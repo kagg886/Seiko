@@ -53,6 +53,10 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener 
 
         lv.setAdapter(adapter);
         btn.setOnClickListener(this);
+        btn.setOnLongClickListener(v1 -> {
+            getActivity().finish();
+            return false;
+        });
         return v;
     }
 

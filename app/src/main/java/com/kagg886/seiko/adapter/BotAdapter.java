@@ -14,6 +14,7 @@ import com.kagg886.seiko.R;
 import com.kagg886.seiko.activity.MainActivity;
 import com.kagg886.seiko.bot.LoginThread;
 import com.kagg886.seiko.fragment.module.LoginFragment;
+import com.kagg886.seiko.service.BotRunnerService;
 import com.kagg886.seiko.util.IOUtil;
 import com.kagg886.seiko.util.storage.JSONArrayStorage;
 import net.mamoe.mirai.Bot;
@@ -88,7 +89,7 @@ public class BotAdapter extends BaseAdapter {
                 return;
             }
             if (isChecked) {
-                new LoginThread(avt, target, sw, nick).start();
+                BotRunnerService.INSTANCE.login(target,nick,sw);
             } else {
                 Bot.getInstance(target.optLong("uin")).close();
                 avt.snack(target.optLong("uin") + "已下线");
@@ -102,16 +103,24 @@ public class BotAdapter extends BaseAdapter {
             builder.setItems(new String[]{"导出设备信息", "登录配置", "导出日志", "删除BOT"}, (dialog, which) -> {
                 switch (which) {
                     case 0:
-                        IOUtil.quickShare(avt, new File(avt.getExternalFilesDir("bots") + "/" + object.optLong("uin") + "/device.json"), "*/*");
+                        File p = new File(avt.getExternalFilesDir("bots") + "/" + object.optLong("uin") + "/device.json");
+                        if (!p.exists()) {
+                            avt.snack("从未登陆过，无法获取到设备信息");
+                            return;
+                        }
+                        IOUtil.quickShare(avt , p, "*/*");
                         break;
                     case 1:
                         LoginFragment.editDialog(avt, this, true, object).show();
-                        //TODO 修改密码等...
                         break;
                     case 2:
                         //TODO 添加导出日志的代码
                         break;
                     case 3:
+                        if (Bot.getInstanceOrNull(object.optLong("uin")) != null) {
+                            avt.snack("请下线BOT然后再执行此操作!");
+                            return;
+                        }
                         botList.remove(position);
                         botList.save();
                         notifyDataSetChanged();

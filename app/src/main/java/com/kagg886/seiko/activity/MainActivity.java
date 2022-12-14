@@ -1,7 +1,13 @@
 package com.kagg886.seiko.activity;
 
+import android.app.ActivityManager;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.IBinder;
+import android.util.Log;
 import android.widget.LinearLayout;
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
@@ -16,6 +22,7 @@ import com.kagg886.seiko.R;
 import com.kagg886.seiko.adapter.ModuleAdapter;
 import com.kagg886.seiko.fragment.module.LoginFragment;
 import com.kagg886.seiko.fragment.module.SettingsFragment;
+import com.kagg886.seiko.service.BotRunnerService;
 
 import java.util.ArrayList;
 
@@ -70,6 +77,27 @@ public class MainActivity extends AppCompatActivity {
         adapter.setViews(fragments);
         pager.setAdapter(adapter);
         layout.setupWithViewPager(pager);
+
+        Intent a = new Intent(this, BotRunnerService.class);
+        ServiceConnection conn = new ServiceConnection() {
+            @Override
+            public void onServiceConnected(ComponentName name, IBinder service) {
+                BotRunnerService.INSTANCE = ((BotRunnerService.Bridge) service).getService();
+                BotRunnerService.INSTANCE.setActivity(MainActivity.this);
+                Log.i("DEBUG","Service Connected");
+            }
+
+            @Override
+            public void onServiceDisconnected(ComponentName name) {
+                Log.w("DEBUG", "Service DisConnected");
+                BotRunnerService.INSTANCE = null;
+            }
+        };
+        if (BotRunnerService.INSTANCE == null) {
+            bindService(a, conn, BIND_AUTO_CREATE);
+        } else {
+            BotRunnerService.INSTANCE.setActivity(MainActivity.this);
+        }
     }
 
     public void snack(String text) {

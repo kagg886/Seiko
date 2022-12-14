@@ -16,6 +16,12 @@
             android:theme="@style/Theme.Seiko"
             android:usesCleartextTraffic="true"
             tools:targetApi="31">
+        <service
+                android:name=".service.BotRunnerService"
+                android:enabled="true"
+                android:exported="false">
+        </service>
+
         <activity
                 android:name=".activity.SMSActivity"
                 android:exported="false"/>
