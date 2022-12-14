@@ -10,7 +10,7 @@ android {
         minSdk 28
         targetSdk 32
         versionCode 1
-        versionName "1.0"
+        versionName "0.0.1"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         buildConfigField "String", "BUILD_TIME", getDate()
     }
@@ -32,15 +32,15 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.4.1'
     implementation 'com.google.android.material:material:1.4.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
-    implementation 'androidx.preference:preference:1.1.1'
+    implementation 'androidx.preference:preference:1.2.0'
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.4'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.0'
     implementation fileTree(dir: 'libs', include: '*.jar')
 }
 
-String getDate() {
-    Date date = new Date();
-    String dates = "\"" + date.format("yyyy-MM-dd HH:mm:ss") + "\"";
-    return dates;
+static String getDate() {
+    Date date = new Date()
+    String dates = "\"" + date.format("yyyy-MM-dd HH:mm:ss") + "\""
+    return dates
 }
