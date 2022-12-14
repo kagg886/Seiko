@@ -1,9 +1,7 @@
 package com.kagg886.seiko.adapter;
 
 import android.annotation.SuppressLint;
-import android.content.DialogInterface;
 import android.graphics.BitmapFactory;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +13,7 @@ import androidx.appcompat.widget.SwitchCompat;
 import com.kagg886.seiko.R;
 import com.kagg886.seiko.activity.MainActivity;
 import com.kagg886.seiko.bot.LoginThread;
+import com.kagg886.seiko.fragment.module.LoginFragment;
 import com.kagg886.seiko.util.IOUtil;
 import com.kagg886.seiko.util.storage.JSONArrayStorage;
 import net.mamoe.mirai.Bot;
@@ -51,10 +50,6 @@ public class BotAdapter extends BaseAdapter {
         return botList.opt(position);
     }
 
-    public JSONObject getItemAsJSON(int pos) {
-        return (JSONObject) getItem(pos);
-    }
-
     @Override
     public long getItemId(int position) {
         return position;
@@ -74,7 +69,7 @@ public class BotAdapter extends BaseAdapter {
         qq.setText(String.valueOf(target.optLong("uin")));
         IOUtil.asyncHttp(avt, Jsoup.connect("https://q1.qlogo.cn/g?b=qq&nk=" + qq.getText().toString() + "&s=640").ignoreContentType(true).timeout(10000), new IOUtil.Response() {
             @Override
-            public void onSuccess(byte[] byt) throws Exception {
+            public void onSuccess(byte[] byt) {
                 imageView.setImageBitmap(BitmapFactory.decodeByteArray(byt, 0, byt.length));
             }
 
@@ -93,10 +88,10 @@ public class BotAdapter extends BaseAdapter {
                 return;
             }
             if (isChecked) {
-                new LoginThread(avt, target.optLong("uin"), target.optString("pass"), sw, nick).start();
+                new LoginThread(avt, target, sw, nick).start();
             } else {
                 Bot.getInstance(target.optLong("uin")).close();
-                avt.snake(target.optLong("uin") + "已下线");
+                avt.snack(target.optLong("uin") + "已下线");
             }
         });
 
@@ -104,16 +99,23 @@ public class BotAdapter extends BaseAdapter {
             JSONObject object = botList.optJSONObject(position);
             AlertDialog.Builder builder = new AlertDialog.Builder(avt);
             builder.setTitle(String.valueOf(object.optLong("uin")));
-            builder.setItems(new String[]{"导出设备信息", "修改密码", "导出日志"}, (dialog, which) -> {
+            builder.setItems(new String[]{"导出设备信息", "登录配置", "导出日志", "删除BOT"}, (dialog, which) -> {
                 switch (which) {
                     case 0:
                         IOUtil.quickShare(avt, new File(avt.getExternalFilesDir("bots") + "/" + object.optLong("uin") + "/device.json"), "*/*");
                         break;
                     case 1:
-                        //TODO 添加修改密码的代码
+                        LoginFragment.editDialog(avt, this, true, object).show();
+                        //TODO 修改密码等...
                         break;
                     case 2:
                         //TODO 添加导出日志的代码
+                        break;
+                    case 3:
+                        botList.remove(position);
+                        botList.save();
+                        notifyDataSetChanged();
+                        avt.snack("删除完毕");
                         break;
                 }
             });

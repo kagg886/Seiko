@@ -51,7 +51,7 @@ public class AndroidSolver extends LoginSolver {
             @Override
             public void resumeWith(@NotNull Object o) {
                 if (o instanceof RetryLaterException) {
-                    avt.snake(((RetryLaterException) o).getMessage());
+                    avt.snack(((RetryLaterException) o).getMessage());
                     return;
                 }
                 Log.i("CallBack",o.getClass().getName());

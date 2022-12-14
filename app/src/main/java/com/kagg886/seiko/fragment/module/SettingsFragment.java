@@ -3,7 +3,6 @@ package com.kagg886.seiko.fragment.module;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.widget.Toast;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import com.kagg886.seiko.BuildConfig;
@@ -78,7 +77,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Prefer
                     }
                     f.delete();
                 }
-                ((MainActivity)getActivity()).snake("清理完毕(๑′ᴗ‵๑)");
+                ((MainActivity)getActivity()).snack("清理完毕(๑′ᴗ‵๑)");
                 findPreference("cleanCache").setSummary("已发现0Byte");
                 break;
         }

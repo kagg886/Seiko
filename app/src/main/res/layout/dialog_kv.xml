@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout
+        android:gravity="left|top"
         android:theme="@style/Theme.AppCompat" xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent" android:layout_height="match_parent" android:orientation="vertical">
@@ -27,4 +28,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
     </com.google.android.material.textfield.TextInputLayout>
+    <TextView
+            android:textColor="@color/purple_200"
+            android:text="点按下方文字选择登录协议"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+    <Spinner
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/dialog_protocol"/>
 </LinearLayout>

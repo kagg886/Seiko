@@ -72,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
         layout.setupWithViewPager(pager);
     }
 
-    public void snake(String text) {
+    public void snack(String text) {
         Snackbar.make(rootView, text, BaseTransientBottomBar.LENGTH_LONG).show();
     }
 }

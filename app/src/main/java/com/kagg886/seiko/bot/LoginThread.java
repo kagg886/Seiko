@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
-import android.util.Log;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -46,12 +45,12 @@ public class LoginThread extends Thread {
                     dialog.show();
                     break;
                 case 0:
-                    avt.snake("Bot:" + bot.getId() + "登录成功");
+                    avt.snack("Bot:" + bot.getId() + "登录成功");
                     nick.setText(bot.getNick());
                     dialog.dismiss();
                     break;
                 case 1:
-                    avt.snake("发生异常:" + ((Throwable) msg.getData().getSerializable("exception")).getMessage());
+                    avt.snack("发生异常:" + ((Throwable) msg.getData().getSerializable("exception")).getMessage());
                     sw.setChecked(false);
                     dialog.dismiss();
                     break;
@@ -59,19 +58,25 @@ public class LoginThread extends Thread {
         }
     };
 
-    public LoginThread(MainActivity avt, Long uin, String pass, SwitchCompat sw, TextView nick) {
+    @SuppressLint("DefaultLocale")
+    public LoginThread(MainActivity avt, JSONObject botConfig, SwitchCompat sw, TextView nick) {
         this.avt = avt;
         this.nick = nick;
         this.sw = sw;
+
+        Long uin = botConfig.optLong("uin");
+        String pass = botConfig.optString("pass");
+        BotConfiguration.MiraiProtocol protocol = BotConfiguration.MiraiProtocol.valueOf(botConfig.optString("platform", "ANDROID_PHONE"));
+
         dialog = new AlertDialog.Builder(avt)
                 .setTitle("登录中...(" + uin + ")")
                 .setCancelable(false)
                 .setMessage("请稍等片刻...")
                 .create();
         BotConfiguration configuration = new BotConfiguration();
-        configuration.setProtocol(BotConfiguration.MiraiProtocol.ANDROID_PHONE);
         String parentPath = String.format("%s/%d/", avt.getExternalFilesDir("bots").getAbsolutePath(), uin);
         configuration.setWorkingDir(new File(parentPath));
+        configuration.setProtocol(protocol);
         File p = new File(parentPath + "device.json");
         if (!p.exists()) {
             p.getParentFile().mkdirs();
@@ -116,7 +121,6 @@ public class LoginThread extends Thread {
             s.save();
             bot.join();
         } catch (Exception e) {
-            Log.w("ERROR", e);
             Message m = new Message();
             m.what = 1;
             Bundle b = new Bundle();

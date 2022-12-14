@@ -15,6 +15,6 @@ import com.kagg886.seiko.activity.MainActivity;
 public class BaseFragment extends Fragment {
 
     public void snack(String text) {
-        ((MainActivity)getActivity()).snake(text);
+        ((MainActivity)getActivity()).snack(text);
     }
 }
