@@ -1,6 +1,7 @@
 package com.kagg886.seiko.adapter;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,6 +9,10 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.SwitchCompat;
 import com.kagg886.seiko.R;
@@ -22,6 +27,9 @@ import org.json.JSONObject;
 import org.jsoup.Jsoup;
 
 import java.io.File;
+import java.io.OutputStream;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 /**
  * @projectName: Seiko
@@ -35,6 +43,10 @@ import java.io.File;
 public class BotAdapter extends BaseAdapter {
     private MainActivity avt;
     private JSONArrayStorage botList;
+
+    public static long chooseUin;
+
+
 
     @Override
     public int getCount() {
@@ -114,7 +126,12 @@ public class BotAdapter extends BaseAdapter {
                         LoginFragment.editDialog(avt, this, true, object).show();
                         break;
                     case 2:
-                        //TODO 添加导出日志的代码
+                        chooseUin = object.optLong("uin");
+                        Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
+                        intent.addCategory(Intent.CATEGORY_OPENABLE);
+                        intent.setType("*/*");
+                        intent.putExtra(Intent.EXTRA_TITLE, "log-" + object.optLong("uin")  + ".zip");
+                        avt.writeCall.launch(intent);
                         break;
                     case 3:
                         if (Bot.getInstanceOrNull(object.optLong("uin")) != null) {

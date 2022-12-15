@@ -1,8 +1,6 @@
 package com.kagg886.seiko.activity;
 
-import android.app.ActivityManager;
 import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Bundle;
@@ -10,7 +8,6 @@ import android.os.IBinder;
 import android.util.Log;
 import android.widget.LinearLayout;
 import androidx.activity.result.ActivityResult;
-import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
@@ -19,12 +16,21 @@ import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
 import com.kagg886.seiko.R;
+import com.kagg886.seiko.adapter.BotAdapter;
 import com.kagg886.seiko.adapter.ModuleAdapter;
 import com.kagg886.seiko.fragment.module.LoginFragment;
+import com.kagg886.seiko.fragment.module.PluginFragment;
 import com.kagg886.seiko.fragment.module.SettingsFragment;
 import com.kagg886.seiko.service.BotRunnerService;
+import com.kagg886.seiko.util.IOUtil;
 
+import java.io.File;
+import java.io.OutputStream;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 /**
  * @projectName: Seiko
@@ -44,10 +50,30 @@ public class MainActivity extends AppCompatActivity {
 
     private ActivityResult result;
 
-    public ActivityResultLauncher<Intent> verifyCall = this.registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
-        @Override
-        public void onActivityResult(ActivityResult result) {
-            MainActivity.this.result = result;
+    public ActivityResultLauncher<Intent> verifyCall = this.registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> MainActivity.this.result = result);
+
+    public ActivityResultLauncher<Intent> writeCall = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+        if (result.getData() == null) {
+            return;
+        }
+        try {
+            File p = new File(getExternalFilesDir("bots") + "/" + BotAdapter.chooseUin + "/log");
+            if (!p.isDirectory()) {
+                snack("并没有日志，不需要导出");
+                return;
+            }
+            OutputStream stream = getContentResolver().openOutputStream(result.getData().getData());
+            ZipOutputStream output = new ZipOutputStream(stream);
+            for (File a : p.listFiles()) {
+                output.putNextEntry(new ZipEntry(a.getName()));
+                output.write(IOUtil.loadByteFromFile(a.getAbsolutePath()));
+            }
+            output.close();
+            stream.close();
+            snack("导出成功!");
+        } catch (Exception e) {
+            Log.w("DEBUG",e);
+            snack("导出失败!");
         }
     });
 
@@ -73,6 +99,7 @@ public class MainActivity extends AppCompatActivity {
         rootView = findViewById(R.id.activity_main_root);
         ArrayList<ModuleAdapter.Structure> fragments = new ArrayList<>();
         fragments.add(new ModuleAdapter.Structure("BOT列表", new LoginFragment()));
+        fragments.add(new ModuleAdapter.Structure("插件", new PluginFragment()));
         fragments.add(new ModuleAdapter.Structure("设置", new SettingsFragment()));
         adapter.setViews(fragments);
         pager.setAdapter(adapter);
@@ -84,7 +111,8 @@ public class MainActivity extends AppCompatActivity {
             public void onServiceConnected(ComponentName name, IBinder service) {
                 BotRunnerService.INSTANCE = ((BotRunnerService.Bridge) service).getService();
                 BotRunnerService.INSTANCE.setActivity(MainActivity.this);
-                Log.i("DEBUG","Service Connected");
+                snack("已绑定服务");
+                Log.i("DEBUG", "Service Connected");
             }
 
             @Override
@@ -97,6 +125,7 @@ public class MainActivity extends AppCompatActivity {
             bindService(a, conn, BIND_AUTO_CREATE);
         } else {
             BotRunnerService.INSTANCE.setActivity(MainActivity.this);
+            snack("已重绑服务");
         }
     }
 
