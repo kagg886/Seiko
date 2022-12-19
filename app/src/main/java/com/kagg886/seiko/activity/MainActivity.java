@@ -106,26 +106,10 @@ public class MainActivity extends AppCompatActivity {
         layout.setupWithViewPager(pager);
 
         Intent a = new Intent(this, BotRunnerService.class);
-        ServiceConnection conn = new ServiceConnection() {
-            @Override
-            public void onServiceConnected(ComponentName name, IBinder service) {
-                BotRunnerService.INSTANCE = ((BotRunnerService.Bridge) service).getService();
-                BotRunnerService.INSTANCE.setActivity(MainActivity.this);
-                snack("已绑定服务");
-                Log.i("DEBUG", "Service Connected");
-            }
-
-            @Override
-            public void onServiceDisconnected(ComponentName name) {
-                Log.w("DEBUG", "Service DisConnected");
-                BotRunnerService.INSTANCE = null;
-            }
-        };
+        BotRunnerService.avt = this;
         if (BotRunnerService.INSTANCE == null) {
-            bindService(a, conn, BIND_AUTO_CREATE);
-        } else {
-            BotRunnerService.INSTANCE.setActivity(MainActivity.this);
-            snack("已重绑服务");
+            startForegroundService(a);
+            snack("绑定服务成功");
         }
     }
 
