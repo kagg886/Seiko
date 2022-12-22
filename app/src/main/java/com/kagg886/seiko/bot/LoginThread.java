@@ -10,6 +10,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.SwitchCompat;
 import com.kagg886.seiko.activity.MainActivity;
+import com.kagg886.seiko.plugin.api.SeikoPlugin;
+import com.kagg886.seiko.service.BotRunnerService;
 import com.kagg886.seiko.util.storage.JSONArrayStorage;
 import net.mamoe.mirai.Bot;
 import net.mamoe.mirai.BotFactory;
@@ -119,6 +121,10 @@ public class LoginThread extends Thread {
                 }
             }
             s.save();
+
+            for (SeikoPlugin plugin : BotRunnerService.INSTANCE.getSeikoPluginList()) {
+                plugin.onBotGoLine(bot.getId());
+            }
             bot.join();
         } catch (Exception e) {
             Message m = new Message();

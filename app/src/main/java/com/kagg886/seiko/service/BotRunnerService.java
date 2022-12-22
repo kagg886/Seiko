@@ -18,14 +18,17 @@ import androidx.core.app.NotificationCompat;
 import com.kagg886.seiko.R;
 import com.kagg886.seiko.activity.MainActivity;
 import com.kagg886.seiko.bot.LoginThread;
+import com.kagg886.seiko.plugin.PluginList;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadPoolExecutor;
 
 public class BotRunnerService extends Service {
 
-    private static ThreadPoolExecutor executor = (ThreadPoolExecutor) Executors.newCachedThreadPool();
+    private static final ThreadPoolExecutor executor = (ThreadPoolExecutor) Executors.newCachedThreadPool();
 
     public static BotRunnerService INSTANCE;
 
@@ -33,29 +36,33 @@ public class BotRunnerService extends Service {
 
     private Bitmap icon;
 
+    private PluginList seikoPluginList;
+
     @SuppressLint("StaticFieldLeak")
     public static MainActivity avt;
+
+
+    public PluginList getSeikoPluginList() {
+        return seikoPluginList;
+    }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         INSTANCE = this;
         startForeground(114514, getNotification("Seiko启动成功"));
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-                final int[] i = {0};
-                while (true) {
-                    try {
-                        Thread.sleep(1000);
-                    } catch (InterruptedException e) {
-                        throw new RuntimeException(e);
-                    }
-                    avt.runOnUiThread(() -> {
-                        notificationManager.notify(114514,getNotification("已运行" + i[0] + "秒"));
-                        i[0]++;
-                    });
+        new Thread(() -> {
+            NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            final int[] i = {0};
+            while (true) {
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
                 }
+                avt.runOnUiThread(() -> {
+                    notificationManager.notify(114514,getNotification("已运行" + i[0] + "秒"));
+                    i[0]++;
+                });
             }
         }).start();
         return super.onStartCommand(intent, flags, startId);
@@ -70,7 +77,7 @@ public class BotRunnerService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-
+        seikoPluginList = new PluginList(this);
         NotificationChannel chan = new NotificationChannel(CHANNEL_ID, "botRunner", NotificationManager.IMPORTANCE_DEFAULT);
         chan.setLightColor(Color.BLUE);
         chan.setLockscreenVisibility(Notification.VISIBILITY_PRIVATE);

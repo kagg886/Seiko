@@ -36,6 +36,18 @@ dependencies {
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.4'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.0'
+
+//    implementation("net.mamoe:mirai-core-android:2.13.2") {
+//        exclude module: "net.mamoe:mirai-core-api"
+//        exclude module: "net.mamoe:mirai-core-utils"
+//
+//    }
+//    implementation("net.mamoe:mirai-core-api-android:2.13.2") {
+//        exclude module: "net.mamoe:mirai-core-utils"
+//    }
+//    implementation("net.mamoe:mirai-core-utils-android:2.13.2")
+
+    implementation project(':PluginModule')
     implementation fileTree(dir: 'libs', include: '*.jar')
 }
 

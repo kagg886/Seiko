@@ -93,17 +93,11 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         layout = findViewById(R.id.activity_main_view_tab_layout);
         pager = findViewById(R.id.activity_main_view_view_pager);
         adapter = new ModuleAdapter(getSupportFragmentManager());
         rootView = findViewById(R.id.activity_main_root);
-        ArrayList<ModuleAdapter.Structure> fragments = new ArrayList<>();
-        fragments.add(new ModuleAdapter.Structure("BOT列表", new LoginFragment()));
-        fragments.add(new ModuleAdapter.Structure("插件", new PluginFragment()));
-        fragments.add(new ModuleAdapter.Structure("设置", new SettingsFragment()));
-        adapter.setViews(fragments);
-        pager.setAdapter(adapter);
-        layout.setupWithViewPager(pager);
 
         Intent a = new Intent(this, BotRunnerService.class);
         BotRunnerService.avt = this;
@@ -111,6 +105,14 @@ public class MainActivity extends AppCompatActivity {
             startForegroundService(a);
             snack("绑定服务成功");
         }
+
+        ArrayList<ModuleAdapter.Structure> fragments = new ArrayList<>();
+        fragments.add(new ModuleAdapter.Structure("BOT列表", new LoginFragment()));
+        fragments.add(new ModuleAdapter.Structure("插件", new PluginFragment()));
+        fragments.add(new ModuleAdapter.Structure("设置", new SettingsFragment()));
+        adapter.setViews(fragments);
+        pager.setAdapter(adapter);
+        layout.setupWithViewPager(pager);
     }
 
     public void snack(String text) {
