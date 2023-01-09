@@ -3,21 +3,19 @@ package com.kagg886.seiko.adapter;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-import androidx.activity.result.ActivityResult;
-import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.SwitchCompat;
 import com.kagg886.seiko.R;
 import com.kagg886.seiko.activity.MainActivity;
-import com.kagg886.seiko.bot.LoginThread;
 import com.kagg886.seiko.fragment.module.LoginFragment;
 import com.kagg886.seiko.service.BotRunnerService;
 import com.kagg886.seiko.util.IOUtil;
@@ -41,12 +39,11 @@ import java.util.zip.ZipOutputStream;
  * @version: 1.0
  */
 public class BotAdapter extends BaseAdapter {
+    private static ActivityResultLauncher<Intent> writeCall;
     private MainActivity avt;
     private JSONArrayStorage botList;
 
     public static long chooseUin;
-
-
 
     @Override
     public int getCount() {
@@ -75,7 +72,7 @@ public class BotAdapter extends BaseAdapter {
         ImageView imageView = v.findViewById(R.id.adapter_botitem_imgContent);
         TextView nick = v.findViewById(R.id.adapter_botitem_botqqnick);
         TextView qq = v.findViewById(R.id.adapter_botitem_botqqid);
-        SwitchCompat sw = v.findViewById(R.id.adapter_botitem_status);
+        SwitchCompat sw = v.findViewById(R.id.adapter_dicitem_status);
         JSONObject target = botList.optJSONObject(position);
 
         nick.setText(target.optString("nick", "未登录"));
@@ -131,7 +128,7 @@ public class BotAdapter extends BaseAdapter {
                         intent.addCategory(Intent.CATEGORY_OPENABLE);
                         intent.setType("*/*");
                         intent.putExtra(Intent.EXTRA_TITLE, "log-" + object.optLong("uin")  + ".zip");
-                        avt.writeCall.launch(intent);
+                        writeCall.launch(intent);
                         break;
                     case 3:
                         if (Bot.getInstanceOrNull(object.optLong("uin")) != null) {
@@ -148,5 +145,32 @@ public class BotAdapter extends BaseAdapter {
             builder.create().show();
         });
         return v;
+    }
+    
+    public static void registerActivityResult(MainActivity avt) {
+         writeCall = avt.registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+            if (result.getData() == null) {
+                return;
+            }
+            try {
+                File p = new File(avt.getExternalFilesDir("bots") + "/" + BotAdapter.chooseUin + "/log");
+                if (!p.isDirectory()) {
+                    avt.snack("并没有日志，不需要导出");
+                    return;
+                }
+                OutputStream stream = avt.getContentResolver().openOutputStream(result.getData().getData());
+                ZipOutputStream output = new ZipOutputStream(stream);
+                for (File a : p.listFiles()) {
+                    output.putNextEntry(new ZipEntry(a.getName()));
+                    output.write(IOUtil.loadByteFromFile(a.getAbsolutePath()));
+                }
+                output.close();
+                stream.close();
+                avt.snack("导出成功!");
+            } catch (Exception e) {
+                Log.w("DEBUG",e);
+                avt.snack("导出失败!");
+            }
+        });
     }
 }

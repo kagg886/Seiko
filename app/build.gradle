@@ -1,9 +1,10 @@
 plugins {
     id 'com.android.application'
 }
+apply plugin: 'kotlin-android'
 
 android {
-    compileSdk 32
+    compileSdk 33
 
     defaultConfig {
         applicationId "com.kagg886.seiko"
@@ -28,27 +29,25 @@ android {
 }
 
 dependencies {
-    implementation 'org.jsoup:jsoup:1.15.3'
     implementation 'androidx.appcompat:appcompat:1.4.1'
     implementation 'com.google.android.material:material:1.4.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
-    implementation 'androidx.preference:preference:1.1.1'
+    implementation 'androidx.preference:preference:1.2.0'
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.4'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.0'
 
-//    implementation("net.mamoe:mirai-core-android:2.13.2") {
-//        exclude module: "net.mamoe:mirai-core-api"
-//        exclude module: "net.mamoe:mirai-core-utils"
-//
-//    }
-//    implementation("net.mamoe:mirai-core-api-android:2.13.2") {
-//        exclude module: "net.mamoe:mirai-core-utils"
-//    }
-//    implementation("net.mamoe:mirai-core-utils-android:2.13.2")
+    implementation 'org.jsoup:jsoup:1.15.3'
+
+
+    runtimeOnly("net.mamoe:mirai-core-android:2.13.2")
+    api("net.mamoe:mirai-core-api-android:2.13.2")
+    implementation("net.mamoe:mirai-core-utils-android:2.13.2")
 
     implementation project(':PluginModule')
-    implementation fileTree(dir: 'libs', include: '*.jar')
+    implementation project(':SeikoDic')
+    implementation 'androidx.core:core-ktx:1.9.0'
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }
 
 String getDate() {

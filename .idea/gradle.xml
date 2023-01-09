@@ -14,6 +14,7 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/PluginModule" />
+            <option value="$PROJECT_DIR$/SeikoDic" />
             <option value="$PROJECT_DIR$/app" />
           </set>
         </option>

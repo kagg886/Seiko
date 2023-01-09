@@ -9,6 +9,7 @@ import com.kagg886.seiko.R;
 import com.kagg886.seiko.activity.MainActivity;
 import com.kagg886.seiko.plugin.SeikoDescription;
 import com.kagg886.seiko.service.BotRunnerService;
+import net.mamoe.mirai.Bot;
 
 /**
  * @projectName: Seiko

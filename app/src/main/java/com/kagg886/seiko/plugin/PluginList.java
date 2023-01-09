@@ -3,6 +3,7 @@ package com.kagg886.seiko.plugin;
 import android.content.Context;
 import android.util.Log;
 import androidx.appcompat.app.AlertDialog;
+import com.kagg886.seiko.dic.DICPlugin;
 import com.kagg886.seiko.plugin.api.SeikoPlugin;
 import com.kagg886.seiko.service.BotRunnerService;
 import dalvik.system.DexClassLoader;
@@ -10,6 +11,7 @@ import dalvik.system.DexClassLoader;
 import javax.xml.transform.ErrorListener;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Objects;
 
 /**
  * @projectName: Seiko
@@ -31,14 +33,26 @@ public class PluginList extends ArrayList<SeikoPlugin> {
 
     public void refresh() {
         clear();
-        for (File f : ctx.getExternalFilesDir("plugin").listFiles()) {
+        add(new DICPlugin());
+        for (File f : Objects.requireNonNull(ctx.getExternalFilesDir("plugin").listFiles())) {
             try {
                 loadClass(f);
             } catch (Throwable e) {
-                AlertDialog dialog1 = new AlertDialog.Builder(BotRunnerService.avt).setTitle(f.getName() + "加载失败")
+                AlertDialog dialog1 = new AlertDialog.Builder(ctx).setTitle(f.getName() + "加载失败")
                         .setMessage(e.getMessage()).create();
                 dialog1.show();
                 Log.w("DEBUG",e);
+            }
+        }
+        for (SeikoPlugin p : this) {
+            try {
+                p.onLoad(ctx);
+            } catch (Exception e) {
+                remove(p);
+                AlertDialog dialog1 = new AlertDialog.Builder(ctx).setTitle(p.getDescription().getId() + "加载失败")
+                        .setMessage(e.getMessage()).create();
+                dialog1.show();
+                Log.w("Seiko",e);
             }
         }
     }

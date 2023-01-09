@@ -18,6 +18,7 @@ import com.google.android.material.tabs.TabLayout;
 import com.kagg886.seiko.R;
 import com.kagg886.seiko.adapter.BotAdapter;
 import com.kagg886.seiko.adapter.ModuleAdapter;
+import com.kagg886.seiko.fragment.module.DICFragment;
 import com.kagg886.seiko.fragment.module.LoginFragment;
 import com.kagg886.seiko.fragment.module.PluginFragment;
 import com.kagg886.seiko.fragment.module.SettingsFragment;
@@ -52,31 +53,6 @@ public class MainActivity extends AppCompatActivity {
 
     public ActivityResultLauncher<Intent> verifyCall = this.registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> MainActivity.this.result = result);
 
-    public ActivityResultLauncher<Intent> writeCall = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
-        if (result.getData() == null) {
-            return;
-        }
-        try {
-            File p = new File(getExternalFilesDir("bots") + "/" + BotAdapter.chooseUin + "/log");
-            if (!p.isDirectory()) {
-                snack("并没有日志，不需要导出");
-                return;
-            }
-            OutputStream stream = getContentResolver().openOutputStream(result.getData().getData());
-            ZipOutputStream output = new ZipOutputStream(stream);
-            for (File a : p.listFiles()) {
-                output.putNextEntry(new ZipEntry(a.getName()));
-                output.write(IOUtil.loadByteFromFile(a.getAbsolutePath()));
-            }
-            output.close();
-            stream.close();
-            snack("导出成功!");
-        } catch (Exception e) {
-            Log.w("DEBUG",e);
-            snack("导出失败!");
-        }
-    });
-
     public ActivityResult getResult() {
         while (result == null) {
             try {
@@ -99,6 +75,8 @@ public class MainActivity extends AppCompatActivity {
         adapter = new ModuleAdapter(getSupportFragmentManager());
         rootView = findViewById(R.id.activity_main_root);
 
+        BotAdapter.registerActivityResult(this);
+
         Intent a = new Intent(this, BotRunnerService.class);
         BotRunnerService.avt = this;
         if (BotRunnerService.INSTANCE == null) {
@@ -109,6 +87,7 @@ public class MainActivity extends AppCompatActivity {
         ArrayList<ModuleAdapter.Structure> fragments = new ArrayList<>();
         fragments.add(new ModuleAdapter.Structure("BOT列表", new LoginFragment()));
         fragments.add(new ModuleAdapter.Structure("插件", new PluginFragment()));
+        fragments.add(new ModuleAdapter.Structure("词库",new DICFragment()));
         fragments.add(new ModuleAdapter.Structure("设置", new SettingsFragment()));
         adapter.setViews(fragments);
         pager.setAdapter(adapter);

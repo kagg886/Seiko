@@ -30,12 +30,12 @@
             android:layout_height="wrap_content" android:id="@+id/adapter_botitem_botqqnick"
             app:layout_constraintStart_toEndOf="@+id/adapter_botitem_imgView"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="@+id/adapter_botitem_status"/>
+            app:layout_constraintBottom_toBottomOf="@+id/adapter_dicitem_status"/>
     <androidx.appcompat.widget.SwitchCompat
             android:scaleX="1.5"
             android:scaleY="1.5"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" android:id="@+id/adapter_botitem_status"
+            android:layout_height="wrap_content" android:id="@+id/adapter_dicitem_status"
             app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="@+id/adapter_botitem_imgView"/>
     <TextView
