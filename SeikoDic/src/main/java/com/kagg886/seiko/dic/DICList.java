@@ -11,7 +11,7 @@ import java.util.ArrayList;
  * @package: com.kagg886.seiko.dic
  * @className: DICList
  * @author: kagg886
- * @description: 代表Dictionary集合
+ * @description: 保管了从存储里加载的伪代码文件
  * @date: 2023/1/9 19:33
  * @version: 1.0
  */

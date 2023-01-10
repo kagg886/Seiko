@@ -20,6 +20,7 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 
 /**
  * @projectName: Seiko
@@ -91,7 +92,7 @@ public class LoginThread extends Thread {
         configuration.fileBasedDeviceInfo(p.getAbsolutePath());
         configuration.setLoginSolver(new AndroidSolver(avt));
 
-        File f1 = new File(parentPath + "log/" + System.currentTimeMillis() + ".log");
+        File f1 = new File(parentPath + "log/" + new SimpleDateFormat("yyyy-MM-dd").format(System.currentTimeMillis()) + ".log");
         if (!f1.exists()) {
             f1.getParentFile().mkdirs();
             try {

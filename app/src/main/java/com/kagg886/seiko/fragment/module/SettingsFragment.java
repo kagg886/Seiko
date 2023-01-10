@@ -3,11 +3,17 @@ package com.kagg886.seiko.fragment.module;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.text.InputType;
+import android.widget.EditText;
+import androidx.annotation.NonNull;
+import androidx.preference.EditTextPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
+import androidx.preference.PreferenceManager;
 import com.kagg886.seiko.BuildConfig;
 import com.kagg886.seiko.R;
 import com.kagg886.seiko.activity.MainActivity;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 
@@ -60,6 +66,22 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Prefer
 
         s.setSummary(str.toString());
         s.setOnPreferenceClickListener(this);
+
+        EditTextPreference sp = findPreference("maxLogNum");
+        sp.setOnBindEditTextListener(editText -> editText.setInputType(InputType.TYPE_CLASS_NUMBER));
+        sp.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(@NonNull @NotNull Preference preference, Object newValue) {
+                if (Integer.parseInt((String) newValue) > 0) {
+                    sp.setSummary(String.format("当前设置的值为:%s", newValue));
+                    ((MainActivity) getActivity()).snack("保存成功!");
+                    return true;
+                }
+                ((MainActivity) getActivity()).snack("不能为0和负数!");
+                return false;
+            }
+        });
+        sp.setSummary(String.format("当前设置的值为:%s", sp.getSharedPreferences().getString("maxLogNum","40")));
     }
 
     @Override
@@ -78,7 +100,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Prefer
                     f.delete();
                 }
                 ((MainActivity)getActivity()).snack("清理完毕(๑′ᴗ‵๑)");
-                findPreference("cleanCache").setSummary("已发现0Byte");
+                preference.setSummary("已发现0Byte");
                 break;
         }
         return false;

@@ -17,6 +17,14 @@
             android:theme="@style/Theme.Seiko"
             android:usesCleartextTraffic="true"
             tools:targetApi="31">
+        <activity
+                android:name=".activity.LogActivity"
+                android:exported="false">
+            <meta-data
+                    android:name="android.app.lib_name"
+                    android:value=""/>
+        </activity>
+
         <service
                 android:name=".service.BotRunnerService"
                 android:enabled="true"

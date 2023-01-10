@@ -23,7 +23,7 @@ import org.jetbrains.annotations.NotNull;
  * @package: com.kagg886.seiko.fragment.module
  * @className: DICFragment
  * @author: kagg886
- * @description: 提供简易的Dictionary管理
+ * @description: 提供简易的伪代码文件管理
  * @date: 2023/1/9 18:48
  * @version: 1.0
  */

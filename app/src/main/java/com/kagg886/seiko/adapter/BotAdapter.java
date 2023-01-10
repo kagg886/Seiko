@@ -15,6 +15,7 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.SwitchCompat;
 import com.kagg886.seiko.R;
+import com.kagg886.seiko.activity.LogActivity;
 import com.kagg886.seiko.activity.MainActivity;
 import com.kagg886.seiko.fragment.module.LoginFragment;
 import com.kagg886.seiko.service.BotRunnerService;
@@ -42,8 +43,6 @@ public class BotAdapter extends BaseAdapter {
     private static ActivityResultLauncher<Intent> writeCall;
     private MainActivity avt;
     private JSONArrayStorage botList;
-
-    public static long chooseUin;
 
     @Override
     public int getCount() {
@@ -107,12 +106,13 @@ public class BotAdapter extends BaseAdapter {
 
         v.setOnClickListener(v1 -> {
             JSONObject object = botList.optJSONObject(position);
+            String uin = String.valueOf(object.optLong("uin"));
             AlertDialog.Builder builder = new AlertDialog.Builder(avt);
-            builder.setTitle(String.valueOf(object.optLong("uin")));
-            builder.setItems(new String[]{"导出设备信息", "登录配置", "导出日志", "删除BOT"}, (dialog, which) -> {
+            builder.setTitle(uin);
+            builder.setItems(new String[]{"导出设备信息", "登录配置", "查看日志", "删除BOT"}, (dialog, which) -> {
                 switch (which) {
                     case 0:
-                        File p = new File(avt.getExternalFilesDir("bots") + "/" + object.optLong("uin") + "/device.json");
+                        File p = new File(avt.getExternalFilesDir("bots") + "/" + uin+ "/device.json");
                         if (!p.exists()) {
                             avt.snack("从未登陆过，无法获取到设备信息");
                             return;
@@ -120,15 +120,16 @@ public class BotAdapter extends BaseAdapter {
                         IOUtil.quickShare(avt , p, "*/*");
                         break;
                     case 1:
+                        if (Bot.getInstanceOrNull(object.optLong("uin")) != null) {
+                            avt.snack("请下线BOT然后再执行此操作!");
+                            return;
+                        }
                         LoginFragment.editDialog(avt, this, true, object).show();
                         break;
                     case 2:
-                        chooseUin = object.optLong("uin");
-                        Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
-                        intent.addCategory(Intent.CATEGORY_OPENABLE);
-                        intent.setType("*/*");
-                        intent.putExtra(Intent.EXTRA_TITLE, "log-" + object.optLong("uin")  + ".zip");
-                        writeCall.launch(intent);
+                        Intent i = new Intent(avt, LogActivity.class);
+                        i.putExtra("uin",uin);
+                        avt.startActivity(i);
                         break;
                     case 3:
                         if (Bot.getInstanceOrNull(object.optLong("uin")) != null) {
@@ -145,32 +146,5 @@ public class BotAdapter extends BaseAdapter {
             builder.create().show();
         });
         return v;
-    }
-    
-    public static void registerActivityResult(MainActivity avt) {
-         writeCall = avt.registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
-            if (result.getData() == null) {
-                return;
-            }
-            try {
-                File p = new File(avt.getExternalFilesDir("bots") + "/" + BotAdapter.chooseUin + "/log");
-                if (!p.isDirectory()) {
-                    avt.snack("并没有日志，不需要导出");
-                    return;
-                }
-                OutputStream stream = avt.getContentResolver().openOutputStream(result.getData().getData());
-                ZipOutputStream output = new ZipOutputStream(stream);
-                for (File a : p.listFiles()) {
-                    output.putNextEntry(new ZipEntry(a.getName()));
-                    output.write(IOUtil.loadByteFromFile(a.getAbsolutePath()));
-                }
-                output.close();
-                stream.close();
-                avt.snack("导出成功!");
-            } catch (Exception e) {
-                Log.w("DEBUG",e);
-                avt.snack("导出失败!");
-            }
-        });
     }
 }

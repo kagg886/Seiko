@@ -7,7 +7,7 @@ import java.io.File;
  * @package: com.kagg886.seiko.dic.entity
  * @className: Dictionary
  * @author: kagg886
- * @description: 代表了一个词库实例
+ * @description: 代表了一个伪代码实例
  * @date: 2023/1/9 19:34
  * @version: 1.0
  */

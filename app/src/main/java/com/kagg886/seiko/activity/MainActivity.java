@@ -75,8 +75,6 @@ public class MainActivity extends AppCompatActivity {
         adapter = new ModuleAdapter(getSupportFragmentManager());
         rootView = findViewById(R.id.activity_main_root);
 
-        BotAdapter.registerActivityResult(this);
-
         Intent a = new Intent(this, BotRunnerService.class);
         BotRunnerService.avt = this;
         if (BotRunnerService.INSTANCE == null) {

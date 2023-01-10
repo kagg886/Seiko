@@ -1,5 +1,6 @@
 package com.kagg886.seiko.plugin;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.util.Log;
 import androidx.appcompat.app.AlertDialog;
@@ -52,7 +53,7 @@ public class PluginList extends ArrayList<SeikoPlugin> {
                 AlertDialog dialog1 = new AlertDialog.Builder(ctx).setTitle(p.getDescription().getId() + "加载失败")
                         .setMessage(e.getMessage()).create();
                 dialog1.show();
-                Log.w("Seiko",e);
+                Log.w("DEBUG",e);
             }
         }
     }

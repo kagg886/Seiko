@@ -12,7 +12,9 @@ import kotlin.coroutines.Continuation;
 import kotlin.coroutines.CoroutineContext;
 import kotlin.coroutines.EmptyCoroutineContext;
 import net.mamoe.mirai.Bot;
+import net.mamoe.mirai.network.LoginFailedException;
 import net.mamoe.mirai.network.RetryLaterException;
+import net.mamoe.mirai.network.UnsupportedSliderCaptchaException;
 import net.mamoe.mirai.utils.DeviceVerificationRequests;
 import net.mamoe.mirai.utils.DeviceVerificationResult;
 import net.mamoe.mirai.utils.LoginSolver;
@@ -76,6 +78,7 @@ public class AndroidSolver extends LoginSolver {
 
     @Override
     public boolean isSliderCaptchaSupported() {
+        //用于通知Mirai-Core此解决器支持滑动验证
         return true;
     }
 
@@ -87,7 +90,7 @@ public class AndroidSolver extends LoginSolver {
         avt.verifyCall.launch(i);
         ActivityResult result = avt.getResult();
         if (result.getResultCode() != Activity.RESULT_OK) {
-            return null;
+            throw new UnsupportedSliderCaptchaException("滑块验证被用户取消");
         }
         return result.getData().getStringExtra("ticket");
     }

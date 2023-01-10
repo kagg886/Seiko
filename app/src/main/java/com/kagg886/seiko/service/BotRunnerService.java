@@ -33,6 +33,16 @@ import java.util.LinkedList;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadPoolExecutor;
 
+
+/**
+ * @projectName: Seiko
+ * @package: com.kagg886.seiko.service
+ * @className: PluginList
+ * @author: kagg886
+ * @description: BOT托管服务，提供Activity与Mirai-Core交互的接口
+ * @date: 2022/12/19 16:48
+ * @version: 1.0
+ */
 public class BotRunnerService extends Service {
 
     private static final ThreadPoolExecutor executor = (ThreadPoolExecutor) Executors.newCachedThreadPool();
