@@ -6,10 +6,11 @@ import androidx.appcompat.app.AlertDialog;
 import com.kagg886.seiko.dic.DICPlugin;
 import com.kagg886.seiko.plugin.api.SeikoPlugin;
 import dalvik.system.DexClassLoader;
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Objects;
+import java.util.ServiceLoader;
+
 
 /**
  * @projectName: Seiko
@@ -55,12 +56,15 @@ public class PluginList extends ArrayList<SeikoPlugin> {
         }
     }
 
-    public void loadClass(File f) throws Throwable {
-        if (f.getName().endsWith(".dex")) {
-            String mainClass = f.getName().replace(".dex", "");
+    public void loadClass(File f) {
+        if (f.getName().endsWith(".apk") || f.getName().endsWith(".zip")) {
             DexClassLoader classLoader = new DexClassLoader(f.getAbsolutePath(), ctx.getCacheDir().getAbsolutePath(), null, getClass().getClassLoader());
-            SeikoPlugin o = (SeikoPlugin) classLoader.loadClass(mainClass).newInstance();
-            this.add(o);
+            ServiceLoader<SeikoPlugin> load = ServiceLoader.load(SeikoPlugin.class, classLoader);
+            for (SeikoPlugin o : load) {
+                this.add(o);
+            }
         }
     }
 }
+
+
