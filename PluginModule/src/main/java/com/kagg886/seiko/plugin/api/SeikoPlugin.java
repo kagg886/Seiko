@@ -2,6 +2,8 @@ package com.kagg886.seiko.plugin.api;
 
 import com.kagg886.seiko.plugin.SeikoDescription;
 
+import java.io.File;
+
 /**
  * @projectName: Seiko
  * @package: com.kagg886.seiko.plugin.api
@@ -11,13 +13,24 @@ import com.kagg886.seiko.plugin.SeikoDescription;
  * @date: 2022/12/22 14:56
  * @version: 1.0
  */
-public interface SeikoPlugin {
-    void onBotGoLine(long botQQ);
+public abstract class SeikoPlugin {
+
+    private File f;
+
+    public File getFile() {
+        return f;
+    }
+
+    public void setFile(File f) {
+        this.f = f;
+    }
+
+    public abstract void onBotGoLine(long botQQ);
 
     @Deprecated
-    void onBotOffLine(long botQQ);
+    public abstract void onBotOffLine(long botQQ);
 
-    void onLoad(Object context);
+    public abstract void onLoad(Object context);
 
-    SeikoDescription getDescription();
+    public abstract SeikoDescription getDescription();
 }

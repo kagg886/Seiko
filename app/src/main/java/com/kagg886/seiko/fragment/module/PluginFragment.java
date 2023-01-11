@@ -1,7 +1,6 @@
 package com.kagg886.seiko.fragment.module;
 
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -20,18 +19,16 @@ import com.kagg886.seiko.R;
 import com.kagg886.seiko.activity.MainActivity;
 import com.kagg886.seiko.adapter.PluginAdapter;
 import com.kagg886.seiko.service.BotRunnerService;
-
 import com.kagg886.seiko.util.FileUtil;
 import com.kagg886.seiko.util.NetUtil;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.Response;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.UUID;
-
-import kotlin.text.StringsKt;
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.Response;
 
 
 public class PluginFragment extends Fragment implements View.OnClickListener {
@@ -56,19 +53,16 @@ public class PluginFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         AlertDialog dialog = new AlertDialog.Builder(getContext())
-                .setTitle("您要...").setItems(new String[]{"导入插件", "刷新插件"}, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        switch (which) {
-                            case 0:
-                                importPluginDialog().show();
-                                break;
-                            case 1:
-                                BotRunnerService.INSTANCE.getSeikoPluginList().refresh();
-                                adapter.notifyDataSetChanged();
-                                ((MainActivity) getActivity()).snack("刷新完成");
-                                break;
-                        }
+                .setTitle("您要...").setItems(new String[]{"导入插件", "刷新插件"}, (dialog1, which) -> {
+                    switch (which) {
+                        case 0:
+                            importPluginDialog().show();
+                            break;
+                        case 1:
+                            BotRunnerService.INSTANCE.getSeikoPluginList().refresh();
+                            adapter.notifyDataSetChanged();
+                            ((MainActivity) getActivity()).snack("刷新完成");
+                            break;
                     }
                 }).create();
         dialog.show();
@@ -140,7 +134,7 @@ public class PluginFragment extends Fragment implements View.OnClickListener {
         return builder.create();
     }
 
-    private Handler mHandler = new Handler(Looper.getMainLooper()) {
+    private final Handler mHandler = new Handler(Looper.getMainLooper()) {
         @Override
         public void handleMessage(@NonNull Message msg) {
             MainActivity avt = (MainActivity) getActivity();

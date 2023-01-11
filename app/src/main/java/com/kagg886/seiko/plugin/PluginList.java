@@ -1,11 +1,12 @@
 package com.kagg886.seiko.plugin;
 
 import android.content.Context;
-import android.util.Log;
-import androidx.appcompat.app.AlertDialog;
 import com.kagg886.seiko.dic.DICPlugin;
+import com.kagg886.seiko.event.DialogBroadCast;
 import com.kagg886.seiko.plugin.api.SeikoPlugin;
+import com.kagg886.seiko.util.IOUtil;
 import dalvik.system.DexClassLoader;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Objects;
@@ -37,33 +38,51 @@ public class PluginList extends ArrayList<SeikoPlugin> {
             try {
                 loadClass(f);
             } catch (Throwable e) {
-                AlertDialog dialog1 = new AlertDialog.Builder(ctx).setTitle(f.getName() + "加载失败")
-                        .setMessage(e.getMessage()).create();
-                dialog1.show();
-                Log.w("DEBUG", e);
+                f.delete();
+                DialogBroadCast.sendBroadCast(ctx, f.getName() + "加载失败,此插件已自动删除", IOUtil.getException(e));
             }
         }
+        ArrayList<SeikoPlugin> remove = new ArrayList<>(); //可恶的ConcurrentModificationException
         for (SeikoPlugin p : this) {
             try {
                 p.onLoad(ctx);
             } catch (Exception e) {
-                remove(p);
-                AlertDialog dialog1 = new AlertDialog.Builder(ctx).setTitle(p.getDescription().getId() + "加载失败")
-                        .setMessage(e.getMessage()).create();
-                dialog1.show();
-                Log.w("Seiko", e);
+                remove.add(p);
+                p.getFile().delete();
+                DialogBroadCast.sendBroadCast(ctx, p.getDescription().getId() + "初始化失败", IOUtil.getException(e));
             }
+        }
+        for (SeikoPlugin p : remove) {
+            remove(p);
         }
     }
 
     public void loadClass(File f) {
-        if (f.getName().endsWith(".apk") || f.getName().endsWith(".zip")) {
+        if (f.getName().endsWith(".apk") || f.getName().endsWith(".zip") || f.getName().endsWith(".jar")) {
             DexClassLoader classLoader = new DexClassLoader(f.getAbsolutePath(), ctx.getCacheDir().getAbsolutePath(), null, getClass().getClassLoader());
             ServiceLoader<SeikoPlugin> load = ServiceLoader.load(SeikoPlugin.class, classLoader);
-            for (SeikoPlugin o : load) {
-                this.add(o);
+
+            SeikoPlugin plugin = load.iterator().next();
+            if (plugin == null) {
+                throw new IllegalArgumentException(f.getName() + "不是一个合法的Seiko插件");
+            }
+            plugin.setFile(f);
+            add(plugin);
+        }
+    }
+
+    @Override
+    public boolean add(SeikoPlugin seikoPlugin) {
+        for (SeikoPlugin has : this) {
+            if (has.getDescription().getId().equals(seikoPlugin.getDescription().getId())) {
+                throw new ArrayStoreException(String.format("插件发生冲突:[%s(%s)]-[%s(%s)]",
+                        has.getDescription().getId(),
+                        has.getFile().getAbsolutePath(),
+                        seikoPlugin.getDescription().getId(),
+                        seikoPlugin.getFile().getAbsolutePath()));
             }
         }
+        return super.add(seikoPlugin);
     }
 }
 

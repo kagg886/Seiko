@@ -24,7 +24,7 @@ import java.util.function.Consumer;
  * @date: 2023/1/9 17:31
  * @version: 1.0
  */
-public class DICPlugin implements SeikoPlugin {
+public class DICPlugin extends SeikoPlugin {
     private static DICList dicLists;
     private static String dicConfigPoint;
     private Context context;
