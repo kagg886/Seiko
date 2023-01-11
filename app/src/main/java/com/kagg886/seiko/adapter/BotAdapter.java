@@ -19,10 +19,13 @@ import com.kagg886.seiko.R;
 import com.kagg886.seiko.activity.MainActivity;
 import com.kagg886.seiko.bot.LoginThread;
 import com.kagg886.seiko.fragment.module.LoginFragment;
+import com.kagg886.seiko.plugin.api.SeikoPlugin;
 import com.kagg886.seiko.service.BotRunnerService;
 import com.kagg886.seiko.util.IOUtil;
 import com.kagg886.seiko.util.storage.JSONArrayStorage;
 import net.mamoe.mirai.Bot;
+import net.mamoe.mirai.Mirai;
+
 import org.json.JSONObject;
 import org.jsoup.Jsoup;
 
@@ -103,6 +106,10 @@ public class BotAdapter extends BaseAdapter {
             if (isChecked) {
                 BotRunnerService.INSTANCE.login(target,nick,sw);
             } else {
+                Bot bot = Bot.getInstance(target.optLong("uin"));
+                for (SeikoPlugin plugin : BotRunnerService.INSTANCE.getSeikoPluginList()) {
+                    plugin.onBotGoLine(bot.getId());
+                }
                 Bot.getInstance(target.optLong("uin")).close();
                 avt.snack(target.optLong("uin") + "已下线");
             }
