@@ -13,6 +13,12 @@
         <item name="colorOnSecondary">@color/black</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
+
         <!-- Customize your theme here. -->
+
+    </style>
+
+    <style name="EditText">
+        <item name="android:textColor">@color/black</item>
     </style>
 </resources>

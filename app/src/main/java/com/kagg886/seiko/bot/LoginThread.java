@@ -18,10 +18,6 @@ import net.mamoe.mirai.BotFactory;
 import net.mamoe.mirai.utils.BotConfiguration;
 import org.json.JSONObject;
 
-import java.io.File;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-
 /**
  * @projectName: Seiko
  * @package: com.kagg886.seiko.bot
@@ -32,15 +28,15 @@ import java.text.SimpleDateFormat;
  * @version: 1.0
  */
 public class LoginThread extends Thread {
-    private Bot bot;
-    private MainActivity avt;
+    private final Bot bot;
+    private final MainActivity avt;
 
-    private SwitchCompat sw;
-    private TextView nick;
+    private final SwitchCompat sw;
+    private final TextView nick;
 
-    private AlertDialog dialog;
+    private final AlertDialog dialog;
 
-    private Handler mHandler = new Handler(Looper.getMainLooper()) {
+    private final Handler dialogController = new Handler(Looper.getMainLooper()) { //Dialog控制的Handler
         @Override
         public void handleMessage(@NonNull Message msg) {
             switch (msg.what) {
@@ -76,33 +72,8 @@ public class LoginThread extends Thread {
                 .setCancelable(false)
                 .setMessage("请稍等片刻...")
                 .create();
-        BotConfiguration configuration = new BotConfiguration();
-        String parentPath = String.format("%s/%d/", avt.getExternalFilesDir("bots").getAbsolutePath(), uin);
-        configuration.setWorkingDir(new File(parentPath));
+        BotLogConfiguration configuration = new BotLogConfiguration(uin, avt);
         configuration.setProtocol(protocol);
-        File p = new File(parentPath + "device.json");
-        if (!p.exists()) {
-            p.getParentFile().mkdirs();
-            try {
-                p.createNewFile();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        }
-        configuration.fileBasedDeviceInfo(p.getAbsolutePath());
-        configuration.setLoginSolver(new AndroidSolver(avt));
-
-        File f1 = new File(parentPath + "log/" + new SimpleDateFormat("yyyy-MM-dd").format(System.currentTimeMillis()) + ".log");
-        if (!f1.exists()) {
-            f1.getParentFile().mkdirs();
-            try {
-                f1.createNewFile();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        }
-        configuration.redirectBotLogToFile(f1);
-        configuration.redirectNetworkLogToFile(f1);
         bot = BotFactory.INSTANCE.newBot(uin, pass, configuration);
     }
 
@@ -110,9 +81,9 @@ public class LoginThread extends Thread {
     @Override
     public void run() {
         try {
-            mHandler.sendEmptyMessage(2);
+            dialogController.sendEmptyMessage(2);
             bot.login();
-            mHandler.sendEmptyMessage(0);
+            dialogController.sendEmptyMessage(0);
             JSONArrayStorage s = JSONArrayStorage.obtain(avt.getExternalFilesDir("config").getAbsolutePath() + "/botList.json");
             for (int i = 0; i < s.length(); i++) {
                 JSONObject b = s.optJSONObject(i);
@@ -122,18 +93,21 @@ public class LoginThread extends Thread {
                 }
             }
             s.save();
-
             for (SeikoPlugin plugin : BotRunnerService.INSTANCE.getSeikoPluginList()) {
                 plugin.onBotGoLine(bot.getId());
             }
             bot.join();
-        } catch (Exception e) {
+            for (SeikoPlugin plugin : BotRunnerService.INSTANCE.getSeikoPluginList()) {
+                plugin.onBotOffLine(bot.getId());
+            }
+            throw new RuntimeException("用户操作，BOT主动下线");
+        } catch (Throwable e) {
             Message m = new Message();
             m.what = 1;
             Bundle b = new Bundle();
             b.putSerializable("exception", e);
             m.setData(b);
-            mHandler.sendMessage(m);
+            dialogController.sendMessage(m);
         }
     }
 }

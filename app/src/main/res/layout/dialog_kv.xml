@@ -11,7 +11,8 @@
             android:id="@+id/dialog_editKey"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-        <com.google.android.material.textfield.TextInputEditText
+        <EditText
+                style="@style/EditText"
                 android:layout_width="match_parent"
                 android:hint="请输入账号"
                 android:layout_height="wrap_content"/>
@@ -22,7 +23,8 @@
             android:id="@+id/dialog_editValue"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-        <com.google.android.material.textfield.TextInputEditText
+        <EditText
+                style="@style/EditText"
                 android:hint="请输入密码"
                 android:inputType="textPassword"
                 android:layout_width="match_parent"

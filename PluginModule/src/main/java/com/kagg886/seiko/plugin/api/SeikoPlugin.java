@@ -14,8 +14,11 @@ import com.kagg886.seiko.plugin.SeikoDescription;
  */
 public interface SeikoPlugin {
     void onBotGoLine(long botQQ);
+
+    @Deprecated
     void onBotOffLine(long botQQ);
 
     void onLoad(Context context);
+
     SeikoDescription getDescription();
 }

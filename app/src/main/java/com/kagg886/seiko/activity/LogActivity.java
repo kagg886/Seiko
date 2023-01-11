@@ -1,20 +1,23 @@
 package com.kagg886.seiko.activity;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AbsListView;
 import android.widget.ListView;
 import android.widget.Toast;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
-import android.os.Bundle;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
 import com.kagg886.seiko.R;
 import com.kagg886.seiko.adapter.LogAdapter;
+import com.kagg886.seiko.bot.BotLogConfiguration;
 import com.kagg886.seiko.util.IOUtil;
+import net.mamoe.mirai.Bot;
 
 import java.io.File;
 import java.io.OutputStream;
@@ -35,17 +38,28 @@ public class LogActivity extends AppCompatActivity implements View.OnClickListen
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_plugin);
         nowBot = getIntent().getStringExtra("uin");
-
-        File logFile = IOUtil.newFile(getExternalFilesDir("bots"),"/",nowBot,"/log/",new SimpleDateFormat("yyyy-MM-dd").format(System.currentTimeMillis()),".log");
-        if (!logFile.exists()) {
-            Toast.makeText(this,"今日未启动bot!",Toast.LENGTH_LONG).show();
-            finish();
-            return;
+        File file;
+        Bot bot = Bot.findInstance(Long.parseLong(nowBot));
+        if (bot == null) { //bot未登录时拉取今日的日志
+            String parentPath = String.format("%s/%s/", getExternalFilesDir("bots").getAbsolutePath(), nowBot);
+            File offlineLogFile = new File(parentPath + "log/" + new SimpleDateFormat("yyyy-MM-dd").format(System.currentTimeMillis()) + ".log");
+            if (offlineLogFile.exists()) {
+                file = offlineLogFile;
+            } else {
+                Toast.makeText(this, "今日未产生Bot日志", Toast.LENGTH_LONG).show();
+                finish();
+                return;
+            }
+        } else {
+            file = ((BotLogConfiguration) bot.getConfiguration()).getLogFile();
         }
 
-        log = findViewById(R.id.fragment_plugin_list);
 
-        adapter = new LogAdapter(this,logFile);
+        log = findViewById(R.id.fragment_plugin_list);
+        log.setTranscriptMode(AbsListView.TRANSCRIPT_MODE_ALWAYS_SCROLL);
+        log.setStackFromBottom(true);
+
+        adapter = new LogAdapter(this, file);
         log.setAdapter(adapter);
 
         btn = findViewById(R.id.fragment_plugin_menu);

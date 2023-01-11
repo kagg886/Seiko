@@ -68,7 +68,7 @@ public class DemoPlugin implements SeikoPlugin {
      * @param long:
      * @return null
      * @author kagg886
-     * @description bot下线时调用
+     * @description bot下线时调用(准确来说是BOT线程被终止时调用)(即将弃用此特性)
      * @date 2023/01/10 13:18
      */
     @Override

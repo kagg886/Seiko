@@ -3,7 +3,6 @@ package com.kagg886.seiko.adapter;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,7 +10,6 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.SwitchCompat;
 import com.kagg886.seiko.R;
@@ -26,9 +24,6 @@ import org.json.JSONObject;
 import org.jsoup.Jsoup;
 
 import java.io.File;
-import java.io.OutputStream;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipOutputStream;
 
 /**
  * @projectName: Seiko
@@ -41,8 +36,8 @@ import java.util.zip.ZipOutputStream;
  */
 public class BotAdapter extends BaseAdapter {
     private static ActivityResultLauncher<Intent> writeCall;
-    private MainActivity avt;
-    private JSONArrayStorage botList;
+    private final MainActivity avt;
+    private final JSONArrayStorage botList;
 
     @Override
     public int getCount() {
@@ -100,7 +95,7 @@ public class BotAdapter extends BaseAdapter {
                 BotRunnerService.INSTANCE.login(target,nick,sw);
             } else {
                 Bot.getInstance(target.optLong("uin")).close();
-                avt.snack(target.optLong("uin") + "已下线");
+                //avt.snack(target.optLong("uin") + "已下线");
             }
         });
 
