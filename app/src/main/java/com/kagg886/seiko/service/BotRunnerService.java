@@ -22,14 +22,9 @@ import androidx.core.app.NotificationCompat;
 import com.kagg886.seiko.R;
 import com.kagg886.seiko.activity.MainActivity;
 import com.kagg886.seiko.bot.LoginThread;
-import com.kagg886.seiko.dic.DICList;
-import com.kagg886.seiko.dic.DICPlugin;
 import com.kagg886.seiko.plugin.PluginList;
-import com.kagg886.seiko.util.storage.JSONObjectStorage;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadPoolExecutor;
 
@@ -57,10 +52,10 @@ public class BotRunnerService extends Service {
 
     private NotificationManager notificationManager;
 
-    private Handler mHandler = new Handler(Looper.getMainLooper()) {
+    private final Handler mHandler = new Handler(Looper.getMainLooper()) {
         @Override
         public void handleMessage(@NonNull Message msg) {
-            notificationManager.notify(114514,getNotification("已运行" + msg.what + "秒"));
+            notificationManager.notify(114514, getNotification("已运行" + msg.what + "秒"));
         }
     };
 

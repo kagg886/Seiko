@@ -1,6 +1,5 @@
 package com.kagg886.seiko.plugin.api;
 
-import android.content.Context;
 import com.kagg886.seiko.plugin.SeikoDescription;
 
 /**
@@ -18,7 +17,7 @@ public interface SeikoPlugin {
     @Deprecated
     void onBotOffLine(long botQQ);
 
-    void onLoad(Context context);
+    void onLoad(Object context);
 
     SeikoDescription getDescription();
 }

@@ -13,7 +13,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class JSONObjectStorage extends JSONObject {
 
-	private static ConcurrentHashMap<String,JSONObjectStorage> storagesCache = new ConcurrentHashMap<>(); //缓存池，减少从硬盘的读操作
+	private static final ConcurrentHashMap<String,JSONObjectStorage> storagesCache = new ConcurrentHashMap<>(); //缓存池，减少从硬盘的读操作
 
 	public String indexKey(int a) {
 		Iterator<String> b = keys();
@@ -49,7 +49,7 @@ public class JSONObjectStorage extends JSONObject {
 		return s;
 	}
 	
-	private String workdir;
+	private final String workdir;
 	
 	private JSONObjectStorage(String relativeDir) throws Exception {
 		super(getJSON(relativeDir));

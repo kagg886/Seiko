@@ -1,4 +1,4 @@
-package com.kagg886.seiko.util;
+package com.kagg886.seiko.dic.util;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -8,13 +8,6 @@ import org.jsoup.Connection;
 import java.io.*;
 
 public class IOUtil {
-
-    public static String getException(Throwable e) {
-        StringWriter writer = new StringWriter();
-        PrintWriter printWriter = new PrintWriter(writer);
-        e.printStackTrace(printWriter);
-        return writer.toString();
-    }
 
     public static void quickShare(Activity ctx, File p, String type) {
         Intent intent = new Intent("android.intent.action.SEND");
@@ -40,10 +33,16 @@ public class IOUtil {
         }).start();
     }
 
-    public interface Response {
-        void onSuccess(byte[] byt) throws Exception;
-
-        void onFailed(Throwable t);
+    public static String getException(Throwable e) {
+        StringWriter stringWriter = new StringWriter();
+        PrintWriter writer = new PrintWriter(stringWriter);
+        e.printStackTrace(writer);
+        try {
+            stringWriter.close();
+            writer.close();
+        } catch (IOException ignored) {
+        }
+        return stringWriter.toString();
     }
 
     /*
@@ -83,10 +82,6 @@ public class IOUtil {
         f.delete();
     }
 
-    /*
-     * 从流中读取所有字节
-     * */
-
     public static byte[] loadByteFromStream(InputStream stream) throws IOException {
         ByteArrayOutputStream output = new ByteArrayOutputStream();
         int by;
@@ -100,15 +95,13 @@ public class IOUtil {
         return output.toByteArray();
     }
 
+    /*
+     * 从流中读取所有字节
+     * */
+
     public static String loadStringFromStream(InputStream stream) throws IOException {
         return new String(loadByteFromStream(stream));
     }
-
-
-
-    /*
-     *读取文件
-     * */
 
     public static byte[] loadByteFromFile(String file) throws IOException {
         FileInputStream stream;
@@ -120,10 +113,15 @@ public class IOUtil {
         return loadByteFromStream(stream);
     }
 
+
+
+    /*
+     *读取文件
+     * */
+
     public static String loadStringFromFile(String file) throws IOException {
         return new String(loadByteFromFile(file));
     }
-
 
     public static void writeByteToFile(String file, byte[] byt) throws IOException {
         FileOutputStream stream;
@@ -154,5 +152,11 @@ public class IOUtil {
             e.printStackTrace();
             return false;
         }
+    }
+
+    public interface Response {
+        void onSuccess(byte[] byt) throws Exception;
+
+        void onFailed(Throwable t);
     }
 }

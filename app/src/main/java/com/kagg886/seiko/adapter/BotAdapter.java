@@ -107,12 +107,12 @@ public class BotAdapter extends BaseAdapter {
             builder.setItems(new String[]{"导出设备信息", "登录配置", "查看日志", "删除BOT"}, (dialog, which) -> {
                 switch (which) {
                     case 0:
-                        File p = new File(avt.getExternalFilesDir("bots") + "/" + uin+ "/device.json");
+                        File p = new File(avt.getExternalFilesDir("bots") + "/" + uin + "/device.json");
                         if (!p.exists()) {
                             avt.snack("从未登陆过，无法获取到设备信息");
                             return;
                         }
-                        IOUtil.quickShare(avt , p, "*/*");
+                        IOUtil.quickShare(avt, p, "*/*");
                         break;
                     case 1:
                         if (Bot.getInstanceOrNull(object.optLong("uin")) != null) {
@@ -123,7 +123,7 @@ public class BotAdapter extends BaseAdapter {
                         break;
                     case 2:
                         Intent i = new Intent(avt, LogActivity.class);
-                        i.putExtra("uin",uin);
+                        i.putExtra("uin", uin);
                         avt.startActivity(i);
                         break;
                     case 3:

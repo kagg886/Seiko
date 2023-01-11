@@ -33,6 +33,7 @@ public class LogActivity extends AppCompatActivity implements View.OnClickListen
     private ActivityResultLauncher<Intent> writeCall;
 
     private String nowBot;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -103,7 +104,7 @@ public class LogActivity extends AppCompatActivity implements View.OnClickListen
                 stream.close();
                 snack("导出成功!");
             } catch (Exception e) {
-                Log.w("DEBUG",e);
+                Log.w("DEBUG", e);
                 snack("导出失败!");
             }
         });

@@ -10,16 +10,12 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.preference.PreferenceManager;
-import com.kagg886.seiko.util.IOUtil;
 import com.kagg886.seiko.util.LimitedArrayList;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.prefs.Preferences;
 
 /**
  * @projectName: Seiko
@@ -31,12 +27,12 @@ import java.util.prefs.Preferences;
  * @version: 1.0
  */
 public class LogAdapter extends BaseAdapter {
-    private LimitedArrayList<String> log;
-    private Context ctx;
+    private final LimitedArrayList<String> log;
+    private final Context ctx;
 
-    private BufferedReader reader;
+    private final BufferedReader reader;
 
-    private Handler mHandler = new Handler(Looper.getMainLooper()) {
+    private final Handler mHandler = new Handler(Looper.getMainLooper()) {
         @Override
         public void handleMessage(@NonNull Message msg) {
             notifyDataSetChanged();
@@ -44,7 +40,7 @@ public class LogAdapter extends BaseAdapter {
     };
 
     public LogAdapter(Context ctx, File logFile) {
-        log = new LimitedArrayList<>(Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(ctx).getString("maxLogNum","40")));
+        log = new LimitedArrayList<>(Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(ctx).getString("maxLogNum", "40")));
         this.ctx = ctx;
 
         try {
@@ -62,7 +58,8 @@ public class LogAdapter extends BaseAdapter {
                         Thread.sleep(1000);
                     }
                     a = reader.readLine();
-                } catch (Exception e) {}
+                } catch (Exception e) {
+                }
                 if (a == null) {
                     needDelay = true;
                     continue;

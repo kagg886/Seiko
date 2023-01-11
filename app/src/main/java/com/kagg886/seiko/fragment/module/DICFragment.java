@@ -1,6 +1,5 @@
 package com.kagg886.seiko.fragment.module;
 
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,8 +13,6 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.kagg886.seiko.R;
 import com.kagg886.seiko.activity.MainActivity;
 import com.kagg886.seiko.adapter.DICAdapter;
-import com.kagg886.seiko.adapter.PluginAdapter;
-import com.kagg886.seiko.service.BotRunnerService;
 import org.jetbrains.annotations.NotNull;
 
 /**

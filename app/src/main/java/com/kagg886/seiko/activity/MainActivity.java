@@ -1,11 +1,8 @@
 package com.kagg886.seiko.activity;
 
-import android.content.ComponentName;
 import android.content.Intent;
-import android.content.ServiceConnection;
+import android.content.IntentFilter;
 import android.os.Bundle;
-import android.os.IBinder;
-import android.util.Log;
 import android.widget.LinearLayout;
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultLauncher;
@@ -16,22 +13,15 @@ import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
 import com.kagg886.seiko.R;
-import com.kagg886.seiko.adapter.BotAdapter;
 import com.kagg886.seiko.adapter.ModuleAdapter;
+import com.kagg886.seiko.event.DialogBroadCast;
 import com.kagg886.seiko.fragment.module.DICFragment;
 import com.kagg886.seiko.fragment.module.LoginFragment;
 import com.kagg886.seiko.fragment.module.PluginFragment;
 import com.kagg886.seiko.fragment.module.SettingsFragment;
 import com.kagg886.seiko.service.BotRunnerService;
-import com.kagg886.seiko.util.IOUtil;
 
-import java.io.File;
-import java.io.OutputStream;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipOutputStream;
 
 /**
  * @projectName: Seiko
@@ -65,10 +55,23 @@ public class MainActivity extends AppCompatActivity {
         return p;
     }
 
+    private DialogBroadCast dialogBroadCast;
+
+    @Override
+    protected void onDestroy() {
+        unregisterReceiver(dialogBroadCast);
+        super.onDestroy();
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        dialogBroadCast = new DialogBroadCast(this);
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(DialogBroadCast.TAG);
+        registerReceiver(dialogBroadCast, filter);
 
         layout = findViewById(R.id.activity_main_view_tab_layout);
         pager = findViewById(R.id.activity_main_view_view_pager);

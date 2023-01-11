@@ -1,15 +1,12 @@
 package com.kagg886.seiko.plugin;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.util.Log;
 import androidx.appcompat.app.AlertDialog;
 import com.kagg886.seiko.dic.DICPlugin;
 import com.kagg886.seiko.plugin.api.SeikoPlugin;
-import com.kagg886.seiko.service.BotRunnerService;
 import dalvik.system.DexClassLoader;
 
-import javax.xml.transform.ErrorListener;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Objects;
@@ -25,7 +22,7 @@ import java.util.Objects;
  */
 public class PluginList extends ArrayList<SeikoPlugin> {
 
-    private Context ctx; //Service的Context
+    private final Context ctx; //Service的Context
 
     public PluginList(Context ctx) {
         this.ctx = ctx;
@@ -42,7 +39,7 @@ public class PluginList extends ArrayList<SeikoPlugin> {
                 AlertDialog dialog1 = new AlertDialog.Builder(ctx).setTitle(f.getName() + "加载失败")
                         .setMessage(e.getMessage()).create();
                 dialog1.show();
-                Log.w("DEBUG",e);
+                Log.w("DEBUG", e);
             }
         }
         for (SeikoPlugin p : this) {
@@ -53,7 +50,7 @@ public class PluginList extends ArrayList<SeikoPlugin> {
                 AlertDialog dialog1 = new AlertDialog.Builder(ctx).setTitle(p.getDescription().getId() + "加载失败")
                         .setMessage(e.getMessage()).create();
                 dialog1.show();
-                Log.w("DEBUG",e);
+                Log.w("Seiko", e);
             }
         }
     }

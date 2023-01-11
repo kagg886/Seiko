@@ -4,20 +4,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.CompoundButton;
 import android.widget.TextView;
 import androidx.appcompat.widget.SwitchCompat;
 import com.kagg886.seiko.R;
 import com.kagg886.seiko.activity.MainActivity;
 import com.kagg886.seiko.dic.DICList;
 import com.kagg886.seiko.dic.DICPlugin;
-import com.kagg886.seiko.service.BotRunnerService;
 import com.kagg886.seiko.util.IOUtil;
 import com.kagg886.seiko.util.storage.JSONObjectStorage;
-import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.io.File;
 
 /**
  * @projectName: Seiko
@@ -30,21 +25,17 @@ import java.io.File;
  */
 public class DICAdapter extends BaseAdapter {
 
-    private MainActivity avt;
-
-    private JSONObjectStorage storage;
+    private final MainActivity avt;
 
 
     public DICAdapter(MainActivity avt) {
         this.avt = avt;
-        refresh();
     }
 
     private void refresh() {
-        DICPlugin.getDicLists().refresh();
+        DICPlugin.getDicLists().refresh(avt);
         JSONObjectStorage.destroy(IOUtil.newFile(avt.getExternalFilesDir("config"), "/dicList.json").getAbsolutePath());
-        storage = null;
-        storage = JSONObjectStorage.obtain(IOUtil.newFile(avt.getExternalFilesDir("config"), "/dicList.json").getAbsolutePath());
+        JSONObjectStorage.obtain(IOUtil.newFile(avt.getExternalFilesDir("config"), "/dicList.json").getAbsolutePath());
     }
 
 
@@ -72,12 +63,13 @@ public class DICAdapter extends BaseAdapter {
         DICList l = DICPlugin.getDicLists();
         tx.setText(l.get(i).getName());
 
-        final JSONObject a = storage.optJSONObject(l.get(i).getName());
+        final JSONObject a = DICPlugin.getDicConfig().optJSONObject(l.get(i).getName());
         if (a == null) {
             sw.setChecked(true);
         } else {
             sw.setChecked(a.optBoolean("enabled",true));
         }
+
         sw.setOnCheckedChangeListener((compoundButton, isChecked) -> {
             if (!compoundButton.isPressed()) {
                 return;
@@ -89,10 +81,9 @@ public class DICAdapter extends BaseAdapter {
                 tmp = a;
             }
             try {
-                tmp.put("enabled",isChecked);
-                storage.put(l.get(i).getName(),tmp);
-                storage.save();
-                notifyDataSetChanged();
+                tmp.put("enabled", isChecked);
+                DICPlugin.getDicConfig().put(l.get(i).getName(), tmp);
+                DICPlugin.getDicConfig().save();
             } catch (Throwable e) {
                 throw new RuntimeException(e);
             }

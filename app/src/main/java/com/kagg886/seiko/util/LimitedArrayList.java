@@ -12,7 +12,8 @@ import java.util.ArrayList;
  * @version: 1.0
  */
 public class LimitedArrayList<T> extends ArrayList<T> {
-    private int len;
+    private final int len;
+
     public LimitedArrayList(int len) {
         this.len = len;
     }

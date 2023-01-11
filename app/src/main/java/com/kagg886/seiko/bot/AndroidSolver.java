@@ -12,7 +12,6 @@ import kotlin.coroutines.Continuation;
 import kotlin.coroutines.CoroutineContext;
 import kotlin.coroutines.EmptyCoroutineContext;
 import net.mamoe.mirai.Bot;
-import net.mamoe.mirai.network.LoginFailedException;
 import net.mamoe.mirai.network.RetryLaterException;
 import net.mamoe.mirai.network.UnsupportedSliderCaptchaException;
 import net.mamoe.mirai.utils.DeviceVerificationRequests;
@@ -31,7 +30,7 @@ import org.jetbrains.annotations.Nullable;
  * @version: 1.0
  */
 public class AndroidSolver extends LoginSolver {
-    private MainActivity avt;
+    private final MainActivity avt;
 
     public AndroidSolver(MainActivity avt) {
         this.avt = avt;

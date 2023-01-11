@@ -4,12 +4,10 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.text.InputType;
-import android.widget.EditText;
 import androidx.annotation.NonNull;
 import androidx.preference.EditTextPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
-import androidx.preference.PreferenceManager;
 import com.kagg886.seiko.BuildConfig;
 import com.kagg886.seiko.R;
 import com.kagg886.seiko.activity.MainActivity;
@@ -58,10 +56,10 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Prefer
                 break appends;
             }
             if ((total / 1024 / 1024) < 1) {
-                str.append(String.format("%.2f",total / 1024.0)).append("KB");
+                str.append(String.format("%.2f", total / 1024.0)).append("KB");
                 break appends;
             }
-            str.append(String.format("%.2f",total / 1024.0 / 1024.0)).append("MB");
+            str.append(String.format("%.2f", total / 1024.0 / 1024.0)).append("MB");
         }
 
         s.setSummary(str.toString());
@@ -81,27 +79,25 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Prefer
                 return false;
             }
         });
-        sp.setSummary(String.format("当前设置的值为:%s", sp.getSharedPreferences().getString("maxLogNum","40")));
+        sp.setSummary(String.format("当前设置的值为:%s", sp.getSharedPreferences().getString("maxLogNum", "40")));
     }
 
     @Override
     public boolean onPreferenceClick(Preference preference) {
-        switch (preference.getKey()) {
-            case "cleanCache":
-                File f = getContext().getExternalFilesDir("bots");
-                for (File bot : f.listFiles()) {
-                    f = new File(bot.getAbsolutePath() + "/log");
-                    if (!f.isDirectory()) {
-                        continue;
-                    }
-                    for (File log : f.listFiles()) {
-                        log.delete();
-                    }
-                    f.delete();
+        if (preference.getKey().equals("cleanCache")) {
+            File f = getContext().getExternalFilesDir("bots");
+            for (File bot : f.listFiles()) {
+                f = new File(bot.getAbsolutePath() + "/log");
+                if (!f.isDirectory()) {
+                    continue;
                 }
-                ((MainActivity)getActivity()).snack("清理完毕(๑′ᴗ‵๑)");
-                preference.setSummary("已发现0Byte");
-                break;
+                for (File log : f.listFiles()) {
+                    log.delete();
+                }
+                f.delete();
+            }
+            ((MainActivity) getActivity()).snack("清理完毕(๑′ᴗ‵๑)");
+            preference.setSummary("已发现0Byte");
         }
         return false;
     }

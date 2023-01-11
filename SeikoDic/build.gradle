@@ -41,4 +41,6 @@ dependencies {
     runtimeOnly("net.mamoe:mirai-core-android:2.13.2")
     api("net.mamoe:mirai-core-api-android:2.13.2")
     implementation("net.mamoe:mirai-core-utils-android:2.13.2")
+
+    compileOnly("org.jsoup:jsoup:1.15.3")
 }
