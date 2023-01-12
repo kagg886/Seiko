@@ -2,7 +2,6 @@ package com.kagg886.seiko.util.storage;
 
 import androidx.annotation.NonNull;
 import com.kagg886.seiko.util.IOUtil;
-import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -61,13 +60,16 @@ public class JSONObjectStorage extends JSONObject {
 	}
 
 
-	public JSONObject put(@NonNull @NotNull String name, String value) {
-		try {
-			return super.put(name, value);
-		} catch (JSONException e) {
-			throw new RuntimeException(e);
-		}
-	}
+	private static String getJSON(String relativeDir) throws IOException {
+        if (relativeDir.equals("")) {
+            return "{}";
+        }
+        String string = IOUtil.loadStringFromFile(relativeDir);
+        if (string.equals("")) {
+            return "{}";
+        }
+        return string;
+    }
 
 	public synchronized boolean save() {
 		try {
@@ -78,16 +80,18 @@ public class JSONObjectStorage extends JSONObject {
 		}
 	}
 	
-	
-	private static String getJSON(String relativeDir) throws IOException {
-		if (relativeDir.equals("")) {
-			return "{}";
-		}
-		String string = IOUtil.loadStringFromFile(relativeDir);
-		if (string.equals("")) {
-			return "{}";
-		}
-		return string;
-	}
+	public JSONObject put(@NonNull String name, String value) {
+        try {
+            return super.put(name, value);
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
+    public JSONObject optJSONObject(String name, JSONObject jsonObject) {
+        if (isNull(name)) {
+            return jsonObject;
+        }
+        return super.optJSONObject(name);
+    }
 }

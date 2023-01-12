@@ -1,4 +1,4 @@
-package com.kagg886.seiko.dic.util;
+package com.kagg886.seiko.util;
 
 import java.util.Iterator;
 

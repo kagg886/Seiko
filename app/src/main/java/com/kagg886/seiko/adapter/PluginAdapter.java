@@ -9,7 +9,6 @@ import com.kagg886.seiko.R;
 import com.kagg886.seiko.activity.MainActivity;
 import com.kagg886.seiko.plugin.SeikoDescription;
 import com.kagg886.seiko.service.BotRunnerService;
-import net.mamoe.mirai.Bot;
 
 /**
  * @projectName: Seiko
@@ -21,7 +20,7 @@ import net.mamoe.mirai.Bot;
  * @version: 1.0
  */
 public class PluginAdapter extends BaseAdapter {
-    private MainActivity avt;
+    private final MainActivity avt;
 
     public PluginAdapter(MainActivity avt) {
         this.avt = avt;
@@ -29,6 +28,9 @@ public class PluginAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
+        if (BotRunnerService.INSTANCE == null) { //服务绑定和活动加载是异步的，此时需要手动刷新程序
+            return 0;
+        }
         return BotRunnerService.INSTANCE.getSeikoPluginList().size();
     }
 

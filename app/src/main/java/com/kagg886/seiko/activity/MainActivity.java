@@ -7,6 +7,7 @@ import android.widget.LinearLayout;
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
 import com.google.android.material.snackbar.BaseTransientBottomBar;
@@ -20,8 +21,14 @@ import com.kagg886.seiko.fragment.module.LoginFragment;
 import com.kagg886.seiko.fragment.module.PluginFragment;
 import com.kagg886.seiko.fragment.module.SettingsFragment;
 import com.kagg886.seiko.service.BotRunnerService;
+import com.kagg886.seiko.util.IOUtil;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 /**
  * @projectName: Seiko
@@ -68,6 +75,38 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        File f = getExternalFilesDir("crash");
+        if (f.listFiles().length != 0) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("发现了" + f.listFiles().length + "个崩溃文件");
+            builder.setMessage("请在下方选择你的操作");
+            builder.setPositiveButton("打包并分享", (dialog, which) -> {
+                File crashFile = getExternalFilesDir("tmp").toPath().resolve("crash.zip").toFile();
+                if (crashFile.exists()) {
+                    crashFile.delete();
+                }
+                try {
+                    crashFile.createNewFile();
+                    ZipOutputStream stream = new ZipOutputStream(Files.newOutputStream(crashFile.toPath()));
+                    for (File log : f.listFiles()) {
+                        stream.putNextEntry(new ZipEntry(log.getName()));
+                        stream.write(IOUtil.loadByteFromFile(log.getAbsolutePath()));
+                    }
+                    stream.close();
+                    IOUtil.delFile(f);
+                    IOUtil.quickShare(MainActivity.this, crashFile, "*/*");
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            });
+
+            builder.setNegativeButton("全部删除", (dialog, which) -> {
+                IOUtil.delFile(f);
+                snack("已全部删除!");
+            });
+            builder.create().show();
+        }
+
         dialogBroadCast = new DialogBroadCast(this);
         IntentFilter filter = new IntentFilter();
         filter.addAction(DialogBroadCast.TAG);
@@ -93,6 +132,7 @@ public class MainActivity extends AppCompatActivity {
         adapter.setViews(fragments);
         pager.setAdapter(adapter);
         layout.setupWithViewPager(pager);
+
     }
 
     public void snack(String text) {

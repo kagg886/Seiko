@@ -1,8 +1,8 @@
-package com.kagg886.seiko.dic.util;
+package com.kagg886.seiko.util.storage;
 
 /**
  * @projectName: Seiko
- * @package: com.kagg886.seiko.util.storage
+ * @package: com.kagg886.seiko.com.kagg886.seiko.util.storage
  * @className: JSONArrayStorage
  * @author: kagg886
  * @description: json数组存储类
@@ -10,19 +10,16 @@ package com.kagg886.seiko.dic.util;
  * @version: 1.0
  */
 
+import com.kagg886.seiko.util.IOUtil;
 import org.json.JSONArray;
 
 import java.io.IOException;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class JSONArrayStorage extends JSONArray {
-    private static final ConcurrentHashMap<String, JSONArrayStorage> storagesCache = new ConcurrentHashMap<>(); //缓存池，减少从硬盘的读操作
     private final String workdir;
 
-    private JSONArrayStorage(String relativeDir) throws Exception {
-        super(getJSON(relativeDir));
-        this.workdir = relativeDir;
-    }
+    private static final ConcurrentHashMap<String,JSONArrayStorage> storagesCache = new ConcurrentHashMap<>(); //缓存池，减少从硬盘的读操作
 
     public static JSONArrayStorage obtain(String relativeDir) {
         if (storagesCache.containsKey(relativeDir)) {
@@ -34,9 +31,24 @@ public class JSONArrayStorage extends JSONArray {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-        storagesCache.put(relativeDir, s);
+        storagesCache.put(relativeDir,s);
         return s;
     }
+
+    private JSONArrayStorage(String relativeDir) throws Exception {
+        super(getJSON(relativeDir));
+        this.workdir = relativeDir;
+    }
+
+    public boolean save() {
+        try {
+            IOUtil.writeStringToFile(workdir, this.toString());
+            return true;
+        } catch (IOException e) {
+            return false;
+        }
+    }
+
 
     private static String getJSON(String relativeDir) throws IOException {
         if (relativeDir.equals("")) {
@@ -47,15 +59,6 @@ public class JSONArrayStorage extends JSONArray {
             return "[]";
         }
         return string;
-    }
-
-    public boolean save() {
-        try {
-            IOUtil.writeStringToFile(workdir, this.toString());
-            return true;
-        } catch (IOException e) {
-            return false;
-        }
     }
 
 }

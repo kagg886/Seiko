@@ -13,6 +13,7 @@ import android.widget.ListView;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputLayout;
 import com.kagg886.seiko.R;
@@ -21,7 +22,6 @@ import com.kagg886.seiko.adapter.PluginAdapter;
 import com.kagg886.seiko.service.BotRunnerService;
 import com.kagg886.seiko.util.FileUtil;
 import com.kagg886.seiko.util.NetUtil;
-import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
 
@@ -31,11 +31,13 @@ import java.nio.file.Paths;
 import java.util.UUID;
 
 
-public class PluginFragment extends Fragment implements View.OnClickListener {
+public class PluginFragment extends Fragment implements View.OnClickListener, SwipeRefreshLayout.OnRefreshListener {
     private static ActivityResultLauncher<Intent> readCall;
     private ListView listView;
-    private PluginAdapter adapter;
+    private SwipeRefreshLayout layout;
+
     private FloatingActionButton button;
+    private PluginAdapter adapter;
     private AlertDialog dialog;
 
     @Override
@@ -45,24 +47,22 @@ public class PluginFragment extends Fragment implements View.OnClickListener {
         listView = v.findViewById(R.id.fragment_plugin_list);
         adapter = new PluginAdapter((MainActivity) getActivity());
         listView.setAdapter(adapter);
+
         button = v.findViewById(R.id.fragment_plugin_menu);
         button.setOnClickListener(this);
+
+        layout = v.findViewById(R.id.fragment_plugin_refresh);
+        layout.setOnRefreshListener(this);
+
         return v;
     }
 
     @Override
     public void onClick(View v) {
         AlertDialog dialog = new AlertDialog.Builder(getContext())
-                .setTitle("您要...").setItems(new String[]{"从网络导入", "刷新插件"}, (dialog1, which) -> {
-                    switch (which) {
-                        case 0:
-                            importPluginDialog().show();
-                            break;
-                        case 1:
-                            BotRunnerService.INSTANCE.getSeikoPluginList().refresh();
-                            adapter.notifyDataSetChanged();
-                            ((MainActivity) getActivity()).snack("刷新完成");
-                            break;
+                .setTitle("您要...").setItems(new String[]{"从网络导入"}, (dialog1, which) -> {
+                    if (which == 0) {
+                        importPluginDialog().show();
                     }
                 }).create();
         dialog.show();
@@ -77,7 +77,7 @@ public class PluginFragment extends Fragment implements View.OnClickListener {
         mHandler.sendEmptyMessage(2);
         NetUtil.downloadFromUrlAsync(url, new Callback() {
             @Override
-            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+            public void onResponse(@NonNull okhttp3.Call call, @NonNull Response response) throws IOException {
                 File file = null;
                 try {
                     byte[] data = response.body().source().readByteArray();
@@ -101,7 +101,7 @@ public class PluginFragment extends Fragment implements View.OnClickListener {
             }
 
             @Override
-            public void onFailure(@NonNull Call call, @NonNull IOException e) {
+            public void onFailure(@NonNull okhttp3.Call call, @NonNull IOException e) {
                 e.printStackTrace();
                 notifyError(e);
             }
@@ -153,4 +153,12 @@ public class PluginFragment extends Fragment implements View.OnClickListener {
             }
         }
     };
+
+    @Override
+    public void onRefresh() {
+        BotRunnerService.INSTANCE.getSeikoPluginList().refresh();
+        adapter.notifyDataSetChanged();
+        layout.setRefreshing(false);
+        ((MainActivity) getActivity()).snack("刷新完成");
+    }
 }

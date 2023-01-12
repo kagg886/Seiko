@@ -18,3 +18,4 @@ include ':PluginAPI'
 include ':SeikoDic'
 
 include ':PluginDemo'
+include ':SeikoUtil'

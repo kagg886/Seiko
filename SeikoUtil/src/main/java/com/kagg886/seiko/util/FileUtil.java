@@ -3,7 +3,6 @@ package com.kagg886.seiko.util;
 import android.content.Context;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 

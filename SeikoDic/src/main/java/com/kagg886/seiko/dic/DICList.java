@@ -3,7 +3,7 @@ package com.kagg886.seiko.dic;
 import android.content.Context;
 import android.content.Intent;
 import com.kagg886.seiko.dic.entity.DictionaryFile;
-import com.kagg886.seiko.dic.util.IOUtil;
+import com.kagg886.seiko.util.IOUtil;
 
 import java.io.File;
 import java.util.ArrayList;

@@ -2,8 +2,8 @@ package com.kagg886.seiko.dic.entity;
 
 import android.text.TextUtils;
 import com.kagg886.seiko.dic.exception.DictionaryOnLoadException;
-import com.kagg886.seiko.dic.util.ArrayIterator;
-import com.kagg886.seiko.dic.util.IOUtil;
+import com.kagg886.seiko.util.ArrayIterator;
+import com.kagg886.seiko.util.IOUtil;
 import net.mamoe.mirai.event.events.MessageEvent;
 
 import java.io.File;

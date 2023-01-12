@@ -3,17 +3,14 @@ package com.kagg886.seiko.dic;
 import android.content.Context;
 import android.util.Log;
 import com.kagg886.seiko.dic.entity.DictionaryFile;
-import com.kagg886.seiko.dic.util.IOUtil;
-import com.kagg886.seiko.dic.util.JSONObjectStorage;
 import com.kagg886.seiko.plugin.SeikoDescription;
 import com.kagg886.seiko.plugin.api.SeikoPlugin;
+import com.kagg886.seiko.util.storage.JSONObjectStorage;
 import net.mamoe.mirai.Bot;
 import net.mamoe.mirai.event.EventChannel;
 import net.mamoe.mirai.event.events.BotEvent;
 import net.mamoe.mirai.event.events.GroupMessageEvent;
 import org.json.JSONObject;
-
-import java.util.function.Consumer;
 
 /**
  * @projectName: Seiko
@@ -40,17 +37,14 @@ public class DICPlugin extends SeikoPlugin {
     @Override
     public void onBotGoLine(long botQQ) {
         EventChannel<BotEvent> event = Bot.findInstance(botQQ).getEventChannel();
-        event.subscribeAlways(GroupMessageEvent.class, new Consumer<GroupMessageEvent>() {
-            @Override
-            public void accept(GroupMessageEvent groupMessageEvent) {
-                JSONObject dicConfigUnit;
-                for (DictionaryFile dic : dicLists) {
-                    if ((dicConfigUnit = getDicConfig().optJSONObject(dic.getName(), new JSONObject())) != null) {
-                        if (dicConfigUnit.optBoolean("enabled", true)) {
-                            dic.invoke(groupMessageEvent);
-                            Log.i("DEBUG", dic.getName() + "已执行");
-                            return;
-                        }
+        event.subscribeAlways(GroupMessageEvent.class, groupMessageEvent -> {
+            JSONObject dicConfigUnit;
+            for (DictionaryFile dic : dicLists) {
+                if ((dicConfigUnit = getDicConfig().optJSONObject(dic.getName(), new JSONObject())) != null) {
+                    if (dicConfigUnit.optBoolean("enabled", true)) {
+                        dic.invoke(groupMessageEvent);
+                        Log.i("DEBUG", dic.getName() + "已执行");
+                        return;
                     }
                 }
             }
@@ -66,7 +60,7 @@ public class DICPlugin extends SeikoPlugin {
     public void onLoad(Object ctx) {
         this.context = (Context) ctx;
         dicLists = new DICList(context);
-        dicConfigPoint = IOUtil.newFile(context.getExternalFilesDir("config"), "/dicList.json").getAbsolutePath();
+        dicConfigPoint = context.getExternalFilesDir("config").toPath().resolve("dicList.json").toFile().getAbsolutePath();
     }
 
     @Override

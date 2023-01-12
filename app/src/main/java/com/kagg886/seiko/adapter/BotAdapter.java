@@ -22,7 +22,6 @@ import com.kagg886.seiko.util.IOUtil;
 import com.kagg886.seiko.util.NetUtil;
 import com.kagg886.seiko.util.storage.JSONArrayStorage;
 import net.mamoe.mirai.Bot;
-import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
 import org.jetbrains.annotations.NotNull;
@@ -79,14 +78,14 @@ public class BotAdapter extends BaseAdapter {
         qq.setText(String.valueOf(target.optLong("uin")));
         NetUtil.downloadFromUrlAsync("https://q1.qlogo.cn/g?b=qq&nk=" + qq.getText().toString() + "&s=640", new Callback() {
             @Override
-            public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                avt.runOnUiThread(() -> imageView.setImageResource(R.drawable.ic_error));
+            public void onResponse(@NotNull okhttp3.Call call, @NotNull Response response) throws IOException {
+                byte[] byt = response.body().source().readByteArray();
+                avt.runOnUiThread(() -> imageView.setImageBitmap(BitmapFactory.decodeByteArray(byt, 0, byt.length)));
             }
 
             @Override
-            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-                byte[] byt = response.body().source().readByteArray();
-                avt.runOnUiThread(() -> imageView.setImageBitmap(BitmapFactory.decodeByteArray(byt, 0, byt.length)));
+            public void onFailure(@NotNull okhttp3.Call call, @NotNull IOException e) {
+                avt.runOnUiThread(() -> imageView.setImageResource(R.drawable.ic_error));
             }
         });
 

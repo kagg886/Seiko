@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.kagg886.seiko.R;
 import com.kagg886.seiko.activity.MainActivity;
@@ -24,8 +25,9 @@ import org.jetbrains.annotations.NotNull;
  * @date: 2023/1/9 18:48
  * @version: 1.0
  */
-public class DICFragment extends Fragment implements View.OnClickListener {
+public class DICFragment extends Fragment implements View.OnClickListener, SwipeRefreshLayout.OnRefreshListener {
     private ListView listView;
+    private SwipeRefreshLayout layout;
     private DICAdapter adapter;
     private FloatingActionButton button;
 
@@ -35,27 +37,34 @@ public class DICFragment extends Fragment implements View.OnClickListener {
     public View onCreateView(@NonNull @NotNull LayoutInflater inflater, @Nullable @org.jetbrains.annotations.Nullable ViewGroup container, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_plugin, container, false);
         listView = v.findViewById(R.id.fragment_plugin_list);
-        adapter = new DICAdapter(((MainActivity)getActivity()));
+        adapter = new DICAdapter(((MainActivity) getActivity()));
         listView.setAdapter(adapter);
         button = v.findViewById(R.id.fragment_plugin_menu);
         button.setOnClickListener(this);
+        layout = v.findViewById(R.id.fragment_plugin_refresh);
+        layout.setOnRefreshListener(this);
         return v;
     }
 
     @Override
     public void onClick(View view) {
         AlertDialog dialog = new AlertDialog.Builder(requireContext())
-                .setTitle("您要...").setItems(new String[]{"导入词库", "重载词库"}, (dialog1, which) -> {
+                .setTitle("您要...").setItems(new String[]{"导入词库"}, (dialog1, which) -> {
                     switch (which) {
                         case 0:
                             ((MainActivity) getActivity()).snack("懒得做了xwx\n等更新吧www");
                             break;
                         case 1:
-                            adapter.notifyDataSetChanged();
-                            ((MainActivity) getActivity()).snack("刷新完成");
                             break;
                     }
                 }).create();
         dialog.show();
+    }
+
+    @Override
+    public void onRefresh() {
+        adapter.notifyDataSetChanged();
+        layout.setRefreshing(false);
+        ((MainActivity) getActivity()).snack("刷新完成");
     }
 }

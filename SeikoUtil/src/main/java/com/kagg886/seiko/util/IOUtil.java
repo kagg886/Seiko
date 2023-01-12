@@ -1,71 +1,25 @@
-package com.kagg886.seiko.dic.util;
+package com.kagg886.seiko.util;
 
 import android.app.Activity;
 import android.content.Intent;
 import androidx.core.content.FileProvider;
-import org.jsoup.Connection;
 
 import java.io.*;
 
 public class IOUtil {
+
+    public static String getException(Throwable e) {
+        StringWriter writer = new StringWriter();
+        PrintWriter printWriter = new PrintWriter(writer);
+        e.printStackTrace(printWriter);
+        return writer.toString();
+    }
 
     public static void quickShare(Activity ctx, File p, String type) {
         Intent intent = new Intent("android.intent.action.SEND");
         intent.putExtra("android.intent.extra.STREAM", FileProvider.getUriForFile(ctx, "com.kagg886.seiko.fileprovider", p));
         intent.setType(type);
         ctx.startActivity(intent);
-    }
-
-    public static void asyncHttp(Activity ctx, Connection c, Response resp) {
-        new Thread(() -> {
-            try {
-                byte[] a = IOUtil.loadByteFromStream(c.execute().bodyStream());
-                ctx.runOnUiThread(() -> {
-                    try {
-                        resp.onSuccess(a);
-                    } catch (Exception e) {
-                        resp.onFailed(e);
-                    }
-                });
-            } catch (IOException e) {
-                ctx.runOnUiThread(() -> resp.onFailed(e));
-            }
-        }).start();
-    }
-
-    public static String getException(Throwable e) {
-        StringWriter stringWriter = new StringWriter();
-        PrintWriter writer = new PrintWriter(stringWriter);
-        e.printStackTrace(writer);
-        try {
-            stringWriter.close();
-            writer.close();
-        } catch (IOException ignored) {
-        }
-        return stringWriter.toString();
-    }
-
-    /*
-     * 用于快速创建新文件
-     * */
-    public static File newFile(File base, Object... path) {
-        StringBuilder builder = new StringBuilder();
-        builder.append(base.getAbsolutePath());
-        for (Object b : path) {
-            builder.append(b.toString());
-        }
-
-        File rtn = new File(builder.toString());
-        if (!rtn.getParentFile().isDirectory()) {
-            rtn.mkdirs();
-        }
-        if (!rtn.exists()) {
-            try {
-                rtn.createNewFile();
-            } catch (IOException ignored) {
-            }
-        }
-        return rtn;
     }
 
     /*
@@ -82,6 +36,10 @@ public class IOUtil {
         f.delete();
     }
 
+    /*
+     * 从流中读取所有字节
+     * */
+
     public static byte[] loadByteFromStream(InputStream stream) throws IOException {
         ByteArrayOutputStream output = new ByteArrayOutputStream();
         int by;
@@ -95,13 +53,15 @@ public class IOUtil {
         return output.toByteArray();
     }
 
-    /*
-     * 从流中读取所有字节
-     * */
-
     public static String loadStringFromStream(InputStream stream) throws IOException {
         return new String(loadByteFromStream(stream));
     }
+
+
+
+    /*
+     *读取文件
+     * */
 
     public static byte[] loadByteFromFile(String file) throws IOException {
         FileInputStream stream;
@@ -113,15 +73,10 @@ public class IOUtil {
         return loadByteFromStream(stream);
     }
 
-
-
-    /*
-     *读取文件
-     * */
-
     public static String loadStringFromFile(String file) throws IOException {
         return new String(loadByteFromFile(file));
     }
+
 
     public static void writeByteToFile(String file, byte[] byt) throws IOException {
         FileOutputStream stream;
@@ -152,11 +107,5 @@ public class IOUtil {
             e.printStackTrace();
             return false;
         }
-    }
-
-    public interface Response {
-        void onSuccess(byte[] byt) throws Exception;
-
-        void onFailed(Throwable t);
     }
 }
