@@ -14,7 +14,6 @@ import java.io.File;
  * @version: 1.0
  */
 public abstract class SeikoPlugin {
-
     private File f;
 
     public File getFile() {
