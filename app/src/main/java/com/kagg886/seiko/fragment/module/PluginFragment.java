@@ -53,7 +53,7 @@ public class PluginFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         AlertDialog dialog = new AlertDialog.Builder(getContext())
-                .setTitle("您要...").setItems(new String[]{"导入插件", "刷新插件"}, (dialog1, which) -> {
+                .setTitle("您要...").setItems(new String[]{"从网络导入", "刷新插件"}, (dialog1, which) -> {
                     switch (which) {
                         case 0:
                             importPluginDialog().show();

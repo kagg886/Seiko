@@ -63,7 +63,7 @@ public class LoginThread extends Thread {
         this.nick = nick;
         this.sw = sw;
 
-        Long uin = botConfig.optLong("uin");
+        long uin = botConfig.optLong("uin");
         String pass = botConfig.optString("pass");
         BotConfiguration.MiraiProtocol protocol = BotConfiguration.MiraiProtocol.valueOf(botConfig.optString("platform", "ANDROID_PHONE"));
 

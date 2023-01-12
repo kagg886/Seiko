@@ -3,7 +3,6 @@ package com.kagg886.seiko.util;
 import android.app.Activity;
 import android.content.Intent;
 import androidx.core.content.FileProvider;
-import org.jsoup.Connection;
 
 import java.io.*;
 
@@ -23,50 +22,10 @@ public class IOUtil {
         ctx.startActivity(intent);
     }
 
-    public static void asyncHttp(Activity ctx, Connection c, Response resp) {
-        new Thread(() -> {
-            try {
-                byte[] a = IOUtil.loadByteFromStream(c.execute().bodyStream());
-                ctx.runOnUiThread(() -> {
-                    try {
-                        resp.onSuccess(a);
-                    } catch (Exception e) {
-                        resp.onFailed(e);
-                    }
-                });
-            } catch (IOException e) {
-                ctx.runOnUiThread(() -> resp.onFailed(e));
-            }
-        }).start();
-    }
-
     public interface Response {
         void onSuccess(byte[] byt) throws Exception;
 
         void onFailed(Throwable t);
-    }
-
-    /*
-     * 用于快速创建新文件
-     * */
-    public static File newFile(File base, Object... path) {
-        StringBuilder builder = new StringBuilder();
-        builder.append(base.getAbsolutePath());
-        for (Object b : path) {
-            builder.append(b.toString());
-        }
-
-        File rtn = new File(builder.toString());
-        if (!rtn.getParentFile().isDirectory()) {
-            rtn.mkdirs();
-        }
-        if (!rtn.exists()) {
-            try {
-                rtn.createNewFile();
-            } catch (IOException ignored) {
-            }
-        }
-        return rtn;
     }
 
     /*

@@ -1,0 +1,33 @@
+plugins {
+    id 'com.android.application'
+}
+apply plugin: 'kotlin-android'
+
+android {
+    namespace 'com.example.demo'
+    compileSdk 32
+
+    defaultConfig {
+        minSdk 28
+        targetSdk 32
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles "consumer-rules.pro"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+dependencies {
+    compileOnly project(':PluginAPI')
+    compileOnly("net.mamoe:mirai-core-android:2.13.2")
+}

@@ -5,6 +5,7 @@ import net.mamoe.mirai.utils.BotConfiguration;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.text.SimpleDateFormat;
 
 /**
@@ -22,9 +23,9 @@ public class BotLogConfiguration extends BotConfiguration {
 
     public BotLogConfiguration(Long bot, MainActivity avt) {
         super();
-        String parentPath = String.format("%s/%d/", avt.getExternalFilesDir("bots").getAbsolutePath(), bot);
-        setWorkingDir(new File(parentPath));
-        File p = new File(parentPath + "device.json");
+        Path parentPath = avt.getExternalFilesDir("bots").toPath().resolve(String.valueOf(bot));
+        setWorkingDir(parentPath.toFile());
+        File p = parentPath.resolve("device.json").toFile();
         if (!p.exists()) {
             p.getParentFile().mkdirs();
             try {
@@ -37,7 +38,7 @@ public class BotLogConfiguration extends BotConfiguration {
         setLoginSolver(new AndroidSolver(avt));
 
 
-        File f1 = new File(parentPath + "log/" + new SimpleDateFormat("yyyy-MM-dd").format(System.currentTimeMillis()) + ".log");
+        File f1 = parentPath.resolve("log").resolve(new SimpleDateFormat("yyyy-MM-dd").format(System.currentTimeMillis()) + ".log").toFile();
         if (!f1.exists()) {
             f1.getParentFile().mkdirs();
             try {

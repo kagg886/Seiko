@@ -10,7 +10,6 @@ import com.kagg886.seiko.R;
 import com.kagg886.seiko.activity.MainActivity;
 import com.kagg886.seiko.dic.DICList;
 import com.kagg886.seiko.dic.DICPlugin;
-import com.kagg886.seiko.util.IOUtil;
 import com.kagg886.seiko.util.storage.JSONObjectStorage;
 import org.json.JSONObject;
 
@@ -34,8 +33,9 @@ public class DICAdapter extends BaseAdapter {
 
     private void refresh() {
         DICPlugin.getDicLists().refresh(avt);
-        JSONObjectStorage.destroy(IOUtil.newFile(avt.getExternalFilesDir("config"), "/dicList.json").getAbsolutePath());
-        JSONObjectStorage.obtain(IOUtil.newFile(avt.getExternalFilesDir("config"), "/dicList.json").getAbsolutePath());
+        String file = avt.getExternalFilesDir("config").toPath().resolve("dicList.json").toFile().getAbsolutePath();
+        JSONObjectStorage.destroy(file);
+        JSONObjectStorage.obtain(file);
     }
 
 

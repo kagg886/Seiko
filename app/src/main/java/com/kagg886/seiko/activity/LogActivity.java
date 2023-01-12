@@ -21,6 +21,8 @@ import net.mamoe.mirai.Bot;
 
 import java.io.File;
 import java.io.OutputStream;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
@@ -42,8 +44,9 @@ public class LogActivity extends AppCompatActivity implements View.OnClickListen
         File file;
         Bot bot = Bot.findInstance(Long.parseLong(nowBot));
         if (bot == null) { //bot未登录时拉取今日的日志
-            String parentPath = String.format("%s/%s/", getExternalFilesDir("bots").getAbsolutePath(), nowBot);
-            File offlineLogFile = new File(parentPath + "log/" + new SimpleDateFormat("yyyy-MM-dd").format(System.currentTimeMillis()) + ".log");
+            //String parentPath = String.format("%s/%s/", getExternalFilesDir("bots").getAbsolutePath(), nowBot);
+            Path parentPath = Paths.get(getExternalFilesDir("bots").getAbsolutePath(), nowBot);
+            File offlineLogFile = parentPath.resolve("log").resolve(new SimpleDateFormat("yyyy-MM-dd").format(System.currentTimeMillis()) + ".log").toFile();
             if (offlineLogFile.exists()) {
                 file = offlineLogFile;
             } else {

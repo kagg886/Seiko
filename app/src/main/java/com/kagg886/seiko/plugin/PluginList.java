@@ -9,6 +9,7 @@ import dalvik.system.DexClassLoader;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Objects;
 import java.util.ServiceLoader;
 
@@ -60,12 +61,12 @@ public class PluginList extends ArrayList<SeikoPlugin> {
     public void loadClass(File f) {
         if (f.getName().endsWith(".apk") || f.getName().endsWith(".zip") || f.getName().endsWith(".jar")) {
             DexClassLoader classLoader = new DexClassLoader(f.getAbsolutePath(), ctx.getCacheDir().getAbsolutePath(), null, getClass().getClassLoader());
-            ServiceLoader<SeikoPlugin> load = ServiceLoader.load(SeikoPlugin.class, classLoader);
+            Iterator<SeikoPlugin> load = ServiceLoader.load(SeikoPlugin.class, classLoader).iterator();
 
-            SeikoPlugin plugin = load.iterator().next();
-            if (plugin == null) {
+            if (!load.hasNext()) {
                 throw new IllegalArgumentException(f.getName() + "不是一个合法的Seiko插件");
             }
+            SeikoPlugin plugin = load.next();
             plugin.setFile(f);
             add(plugin);
         }

@@ -19,14 +19,17 @@ import com.kagg886.seiko.fragment.module.LoginFragment;
 import com.kagg886.seiko.plugin.api.SeikoPlugin;
 import com.kagg886.seiko.service.BotRunnerService;
 import com.kagg886.seiko.util.IOUtil;
+import com.kagg886.seiko.util.NetUtil;
 import com.kagg886.seiko.util.storage.JSONArrayStorage;
 import net.mamoe.mirai.Bot;
-import net.mamoe.mirai.Mirai;
-
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.Response;
+import org.jetbrains.annotations.NotNull;
 import org.json.JSONObject;
-import org.jsoup.Jsoup;
 
 import java.io.File;
+import java.io.IOException;
 
 /**
  * @projectName: Seiko
@@ -42,14 +45,14 @@ public class BotAdapter extends BaseAdapter {
     private final MainActivity avt;
     private final JSONArrayStorage botList;
 
-    @Override
-    public int getCount() {
-        return botList.length();
-    }
-
     public BotAdapter(MainActivity a) {
         this.avt = a;
         botList = JSONArrayStorage.obtain(avt.getExternalFilesDir("config").getAbsolutePath() + "/botList.json");
+    }
+
+    @Override
+    public int getCount() {
+        return botList.length();
     }
 
     @Override
@@ -74,15 +77,16 @@ public class BotAdapter extends BaseAdapter {
 
         nick.setText(target.optString("nick", "未登录"));
         qq.setText(String.valueOf(target.optLong("uin")));
-        IOUtil.asyncHttp(avt, Jsoup.connect("https://q1.qlogo.cn/g?b=qq&nk=" + qq.getText().toString() + "&s=640").ignoreContentType(true).timeout(10000), new IOUtil.Response() {
+        NetUtil.downloadFromUrlAsync("https://q1.qlogo.cn/g?b=qq&nk=" + qq.getText().toString() + "&s=640", new Callback() {
             @Override
-            public void onSuccess(byte[] byt) {
-                imageView.setImageBitmap(BitmapFactory.decodeByteArray(byt, 0, byt.length));
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                avt.runOnUiThread(() -> imageView.setImageResource(R.drawable.ic_error));
             }
 
             @Override
-            public void onFailed(Throwable t) {
-                imageView.setImageResource(R.drawable.ic_error);
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                byte[] byt = response.body().source().readByteArray();
+                avt.runOnUiThread(() -> imageView.setImageBitmap(BitmapFactory.decodeByteArray(byt, 0, byt.length)));
             }
         });
 
@@ -95,7 +99,7 @@ public class BotAdapter extends BaseAdapter {
                 return;
             }
             if (isChecked) {
-                BotRunnerService.INSTANCE.login(target,nick,sw);
+                BotRunnerService.INSTANCE.login(target, nick, sw);
             } else {
                 Bot bot = Bot.getInstance(target.optLong("uin"));
                 for (SeikoPlugin plugin : BotRunnerService.INSTANCE.getSeikoPluginList()) {
