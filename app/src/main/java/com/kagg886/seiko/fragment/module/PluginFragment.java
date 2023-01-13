@@ -1,7 +1,7 @@
 package com.kagg886.seiko.fragment.module;
 
 import android.app.AlertDialog;
-import android.content.Intent;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -9,16 +9,17 @@ import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
-import androidx.activity.result.ActivityResultLauncher;
 import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputLayout;
 import com.kagg886.seiko.R;
 import com.kagg886.seiko.activity.MainActivity;
 import com.kagg886.seiko.adapter.PluginAdapter;
+import com.kagg886.seiko.fragment.BaseFragment;
+import com.kagg886.seiko.plugin.api.SeikoPlugin;
 import com.kagg886.seiko.service.BotRunnerService;
 import com.kagg886.seiko.util.FileUtil;
 import com.kagg886.seiko.util.NetUtil;
@@ -31,8 +32,7 @@ import java.nio.file.Paths;
 import java.util.UUID;
 
 
-public class PluginFragment extends Fragment implements View.OnClickListener, SwipeRefreshLayout.OnRefreshListener {
-    private static ActivityResultLauncher<Intent> readCall;
+public class PluginFragment extends BaseFragment implements View.OnClickListener, SwipeRefreshLayout.OnRefreshListener {
     private ListView listView;
     private SwipeRefreshLayout layout;
 
@@ -47,7 +47,30 @@ public class PluginFragment extends Fragment implements View.OnClickListener, Sw
         listView = v.findViewById(R.id.fragment_plugin_list);
         adapter = new PluginAdapter((MainActivity) getActivity());
         listView.setAdapter(adapter);
-
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(getContext());
+                SeikoPlugin desc = BotRunnerService.INSTANCE.getSeikoPluginList().get(position);
+                builder.setTitle("操作:" + desc.getDescription().getName());
+                builder.setItems(new String[]{"删除插件"}, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (which == 0) {
+                            if (desc.getFile() == null) {
+                                snack("内置插件不可删除");
+                                return;
+                            }
+                            desc.getFile().delete();
+                            BotRunnerService.INSTANCE.getSeikoPluginList().remove(desc);
+                            adapter.notifyDataSetChanged();
+                            snack("删除成功!");
+                        }
+                    }
+                });
+                builder.create().show();
+            }
+        });
         button = v.findViewById(R.id.fragment_plugin_menu);
         button.setOnClickListener(this);
 

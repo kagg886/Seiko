@@ -1,19 +1,23 @@
 package com.kagg886.seiko.fragment.module;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
-import androidx.fragment.app.Fragment;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.kagg886.seiko.R;
 import com.kagg886.seiko.activity.MainActivity;
 import com.kagg886.seiko.adapter.DICAdapter;
+import com.kagg886.seiko.dic.DICPlugin;
+import com.kagg886.seiko.dic.entity.DictionaryFile;
+import com.kagg886.seiko.fragment.BaseFragment;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -25,7 +29,7 @@ import org.jetbrains.annotations.NotNull;
  * @date: 2023/1/9 18:48
  * @version: 1.0
  */
-public class DICFragment extends Fragment implements View.OnClickListener, SwipeRefreshLayout.OnRefreshListener {
+public class DICFragment extends BaseFragment implements View.OnClickListener, SwipeRefreshLayout.OnRefreshListener {
     private ListView listView;
     private SwipeRefreshLayout layout;
     private DICAdapter adapter;
@@ -39,6 +43,25 @@ public class DICFragment extends Fragment implements View.OnClickListener, Swipe
         listView = v.findViewById(R.id.fragment_plugin_list);
         adapter = new DICAdapter(((MainActivity) getActivity()));
         listView.setAdapter(adapter);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                DictionaryFile file = DICPlugin.getDicLists().get(position);
+                builder.setTitle("操作:" + file.getName());
+                builder.setItems(new String[]{"删除词库"}, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (which == 0) {
+                            file.getFile().delete();
+                            adapter.notifyDataSetChanged();
+                            snack("删除成功!");
+                        }
+                    }
+                });
+                builder.create().show();
+            }
+        });
         button = v.findViewById(R.id.fragment_plugin_menu);
         button.setOnClickListener(this);
         layout = v.findViewById(R.id.fragment_plugin_refresh);

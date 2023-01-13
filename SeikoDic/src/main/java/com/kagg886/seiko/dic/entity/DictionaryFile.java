@@ -40,6 +40,10 @@ public class DictionaryFile {
         }
     };
 
+    public File getFile() {
+        return dicFile;
+    }
+
     public DictionaryFile(File dicFile) throws Throwable {
         this.dicFile = dicFile;
         String dicCodes = IOUtil.loadStringFromFile(dicFile.getAbsolutePath());
@@ -103,6 +107,6 @@ public class DictionaryFile {
     }
 
     public String getName() {
-        return dicFile.getName();
+        return getFile().getName();
     }
 }
