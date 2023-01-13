@@ -1,5 +1,7 @@
 package com.kagg886.seiko.plugin.api;
 
+import androidx.annotation.Keep;
+
 import com.kagg886.seiko.plugin.SeikoDescription;
 
 import java.io.File;
@@ -13,7 +15,9 @@ import java.io.File;
  * @date: 2022/12/22 14:56
  * @version: 1.0
  */
+@Keep
 public abstract class SeikoPlugin {
+
     private File f;
 
     public File getFile() {

@@ -38,5 +38,6 @@ public class DICList extends ArrayList<DictionaryFile> {
                 context.sendBroadcast(broadcast);
             }
         }
+        System.out.println("read all.");
     }
 }
