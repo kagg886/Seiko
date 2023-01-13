@@ -1,16 +1,14 @@
 package com.kagg886.seiko.dic;
 
 import android.content.Context;
+import android.util.Log;
 import com.kagg886.seiko.dic.entity.DictionaryFile;
-import com.kagg886.seiko.dic.session.impl.FriendMessageRuntime;
-import com.kagg886.seiko.dic.session.impl.GroupMessageRuntime;
 import com.kagg886.seiko.plugin.SeikoDescription;
 import com.kagg886.seiko.plugin.api.SeikoPlugin;
 import com.kagg886.seiko.util.storage.JSONObjectStorage;
 import net.mamoe.mirai.Bot;
 import net.mamoe.mirai.event.EventChannel;
 import net.mamoe.mirai.event.events.BotEvent;
-import net.mamoe.mirai.event.events.FriendMessageEvent;
 import net.mamoe.mirai.event.events.GroupMessageEvent;
 import org.json.JSONObject;
 
@@ -44,21 +42,8 @@ public class DICPlugin extends SeikoPlugin {
             for (DictionaryFile dic : dicLists) {
                 if ((dicConfigUnit = getDicConfig().optJSONObject(dic.getName(), new JSONObject())) != null) {
                     if (dicConfigUnit.optBoolean("enabled", true)) {
-                        GroupMessageRuntime runtime = new GroupMessageRuntime(dic, groupMessageEvent);
-                        runtime.invoke(groupMessageEvent.getMessage().contentToString());
-                        return;
-                    }
-                }
-            }
-        });
-
-        event.subscribeAlways(FriendMessageEvent.class, friendMessageEvent -> {
-            JSONObject dicConfigUnit;
-            for (DictionaryFile dic : dicLists) {
-                if ((dicConfigUnit = getDicConfig().optJSONObject(dic.getName(), new JSONObject())) != null) {
-                    if (dicConfigUnit.optBoolean("enabled", true)) {
-                        FriendMessageRuntime runtime = new FriendMessageRuntime(dic, friendMessageEvent);
-                        runtime.invoke(friendMessageEvent.getMessage().contentToString());
+                        dic.invoke(groupMessageEvent);
+                        Log.i("DEBUG", dic.getName() + "已执行");
                         return;
                     }
                 }

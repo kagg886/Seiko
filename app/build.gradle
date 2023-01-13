@@ -18,8 +18,19 @@ android {
 
     buildTypes {
         release {
-            zipAlignEnabled true
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+//            minifyEnabled false
+            minifyEnabled true      // 开启混淆
+            zipAlignEnabled true    // 已启用压缩
+            shrinkResources true    // 缩减资源
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+
+        debug {
+//            minifyEnabled false
+            minifyEnabled true      // 开启混淆
+            zipAlignEnabled true    // 已启用压缩
+            shrinkResources true    // 缩减资源
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
     compileOptions {
@@ -33,7 +44,6 @@ dependencies {
     implementation 'com.google.android.material:material:1.4.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     implementation 'androidx.preference:preference:1.2.0'
-
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.4'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.0'

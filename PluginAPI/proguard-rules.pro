@@ -19,11 +19,3 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
-
--keep @com.kagg886.seiko.util.ProguardProtect class * {*;}
--keep class * {
-    @com.kagg886.seiko.util.ProguardProtect <fields>;
-}
--keepclassmembers class * {
-    @com.kagg886.seiko.util.ProguardProtect <methods>;
-}
