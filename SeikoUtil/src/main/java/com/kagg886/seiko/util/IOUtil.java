@@ -6,12 +6,8 @@ import androidx.core.content.FileProvider;
 
 import java.io.*;
 import java.nio.ByteBuffer;
-import java.nio.MappedByteBuffer;
-import java.nio.channels.ByteChannel;
-import java.nio.channels.Channel;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
-import java.nio.channels.WritableByteChannel;
 
 public class IOUtil {
 
@@ -69,12 +65,13 @@ public class IOUtil {
     /*
      * 尝试高效读取 花费46ms左右 3.6mb 3万行
      */
+
+    //Hamusuta0320 NB
     public static byte[] loadByteFromStream(InputStream is) throws IOException {
-        long start = System.currentTimeMillis();
         ReadableByteChannel readableByteChannel = Channels.newChannel(is);
         ByteBuffer bf = ByteBuffer.allocate(8192);
         ByteArrayOutputStream sb = new ByteArrayOutputStream();
-        int read = 0;
+        int read;
         while ((read = readableByteChannel.read(bf)) != -1) {
             bf.flip();
             sb.write(bf.array(), 0, read);
@@ -83,8 +80,6 @@ public class IOUtil {
         readableByteChannel.close();
         byte[] res = sb.toByteArray();
         sb.close();
-        System.out.println("第二种方式读取流完成:" + res.length);
-        System.out.println(System.currentTimeMillis() - start);
         return res;
     }
 

@@ -41,13 +41,11 @@ public class DictionaryFile {
     };
 
     public DictionaryFile(File dicFile) throws Throwable {
-        //TODO 200K文件大约需要两秒的时间加载，有没有大牛愿意优化一下(
         this.dicFile = dicFile;
         String dicCodes = IOUtil.loadStringFromFile(dicFile.getAbsolutePath());
         if (dicCodes.length() == 0) {
             throw new DictionaryOnLoadException("[" + dicFile.getName() + "]为空!");
         }
-
         String[] lines = dicCodes.split("\n");
         int start = 0;
         for (int i = 0; i < lines.length; i++) {
@@ -94,7 +92,9 @@ public class DictionaryFile {
             } else {
                 dictionaryCodes.add(new DictionaryCode(iterator.getLen(), comm, DictionaryCode.Type.PLAIN_TEXT));
             }
-            //dictionaryCodes.add(new DictionaryCode(iterator.getLen(), comm));
+        }
+        if (iterator.getLen() == lines.length) {
+            commands.put(new DictionaryCommandMatcher(commandRegex, commandLine, dicFile), dictionaryCodes);
         }
     }
 

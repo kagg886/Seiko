@@ -42,12 +42,10 @@ public class DICPlugin extends SeikoPlugin {
         event.subscribeAlways(GroupMessageEvent.class, groupMessageEvent -> {
             JSONObject dicConfigUnit;
             for (DictionaryFile dic : dicLists) {
-                if ((dicConfigUnit = getDicConfig().optJSONObject(dic.getName(), new JSONObject())) != null) {
-                    if (dicConfigUnit.optBoolean("enabled", true)) {
-                        GroupMessageRuntime runtime = new GroupMessageRuntime(dic, groupMessageEvent);
-                        runtime.invoke(groupMessageEvent.getMessage().contentToString());
-                        return;
-                    }
+                dicConfigUnit = getDicConfig().optJSONObject(dic.getName(), new JSONObject());
+                if (dicConfigUnit.optBoolean("enabled", true)) {
+                    GroupMessageRuntime runtime = new GroupMessageRuntime(dic, groupMessageEvent);
+                    runtime.invoke(groupMessageEvent.getMessage().contentToString());
                 }
             }
         });
@@ -59,7 +57,6 @@ public class DICPlugin extends SeikoPlugin {
                     if (dicConfigUnit.optBoolean("enabled", true)) {
                         FriendMessageRuntime runtime = new FriendMessageRuntime(dic, friendMessageEvent);
                         runtime.invoke(friendMessageEvent.getMessage().contentToString());
-                        return;
                     }
                 }
             }

@@ -43,8 +43,6 @@ public class GroupMessageRuntime extends AbsRuntime<GroupMessageEvent> {
         StringBuilder buffer = new StringBuilder();
 
         for (DictionaryCode dic : code) {
-            System.out.println(dic.toString() + "的类型:" + dic.getType());
-            System.out.println("此时变量sendSwitch:" + sendSwitch);
             if (dic.getType() == DictionaryCode.Type.FUNCTION) {
                 if (!sendSwitch) {
                     event.getGroup().sendMessage(buffer.toString());
