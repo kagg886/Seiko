@@ -1,1 +1,0 @@
-com.kagg886.seiko.plugin
