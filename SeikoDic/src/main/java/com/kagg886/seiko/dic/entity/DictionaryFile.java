@@ -1,15 +1,16 @@
 package com.kagg886.seiko.dic.entity;
 
 import android.text.TextUtils;
+import androidx.annotation.Nullable;
+import com.kagg886.seiko.dic.entity.impl.Function;
+import com.kagg886.seiko.dic.entity.impl.PlainText;
 import com.kagg886.seiko.dic.exception.DictionaryOnLoadException;
 import com.kagg886.seiko.util.ArrayIterator;
 import com.kagg886.seiko.util.IOUtil;
-import net.mamoe.mirai.event.events.MessageEvent;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 
 /**
  * @projectName: Seiko
@@ -23,7 +24,19 @@ import java.util.Map;
 public class DictionaryFile {
     private final File dicFile;
 
-    private final HashMap<String, ArrayList<DictionaryCode>> commands = new HashMap<>();
+    private final HashMap<DictionaryCommandMatcher, ArrayList<DictionaryCode>> commands = new HashMap<DictionaryCommandMatcher, ArrayList<DictionaryCode>>() {
+        @Nullable
+        @org.jetbrains.annotations.Nullable
+        @Override
+        public ArrayList<DictionaryCode> put(DictionaryCommandMatcher key, ArrayList<DictionaryCode> value) {
+            for (DictionaryCommandMatcher d : keySet()) {
+                if (key.equals(d)) {
+                    throw new DictionaryOnLoadException(dicFile.getName() + "含有冲突指令:" + key.getLine() + "-" + d.getLine());
+                }
+            }
+            return super.put(key, value);
+        }
+    };
 
     public DictionaryFile(File dicFile) throws Throwable {
         //TODO 200K文件大约需要两秒的时间加载，有没有大牛愿意优化一下(
@@ -47,7 +60,7 @@ public class DictionaryFile {
         boolean behindLineIsEmpty = true;
         String commandRegex = null;
         ArrayList<DictionaryCode> dictionaryCodes = new ArrayList<>();
-
+        int commandLine = 0;
         while (iterator.hasNext()) {
             String comm = iterator.next();
             if (comm.startsWith("//")) { //注释判空处理
@@ -61,6 +74,7 @@ public class DictionaryFile {
                 commandRegex = comm;
                 System.out.println("第" + iterator.getLen() + "行指令:" + comm);
                 behindLineIsEmpty = false;
+                commandLine = iterator.getLen();
                 continue;
             }
             if (TextUtils.isEmpty(comm)) {
@@ -68,25 +82,27 @@ public class DictionaryFile {
                 if (dictionaryCodes.size() == 0) {
                     throw new DictionaryOnLoadException("指令无伪代码实现:" + commandRegex + "(" + dicFile.getName() + ":" + (iterator.getLen() - 1) + ")");
                 }
-                commands.put(commandRegex, dictionaryCodes);
+                commands.put(new DictionaryCommandMatcher(commandRegex, commandLine, dicFile), dictionaryCodes);
                 dictionaryCodes = new ArrayList<>();
                 behindLineIsEmpty = true;
                 continue;
             }
-            System.out.println("第" + iterator.getLen() + "行伪代码:" + comm);
-            dictionaryCodes.add(new DictionaryCode(iterator.getLen(), comm));
+            if (comm.startsWith("$")) {
+                if (!comm.endsWith("$")) {
+                    throw new DictionaryOnLoadException("未闭合的函数:(" + dicFile.getName() + ":" + iterator.getLen() + ")");
+                }
+                System.out.println("第" + iterator.getLen() + "行函数:" + comm);
+                dictionaryCodes.add(new Function(iterator.getLen(), comm));
+            } else {
+                System.out.println("第" + iterator.getLen() + "行纯文本:" + comm);
+                dictionaryCodes.add(new PlainText(iterator.getLen(), comm));
+            }
+            //dictionaryCodes.add(new DictionaryCode(iterator.getLen(), comm));
         }
     }
 
-    public void invoke(MessageEvent event) {
-        for (Map.Entry<String, ArrayList<DictionaryCode>> command : commands.entrySet()) {
-            if (event.getMessage().contentToString().matches(command.getKey())) {
-                //TODO 准备工作，然后传入方法
-                for (DictionaryCode c : command.getValue()) {
-
-                }
-            }
-        }
+    public HashMap<DictionaryCommandMatcher, ArrayList<DictionaryCode>> getCommands() {
+        return commands;
     }
 
     public String getName() {

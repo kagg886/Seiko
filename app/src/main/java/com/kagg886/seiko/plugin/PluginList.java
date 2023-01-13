@@ -58,11 +58,18 @@ public class PluginList extends ArrayList<SeikoPlugin> {
         }
     }
 
-    public void loadClass(File f) {
+    public void loadClass(File f) throws Throwable {
+        if (f.getName().endsWith(".dex")) {
+            String mainClass = f.getName().replace(".dex", "");
+            DexClassLoader classLoader = new DexClassLoader(f.getAbsolutePath(), ctx.getCacheDir().getAbsolutePath(), null, getClass().getClassLoader());
+            SeikoPlugin o = (SeikoPlugin) classLoader.loadClass(mainClass).newInstance();
+            o.setFile(f);
+            this.add(o);
+            return;
+        }
         if (f.getName().endsWith(".apk") || f.getName().endsWith(".zip") || f.getName().endsWith(".jar")) {
             DexClassLoader classLoader = new DexClassLoader(f.getAbsolutePath(), ctx.getCacheDir().getAbsolutePath(), null, getClass().getClassLoader());
             Iterator<SeikoPlugin> load = ServiceLoader.load(SeikoPlugin.class, classLoader).iterator();
-
             if (!load.hasNext()) {
                 throw new IllegalArgumentException(f.getName() + "不是一个合法的Seiko插件");
             }
