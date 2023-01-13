@@ -74,15 +74,16 @@ public class IOUtil {
         ReadableByteChannel readableByteChannel = Channels.newChannel(is);
         ByteBuffer bf = ByteBuffer.allocate(8192);
         ByteArrayOutputStream sb = new ByteArrayOutputStream();
-        while ((readableByteChannel.read(bf)) != -1) {
+        int read = 0;
+        while ((read = readableByteChannel.read(bf)) != -1) {
             bf.flip();
-            sb.write(bf.array());
+            sb.write(bf.array(), 0, read);
             bf.clear();
         }
         readableByteChannel.close();
         byte[] res = sb.toByteArray();
         sb.close();
-        System.out.println("第二种方式读取流完成");
+        System.out.println("第二种方式读取流完成:" + res.length);
         System.out.println(System.currentTimeMillis() - start);
         return res;
     }
