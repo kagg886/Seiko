@@ -7,6 +7,7 @@ import androidx.activity.result.ActivityResult;
 import com.kagg886.seiko.activity.CaptchaActivity;
 import com.kagg886.seiko.activity.MainActivity;
 import com.kagg886.seiko.activity.SMSActivity;
+import com.kagg886.seiko.event.SnackBroadCast;
 import kotlin.Unit;
 import kotlin.coroutines.Continuation;
 import kotlin.coroutines.CoroutineContext;
@@ -52,7 +53,7 @@ public class AndroidSolver extends LoginSolver {
             @Override
             public void resumeWith(@NotNull Object o) {
                 if (o instanceof RetryLaterException) {
-                    avt.snack(((RetryLaterException) o).getMessage());
+                    SnackBroadCast.sendBroadCast(avt, ((RetryLaterException) o).getMessage());
                     return;
                 }
                 Log.i("CallBack",o.getClass().getName());

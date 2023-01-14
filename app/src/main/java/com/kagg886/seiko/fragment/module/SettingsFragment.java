@@ -10,7 +10,7 @@ import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import com.kagg886.seiko.BuildConfig;
 import com.kagg886.seiko.R;
-import com.kagg886.seiko.activity.MainActivity;
+import com.kagg886.seiko.event.SnackBroadCast;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
@@ -72,10 +72,10 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Prefer
             public boolean onPreferenceChange(@NonNull @NotNull Preference preference, Object newValue) {
                 if (Integer.parseInt((String) newValue) > 0) {
                     sp.setSummary(String.format("当前设置的值为:%s", newValue));
-                    ((MainActivity) getActivity()).snack("保存成功!");
+                    SnackBroadCast.sendBroadCast(getContext(), "保存成功!");
                     return true;
                 }
-                ((MainActivity) getActivity()).snack("不能为0和负数!");
+                SnackBroadCast.sendBroadCast(getContext(), "不能为0和负数!");
                 return false;
             }
         });
@@ -96,7 +96,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Prefer
                 }
                 f.delete();
             }
-            ((MainActivity) getActivity()).snack("清理完毕(๑′ᴗ‵๑)");
+            SnackBroadCast.sendBroadCast(getContext(), "清理完毕(๑′ᴗ‵๑)");
             preference.setSummary("已发现0Byte");
         }
         return false;

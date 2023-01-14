@@ -2,6 +2,7 @@ package com.example.demo;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.util.Log;
 import android.widget.Toast;
 import com.kagg886.seiko.plugin.SeikoDescription;
 import com.kagg886.seiko.plugin.api.SeikoPlugin;
@@ -31,6 +32,7 @@ public class PluginDemo extends SeikoPlugin {
     @SuppressLint("UnsafeOptInUsageError")
     @Override
     public void onBotGoLine(long botQQ) {
+        Log.i("LIFECYCLE", "onBotGoLine被调用");
         Bot.findInstance(botQQ).getEventChannel().subscribeAlways(GroupMessageEvent.class, new Consumer<GroupMessageEvent>() {
             @Override
             public void accept(GroupMessageEvent groupMessageEvent) {
@@ -48,6 +50,7 @@ public class PluginDemo extends SeikoPlugin {
      */
     @Override
     public void onLoad(Object context) {
+        Log.i("LIFECYCLE", "onLoad被调用");
         Toast.makeText((Context) context, getClass().getName() + "已加载!", Toast.LENGTH_SHORT).show();
     }
 
@@ -55,11 +58,12 @@ public class PluginDemo extends SeikoPlugin {
      * @param :
      * @return SeikoDescription
      * @author kagg886
-     * @description 向SeikoAPP回传描述文件
+     * @description 向SeikoAPP回传描述。请不要在这里调用任何初始化的方法
      * @date 2023/01/12 11:57
      */
     @Override
     public SeikoDescription getDescription() {
+        Log.i("LIFECYCLE", "getDescription被调用");
         SeikoDescription description = new SeikoDescription(getClass().getName());
         description.setName("PluginDemo");
         description.setAuthor("佚名");

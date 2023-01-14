@@ -25,6 +25,7 @@ import com.kagg886.seiko.bot.LoginThread;
 import com.kagg886.seiko.plugin.PluginList;
 import org.json.JSONObject;
 
+import java.util.HashMap;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadPoolExecutor;
 
@@ -49,6 +50,7 @@ public class BotRunnerService extends Service {
     private Bitmap icon;
 
     private PluginList seikoPluginList;
+    private final HashMap<String, Long> lastLoad = new HashMap<>();
 
     private NotificationManager notificationManager;
 
@@ -67,6 +69,9 @@ public class BotRunnerService extends Service {
         return seikoPluginList;
     }
 
+    public HashMap<String, Long> getLastLoad() {
+        return lastLoad;
+    }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {

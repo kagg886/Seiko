@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.SwitchCompat;
 import com.kagg886.seiko.activity.MainActivity;
+import com.kagg886.seiko.event.SnackBroadCast;
 import com.kagg886.seiko.plugin.api.SeikoPlugin;
 import com.kagg886.seiko.service.BotRunnerService;
 import com.kagg886.seiko.util.storage.JSONArrayStorage;
@@ -44,12 +45,12 @@ public class LoginThread extends Thread {
                     dialog.show();
                     break;
                 case 0:
-                    avt.snack("Bot:" + bot.getId() + "登录成功");
+                    SnackBroadCast.sendBroadCast(avt, "Bot:" + bot.getId() + "登录成功");
                     nick.setText(bot.getNick());
                     dialog.dismiss();
                     break;
                 case 1:
-                    avt.snack("发生异常:" + ((Throwable) msg.getData().getSerializable("exception")).getMessage());
+                    SnackBroadCast.sendBroadCast(avt, "发生异常:" + ((Throwable) msg.getData().getSerializable("exception")).getMessage());
                     sw.setChecked(false);
                     dialog.dismiss();
                     break;
@@ -94,7 +95,13 @@ public class LoginThread extends Thread {
             }
             s.save();
             for (SeikoPlugin plugin : BotRunnerService.INSTANCE.getSeikoPluginList()) {
-                plugin.onBotGoLine(bot.getId());
+                try {
+                    plugin.onBotGoLine(bot.getId());
+                } catch (Throwable e) {
+                    bot.getLogger().error("加载插件:" + plugin.getDescription().getName() + "(" + plugin.getDescription().getId() + ")发生错误!", e);
+                    SnackBroadCast.sendBroadCast(avt, "初始化:" + plugin.getDescription().getName() + "时发生错误,请前往bot日志查看。");
+                }
+                BotRunnerService.INSTANCE.getLastLoad().put(plugin.getDescription().getId(), bot.getId());
             }
             bot.join();
             for (SeikoPlugin plugin : BotRunnerService.INSTANCE.getSeikoPluginList()) {

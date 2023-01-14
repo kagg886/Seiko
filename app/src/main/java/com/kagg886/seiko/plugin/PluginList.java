@@ -3,15 +3,15 @@ package com.kagg886.seiko.plugin;
 import android.content.Context;
 import com.kagg886.seiko.dic.DICPlugin;
 import com.kagg886.seiko.event.DialogBroadCast;
+import com.kagg886.seiko.event.SnackBroadCast;
 import com.kagg886.seiko.plugin.api.SeikoPlugin;
+import com.kagg886.seiko.service.BotRunnerService;
 import com.kagg886.seiko.util.IOUtil;
 import dalvik.system.DexClassLoader;
+import net.mamoe.mirai.Bot;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.Objects;
-import java.util.ServiceLoader;
+import java.util.*;
 
 
 /**
@@ -44,13 +44,26 @@ public class PluginList extends ArrayList<SeikoPlugin> {
             }
         }
         ArrayList<SeikoPlugin> remove = new ArrayList<>(); //可恶的ConcurrentModificationException
-        for (SeikoPlugin p : this) {
+        for (SeikoPlugin plugin : this) {
             try {
-                p.onLoad(ctx);
+                plugin.onLoad(ctx);
+                //bot登录后若添加新插件则直接加载
+                Bot.getInstances().stream().filter(Bot::isOnline).forEach(bot -> {
+                    HashMap<String, Long> a = BotRunnerService.INSTANCE.getLastLoad();
+                    if (!Objects.equals(a.getOrDefault(plugin.getDescription().getId(), 0L), bot.getId())) {
+                        try {
+                            plugin.onBotGoLine(bot.getId());
+                            a.put(plugin.getDescription().getId(), bot.getId());
+                        } catch (Throwable e) {
+                            bot.getLogger().error("加载插件:" + plugin.getDescription().getName() + "(" + plugin.getDescription().getId() + ")发生错误!", e);
+                            SnackBroadCast.sendBroadCast(ctx, "初始化:" + plugin.getDescription().getName() + "时发生错误,请前往bot日志查看。");
+                        }
+                    }
+                });
             } catch (Exception e) {
-                remove.add(p);
-                p.getFile().delete();
-                DialogBroadCast.sendBroadCast(ctx, p.getDescription().getId() + "初始化失败", IOUtil.getException(e));
+                remove.add(plugin);
+                plugin.getFile().delete();
+                DialogBroadCast.sendBroadCast(ctx, plugin.getDescription().getId() + "初始化失败", IOUtil.getException(e));
             }
         }
         for (SeikoPlugin p : remove) {

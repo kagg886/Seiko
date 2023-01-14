@@ -9,14 +9,13 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-import androidx.activity.result.ActivityResultLauncher;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.SwitchCompat;
 import com.kagg886.seiko.R;
 import com.kagg886.seiko.activity.LogActivity;
 import com.kagg886.seiko.activity.MainActivity;
+import com.kagg886.seiko.event.SnackBroadCast;
 import com.kagg886.seiko.fragment.module.LoginFragment;
-import com.kagg886.seiko.plugin.api.SeikoPlugin;
 import com.kagg886.seiko.service.BotRunnerService;
 import com.kagg886.seiko.util.IOUtil;
 import com.kagg886.seiko.util.NetUtil;
@@ -40,7 +39,6 @@ import java.io.IOException;
  * @version: 1.0
  */
 public class BotAdapter extends BaseAdapter {
-    private static ActivityResultLauncher<Intent> writeCall;
     private final MainActivity avt;
     private final JSONArrayStorage botList;
 
@@ -100,12 +98,8 @@ public class BotAdapter extends BaseAdapter {
             if (isChecked) {
                 BotRunnerService.INSTANCE.login(target, nick, sw);
             } else {
-                Bot bot = Bot.getInstance(target.optLong("uin"));
-                for (SeikoPlugin plugin : BotRunnerService.INSTANCE.getSeikoPluginList()) {
-                    plugin.onBotGoLine(bot.getId());
-                }
                 Bot.getInstance(target.optLong("uin")).close();
-                //avt.snack(target.optLong("uin") + "已下线");
+                //SnackBroadCast.sendBroadCast(avt,target.optLong("uin") + "已下线");
             }
         });
 
@@ -119,14 +113,14 @@ public class BotAdapter extends BaseAdapter {
                     case 0:
                         File p = new File(avt.getExternalFilesDir("bots") + "/" + uin + "/device.json");
                         if (!p.exists()) {
-                            avt.snack("从未登陆过，无法获取到设备信息");
+                            SnackBroadCast.sendBroadCast(avt, "从未登陆过，无法获取到设备信息");
                             return;
                         }
                         IOUtil.quickShare(avt, p, "*/*");
                         break;
                     case 1:
                         if (Bot.getInstanceOrNull(object.optLong("uin")) != null) {
-                            avt.snack("请下线BOT然后再执行此操作!");
+                            SnackBroadCast.sendBroadCast(avt, "请下线BOT然后再执行此操作!");
                             return;
                         }
                         LoginFragment.editDialog(avt, this, true, object).show();
@@ -138,13 +132,13 @@ public class BotAdapter extends BaseAdapter {
                         break;
                     case 3:
                         if (Bot.getInstanceOrNull(object.optLong("uin")) != null) {
-                            avt.snack("请下线BOT然后再执行此操作!");
+                            SnackBroadCast.sendBroadCast(avt, "请下线BOT然后再执行此操作!");
                             return;
                         }
                         botList.remove(position);
                         botList.save();
                         notifyDataSetChanged();
-                        avt.snack("删除完毕");
+                        SnackBroadCast.sendBroadCast(avt, "删除完毕");
                         break;
                 }
             });

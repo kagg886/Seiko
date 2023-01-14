@@ -10,12 +10,11 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
-import com.google.android.material.snackbar.BaseTransientBottomBar;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
 import com.kagg886.seiko.R;
 import com.kagg886.seiko.adapter.ModuleAdapter;
 import com.kagg886.seiko.event.DialogBroadCast;
+import com.kagg886.seiko.event.SnackBroadCast;
 import com.kagg886.seiko.fragment.module.DICFragment;
 import com.kagg886.seiko.fragment.module.LoginFragment;
 import com.kagg886.seiko.fragment.module.PluginFragment;
@@ -63,10 +62,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private DialogBroadCast dialogBroadCast;
+    private SnackBroadCast snackBroadCast;
 
     @Override
     protected void onDestroy() {
         unregisterReceiver(dialogBroadCast);
+        unregisterReceiver(snackBroadCast);
         super.onDestroy();
     }
 
@@ -102,7 +103,7 @@ public class MainActivity extends AppCompatActivity {
 
             builder.setNegativeButton("全部删除", (dialog, which) -> {
                 IOUtil.delFile(f);
-                snack("已全部删除!");
+                SnackBroadCast.sendBroadCast(this, "已全部删除!");
             });
             builder.create().show();
         }
@@ -113,6 +114,11 @@ public class MainActivity extends AppCompatActivity {
         registerReceiver(dialogBroadCast, filter);
 
         layout = findViewById(R.id.activity_main_view_tab_layout);
+        snackBroadCast = new SnackBroadCast(layout);
+        filter = new IntentFilter();
+        filter.addAction(SnackBroadCast.TAG);
+        registerReceiver(snackBroadCast, filter);
+
         pager = findViewById(R.id.activity_main_view_view_pager);
         adapter = new ModuleAdapter(getSupportFragmentManager());
         rootView = findViewById(R.id.activity_main_root);
@@ -121,7 +127,7 @@ public class MainActivity extends AppCompatActivity {
         BotRunnerService.avt = this;
         if (BotRunnerService.INSTANCE == null) {
             startForegroundService(a);
-            snack("绑定服务成功");
+            SnackBroadCast.sendBroadCast(this, "绑定服务成功");
         }
 
         ArrayList<ModuleAdapter.Structure> fragments = new ArrayList<>();
@@ -133,9 +139,5 @@ public class MainActivity extends AppCompatActivity {
         pager.setAdapter(adapter);
         layout.setupWithViewPager(pager);
 
-    }
-
-    public void snack(String text) {
-        Snackbar.make(rootView, text, BaseTransientBottomBar.LENGTH_LONG).show();
     }
 }

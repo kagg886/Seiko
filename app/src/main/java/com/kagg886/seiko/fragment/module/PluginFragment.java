@@ -12,13 +12,14 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputLayout;
 import com.kagg886.seiko.R;
 import com.kagg886.seiko.activity.MainActivity;
 import com.kagg886.seiko.adapter.PluginAdapter;
-import com.kagg886.seiko.fragment.BaseFragment;
+import com.kagg886.seiko.event.SnackBroadCast;
 import com.kagg886.seiko.plugin.api.SeikoPlugin;
 import com.kagg886.seiko.service.BotRunnerService;
 import com.kagg886.seiko.util.FileUtil;
@@ -32,7 +33,7 @@ import java.nio.file.Paths;
 import java.util.UUID;
 
 
-public class PluginFragment extends BaseFragment implements View.OnClickListener, SwipeRefreshLayout.OnRefreshListener {
+public class PluginFragment extends Fragment implements View.OnClickListener, SwipeRefreshLayout.OnRefreshListener {
     private ListView listView;
     private SwipeRefreshLayout layout;
 
@@ -40,45 +41,25 @@ public class PluginFragment extends BaseFragment implements View.OnClickListener
     private PluginAdapter adapter;
     private AlertDialog dialog;
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_plugin, container, false);
-
-        listView = v.findViewById(R.id.fragment_plugin_list);
-        adapter = new PluginAdapter((MainActivity) getActivity());
-        listView.setAdapter(adapter);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(getContext());
-                SeikoPlugin desc = BotRunnerService.INSTANCE.getSeikoPluginList().get(position);
-                builder.setTitle("操作:" + desc.getDescription().getName());
-                builder.setItems(new String[]{"删除插件"}, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        if (which == 0) {
-                            if (desc.getFile() == null) {
-                                snack("内置插件不可删除");
-                                return;
-                            }
-                            desc.getFile().delete();
-                            BotRunnerService.INSTANCE.getSeikoPluginList().remove(desc);
-                            adapter.notifyDataSetChanged();
-                            snack("删除成功!");
-                        }
-                    }
-                });
-                builder.create().show();
+    private final Handler mHandler = new Handler(Looper.getMainLooper()) {
+        @Override
+        public void handleMessage(@NonNull Message msg) {
+            MainActivity avt = (MainActivity) getActivity();
+            switch (msg.what) {
+                case 2:
+                    PluginFragment.this.dialog.show();
+                    break;
+                case 0:
+                    SnackBroadCast.sendBroadCast(getContext(), "下载完成");
+                    PluginFragment.this.dialog.dismiss();
+                    break;
+                case 1:
+                    SnackBroadCast.sendBroadCast(getContext(), "发生异常:" + ((Throwable) msg.getData().getSerializable("exception")).getMessage());
+                    PluginFragment.this.dialog.dismiss();
+                    break;
             }
-        });
-        button = v.findViewById(R.id.fragment_plugin_menu);
-        button.setOnClickListener(this);
-
-        layout = v.findViewById(R.id.fragment_plugin_refresh);
-        layout.setOnRefreshListener(this);
-
-        return v;
-    }
+        }
+    };
 
     @Override
     public void onClick(View v) {
@@ -140,6 +121,46 @@ public class PluginFragment extends BaseFragment implements View.OnClickListener
         mHandler.sendMessage(m);
     }
 
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View v = inflater.inflate(R.layout.fragment_plugin, container, false);
+
+        listView = v.findViewById(R.id.fragment_plugin_list);
+        adapter = new PluginAdapter((MainActivity) getActivity());
+        listView.setAdapter(adapter);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(getContext());
+                SeikoPlugin desc = BotRunnerService.INSTANCE.getSeikoPluginList().get(position);
+                builder.setTitle("操作:" + desc.getDescription().getName());
+                builder.setItems(new String[]{"删除插件"}, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (which == 0) {
+                            if (desc.getFile() == null) {
+                                SnackBroadCast.sendBroadCast(getContext(), "内置插件不可删除");
+                                return;
+                            }
+                            desc.getFile().delete();
+                            BotRunnerService.INSTANCE.getSeikoPluginList().remove(desc);
+                            adapter.notifyDataSetChanged();
+                            SnackBroadCast.sendBroadCast(getContext(), "删除成功!");
+                        }
+                    }
+                });
+                builder.create().show();
+            }
+        });
+        button = v.findViewById(R.id.fragment_plugin_menu);
+        button.setOnClickListener(this);
+
+        layout = v.findViewById(R.id.fragment_plugin_refresh);
+        layout.setOnRefreshListener(this);
+
+        return v;
+    }
+
     public AlertDialog importPluginDialog() {
         MainActivity avt = (MainActivity) getActivity();
         AlertDialog.Builder builder = new AlertDialog.Builder(avt);
@@ -149,7 +170,7 @@ public class PluginFragment extends BaseFragment implements View.OnClickListener
             TextInputLayout importPluginUrl = view.findViewById(R.id.dialog_importPluginUrl);
             String url = importPluginUrl.getEditText().getText().toString();
             if(url.trim().length() == 0 || !(url.startsWith("http://") || url.startsWith("https://"))) {
-                avt.snack("请正确填写链接");
+                SnackBroadCast.sendBroadCast(avt, "请正确填写链接");
                 return;
             }
             downloadPlugin(avt, url);
@@ -157,31 +178,10 @@ public class PluginFragment extends BaseFragment implements View.OnClickListener
         return builder.create();
     }
 
-    private final Handler mHandler = new Handler(Looper.getMainLooper()) {
-        @Override
-        public void handleMessage(@NonNull Message msg) {
-            MainActivity avt = (MainActivity) getActivity();
-            switch (msg.what) {
-                case 2:
-                    PluginFragment.this.dialog.show();
-                    break;
-                case 0:
-                    avt.snack("下载完成");
-                    PluginFragment.this.dialog.dismiss();
-                    break;
-                case 1:
-                    avt.snack("发生异常:" + ((Throwable) msg.getData().getSerializable("exception")).getMessage());
-                    PluginFragment.this.dialog.dismiss();
-                    break;
-            }
-        }
-    };
-
     @Override
     public void onRefresh() {
         BotRunnerService.INSTANCE.getSeikoPluginList().refresh();
         adapter.notifyDataSetChanged();
         layout.setRefreshing(false);
-        ((MainActivity) getActivity()).snack("刷新完成");
     }
 }

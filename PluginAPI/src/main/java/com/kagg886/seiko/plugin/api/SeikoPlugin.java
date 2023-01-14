@@ -1,7 +1,6 @@
 package com.kagg886.seiko.plugin.api;
 
 import androidx.annotation.Keep;
-
 import com.kagg886.seiko.plugin.SeikoDescription;
 
 import java.io.File;
@@ -27,7 +26,6 @@ public abstract class SeikoPlugin {
     public void setFile(File f) {
         this.f = f;
     }
-
 
     public abstract void onBotGoLine(long botQQ);
 

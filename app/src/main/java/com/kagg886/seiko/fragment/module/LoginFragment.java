@@ -12,12 +12,13 @@ import android.widget.Spinner;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
+import androidx.fragment.app.Fragment;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputLayout;
 import com.kagg886.seiko.R;
 import com.kagg886.seiko.activity.MainActivity;
 import com.kagg886.seiko.adapter.BotAdapter;
-import com.kagg886.seiko.fragment.BaseFragment;
+import com.kagg886.seiko.event.SnackBroadCast;
 import com.kagg886.seiko.util.storage.JSONArrayStorage;
 import net.mamoe.mirai.Bot;
 import org.json.JSONException;
@@ -32,10 +33,10 @@ import org.json.JSONObject;
  * @date: 2022/12/12 19:14
  * @version: 1.0
  */
-public class LoginFragment extends BaseFragment implements View.OnClickListener {
+public class LoginFragment extends Fragment implements View.OnClickListener {
     private BotAdapter adapter;
 
-    private static String protocols[] = {
+    private static final String[] protocols = {
             "ANDROID_PHONE",
             "ANDROID_PAD",
             "ANDROID_WATCH",
@@ -102,12 +103,12 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener 
             try {
                 qq = Long.parseLong(key);
             } catch (Exception e) {
-                avt.snack("请输入合法的qq号!");
+                SnackBroadCast.sendBroadCast(avt, "请输入合法的qq号!");
                 return;
             }
 
             if (Bot.getInstanceOrNull(qq) != null) {
-                avt.snack("请勿输入已存在的QQ");
+                SnackBroadCast.sendBroadCast(avt, "请勿输入已存在的QQ");
             }
             JSONArrayStorage botList = JSONArrayStorage.obtain(avt.getExternalFilesDir("config").getAbsolutePath() + "/botList.json");
             try {
@@ -121,7 +122,7 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener 
                 botList.put(account);
             }
             botList.save();
-            avt.snack("添加成功!");
+            SnackBroadCast.sendBroadCast(avt, "添加成功!");
             adapter.notifyDataSetChanged();
         });
         return builder.create();

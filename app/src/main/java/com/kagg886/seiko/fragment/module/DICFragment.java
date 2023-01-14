@@ -10,6 +10,7 @@ import android.widget.ListView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
+import androidx.fragment.app.Fragment;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.kagg886.seiko.R;
@@ -17,7 +18,7 @@ import com.kagg886.seiko.activity.MainActivity;
 import com.kagg886.seiko.adapter.DICAdapter;
 import com.kagg886.seiko.dic.DICPlugin;
 import com.kagg886.seiko.dic.entity.DictionaryFile;
-import com.kagg886.seiko.fragment.BaseFragment;
+import com.kagg886.seiko.event.SnackBroadCast;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -29,7 +30,7 @@ import org.jetbrains.annotations.NotNull;
  * @date: 2023/1/9 18:48
  * @version: 1.0
  */
-public class DICFragment extends BaseFragment implements View.OnClickListener, SwipeRefreshLayout.OnRefreshListener {
+public class DICFragment extends Fragment implements View.OnClickListener, SwipeRefreshLayout.OnRefreshListener {
     private ListView listView;
     private SwipeRefreshLayout layout;
     private DICAdapter adapter;
@@ -55,7 +56,7 @@ public class DICFragment extends BaseFragment implements View.OnClickListener, S
                         if (which == 0) {
                             file.getFile().delete();
                             adapter.notifyDataSetChanged();
-                            snack("删除成功!");
+                            SnackBroadCast.sendBroadCast(getContext(), "删除成功!");
                         }
                     }
                 });
@@ -75,7 +76,7 @@ public class DICFragment extends BaseFragment implements View.OnClickListener, S
                 .setTitle("您要...").setItems(new String[]{"导入词库"}, (dialog1, which) -> {
                     switch (which) {
                         case 0:
-                            ((MainActivity) getActivity()).snack("懒得做了xwx\n等更新吧www");
+                            SnackBroadCast.sendBroadCast(getContext(), "懒得做了xwx\n等更新吧www");
                             break;
                         case 1:
                             break;
@@ -88,6 +89,5 @@ public class DICFragment extends BaseFragment implements View.OnClickListener, S
     public void onRefresh() {
         adapter.notifyDataSetChanged();
         layout.setRefreshing(false);
-        ((MainActivity) getActivity()).snack("刷新完成");
     }
 }
