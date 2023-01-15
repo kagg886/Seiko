@@ -59,6 +59,7 @@ public class CrashHandler extends Application implements Runnable, Thread.Uncaug
             fileWriter.append("\nAndroid-Version:").append(Build.VERSION.RELEASE);
             fileWriter.append("\nModel:").append(Build.MODEL);
             fileWriter.append("\nAPP-Version:").append(info.versionName).append("(").append(String.valueOf(info.getLongVersionCode())).append(")");
+            fileWriter.append("\nMirai-Version:").append(BuildConfig.MIRAI_VERSION);
             fileWriter.append("\n---StackTrace---\n");
             fileWriter.append(IOUtil.getException(th));
             fileWriter.flush();

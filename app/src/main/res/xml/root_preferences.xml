@@ -8,9 +8,16 @@
 
     <PreferenceCategory app:title="程序信息">
         <DropDownPreference
-                app:key="verInfo"
+                app:key="SeikoInfo"
                 app:title="0"
                 app:summary="1"/>
+
+        <DropDownPreference
+                app:key="MiraiInfo"
+                app:title="内嵌Mirai版本"
+                app:summary="1"/>
+
+
         <DropDownPreference
                 app:key="buildTime"
                 app:title="0"
