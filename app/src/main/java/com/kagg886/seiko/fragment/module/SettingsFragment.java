@@ -21,7 +21,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Prefer
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         setPreferencesFromResource(R.xml.root_preferences, rootKey);
 
-        Preference s = findPreference("verInfo");
+        Preference s = findPreference("SeikoInfo");
         PackageInfo p = null;
         try {
             p = getContext().getPackageManager().getPackageInfo("com.kagg886.seiko", 0);
@@ -34,6 +34,9 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Prefer
         s = findPreference("buildTime");
         s.setTitle("构建日期");
         s.setSummary(BuildConfig.BUILD_TIME);
+
+        s = findPreference("MiraiInfo");
+        s.setSummary(BuildConfig.MIRAI_VERSION);
 
         s = findPreference("cleanCache");
 

@@ -29,5 +29,5 @@ android {
 
 dependencies {
     compileOnly project(':PluginAPI')
-    compileOnly("net.mamoe:mirai-core-android:2.13.2")
+    compileOnly("net.mamoe:mirai-core-android:$gradle.mirai_version")
 }

@@ -14,11 +14,11 @@ android {
         versionName "0.0.3"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         buildConfigField "String", "BUILD_TIME", getDate()
+        buildConfigField "String", "MIRAI_VERSION", "\"" + gradle.mirai_version + "\""
     }
 
     buildTypes {
         release {
-//            minifyEnabled false
             minifyEnabled true      // 开启混淆
             zipAlignEnabled true    // 已启用压缩
             shrinkResources true    // 缩减资源
@@ -26,7 +26,6 @@ android {
         }
 
         debug {
-//            minifyEnabled false
             minifyEnabled true      // 开启混淆
             zipAlignEnabled true    // 已启用压缩
             shrinkResources true    // 缩减资源
@@ -54,9 +53,10 @@ dependencies {
 
     implementation 'com.squareup.okhttp3:okhttp:4.10.0'
 
-    runtimeOnly("net.mamoe:mirai-core-android:2.13.2")
-    api("net.mamoe:mirai-core-api-android:2.13.2")
-    implementation("net.mamoe:mirai-core-utils-android:2.13.2")
+
+    runtimeOnly("net.mamoe:mirai-core-android:$gradle.mirai_version")
+    api("net.mamoe:mirai-core-api-android:$gradle.mirai_version")
+    implementation("net.mamoe:mirai-core-utils-android:$gradle.mirai_version")
 
 
     implementation project(':PluginAPI')

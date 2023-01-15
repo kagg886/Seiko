@@ -19,3 +19,6 @@ include ':SeikoDic'
 
 include ':PluginDemo'
 include ':SeikoUtil'
+
+
+gradle.ext.mirai_version = "2.13.3"

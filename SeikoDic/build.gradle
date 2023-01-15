@@ -39,9 +39,9 @@ dependencies {
     implementation project(':PluginAPI')
     compileOnly project(':SeikoUtil')
 
-    runtimeOnly("net.mamoe:mirai-core-android:2.13.2")
-    api("net.mamoe:mirai-core-api-android:2.13.2")
-    implementation("net.mamoe:mirai-core-utils-android:2.13.2")
+    runtimeOnly("net.mamoe:mirai-core-android:$gradle.mirai_version")
+    api("net.mamoe:mirai-core-api-android:$gradle.mirai_version")
+    implementation("net.mamoe:mirai-core-utils-android:$gradle.mirai_version")
 
     compileOnly("org.jsoup:jsoup:1.15.3")
 }
