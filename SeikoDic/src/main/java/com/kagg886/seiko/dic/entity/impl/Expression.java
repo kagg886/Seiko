@@ -9,11 +9,11 @@ import com.kagg886.seiko.dic.session.AbsRuntime;
  * @package: com.kagg886.seiko.dic.entity.impl
  * @className: Expression
  * @author: kagg886
- * @description: TODO
+ * @description: 代表词库的表达式
  * @date: 2023/1/16 18:39
  * @version: 1.0
  */
-public class Expression extends DictionaryCode {
+public abstract class Expression extends DictionaryCode {
 
     public Expression(int line, String code) {
         super(line, code);

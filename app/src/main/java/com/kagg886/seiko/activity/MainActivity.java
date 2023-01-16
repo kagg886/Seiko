@@ -15,10 +15,10 @@ import com.kagg886.seiko.R;
 import com.kagg886.seiko.adapter.ModuleAdapter;
 import com.kagg886.seiko.event.DialogBroadCast;
 import com.kagg886.seiko.event.SnackBroadCast;
-import com.kagg886.seiko.fragment.module.DICFragment;
-import com.kagg886.seiko.fragment.module.LoginFragment;
-import com.kagg886.seiko.fragment.module.PluginFragment;
-import com.kagg886.seiko.fragment.module.SettingsFragment;
+import com.kagg886.seiko.fragment.DICFragment;
+import com.kagg886.seiko.fragment.LoginFragment;
+import com.kagg886.seiko.fragment.PluginFragment;
+import com.kagg886.seiko.fragment.SettingsFragment;
 import com.kagg886.seiko.service.BotRunnerService;
 import com.kagg886.seiko.util.IOUtil;
 
@@ -76,6 +76,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //检测崩溃报告
         File f = getExternalFilesDir("crash");
         if (f.listFiles().length != 0) {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -108,28 +109,31 @@ public class MainActivity extends AppCompatActivity {
             builder.create().show();
         }
 
+        //初始化Dialog广播
         dialogBroadCast = new DialogBroadCast(this);
         IntentFilter filter = new IntentFilter();
         filter.addAction(DialogBroadCast.TAG);
         registerReceiver(dialogBroadCast, filter);
 
-        layout = findViewById(R.id.activity_main_view_tab_layout);
-        snackBroadCast = new SnackBroadCast(layout);
+        //初始化SnackBar广播
+        rootView = findViewById(R.id.activity_main_root);
+        snackBroadCast = new SnackBroadCast(rootView);
         filter = new IntentFilter();
         filter.addAction(SnackBroadCast.TAG);
         registerReceiver(snackBroadCast, filter);
 
+        layout = findViewById(R.id.activity_main_view_tab_layout);
         pager = findViewById(R.id.activity_main_view_view_pager);
         adapter = new ModuleAdapter(getSupportFragmentManager());
-        rootView = findViewById(R.id.activity_main_root);
 
+        //启动Seiko托管服务，它是整个程序运行的关键
         Intent a = new Intent(this, BotRunnerService.class);
-        BotRunnerService.avt = this;
         if (BotRunnerService.INSTANCE == null) {
             startForegroundService(a);
             SnackBroadCast.sendBroadCast(this, "绑定服务成功");
         }
 
+        //填充列表
         ArrayList<ModuleAdapter.Structure> fragments = new ArrayList<>();
         fragments.add(new ModuleAdapter.Structure("BOT列表", new LoginFragment()));
         fragments.add(new ModuleAdapter.Structure("插件", new PluginFragment()));

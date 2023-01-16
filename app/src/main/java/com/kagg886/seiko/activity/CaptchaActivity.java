@@ -12,6 +12,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+/*
+ * @param null:
+ * @return null
+ * @author kagg886
+ * @description 不能用AlertDialog显示WebView，会有BUG且不知道应该如何解决
+ * @date 2023/01/16 20:25
+ */
 public class CaptchaActivity extends AppCompatActivity {
 
     @SuppressLint("SetJavaScriptEnabled")
@@ -19,6 +26,7 @@ public class CaptchaActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         WebView view = new WebView(this);
+        //shit Android
         view.getSettings().setJavaScriptEnabled(true);
         view.getSettings().setDomStorageEnabled(true);
         view.setWebViewClient(new WebViewClient() {
@@ -29,8 +37,8 @@ public class CaptchaActivity extends AppCompatActivity {
                     try {
                         JSONObject obj = new JSONObject(request.getUrl().getQueryParameter("p"));
                         Intent data = new Intent();
-                        data.putExtra("ticket",obj.optString("ticket"));
-                        setResult(RESULT_OK,data);
+                        data.putExtra("ticket", obj.optString("ticket"));
+                        setResult(RESULT_OK, data);
                         finish();
                     } catch (JSONException e) {
                         throw new RuntimeException(e);

@@ -11,9 +11,9 @@
         android:id="@+id/dialog_importPluginUrl"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-        <com.google.android.material.textfield.TextInputEditText
-            android:layout_width="match_parent"
-            android:hint="请输入插件下载链接"
-            android:layout_height="wrap_content"/>
+        <com.google.android.material.textfield.TextInputEditText style="@style/EditText"
+                                                                 android:layout_width="match_parent"
+                                                                 android:hint="请输入插件下载链接"
+                                                                 android:layout_height="wrap_content"/>
     </com.google.android.material.textfield.TextInputLayout>
 </LinearLayout>

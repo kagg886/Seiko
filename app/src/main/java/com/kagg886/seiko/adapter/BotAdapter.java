@@ -15,7 +15,7 @@ import com.kagg886.seiko.R;
 import com.kagg886.seiko.activity.LogActivity;
 import com.kagg886.seiko.activity.MainActivity;
 import com.kagg886.seiko.event.SnackBroadCast;
-import com.kagg886.seiko.fragment.module.LoginFragment;
+import com.kagg886.seiko.fragment.LoginFragment;
 import com.kagg886.seiko.service.BotRunnerService;
 import com.kagg886.seiko.util.IOUtil;
 import com.kagg886.seiko.util.NetUtil;
@@ -96,7 +96,7 @@ public class BotAdapter extends BaseAdapter {
                 return;
             }
             if (isChecked) {
-                BotRunnerService.INSTANCE.login(target, nick, sw);
+                BotRunnerService.INSTANCE.login(avt, target, nick, sw);
             } else {
                 Bot.getInstance(target.optLong("uin")).close();
                 //SnackBroadCast.sendBroadCast(avt,target.optLong("uin") + "已下线");

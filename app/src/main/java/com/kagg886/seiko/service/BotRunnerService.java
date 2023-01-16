@@ -1,6 +1,5 @@
 package com.kagg886.seiko.service;
 
-import android.annotation.SuppressLint;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -60,9 +59,9 @@ public class BotRunnerService extends Service {
             notificationManager.notify(114514, getNotification("已运行" + msg.what + "秒"));
         }
     };
-
-    @SuppressLint("StaticFieldLeak")
-    public static MainActivity avt;
+//
+//    @SuppressLint("StaticFieldLeak")
+//    public static MainActivity avt;
 
 
     public PluginList getSeikoPluginList() {
@@ -111,7 +110,7 @@ public class BotRunnerService extends Service {
         icon = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);
     }
 
-    public void login(JSONObject target, TextView nick, SwitchCompat sw) {
+    public void login(MainActivity avt, JSONObject target, TextView nick, SwitchCompat sw) {
         executor.execute(new LoginThread(avt, target, sw, nick));
     }
 

@@ -1,4 +1,4 @@
-package com.kagg886.seiko.fragment.module;
+package com.kagg886.seiko.fragment;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -180,6 +180,7 @@ public class PluginFragment extends Fragment implements View.OnClickListener, Sw
 
     @Override
     public void onRefresh() {
+        //TODO 此处刷新一次则词库会刷新两次，知道原因但是不知道怎么解，求助
         BotRunnerService.INSTANCE.getSeikoPluginList().refresh();
         adapter.notifyDataSetChanged();
         layout.setRefreshing(false);

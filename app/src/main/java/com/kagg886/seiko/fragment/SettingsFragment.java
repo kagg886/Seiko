@@ -1,4 +1,4 @@
-package com.kagg886.seiko.fragment.module;
+package com.kagg886.seiko.fragment;
 
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;

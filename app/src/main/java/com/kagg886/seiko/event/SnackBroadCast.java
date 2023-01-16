@@ -12,7 +12,7 @@ import com.google.android.material.snackbar.Snackbar;
  * @package: com.kagg886.seiko.event
  * @className: SnackBroadCast
  * @author: kagg886
- * @description: TODO
+ * @description: 代表一个广播事件，这个事件通知MainActivity发送SnackBar
  * @date: 2023/1/14 11:29
  * @version: 1.0
  */

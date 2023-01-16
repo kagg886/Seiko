@@ -1,4 +1,4 @@
-package com.kagg886.seiko.fragment.module;
+package com.kagg886.seiko.fragment;
 
 import android.os.Bundle;
 import android.text.TextUtils;
