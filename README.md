@@ -23,13 +23,12 @@ Seiko是一个基于Mirai，并适用于Android端的一个QQ机器人软件
 > 不推荐使用GlobalEventChannel。
 
 # 四.插件示例
-
-[前往PluginDemo工程](https://github.com/kagg886/Seiko/tree/dev/PluginDemo)
+[前往PluginDemo工程查看](PluginDemo)
 
 ## 五.词库示例
 
-等待施工
-
+本页面仍需完善，但已有了一些雏形
+[前往SeikoDIC工程查看](SeikoDic/README.md)
 ## 六.我的联系方式
 
 [点击链接加入群聊【次元空间】](https://jq.qq.com/?_wv=1027&k=8vQZES3X)
