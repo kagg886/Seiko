@@ -36,10 +36,10 @@ public abstract class AbsRuntime<T> {
         for (Map.Entry<DictionaryCommandMatcher, ArrayList<DictionaryCode>> entry : file.getCommands().entrySet()) {
             DictionaryCommandMatcher matcher = entry.getKey();
             ArrayList<DictionaryCode> code = entry.getValue();
-            if (!matcher.matchesDomain(event)) {
+            if (!matcher.matchesDomain(event)) { //匹配指令触发的环境和当前环境是否相符
                 return;
             }
-            if (matcher.matchesCommand(command)) {
+            if (matcher.matchesCommand(command)) { //正则匹配
                 invoke(code);
             }
         }
@@ -48,51 +48,4 @@ public abstract class AbsRuntime<T> {
     protected abstract void invoke(ArrayList<DictionaryCode> code);
 
 
-    public Double mathExpressionCalc(String str) {
-        Double a = null;
-        try {
-            a = Double.parseDouble(str);
-        } catch (NumberFormatException e) {
-        }
-
-        if (str.isEmpty() || a != null) {
-            return str.isEmpty() ? 0 : a;
-        }
-
-        if (str.contains(")")) {
-            // 最后一个左括号
-            int lIndex = str.lastIndexOf("(");
-            // 对于的右括号
-            int rIndex = str.indexOf(")", lIndex);
-            return mathExpressionCalc(str.substring(0, lIndex) + mathExpressionCalc(str.substring(lIndex + 1, rIndex)) + str.substring(rIndex + 1));
-        }
-        if (str.contains("+")) {
-            int index = str.lastIndexOf("+");
-            return mathExpressionCalc(str.substring(0, index)) + mathExpressionCalc(str.substring(index + 1));
-        }
-        if (str.contains("-")) {
-            int index = str.lastIndexOf("-");
-            return mathExpressionCalc(str.substring(0, index)) - mathExpressionCalc(str.substring(index + 1));
-        }
-        if (str.contains("*")) {
-            int index = str.lastIndexOf("*");
-            return mathExpressionCalc(str.substring(0, index)) * mathExpressionCalc(str.substring(index + 1));
-        }
-        if (str.contains("/")) {
-            int index = str.lastIndexOf("/");
-            return mathExpressionCalc(str.substring(0, index)) / mathExpressionCalc(str.substring(index + 1));
-        }
-
-        if (str.contains("^")) {
-            int index = str.lastIndexOf("^");
-            return Math.pow(mathExpressionCalc(str.substring(0, index)), mathExpressionCalc(str.substring(index + 1)));
-        }
-
-        if (str.contains("%")) {
-            int index = str.lastIndexOf("%");
-            return mathExpressionCalc(str.substring(0, index)) % mathExpressionCalc(str.substring(index + 1));
-        }
-        // 出错
-        throw new RuntimeException("无法解析的表达式:" + str);
-    }
 }

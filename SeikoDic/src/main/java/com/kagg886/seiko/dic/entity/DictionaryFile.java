@@ -2,6 +2,9 @@ package com.kagg886.seiko.dic.entity;
 
 import android.text.TextUtils;
 import androidx.annotation.Nullable;
+import com.kagg886.seiko.dic.entity.impl.Expression;
+import com.kagg886.seiko.dic.entity.impl.Function;
+import com.kagg886.seiko.dic.entity.impl.PlainText;
 import com.kagg886.seiko.dic.exception.DictionaryOnLoadException;
 import com.kagg886.seiko.util.ArrayIterator;
 import com.kagg886.seiko.util.IOUtil;
@@ -20,10 +23,8 @@ import java.util.HashMap;
  * @version: 1.0
  */
 public class DictionaryFile {
-    private final File dicFile;
-
     private static final boolean STRICT_MODE = false;
-
+    private final File dicFile;
     private final HashMap<DictionaryCommandMatcher, ArrayList<DictionaryCode>> commands = new HashMap<DictionaryCommandMatcher, ArrayList<DictionaryCode>>() {
         @Nullable
         @org.jetbrains.annotations.Nullable
@@ -39,10 +40,6 @@ public class DictionaryFile {
             return super.put(key, value);
         }
     };
-
-    public File getFile() {
-        return dicFile;
-    }
 
     public DictionaryFile(File dicFile) throws Throwable {
         this.dicFile = dicFile;
@@ -64,7 +61,7 @@ public class DictionaryFile {
         boolean behindLineIsEmpty = true;
         String commandRegex = null;
         ArrayList<DictionaryCode> dictionaryCodes = new ArrayList<>();
-        int commandLine = 0;
+        int commandLine = 0; //指令所在的行号
         while (iterator.hasNext()) {
             String comm = iterator.next();
             if (comm.startsWith("//")) { //注释判空处理
@@ -92,14 +89,24 @@ public class DictionaryFile {
                 if (!comm.endsWith("$")) {
                     throw new DictionaryOnLoadException("未闭合的函数:(" + dicFile.getName() + ":" + iterator.getLen() + ")");
                 }
-                dictionaryCodes.add(new DictionaryCode(iterator.getLen(), comm, DictionaryCode.Type.FUNCTION));
+                dictionaryCodes.add(new Function(iterator.getLen(), comm));
+            } else if (comm.startsWith("如果:")) {
+                dictionaryCodes.add(new Expression.If(iterator.getLen(), comm));
+            } else if (comm.startsWith("如果尾")) {
+                dictionaryCodes.add(new Expression.Else(iterator.getLen(), comm));
+            } else if (comm.equals("返回")) {
+                dictionaryCodes.add(new Expression.Return(iterator.getLen(), comm));
             } else {
-                dictionaryCodes.add(new DictionaryCode(iterator.getLen(), comm, DictionaryCode.Type.PLAIN_TEXT));
+                dictionaryCodes.add(new PlainText(iterator.getLen(), comm));
             }
         }
         if (iterator.getLen() == lines.length) {
             commands.put(new DictionaryCommandMatcher(commandRegex, commandLine, dicFile), dictionaryCodes);
         }
+    }
+
+    public File getFile() {
+        return dicFile;
     }
 
     public HashMap<DictionaryCommandMatcher, ArrayList<DictionaryCode>> getCommands() {
