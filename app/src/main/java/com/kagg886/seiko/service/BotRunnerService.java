@@ -1,18 +1,12 @@
 package com.kagg886.seiko.service;
 
-import android.app.Notification;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
-import android.app.Service;
+import android.app.*;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.os.Handler;
-import android.os.IBinder;
-import android.os.Looper;
-import android.os.Message;
+import android.os.*;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -25,6 +19,7 @@ import com.kagg886.seiko.plugin.PluginList;
 import org.json.JSONObject;
 
 import java.util.HashMap;
+import java.util.UUID;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadPoolExecutor;
 
@@ -52,6 +47,8 @@ public class BotRunnerService extends Service {
     private final HashMap<String, Long> lastLoad = new HashMap<>();
 
     private NotificationManager notificationManager;
+
+    private PendingIntent pIntent;
 
     private final Handler mHandler = new Handler(Looper.getMainLooper()) {
         @Override
@@ -108,6 +105,15 @@ public class BotRunnerService extends Service {
         chan.setLockscreenVisibility(Notification.VISIBILITY_PRIVATE);
         notificationManager.createNotificationChannel(chan);
         icon = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);
+
+        Intent i = new Intent(this, MainActivity.class);
+        int flag;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            flag = PendingIntent.FLAG_IMMUTABLE;
+        } else {
+            flag = PendingIntent.FLAG_UPDATE_CURRENT;
+        }
+        pIntent = PendingIntent.getActivity(this, UUID.randomUUID().hashCode(), i, flag);
     }
 
     public void login(MainActivity avt, JSONObject target, TextView nick, SwitchCompat sw) {
@@ -120,6 +126,7 @@ public class BotRunnerService extends Service {
                 .setContentText(content)
                 .setWhen(System.currentTimeMillis())//通知显示时间
                 .setSmallIcon(R.mipmap.ic_launcher).setOngoing(true).setPriority(NotificationCompat.PRIORITY_MAX).setLargeIcon(icon);
+        builder.setContentIntent(pIntent);
         return builder.build();
     }
 }
