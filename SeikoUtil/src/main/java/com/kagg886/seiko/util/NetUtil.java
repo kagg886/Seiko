@@ -5,8 +5,10 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 
 public class NetUtil {
-    public static void downloadFromUrlAsync(String url, Callback callback)  {
-        OkHttpClient okHttpClient = new OkHttpClient();
+
+    public static final OkHttpClient okHttpClient = new OkHttpClient();
+
+    public static void downloadFromUrlAsync(String url, Callback callback) {
         Request req = new Request.Builder()
                 .url(url)
                 .get()

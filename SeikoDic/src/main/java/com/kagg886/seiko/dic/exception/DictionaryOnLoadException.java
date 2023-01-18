@@ -13,4 +13,8 @@ public class DictionaryOnLoadException extends RuntimeException {
     public DictionaryOnLoadException(String ss) {
         super(ss);
     }
+
+    public DictionaryOnLoadException(String ss, Throwable e) {
+        super(ss, e);
+    }
 }

@@ -4,6 +4,7 @@ import android.util.Log;
 import com.kagg886.seiko.dic.entity.DictionaryCode;
 import com.kagg886.seiko.dic.entity.DictionaryFile;
 import com.kagg886.seiko.dic.session.AbsRuntime;
+import net.mamoe.mirai.contact.Contact;
 import net.mamoe.mirai.event.events.FriendMessageEvent;
 
 import java.util.ArrayList;
@@ -20,6 +21,16 @@ import java.util.ArrayList;
 public class FriendMessageRuntime extends AbsRuntime<FriendMessageEvent> {
     public FriendMessageRuntime(DictionaryFile file, FriendMessageEvent event) {
         super(file, event);
+    }
+
+    @Override
+    public Contact getContact() {
+        return event.getFriend();
+    }
+
+    @Override
+    protected void clearMessageCache() {
+
     }
 
     @Override

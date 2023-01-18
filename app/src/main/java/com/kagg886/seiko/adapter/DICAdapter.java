@@ -41,6 +41,9 @@ public class DICAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
+        if (DICPlugin.getDicLists() == null) {
+            return 0;
+        }
         return DICPlugin.getDicLists().size();
     }
 

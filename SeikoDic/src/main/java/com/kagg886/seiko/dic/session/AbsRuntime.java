@@ -3,6 +3,8 @@ package com.kagg886.seiko.dic.session;
 import com.kagg886.seiko.dic.entity.DictionaryCode;
 import com.kagg886.seiko.dic.entity.DictionaryCommandMatcher;
 import com.kagg886.seiko.dic.entity.DictionaryFile;
+import net.mamoe.mirai.contact.Contact;
+import net.mamoe.mirai.message.data.MessageChainBuilder;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -26,6 +28,25 @@ public abstract class AbsRuntime<T> {
         this.file = file;
         this.event = event;
         context = new HashMap<>();
+        context.put("上下文", event);
+        context.put("缓冲区", new MessageChainBuilder());
+    }
+
+    public DictionaryFile getFile() {
+        return file;
+    }
+
+    public abstract Contact getContact();
+
+    public MessageChainBuilder getMessageCache() {
+        return (MessageChainBuilder) context.get("缓冲区");
+    }
+
+    protected abstract void clearMessageCache();
+
+    public void clearMessage() { //清空缓冲区
+        clearMessageCache();
+        context.put("缓冲区", new MessageChainBuilder());
     }
 
     public HashMap<String, Object> getRuntimeObject() {

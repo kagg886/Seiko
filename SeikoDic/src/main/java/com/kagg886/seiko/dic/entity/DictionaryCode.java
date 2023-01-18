@@ -25,6 +25,10 @@ public abstract class DictionaryCode {
         return code;
     }
 
+    public int getLine() {
+        return line;
+    }
+
     @NonNull
     @NotNull
     @Override

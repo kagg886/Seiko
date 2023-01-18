@@ -86,13 +86,14 @@ public class DictionaryFile {
                 continue;
             }
             if (comm.startsWith("$")) {
-                if (!comm.endsWith("$")) {
-                    throw new DictionaryOnLoadException("未闭合的函数:(" + dicFile.getName() + ":" + iterator.getLen() + ")");
+                try {
+                    dictionaryCodes.add(Function.parseFunction(comm, iterator.getLen()));
+                } catch (Throwable e) {
+                    throw new DictionaryOnLoadException("解析词库方法时出错!" + "(" + iterator.getLen() + ":" + comm + ")", e);
                 }
-                dictionaryCodes.add(new Function(iterator.getLen(), comm));
             } else if (comm.startsWith("如果:")) {
                 dictionaryCodes.add(new Expression.If(iterator.getLen(), comm));
-            } else if (comm.startsWith("如果尾")) {
+            } else if (comm.equals("如果尾")) {
                 dictionaryCodes.add(new Expression.Else(iterator.getLen(), comm));
             } else if (comm.equals("返回")) {
                 dictionaryCodes.add(new Expression.Return(iterator.getLen(), comm));
