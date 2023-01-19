@@ -10,8 +10,8 @@ android {
         applicationId "com.kagg886.seiko"
         minSdk 28
         targetSdk 32
-        versionCode 3
-        versionName "0.0.3"
+        versionCode 4
+        versionName "0.0.4"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         buildConfigField "String", "BUILD_TIME", getDate()
         buildConfigField "String", "MIRAI_VERSION", "\"" + gradle.mirai_version + "\""
@@ -19,18 +19,19 @@ android {
 
     buildTypes {
         release {
-            minifyEnabled true      // 开启混淆
+            //minifyEnabled true      // 开启混淆
+            minifyEnabled false      // 开启混淆
             zipAlignEnabled true    // 已启用压缩
-            shrinkResources true    // 缩减资源
+            //shrinkResources true    // 缩减资源
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
 
-        debug {
-            minifyEnabled true      // 开启混淆
-            zipAlignEnabled true    // 已启用压缩
-            shrinkResources true    // 缩减资源
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-        }
+//        debug {
+//            minifyEnabled true      // 开启混淆
+//            zipAlignEnabled true    // 已启用压缩
+//            shrinkResources true    // 缩减资源
+//            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+//        }
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8

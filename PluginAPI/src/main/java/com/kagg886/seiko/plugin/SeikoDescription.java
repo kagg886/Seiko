@@ -1,5 +1,7 @@
 package com.kagg886.seiko.plugin;
 
+import androidx.annotation.Keep;
+
 /**
  * @projectName: Seiko
  * @package: com.kagg886.seiko.plugin.api
@@ -9,6 +11,7 @@ package com.kagg886.seiko.plugin;
  * @date: 2022/12/22 15:02
  * @version: 1.0
  */
+@Keep
 public class SeikoDescription {
     private String name;
     private String desc;
