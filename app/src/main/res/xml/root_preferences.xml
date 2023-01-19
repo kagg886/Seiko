@@ -22,5 +22,10 @@
                 app:key="buildTime"
                 app:title="0"
                 app:summary="1"/>
+
+        <DropDownPreference
+                app:key="goGithub"
+                app:title="查看仓库"
+                app:summary="前往Seiko的Github仓库。获取最新版本Seiko，审阅Seiko源码并提出建议"/>
     </PreferenceCategory>
 </PreferenceScreen>

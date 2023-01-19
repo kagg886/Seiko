@@ -1,17 +1,17 @@
 package com.kagg886.seiko.fragment;
 
+import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.InputType;
-import androidx.annotation.NonNull;
 import androidx.preference.EditTextPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import com.kagg886.seiko.BuildConfig;
 import com.kagg886.seiko.R;
 import com.kagg886.seiko.event.SnackBroadCast;
-import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 
@@ -69,19 +69,23 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Prefer
 
         EditTextPreference sp = findPreference("maxLogNum");
         sp.setOnBindEditTextListener(editText -> editText.setInputType(InputType.TYPE_CLASS_NUMBER));
-        sp.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-            @Override
-            public boolean onPreferenceChange(@NonNull @NotNull Preference preference, Object newValue) {
-                if (Integer.parseInt((String) newValue) > 0) {
-                    sp.setSummary(String.format("当前设置的值为:%s", newValue));
-                    SnackBroadCast.sendBroadCast(getContext(), "保存成功!");
-                    return true;
-                }
-                SnackBroadCast.sendBroadCast(getContext(), "不能为0和负数!");
-                return false;
+        sp.setOnPreferenceChangeListener((preference, newValue) -> {
+            if (Integer.parseInt((String) newValue) > 0) {
+                sp.setSummary(String.format("当前设置的值为:%s", newValue));
+                SnackBroadCast.sendBroadCast(getContext(), "保存成功!");
+                return true;
             }
+            SnackBroadCast.sendBroadCast(getContext(), "不能为0和负数!");
+            return false;
         });
         sp.setSummary(String.format("当前设置的值为:%s", sp.getSharedPreferences().getString("maxLogNum", "40")));
+
+        s = findPreference("goGithub");
+        s.setOnPreferenceClickListener(preference -> {
+            Uri uri = Uri.parse("https://github.com/kagg886/Seiko");
+            startActivity(new Intent(Intent.ACTION_VIEW, uri));
+            return true;
+        });
     }
 
     @Override
@@ -98,8 +102,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Prefer
                 }
                 f.delete();
             }
-            SnackBroadCast.sendBroadCast(getContext(), "清理完毕(๑′ᴗ‵๑)");
-            preference.setSummary("已发现0Byte");
+            preference.setSummary("清理完毕(๑′ᴗ‵๑)");
         }
         return false;
     }

@@ -1,7 +1,7 @@
 package com.kagg886.seiko.dic.entity.func.uninterrupted;
 
 import androidx.annotation.Keep;
-import com.kagg886.seiko.dic.entity.impl.Function;
+import com.kagg886.seiko.dic.entity.func.Function;
 import com.kagg886.seiko.dic.exception.DictionaryOnRunningException;
 import com.kagg886.seiko.dic.session.AbsRuntime;
 import com.kagg886.seiko.util.NetUtil;
@@ -18,7 +18,7 @@ import java.util.Objects;
  * @package: com.kagg886.seiko.dic.entity.func.uninterrupted
  * @className: Image
  * @author: kagg886
- * @description: TODO
+ * @description: $图片 link$
  * @date: 2023/1/18 12:25
  * @version: 1.0
  */
@@ -30,16 +30,16 @@ public class addImage extends Function.UnInterruptedFunction {
     }
 
     @Override
-    public void run(AbsRuntime runtime) {
+    public void run(AbsRuntime runtime, Object[] args) {
         Request req = new Request.Builder()
-                .url(args.get(0))
+                .url(args[0].toString())
                 .get()
                 .build();
         Call call = NetUtil.okHttpClient.newCall(req);
         try (InputStream s = Objects.requireNonNull(call.execute().body()).byteStream()) {
             runtime.getMessageCache().append(ExternalResource.uploadAsImage(s, runtime.getContact()));
         } catch (IOException e) {
-            throw new DictionaryOnRunningException("上传图片失败!:" + args.get(0) + "在" + runtime.getFile().getFile().getAbsolutePath() + ":" + getLine(), e);
+            throw new DictionaryOnRunningException("上传图片失败!:" + args[0] + "在" + runtime.getFile().getFile().getAbsolutePath() + ":" + getLine(), e);
         }
     }
 }

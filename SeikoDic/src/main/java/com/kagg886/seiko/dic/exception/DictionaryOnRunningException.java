@@ -5,7 +5,7 @@ package com.kagg886.seiko.dic.exception;
  * @package: com.kagg886.seiko.dic.exception
  * @className: DictionaryOnRunningException
  * @author: kagg886
- * @description: TODO
+ * @description: 词库在运行时抛出异常
  * @date: 2023/1/18 11:17
  * @version: 1.0
  */

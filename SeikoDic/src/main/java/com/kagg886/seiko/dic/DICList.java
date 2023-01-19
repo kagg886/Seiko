@@ -2,6 +2,7 @@ package com.kagg886.seiko.dic;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import com.kagg886.seiko.dic.entity.DictionaryFile;
 import com.kagg886.seiko.util.IOUtil;
 
@@ -30,7 +31,9 @@ public class DICList extends ArrayList<DictionaryFile> {
         clear();
         for (File p : dicFile.listFiles()) {
             try {
+                long start = System.currentTimeMillis();
                 add(new DictionaryFile(p));
+                Log.d("词库引擎", p.getName() + "装载成功\n装载时间:" + (System.currentTimeMillis() - start) + "ms");
             } catch (Throwable e) {
                 Intent broadcast = new Intent("DialogBroadCast");
                 broadcast.putExtra("name", "加载伪代码文件:[" + p.getName() + "]时发生错误!");

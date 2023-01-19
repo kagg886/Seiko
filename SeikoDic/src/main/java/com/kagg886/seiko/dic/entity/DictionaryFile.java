@@ -2,8 +2,8 @@ package com.kagg886.seiko.dic.entity;
 
 import android.text.TextUtils;
 import androidx.annotation.Nullable;
+import com.kagg886.seiko.dic.entity.func.Function;
 import com.kagg886.seiko.dic.entity.impl.Expression;
-import com.kagg886.seiko.dic.entity.impl.Function;
 import com.kagg886.seiko.dic.entity.impl.PlainText;
 import com.kagg886.seiko.dic.exception.DictionaryOnLoadException;
 import com.kagg886.seiko.util.ArrayIterator;

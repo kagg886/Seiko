@@ -1,10 +1,8 @@
-package com.kagg886.seiko.dic.entity.impl;
+package com.kagg886.seiko.dic.entity.func;
 
 import com.kagg886.seiko.dic.DictionaryUtil;
 import com.kagg886.seiko.dic.entity.DictionaryCode;
 import com.kagg886.seiko.dic.session.AbsRuntime;
-
-import java.util.ArrayList;
 
 /**
  * @projectName: Seiko
@@ -20,16 +18,17 @@ public abstract class Function extends DictionaryCode {
             {"延时", "Delay"}
     };
     private static final String[][] uninterruptedFunctionNames = { //阻断方法列表，后面的是Class名
-            {"图片", "addImage"}
+            {"图片", "addImage"},
+            {"读", "Read"},
+            {"写", "Write"}
     };
-    protected ArrayList<String> args;
-    private final String[] sourceArgs;
+
+    private final String argCode; //去除包装后剩下的参数字符串
 
     public Function(int line, String code) {
         super(line, code);
         int sIndex = code.indexOf(" ");
-        code = code.substring(sIndex + 1, code.length() - 1);
-        sourceArgs = code.split(" ");
+        argCode = code.substring(sIndex + 1, code.length() - 1);
     }
 
     public static Function parseFunction(String dicLine, int line) throws Throwable { //一定是$xxxx a b c$
@@ -59,15 +58,11 @@ public abstract class Function extends DictionaryCode {
         throw new NoSuchFieldException("未找到词库方法");
     }
 
-    public void invoke(AbsRuntime runtime) {
-        args = new ArrayList<>();
-        for (String s : sourceArgs) {
-            args.add(DictionaryUtil.cleanVariableCode(s, runtime));
-        }
-        run(runtime);
+    public void invoke(AbsRuntime<?> runtime) {
+        run(runtime, DictionaryUtil.variableToObject(argCode, runtime));
     }
 
-    protected abstract void run(AbsRuntime runtime);
+    protected abstract void run(AbsRuntime<?> runtime, Object[] args);
 
     /**
      * @projectName: Seiko

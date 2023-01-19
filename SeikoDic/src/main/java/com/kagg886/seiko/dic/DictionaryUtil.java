@@ -16,10 +16,34 @@ import java.util.Objects;
 public class DictionaryUtil {
 
     /*
+     * @param code:参数表
+     * @param runtime:运行时
+     * @return Object
+     * @author kagg886
+     * @description 用于函数，将参数变量提取成字符串
+     * //TODO 针对JavaObject未做测试，日后再说。
+     * @date 2023/01/19 18:51
+     */
+    public static Object[] variableToObject(String code, AbsRuntime<?> runtime) {
+        Object[] args = code.split(" ");
+
+        for (int i = 0; i < args.length; i++) {
+            String arg = (String) args[i];
+            if (arg.startsWith("%") && arg.endsWith("%")) {//是变量
+                args[i] = runtime.getRuntimeObject().getOrDefault(arg.substring(1, arg.length() - 1), null);
+                continue;
+            }
+            args[i] = cleanVariableCode(arg, runtime);
+        }
+
+        return args;
+    }
+
+    /*
      * @param :
      * @return String
      * @author kagg886
-     * @description 清理变量
+     * @description 变量转换成字符串
      * @date 2023/01/13 09:44
      */
     public static String cleanVariableCode(String code, AbsRuntime runtime) {
@@ -35,9 +59,7 @@ public class DictionaryUtil {
                 clone = clone.replace(var, q.toString());
             }
         }
-
         //计算表达式
-
         int x = 0;
         while ((x = clone.indexOf("[", x)) != -1) {
             int y = clone.indexOf("]", x);

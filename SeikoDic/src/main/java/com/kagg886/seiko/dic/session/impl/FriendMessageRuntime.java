@@ -1,13 +1,9 @@
 package com.kagg886.seiko.dic.session.impl;
 
-import android.util.Log;
-import com.kagg886.seiko.dic.entity.DictionaryCode;
 import com.kagg886.seiko.dic.entity.DictionaryFile;
 import com.kagg886.seiko.dic.session.AbsRuntime;
 import net.mamoe.mirai.contact.Contact;
 import net.mamoe.mirai.event.events.FriendMessageEvent;
-
-import java.util.ArrayList;
 
 /**
  * @projectName: Seiko
@@ -21,6 +17,9 @@ import java.util.ArrayList;
 public class FriendMessageRuntime extends AbsRuntime<FriendMessageEvent> {
     public FriendMessageRuntime(DictionaryFile file, FriendMessageEvent event) {
         super(file, event);
+        context.put("QQ", event.getSender().getId());
+        context.put("昵称", event.getSender().getNick());
+        context.put("BOT", event.getBot().getId());
     }
 
     @Override
@@ -30,11 +29,6 @@ public class FriendMessageRuntime extends AbsRuntime<FriendMessageEvent> {
 
     @Override
     protected void clearMessageCache() {
-
-    }
-
-    @Override
-    protected void invoke(ArrayList<DictionaryCode> code) {
-        Log.i("DEBUG", "好友方法触发!");
+        event.getFriend().sendMessage(getMessageCache().build());
     }
 }

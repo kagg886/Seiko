@@ -185,7 +185,7 @@ public class PluginFragment extends Fragment implements View.OnClickListener, Sw
     @Override
     public void onRefresh() {
         //TODO 此处刷新一次则词库会刷新两次，知道原因但是不知道怎么解，求助
-        if (BotRunnerService.INSTANCE.getSeikoPluginList() == null) {
+        if (BotRunnerService.INSTANCE == null) {
             SnackBroadCast.sendBroadCast(avt, "服务启动中，请稍等片刻");
             layout.setRefreshing(false);
             return;
