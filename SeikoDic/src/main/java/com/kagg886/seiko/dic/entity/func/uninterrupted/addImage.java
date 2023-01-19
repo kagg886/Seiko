@@ -1,5 +1,6 @@
 package com.kagg886.seiko.dic.entity.func.uninterrupted;
 
+import androidx.annotation.Keep;
 import com.kagg886.seiko.dic.entity.impl.Function;
 import com.kagg886.seiko.dic.exception.DictionaryOnRunningException;
 import com.kagg886.seiko.dic.session.AbsRuntime;
@@ -21,6 +22,7 @@ import java.util.Objects;
  * @date: 2023/1/18 12:25
  * @version: 1.0
  */
+@Keep
 public class addImage extends Function.UnInterruptedFunction {
 
     public addImage(int line, String code) {

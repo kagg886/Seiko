@@ -32,6 +32,8 @@ public class LogAdapter extends BaseAdapter {
 
     private final BufferedReader reader;
 
+    private static final String SPLIT_STR = "\u001B";
+
     private final Handler mHandler = new Handler(Looper.getMainLooper()) {
         @Override
         public void handleMessage(@NonNull Message msg) {
@@ -65,6 +67,23 @@ public class LogAdapter extends BaseAdapter {
                     continue;
                 } else {
                     needDelay = false;
+                }
+                openBox:
+                {
+                    if (a.contains(SPLIT_STR)) {
+                        int lIndex = a.indexOf("m");
+                        if (lIndex == -1) {
+                            break openBox;
+                        }
+                        int rIndex = a.lastIndexOf(SPLIT_STR);
+                        if (lIndex >= rIndex) {
+                            break openBox;
+                        }
+                        a = a.substring(lIndex + 1, rIndex);
+                    }
+                }
+                if (a.equals(SPLIT_STR + "[0m")) {
+                    continue;
                 }
                 log.add(a);
                 mHandler.sendEmptyMessage(0);

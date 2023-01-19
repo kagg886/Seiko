@@ -130,18 +130,16 @@ public class MainActivity extends AppCompatActivity {
         Intent a = new Intent(this, BotRunnerService.class);
         if (BotRunnerService.INSTANCE == null) {
             startForegroundService(a);
-            SnackBroadCast.sendBroadCast(this, "绑定服务成功");
         }
 
         //填充列表
         ArrayList<ModuleAdapter.Structure> fragments = new ArrayList<>();
-        fragments.add(new ModuleAdapter.Structure("BOT列表", new LoginFragment()));
-        fragments.add(new ModuleAdapter.Structure("插件", new PluginFragment()));
-        fragments.add(new ModuleAdapter.Structure("词库",new DICFragment()));
+        fragments.add(new ModuleAdapter.Structure("BOT列表", new LoginFragment(this)));
+        fragments.add(new ModuleAdapter.Structure("插件", new PluginFragment(this)));
+        fragments.add(new ModuleAdapter.Structure("词库", new DICFragment(this)));
         fragments.add(new ModuleAdapter.Structure("设置", new SettingsFragment()));
         adapter.setViews(fragments);
         pager.setAdapter(adapter);
         layout.setupWithViewPager(pager);
-
     }
 }

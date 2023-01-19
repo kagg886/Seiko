@@ -15,6 +15,7 @@ import androidx.core.app.NotificationCompat;
 import com.kagg886.seiko.R;
 import com.kagg886.seiko.activity.MainActivity;
 import com.kagg886.seiko.bot.LoginThread;
+import com.kagg886.seiko.event.SnackBroadCast;
 import com.kagg886.seiko.plugin.PluginList;
 import org.json.JSONObject;
 
@@ -56,10 +57,6 @@ public class BotRunnerService extends Service {
             notificationManager.notify(114514, getNotification("已运行" + msg.what + "秒"));
         }
     };
-//
-//    @SuppressLint("StaticFieldLeak")
-//    public static MainActivity avt;
-
 
     public PluginList getSeikoPluginList() {
         return seikoPluginList;
@@ -114,6 +111,7 @@ public class BotRunnerService extends Service {
             flag = PendingIntent.FLAG_UPDATE_CURRENT;
         }
         pIntent = PendingIntent.getActivity(this, UUID.randomUUID().hashCode(), i, flag);
+        SnackBroadCast.sendBroadCast(this, "绑定服务成功");
     }
 
     public void login(MainActivity avt, JSONObject target, TextView nick, SwitchCompat sw) {

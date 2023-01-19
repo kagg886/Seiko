@@ -36,6 +36,8 @@ import org.json.JSONObject;
 public class LoginFragment extends Fragment implements View.OnClickListener {
     private BotAdapter adapter;
 
+    private final MainActivity avt;
+
     private static final String[] protocols = {
             "ANDROID_PHONE",
             "ANDROID_PAD",
@@ -44,18 +46,23 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
             "MACOS"
     };
 
+    public LoginFragment(MainActivity avt) {
+        super();
+        this.avt = avt;
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        adapter = new BotAdapter((MainActivity) getActivity());
-        View v = LayoutInflater.from(getContext()).inflate(R.layout.fragment_login, null);
+        adapter = new BotAdapter(avt);
+        View v = LayoutInflater.from(avt).inflate(R.layout.fragment_login, null);
         ListView lv = v.findViewById(R.id.fragment_login_view_list);
         FloatingActionButton btn = v.findViewById(R.id.fragment_login_widget_add);
 
         lv.setAdapter(adapter);
         btn.setOnClickListener(this);
         btn.setOnLongClickListener(v1 -> {
-            getActivity().finish();
+            avt.finish();
             return false;
         });
         return v;
@@ -63,7 +70,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
-        editDialog((MainActivity) getActivity(), adapter, false, new JSONObject()).show();
+        editDialog(avt, adapter, false, new JSONObject()).show();
     }
 
     public static AlertDialog editDialog(MainActivity avt, BaseAdapter adapter, boolean isEdit, JSONObject account) {

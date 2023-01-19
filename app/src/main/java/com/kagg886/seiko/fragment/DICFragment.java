@@ -36,18 +36,25 @@ public class DICFragment extends Fragment implements View.OnClickListener, Swipe
     private DICAdapter adapter;
     private FloatingActionButton button;
 
+    private final MainActivity avt;
+
+    public DICFragment(MainActivity avt) {
+        super();
+        this.avt = avt;
+    }
+
     @Nullable
     @org.jetbrains.annotations.Nullable
     @Override
     public View onCreateView(@NonNull @NotNull LayoutInflater inflater, @Nullable @org.jetbrains.annotations.Nullable ViewGroup container, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_plugin, container, false);
         listView = v.findViewById(R.id.fragment_plugin_list);
-        adapter = new DICAdapter(((MainActivity) getActivity()));
+        adapter = new DICAdapter(avt);
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                AlertDialog.Builder builder = new AlertDialog.Builder(avt);
                 DictionaryFile file = DICPlugin.getDicLists().get(position);
                 builder.setTitle("操作:" + file.getName());
                 builder.setItems(new String[]{"删除词库"}, new DialogInterface.OnClickListener() {
@@ -56,7 +63,7 @@ public class DICFragment extends Fragment implements View.OnClickListener, Swipe
                         if (which == 0) {
                             file.getFile().delete();
                             adapter.notifyDataSetChanged();
-                            SnackBroadCast.sendBroadCast(getContext(), "删除成功!");
+                            SnackBroadCast.sendBroadCast(avt, "删除成功!");
                         }
                     }
                 });
@@ -76,7 +83,7 @@ public class DICFragment extends Fragment implements View.OnClickListener, Swipe
                 .setTitle("您要...").setItems(new String[]{"导入词库"}, (dialog1, which) -> {
                     switch (which) {
                         case 0:
-                            SnackBroadCast.sendBroadCast(getContext(), "懒得做了xwx\n等更新吧www");
+                            SnackBroadCast.sendBroadCast(avt, "懒得做了xwx\n等更新吧www");
                             break;
                         case 1:
                             break;

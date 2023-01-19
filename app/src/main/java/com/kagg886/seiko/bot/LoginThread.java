@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.SwitchCompat;
 import com.kagg886.seiko.activity.MainActivity;
+import com.kagg886.seiko.event.DialogBroadCast;
 import com.kagg886.seiko.event.SnackBroadCast;
 import com.kagg886.seiko.plugin.api.SeikoPlugin;
 import com.kagg886.seiko.service.BotRunnerService;
@@ -50,7 +51,7 @@ public class LoginThread extends Thread {
                     dialog.dismiss();
                     break;
                 case 1:
-                    SnackBroadCast.sendBroadCast(avt, "发生异常:" + ((Throwable) msg.getData().getSerializable("exception")).getMessage());
+                    DialogBroadCast.sendBroadCast(avt, "登录时遇到错误", ((Throwable) msg.getData().getSerializable("exception")).getMessage());
                     sw.setChecked(false);
                     dialog.dismiss();
                     break;
@@ -107,7 +108,7 @@ public class LoginThread extends Thread {
             for (SeikoPlugin plugin : BotRunnerService.INSTANCE.getSeikoPluginList()) {
                 plugin.onBotOffLine(bot.getId());
             }
-            throw new RuntimeException("用户操作，BOT主动下线");
+            SnackBroadCast.sendBroadCast(avt, "用户操作，BOT主动下线");
         } catch (Throwable e) {
             Message m = new Message();
             m.what = 1;

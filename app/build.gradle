@@ -25,12 +25,12 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
 
-//        debug {
-//            minifyEnabled true      // 开启混淆
-//            zipAlignEnabled true    // 已启用压缩
-//            shrinkResources true    // 缩减资源
-//            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-//        }
+        debug {
+            minifyEnabled true      // 开启混淆
+            zipAlignEnabled true    // 已启用压缩
+            shrinkResources true    // 缩减资源
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8

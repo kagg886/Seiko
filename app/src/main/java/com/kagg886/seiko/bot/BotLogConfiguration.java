@@ -37,7 +37,6 @@ public class BotLogConfiguration extends BotConfiguration {
         fileBasedDeviceInfo(p.getAbsolutePath());
         setLoginSolver(new AndroidSolver(avt));
 
-
         File f1 = parentPath.resolve("log").resolve(new SimpleDateFormat("yyyy-MM-dd").format(System.currentTimeMillis()) + ".log").toFile();
         if (!f1.exists()) {
             f1.getParentFile().mkdirs();
@@ -49,6 +48,7 @@ public class BotLogConfiguration extends BotConfiguration {
         }
         redirectBotLogToFile(f1);
         redirectNetworkLogToFile(f1);
+        enableContactCache();
         this.logFile = f1;
     }
 
