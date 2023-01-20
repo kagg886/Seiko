@@ -1,7 +1,6 @@
 package com.kagg886.seiko.dic;
 
 import com.kagg886.seiko.dic.session.AbsRuntime;
-import com.kagg886.seiko.util.UnkownObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,8 +32,7 @@ public class DictionaryUtil {
         for (int i = 0; i < args.length; i++) {
             String arg = (String) args[i];
             if (arg.startsWith("%") && arg.endsWith("%")) {//是变量
-                UnkownObject p = runtime.getRuntimeObject().getOrDefault(arg.substring(1, arg.length() - 1), null);
-                k.add(p);
+                k.add(runtime.getRuntimeObject().getOrDefault(arg.substring(1, arg.length() - 1), "null"));
                 continue;
             }
             k.add(cleanVariableCode(arg, runtime));
@@ -58,9 +56,6 @@ public class DictionaryUtil {
                 Object q = runtime.getRuntimeObject().get(s);
                 if (q == null) {
                     q = "null";
-                }
-                if (q instanceof UnkownObject) {
-                    q = ((UnkownObject) q).getObject();
                 }
                 clone = clone.replace(var, q.toString());
             }

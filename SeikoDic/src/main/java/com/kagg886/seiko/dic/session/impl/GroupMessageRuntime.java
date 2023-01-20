@@ -2,7 +2,6 @@ package com.kagg886.seiko.dic.session.impl;
 
 import com.kagg886.seiko.dic.entity.DictionaryFile;
 import com.kagg886.seiko.dic.session.AbsRuntime;
-import com.kagg886.seiko.util.UnkownObject;
 import net.mamoe.mirai.contact.Contact;
 import net.mamoe.mirai.event.events.GroupMessageEvent;
 import net.mamoe.mirai.message.data.At;
@@ -25,38 +24,38 @@ public class GroupMessageRuntime extends AbsRuntime<GroupMessageEvent> {
 
     public GroupMessageRuntime(DictionaryFile file, GroupMessageEvent event) {
         super(file, event);
-        context.put("群号", new UnkownObject(event.getGroup().getId()));
-        context.put("群名称", new UnkownObject(event.getGroup().getName()));
+        context.put("群号", event.getGroup().getId());
+        context.put("群名称", event.getGroup().getName());
 
-        context.put("QQ", new UnkownObject(event.getSender().getId()));
-        context.put("昵称", new UnkownObject(event.getSender().getNick()));
-        context.put("群名片", new UnkownObject(event.getSender().getNameCard()));
-        context.put("特殊头衔", new UnkownObject(event.getSender().getSpecialTitle()));
-        context.put("头衔", new UnkownObject(event.getSender().getTemperatureTitle()));
-        context.put("权限", new UnkownObject(event.getSender().getPermission().toString()));
-        context.put("权限代码", new UnkownObject(event.getSender().getPermission().getLevel()));
+        context.put("QQ", event.getSender().getId());
+        context.put("昵称", event.getSender().getNick());
+        context.put("群名片", event.getSender().getNameCard());
+        context.put("特殊头衔", event.getSender().getSpecialTitle());
+        context.put("头衔", event.getSender().getTemperatureTitle());
+        context.put("权限", event.getSender().getPermission().toString());
+        context.put("权限代码", event.getSender().getPermission().getLevel());
 
-        context.put("BOT", new UnkownObject(event.getBot().getId()));
+        context.put("BOT", event.getBot().getId());
 
         int len = 0;
         for (SingleMessage s : event.getMessage().stream().filter(At.class::isInstance).collect(Collectors.toList())) {
             At t = (At) s;
-            context.put("艾特" + len, new UnkownObject(t.getTarget()));
+            context.put("艾特" + len, t.getTarget());
             len++;
         }
-        context.put("艾特数", new UnkownObject(len));
+        context.put("艾特数", len);
         len = 0;
         for (SingleMessage s : event.getMessage().stream().filter(Image.class::isInstance).collect(Collectors.toList())) {
             Image t = (Image) s;
-            context.put("图片" + len, new UnkownObject(Image.queryUrl(t)));
+            context.put("图片" + len, Image.queryUrl(t));
             len++;
         }
-        context.put("图片数", new UnkownObject(len));
+        context.put("图片数", len);
 
         if (event.getMessage().get(0) instanceof OnlineAudio) {
             OnlineAudio s = (OnlineAudio) event.getMessage().get(0);
-            context.put("语音链接", new UnkownObject(s.getUrlForDownload()));
-            context.put("语音秒数", new UnkownObject(s.getLength()));
+            context.put("语音链接", s.getUrlForDownload());
+            context.put("语音秒数", s.getLength());
         }
 
     }

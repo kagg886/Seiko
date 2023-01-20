@@ -3,7 +3,6 @@ package com.kagg886.seiko.dic.entity.func.uninterrupted;
 import com.kagg886.seiko.dic.DICPlugin;
 import com.kagg886.seiko.dic.entity.func.Function;
 import com.kagg886.seiko.dic.session.AbsRuntime;
-import com.kagg886.seiko.util.UnkownObject;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -49,6 +48,6 @@ public class Read extends Function.UnInterruptedFunction {
             value = args.get(3).toString();
         }
         String get = get(storage, key, value);
-        runtime.getRuntimeObject().put(putVar, new UnkownObject(get));
+        runtime.getRuntimeObject().put(putVar, get);
     }
 }

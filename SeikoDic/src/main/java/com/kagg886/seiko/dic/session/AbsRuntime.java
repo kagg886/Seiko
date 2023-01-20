@@ -7,7 +7,6 @@ import com.kagg886.seiko.dic.entity.DictionaryFile;
 import com.kagg886.seiko.dic.entity.func.Function;
 import com.kagg886.seiko.dic.entity.impl.Expression;
 import com.kagg886.seiko.dic.entity.impl.PlainText;
-import com.kagg886.seiko.util.UnkownObject;
 import net.mamoe.mirai.contact.Contact;
 import net.mamoe.mirai.message.data.MessageChainBuilder;
 
@@ -27,7 +26,7 @@ import java.util.Map;
 public abstract class AbsRuntime<T> {
     protected final T event; //此次执行伪代码所需要的事件
     protected DictionaryFile file; //被执行的伪代码指令集
-    protected HashMap<String, UnkownObject> context; //此次伪代码执行过程中存取的变量
+    protected HashMap<String, Object> context; //此次伪代码执行过程中存取的变量
 
     /*
      * @param file: 需要执行的dicFile
@@ -42,9 +41,9 @@ public abstract class AbsRuntime<T> {
         context = new HashMap<>();
 
         //通用的变量会存储在这里。
-        context.put("上下文", new UnkownObject(event));
-        context.put("缓冲区", new UnkownObject(new MessageChainBuilder()));
-        context.put("时间戳", new UnkownObject(System.currentTimeMillis()));
+        context.put("上下文", event);
+        context.put("缓冲区", new MessageChainBuilder());
+        context.put("时间戳", System.currentTimeMillis());
     }
 
     public DictionaryFile getFile() {
@@ -54,17 +53,17 @@ public abstract class AbsRuntime<T> {
     public abstract Contact getContact();
 
     public MessageChainBuilder getMessageCache() {
-        return (MessageChainBuilder) context.get("缓冲区").getObject();
+        return (MessageChainBuilder) context.get("缓冲区");
     }
 
     protected abstract void clearMessageCache();
 
     public void clearMessage() { //清空缓冲区
         clearMessageCache();
-        context.put("缓冲区", new UnkownObject(new MessageChainBuilder()));
+        context.put("缓冲区", new MessageChainBuilder());
     }
 
-    public HashMap<String, UnkownObject> getRuntimeObject() {
+    public HashMap<String, Object> getRuntimeObject() {
         return context;
     }
 
@@ -84,13 +83,13 @@ public abstract class AbsRuntime<T> {
             }
             if (matcher.matchesCommand(command)) { //正则匹配
                 String[] x = command.split(" ");
-                context.put("文本", new UnkownObject(command));
-                context.put("参数长", new UnkownObject(x.length));
+                context.put("文本", command);
+                context.put("参数长", x.length);
                 if (x.length == 1) {
-                    context.put("参数0", new UnkownObject(command));
+                    context.put("参数0", command);
                 } else {
                     for (int i = 0; i < x.length; i++) {
-                        context.put("参数" + i, new UnkownObject(x[i]));
+                        context.put("参数" + i, x[i]);
                     }
                 }
                 invoke(code);

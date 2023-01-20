@@ -2,12 +2,10 @@ package com.kagg886.seiko.dic.entity.func.uninterrupted;
 
 import com.kagg886.seiko.dic.entity.func.Function;
 import com.kagg886.seiko.dic.session.AbsRuntime;
-import com.kagg886.seiko.util.UnkownObject;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -36,7 +34,6 @@ public class JavaMethodInvoke extends Function.UnInterruptedFunction {
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
-        System.out.println("找到类");
         for (Method p : clazz.getDeclaredMethods()) {
             p.setAccessible(true);
             if (p.getName().equals(args.get(2).toString())) {
@@ -47,15 +44,11 @@ public class JavaMethodInvoke extends Function.UnInterruptedFunction {
                 }
                 System.out.println("参数填充:" + paramList);
                 try {
-                    Object o = args.get(3);
-                    if (o instanceof UnkownObject) {
-                        o = ((UnkownObject) o).getObject();
-                    }
-                    Object rtn = p.invoke(o, paramList.toArray());
+                    Object rtn = p.invoke(args.get(3), paramList.toArray());
                     if (rtn != null) {
-                        runtime.getRuntimeObject().put(putVar, new UnkownObject(rtn));
+                        runtime.getRuntimeObject().put(putVar, rtn);
                     } else {
-                        runtime.getRuntimeObject().put(putVar, new UnkownObject("null"));
+                        runtime.getRuntimeObject().put(putVar, "null");
                     }
                     System.out.println("invoke完成!" + rtn.toString());
                 } catch (IllegalAccessException e) {
