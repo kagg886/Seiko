@@ -7,6 +7,7 @@ import com.kagg886.seiko.dic.entity.DictionaryFile;
 import com.kagg886.seiko.dic.entity.func.Function;
 import com.kagg886.seiko.dic.entity.impl.Expression;
 import com.kagg886.seiko.dic.entity.impl.PlainText;
+import com.kagg886.seiko.util.UnkownObject;
 import net.mamoe.mirai.contact.Contact;
 import net.mamoe.mirai.message.data.MessageChainBuilder;
 
@@ -26,7 +27,7 @@ import java.util.Map;
 public abstract class AbsRuntime<T> {
     protected final T event; //此次执行伪代码所需要的事件
     protected DictionaryFile file; //被执行的伪代码指令集
-    protected HashMap<String, Object> context; //此次伪代码执行过程中存取的变量
+    protected HashMap<String, UnkownObject> context; //此次伪代码执行过程中存取的变量
 
     /*
      * @param file: 需要执行的dicFile
@@ -41,8 +42,9 @@ public abstract class AbsRuntime<T> {
         context = new HashMap<>();
 
         //通用的变量会存储在这里。
-        context.put("上下文", event);
-        context.put("缓冲区", new MessageChainBuilder());
+        context.put("上下文", new UnkownObject(event));
+        context.put("缓冲区", new UnkownObject(new MessageChainBuilder()));
+        context.put("时间戳", new UnkownObject(System.currentTimeMillis()));
     }
 
     public DictionaryFile getFile() {
@@ -52,17 +54,17 @@ public abstract class AbsRuntime<T> {
     public abstract Contact getContact();
 
     public MessageChainBuilder getMessageCache() {
-        return (MessageChainBuilder) context.get("缓冲区");
+        return (MessageChainBuilder) context.get("缓冲区").getObject();
     }
 
     protected abstract void clearMessageCache();
 
     public void clearMessage() { //清空缓冲区
         clearMessageCache();
-        context.put("缓冲区", new MessageChainBuilder());
+        context.put("缓冲区", new UnkownObject(new MessageChainBuilder()));
     }
 
-    public HashMap<String, Object> getRuntimeObject() {
+    public HashMap<String, UnkownObject> getRuntimeObject() {
         return context;
     }
 
@@ -81,6 +83,16 @@ public abstract class AbsRuntime<T> {
                 return;
             }
             if (matcher.matchesCommand(command)) { //正则匹配
+                String[] x = command.split(" ");
+                context.put("文本", new UnkownObject(command));
+                context.put("参数长", new UnkownObject(x.length));
+                if (x.length == 1) {
+                    context.put("参数0", new UnkownObject(command));
+                } else {
+                    for (int i = 0; i < x.length; i++) {
+                        context.put("参数" + i, new UnkownObject(x[i]));
+                    }
+                }
                 invoke(code);
             }
         }
@@ -94,8 +106,8 @@ public abstract class AbsRuntime<T> {
      * @date 2023/01/19 19:55
      */
     private void invoke(ArrayList<DictionaryCode> code) {
-        boolean sendSwitch = !(code.get(0) instanceof PlainText); //判断第一行是否不是PlainText
-        boolean isJumpCode = false; //"如果"语句不成立则此开关打开。开关打开时跳过解析直到遇到"如果尾"
+        boolean sendSwitch = !(code.get(0) instanceof PlainText); //若第一行为PlainText返回false。为Function返回true
+        boolean isJumpCode = false;
 
         for (DictionaryCode dic : code) {
             if (dic instanceof Expression.Return && !isJumpCode) { //兼容返回写法
@@ -117,36 +129,34 @@ public abstract class AbsRuntime<T> {
             }
 
             if (dic instanceof Function) {
-                if (dic instanceof Function.InterruptedFunction) { //判断阻断函数和非阻断函数
+                if (dic instanceof Function.InterruptedFunction) {
                     if (!sendSwitch) {
                         clearMessage();
                         sendSwitch = true;
                     }
                 }
                 ((Function) dic).invoke(this);
-                continue;
             }
 
             if (dic instanceof PlainText) {
                 getMessageCache().append(new net.mamoe.mirai.message.data.PlainText(DictionaryUtil.cleanVariableCode(dic.getCode(), this)));
                 sendSwitch = false;
-                continue;
             }
 
             if (dic instanceof Expression.If) {
-                if (getMessageCache().size() != 0) { //按阻断方法处理
+                if (getMessageCache().size() != 0) {
                     clearMessageCache();
                     sendSwitch = true;
                 }
-                Expression.If iff = (Expression.If) dic; //计算表达式结果
+                Expression.If iff = (Expression.If) dic;
                 if (!iff.calc(this)) {
                     isJumpCode = true;
                     continue;
                 }
-                continue;
             }
 
-            if (dic == code.get(code.size() - 1)) { //解析到最后一行时强制清空缓冲区
+
+            if (dic == code.get(code.size() - 1)) {
                 clearMessage();
             }
         }

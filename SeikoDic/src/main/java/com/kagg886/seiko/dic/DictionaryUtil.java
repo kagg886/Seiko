@@ -1,7 +1,10 @@
 package com.kagg886.seiko.dic;
 
 import com.kagg886.seiko.dic.session.AbsRuntime;
+import com.kagg886.seiko.util.UnkownObject;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -24,19 +27,19 @@ public class DictionaryUtil {
      * //TODO 针对JavaObject未做测试，日后再说。
      * @date 2023/01/19 18:51
      */
-    public static Object[] variableToObject(String code, AbsRuntime<?> runtime) {
+    public static List<Object> variableToObject(String code, AbsRuntime<?> runtime) {
         Object[] args = code.split(" ");
-
+        ArrayList<Object> k = new ArrayList<>();
         for (int i = 0; i < args.length; i++) {
             String arg = (String) args[i];
             if (arg.startsWith("%") && arg.endsWith("%")) {//是变量
-                args[i] = runtime.getRuntimeObject().getOrDefault(arg.substring(1, arg.length() - 1), null);
+                UnkownObject p = runtime.getRuntimeObject().getOrDefault(arg.substring(1, arg.length() - 1), null);
+                k.add(p);
                 continue;
             }
-            args[i] = cleanVariableCode(arg, runtime);
+            k.add(cleanVariableCode(arg, runtime));
         }
-
-        return args;
+        return k;
     }
 
     /*
@@ -55,6 +58,9 @@ public class DictionaryUtil {
                 Object q = runtime.getRuntimeObject().get(s);
                 if (q == null) {
                     q = "null";
+                }
+                if (q instanceof UnkownObject) {
+                    q = ((UnkownObject) q).getObject();
                 }
                 clone = clone.replace(var, q.toString());
             }

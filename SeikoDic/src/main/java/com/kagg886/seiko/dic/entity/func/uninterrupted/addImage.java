@@ -11,6 +11,7 @@ import okhttp3.Request;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -30,16 +31,16 @@ public class addImage extends Function.UnInterruptedFunction {
     }
 
     @Override
-    public void run(AbsRuntime runtime, Object[] args) {
+    public void run(AbsRuntime<?> runtime, List<Object> args) {
         Request req = new Request.Builder()
-                .url(args[0].toString())
+                .url(args.get(0).toString())
                 .get()
                 .build();
         Call call = NetUtil.okHttpClient.newCall(req);
         try (InputStream s = Objects.requireNonNull(call.execute().body()).byteStream()) {
             runtime.getMessageCache().append(ExternalResource.uploadAsImage(s, runtime.getContact()));
         } catch (IOException e) {
-            throw new DictionaryOnRunningException("上传图片失败!:" + args[0] + "在" + runtime.getFile().getFile().getAbsolutePath() + ":" + getLine(), e);
+            throw new DictionaryOnRunningException("上传图片失败!:" + args.get(0) + "在" + runtime.getFile().getFile().getAbsolutePath() + ":" + getLine(), e);
         }
     }
 }

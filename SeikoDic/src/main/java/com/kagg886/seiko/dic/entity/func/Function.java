@@ -4,6 +4,8 @@ import com.kagg886.seiko.dic.DictionaryUtil;
 import com.kagg886.seiko.dic.entity.DictionaryCode;
 import com.kagg886.seiko.dic.session.AbsRuntime;
 
+import java.util.List;
+
 /**
  * @projectName: Seiko
  * @package: com.kagg886.seiko.dic.entity.impl
@@ -20,7 +22,8 @@ public abstract class Function extends DictionaryCode {
     private static final String[][] uninterruptedFunctionNames = { //阻断方法列表，后面的是Class名
             {"图片", "addImage"},
             {"读", "Read"},
-            {"写", "Write"}
+            {"写", "Write"},
+            {"JAVA方法运行", "JavaMethodInvoke"}
     };
 
     private final String argCode; //去除包装后剩下的参数字符串
@@ -62,7 +65,7 @@ public abstract class Function extends DictionaryCode {
         run(runtime, DictionaryUtil.variableToObject(argCode, runtime));
     }
 
-    protected abstract void run(AbsRuntime<?> runtime, Object[] args);
+    protected abstract void run(AbsRuntime<?> runtime, List<Object> args);
 
     /**
      * @projectName: Seiko

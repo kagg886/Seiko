@@ -4,6 +4,8 @@ import androidx.annotation.Keep;
 import com.kagg886.seiko.dic.entity.func.Function;
 import com.kagg886.seiko.dic.session.AbsRuntime;
 
+import java.util.List;
+
 /**
  * @projectName: Seiko
  * @package: com.kagg886.seiko.dic.entity.func.interrupted
@@ -20,11 +22,12 @@ public class Delay extends Function.InterruptedFunction {
     }
 
     @Override
-    public void run(AbsRuntime runtime, Object[] args) {
+    public void run(AbsRuntime<?> runtime, List<Object> args) {
         try {
-            Thread.sleep(Integer.parseInt(args[0].toString()));
+            Thread.sleep(Integer.parseInt(args.get(0).toString()));
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
+        System.out.println("方法调用完成");
     }
 }

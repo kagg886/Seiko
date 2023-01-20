@@ -3,10 +3,12 @@ package com.kagg886.seiko.dic.entity.func.uninterrupted;
 import com.kagg886.seiko.dic.DICPlugin;
 import com.kagg886.seiko.dic.entity.func.Function;
 import com.kagg886.seiko.dic.session.AbsRuntime;
+import com.kagg886.seiko.util.UnkownObject;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.List;
 import java.util.Properties;
 
 /**
@@ -36,17 +38,17 @@ public class Read extends Function.UnInterruptedFunction {
     }
 
     @Override
-    protected void run(AbsRuntime<?> runtime, Object[] args) {
-        String putVar = (String) args[0];
-        String storage = DICPlugin.getDicData().resolve((String) args[1]).toFile().getAbsolutePath();
-        String key = (String) args[2];
+    protected void run(AbsRuntime<?> runtime, List<Object> args) {
+        String putVar = args.get(0).toString();
+        String storage = DICPlugin.getDicData().resolve(args.get(1).toString()).toFile().getAbsolutePath();
+        String key = args.get(2).toString();
         String value;
-        if (args.length == 3) {
+        if (args.size() == 3) {
             value = "null";
         } else {
-            value = (String) args[3];
+            value = args.get(3).toString();
         }
         String get = get(storage, key, value);
-        runtime.getRuntimeObject().put(putVar, get);
+        runtime.getRuntimeObject().put(putVar, new UnkownObject(get));
     }
 }

@@ -5,6 +5,7 @@ import com.kagg886.seiko.dic.entity.func.Function;
 import com.kagg886.seiko.dic.session.AbsRuntime;
 
 import java.io.*;
+import java.util.List;
 import java.util.Properties;
 
 /**
@@ -53,10 +54,10 @@ public class Write extends Function.UnInterruptedFunction {
     }
 
     @Override
-    protected void run(AbsRuntime<?> runtime, Object[] args) {
-        String storage = DICPlugin.getDicData().resolve((String) args[0]).toFile().getAbsolutePath();
-        String key = (String) args[1];
-        String value = (String) args[2];
+    protected void run(AbsRuntime<?> runtime, List<Object> args) {
+        String storage = DICPlugin.getDicData().resolve(args.get(0).toString()).toFile().getAbsolutePath();
+        String key = args.get(1).toString();
+        String value = args.get(2).toString();
         xx(storage, key, value);
     }
 }
