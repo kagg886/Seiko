@@ -21,6 +21,7 @@ import com.kagg886.seiko.fragment.PluginFragment;
 import com.kagg886.seiko.fragment.SettingsFragment;
 import com.kagg886.seiko.service.BotRunnerService;
 import com.kagg886.seiko.util.IOUtil;
+import com.kagg886.seiko.util.ShareUtil;
 
 import java.io.File;
 import java.io.IOException;
@@ -96,7 +97,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                     stream.close();
                     IOUtil.delFile(f);
-                    IOUtil.quickShare(MainActivity.this, crashFile, "*/*");
+                    ShareUtil.quickShare(MainActivity.this, crashFile, "*/*");
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }

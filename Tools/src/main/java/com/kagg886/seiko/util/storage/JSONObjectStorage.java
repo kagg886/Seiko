@@ -1,6 +1,5 @@
 package com.kagg886.seiko.util.storage;
 
-import androidx.annotation.NonNull;
 import com.kagg886.seiko.util.IOUtil;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -80,7 +79,7 @@ public class JSONObjectStorage extends JSONObject {
 		}
 	}
 	
-	public JSONObject put(@NonNull String name, String value) {
+	public JSONObject put(String name, String value) {
         try {
             return super.put(name, value);
         } catch (JSONException e) {

@@ -51,9 +51,7 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
 
-
-    implementation 'com.squareup.okhttp3:okhttp:4.10.0'
-
+    implementation 'org.jsoup:jsoup:1.15.3'
 
     runtimeOnly("net.mamoe:mirai-core-android:$gradle.mirai_version")
     api("net.mamoe:mirai-core-api-android:$gradle.mirai_version")
@@ -62,7 +60,7 @@ dependencies {
 
     implementation project(':PluginAPI')
     implementation project(':SeikoDic')
-    implementation project(':SeikoUtil')
+    implementation project(':Tools')
 
 }
 

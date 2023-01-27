@@ -22,10 +22,8 @@ import com.kagg886.seiko.adapter.PluginAdapter;
 import com.kagg886.seiko.event.SnackBroadCast;
 import com.kagg886.seiko.plugin.api.SeikoPlugin;
 import com.kagg886.seiko.service.BotRunnerService;
-import com.kagg886.seiko.util.FileUtil;
-import com.kagg886.seiko.util.NetUtil;
-import okhttp3.Callback;
-import okhttp3.Response;
+import com.kagg886.seiko.util.IOUtil;
+import org.jsoup.Jsoup;
 
 import java.io.File;
 import java.io.IOException;
@@ -84,16 +82,15 @@ public class PluginFragment extends Fragment implements View.OnClickListener, Sw
                 .setMessage("请稍等片刻...")
                 .create();
         mHandler.sendEmptyMessage(2);
-        NetUtil.downloadFromUrlAsync(url, new Callback() {
+        IOUtil.asyncHttp(Jsoup.connect(url), new IOUtil.Response() {
             @Override
-            public void onResponse(@NonNull okhttp3.Call call, @NonNull Response response) throws IOException {
+            public void onSuccess(byte[] data) {
                 File file = null;
                 try {
-                    byte[] data = response.body().source().readByteArray();
                     File pluginDir = avt.getExternalFilesDir("plugin");
                     String fileName = UUID.randomUUID().toString().replace("-", "") + ".apk";
                     file = Paths.get(pluginDir.getAbsolutePath(), fileName).toFile();
-                    FileUtil.saveFile(avt, data, file);
+                    IOUtil.writeByteToFile(file.getAbsolutePath(), data);
                     avt.runOnUiThread(() -> {
                         BotRunnerService.INSTANCE.getSeikoPluginList().refresh();
                         adapter.notifyDataSetChanged();
@@ -110,7 +107,7 @@ public class PluginFragment extends Fragment implements View.OnClickListener, Sw
             }
 
             @Override
-            public void onFailure(@NonNull okhttp3.Call call, @NonNull IOException e) {
+            public void onFailed(IOException e) {
                 e.printStackTrace();
                 notifyError(e);
             }

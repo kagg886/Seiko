@@ -1,8 +1,6 @@
 package com.kagg886.seiko.util;
 
-import android.app.Activity;
-import android.content.Intent;
-import androidx.core.content.FileProvider;
+import org.jsoup.Connection;
 
 import java.io.*;
 import java.nio.ByteBuffer;
@@ -11,18 +9,28 @@ import java.nio.channels.ReadableByteChannel;
 
 public class IOUtil {
 
+    public static void asyncHttp(Connection c, Response resp) {
+        new Thread(() -> {
+            try {
+                byte[] a = IOUtil.loadByteFromStream(c.ignoreContentType(true).execute().bodyStream());
+                resp.onSuccess(a);
+            } catch (IOException e) {
+                resp.onFailed(e);
+            }
+        }).start();
+    }
+
+    public interface Response {
+        void onSuccess(byte[] data);
+
+        void onFailed(IOException e);
+    }
+
     public static String getException(Throwable e) {
         StringWriter writer = new StringWriter();
         PrintWriter printWriter = new PrintWriter(writer);
         e.printStackTrace(printWriter);
         return writer.toString();
-    }
-
-    public static void quickShare(Activity ctx, File p, String type) {
-        Intent intent = new Intent("android.intent.action.SEND");
-        intent.putExtra("android.intent.extra.STREAM", FileProvider.getUriForFile(ctx, "com.kagg886.seiko.fileprovider", p));
-        intent.setType(type);
-        ctx.startActivity(intent);
     }
 
     /*

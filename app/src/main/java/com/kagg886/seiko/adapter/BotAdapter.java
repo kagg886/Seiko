@@ -18,13 +18,11 @@ import com.kagg886.seiko.event.SnackBroadCast;
 import com.kagg886.seiko.fragment.LoginFragment;
 import com.kagg886.seiko.service.BotRunnerService;
 import com.kagg886.seiko.util.IOUtil;
-import com.kagg886.seiko.util.NetUtil;
+import com.kagg886.seiko.util.ShareUtil;
 import com.kagg886.seiko.util.storage.JSONArrayStorage;
 import net.mamoe.mirai.Bot;
-import okhttp3.Callback;
-import okhttp3.Response;
-import org.jetbrains.annotations.NotNull;
 import org.json.JSONObject;
+import org.jsoup.Jsoup;
 
 import java.io.File;
 import java.io.IOException;
@@ -74,15 +72,15 @@ public class BotAdapter extends BaseAdapter {
 
         nick.setText(target.optString("nick", "未登录"));
         qq.setText(String.valueOf(target.optLong("uin")));
-        NetUtil.downloadFromUrlAsync("https://q1.qlogo.cn/g?b=qq&nk=" + qq.getText().toString() + "&s=640", new Callback() {
+
+        IOUtil.asyncHttp(Jsoup.connect("https://q1.qlogo.cn/g?b=qq&nk=" + qq.getText().toString() + "&s=640"), new IOUtil.Response() {
             @Override
-            public void onResponse(@NotNull okhttp3.Call call, @NotNull Response response) throws IOException {
-                byte[] byt = response.body().source().readByteArray();
+            public void onSuccess(byte[] byt) {
                 avt.runOnUiThread(() -> imageView.setImageBitmap(BitmapFactory.decodeByteArray(byt, 0, byt.length)));
             }
 
             @Override
-            public void onFailure(@NotNull okhttp3.Call call, @NotNull IOException e) {
+            public void onFailed(IOException e) {
                 avt.runOnUiThread(() -> imageView.setImageResource(R.drawable.ic_error));
             }
         });
@@ -116,7 +114,7 @@ public class BotAdapter extends BaseAdapter {
                             SnackBroadCast.sendBroadCast(avt, "从未登陆过，无法获取到设备信息");
                             return;
                         }
-                        IOUtil.quickShare(avt, p, "*/*");
+                        ShareUtil.quickShare(avt, p, "*/*");
                         break;
                     case 1:
                         if (Bot.getInstanceOrNull(object.optLong("uin")) != null) {

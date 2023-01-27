@@ -18,7 +18,8 @@ include ':PluginAPI'
 include ':SeikoDic'
 
 include ':PluginDemo'
-include ':SeikoUtil'
+include ':Tools'
 
 
 gradle.ext.mirai_version = "2.13.4"
+

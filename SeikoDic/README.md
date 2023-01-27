@@ -95,7 +95,7 @@
 
 > [你可以在这里找到群消息的内置变量](src/main/java/com/kagg886/seiko/dic/session/impl/GroupMessageRuntime.java)
 
-### 好友消息
+### 下表是好友事件内置的变量
 
 | 变量名 | 类型  | 作用             | 备注  |
 |-----|-----|----------------|:---:|
