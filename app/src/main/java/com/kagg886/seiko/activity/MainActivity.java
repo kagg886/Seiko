@@ -137,7 +137,7 @@ public class MainActivity extends AppCompatActivity {
         ArrayList<ModuleAdapter.Structure> fragments = new ArrayList<>();
         fragments.add(new ModuleAdapter.Structure("BOT列表", new LoginFragment(this)));
         fragments.add(new ModuleAdapter.Structure("插件", new PluginFragment(this)));
-        fragments.add(new ModuleAdapter.Structure("词库", new DICFragment(this)));
+        fragments.add(new ModuleAdapter.Structure("伪代码", new DICFragment(this)));
         fragments.add(new ModuleAdapter.Structure("设置", new SettingsFragment()));
         adapter.setViews(fragments);
         pager.setAdapter(adapter);

@@ -57,7 +57,7 @@ public class DICFragment extends Fragment implements View.OnClickListener, Swipe
                 AlertDialog.Builder builder = new AlertDialog.Builder(avt);
                 DictionaryFile file = DICList.getInstance().get(position);
                 builder.setTitle("操作:" + file.getName());
-                builder.setItems(new String[]{"删除词库"}, new DialogInterface.OnClickListener() {
+                builder.setItems(new String[]{"删除伪代码"}, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         if (which == 0) {
@@ -80,7 +80,7 @@ public class DICFragment extends Fragment implements View.OnClickListener, Swipe
     @Override
     public void onClick(View view) {
         AlertDialog dialog = new AlertDialog.Builder(requireContext())
-                .setTitle("您要...").setItems(new String[]{"导入词库"}, (dialog1, which) -> {
+                .setTitle("您要...").setItems(new String[]{"导入伪代码"}, (dialog1, which) -> {
                     switch (which) {
                         case 0:
                             SnackBroadCast.sendBroadCast(avt, "懒得做了xwx\n等更新吧www");

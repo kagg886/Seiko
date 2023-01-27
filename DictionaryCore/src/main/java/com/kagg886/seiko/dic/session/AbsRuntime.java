@@ -71,7 +71,7 @@ public abstract class AbsRuntime<T> {
      * @param command: 指令
      * @return void
      * @author kagg886
-     * @description 暴露在外部的invoke，用于匹配合适的词库代码并送到内部invoke函数
+     * @description 暴露在外部的invoke，用于匹配合适的伪代码代码并送到内部invoke函数
      * @date 2023/01/19 19:54
      */
     public void invoke(String command) {

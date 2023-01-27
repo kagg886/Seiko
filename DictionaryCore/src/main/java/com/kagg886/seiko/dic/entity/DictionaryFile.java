@@ -86,7 +86,7 @@ public class DictionaryFile {
                 try {
                     dictionaryCodes.add(Function.parseFunction(comm, iterator.getLen()));
                 } catch (Throwable e) {
-                    throw new DictionaryOnLoadException("解析词库方法时出错!" + "(" + iterator.getLen() + ":" + comm + ")", e);
+                    throw new DictionaryOnLoadException("解析伪代码方法时出错!" + "(" + iterator.getLen() + ":" + comm + ")", e);
                 }
             } else if (comm.startsWith("如果:")) {
                 dictionaryCodes.add(new Expression.If(iterator.getLen(), comm));

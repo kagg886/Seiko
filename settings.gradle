@@ -15,7 +15,6 @@ dependencyResolutionManagement {
 rootProject.name = "Seiko"
 include ':app'
 include ':PluginAPI'
-include ':SeikoDic'
 
 include ':PluginDemo'
 include ':Tools'

@@ -58,7 +58,7 @@ public abstract class Function extends DictionaryCode {
                 return (Function) func.getConstructor(int.class, String.class).newInstance(line, dicLine);
             }
         }
-        throw new NoSuchFieldException("未找到词库方法");
+        throw new NoSuchFieldException("未找到伪代码方法");
     }
 
     public void invoke(AbsRuntime<?> runtime) {

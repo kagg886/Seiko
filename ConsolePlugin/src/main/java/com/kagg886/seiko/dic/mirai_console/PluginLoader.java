@@ -1,6 +1,5 @@
 package com.kagg886.seiko.dic.mirai_console;
 
-import com.kagg886.seiko.dic.DICList;
 import com.kagg886.seiko.dic.DictionaryEnvironment;
 import com.kagg886.seiko.dic.Interface.ErrorListener;
 import net.mamoe.mirai.console.command.CommandManager;
@@ -48,7 +47,6 @@ public class PluginLoader extends JavaPlugin implements ErrorListener {
         DictionaryEnvironment.getInstance().setErrorListener(this);
         DictionaryEnvironment.getInstance().setDicConfigPoint(getConfigFolderPath().resolve("dicList.json").toFile().getAbsolutePath());
         DictionaryEnvironment.getInstance().setDicData(tmp.toPath());
-        DICList.getInstance().refresh();
         getLogger().info("Environment初始化成功!");
     }
 

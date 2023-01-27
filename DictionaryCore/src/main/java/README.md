@@ -7,11 +7,11 @@ DictionaryEnvironment.getInstance().setDicRoot(DIC存储的路径);
 DictionaryEnvironment.getInstance().setErrorListener(new ErrorListener() {
     @Override
     public void onError(File p, Throwable e) {
-        处理词库加载失败时的代码
+        处理伪代码加载失败时的代码
     }
 });
-DictionaryEnvironment.getInstance().setDicConfigPoint(词库设置存储处，必须是JSON文件);
-DictionaryEnvironment.getInstance().setDicData(词库运行时产生的文件);
+DictionaryEnvironment.getInstance().setDicConfigPoint(伪代码设置存储处，必须是JSON文件);
+DictionaryEnvironment.getInstance().setDicData(伪代码运行时产生的文件);
 ```
 
 ## 2. 构造Runtime

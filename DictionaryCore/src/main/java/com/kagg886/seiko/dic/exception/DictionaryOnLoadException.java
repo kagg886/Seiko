@@ -5,7 +5,7 @@ package com.kagg886.seiko.dic.exception;
  * @package: com.kagg886.seiko.dic.exception
  * @className: DictionaryFileEmptyException
  * @author: kagg886
- * @description: 加载词库出错时抛出
+ * @description: 加载伪代码出错时抛出
  * @date: 2023/1/11 15:19
  * @version: 1.0
  */

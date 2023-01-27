@@ -70,7 +70,7 @@ public class DICPlugin extends SeikoPlugin implements ErrorListener {
     @Override
     public SeikoDescription getDescription() {
         SeikoDescription description = new SeikoDescription(getClass().getName());
-        description.setName("Seiko词库");
+        description.setName("Seiko伪代码");
         description.setDesc("简易DIC插件");
         description.setAuthor("kagg886");
         description.setVerCode("V0.0.1");

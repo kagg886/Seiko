@@ -9,7 +9,7 @@ import com.kagg886.seiko.dic.session.AbsRuntime;
  * @package: com.kagg886.seiko.dic.entity.impl
  * @className: Expression
  * @author: kagg886
- * @description: 代表词库的表达式
+ * @description: 代表伪代码的表达式
  * @date: 2023/1/16 18:39
  * @version: 1.0
  */
