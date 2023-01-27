@@ -1,6 +1,5 @@
 package com.kagg886.seiko.dic.entity;
 
-import androidx.annotation.NonNull;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -29,7 +28,6 @@ public abstract class DictionaryCode {
         return line;
     }
 
-    @NonNull
     @NotNull
     @Override
     public String toString() {

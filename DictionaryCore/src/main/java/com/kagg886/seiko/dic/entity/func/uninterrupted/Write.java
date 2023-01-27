@@ -1,6 +1,6 @@
 package com.kagg886.seiko.dic.entity.func.uninterrupted;
 
-import com.kagg886.seiko.dic.DICPlugin;
+import com.kagg886.seiko.dic.DictionaryEnvironment;
 import com.kagg886.seiko.dic.entity.func.Function;
 import com.kagg886.seiko.dic.session.AbsRuntime;
 
@@ -55,7 +55,7 @@ public class Write extends Function.UnInterruptedFunction {
 
     @Override
     protected void run(AbsRuntime<?> runtime, List<Object> args) {
-        String storage = DICPlugin.getDicData().resolve(args.get(0).toString()).toFile().getAbsolutePath();
+        String storage = DictionaryEnvironment.getInstance().getDicData().resolve(args.get(0).toString()).toFile().getAbsolutePath();
         String key = args.get(1).toString();
         String value = args.get(2).toString();
         xx(storage, key, value);

@@ -1,7 +1,5 @@
 package com.kagg886.seiko.dic.entity;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import com.kagg886.seiko.dic.exception.DictionaryOnLoadException;
 import net.mamoe.mirai.event.events.FriendMessageEvent;
 import net.mamoe.mirai.event.events.GroupMessageEvent;
@@ -49,11 +47,10 @@ public class DictionaryCommandMatcher {
     }
 
     @Override
-    public boolean equals(@Nullable @org.jetbrains.annotations.Nullable Object obj) {
+    public boolean equals(Object obj) {
         return source.equals(obj.toString());
     }
 
-    @NonNull
     @NotNull
     @Override
     public String toString() {

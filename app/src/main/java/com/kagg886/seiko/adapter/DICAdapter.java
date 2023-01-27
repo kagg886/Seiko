@@ -9,7 +9,7 @@ import androidx.appcompat.widget.SwitchCompat;
 import com.kagg886.seiko.R;
 import com.kagg886.seiko.activity.MainActivity;
 import com.kagg886.seiko.dic.DICList;
-import com.kagg886.seiko.dic.DICPlugin;
+import com.kagg886.seiko.dic.DictionaryEnvironment;
 import com.kagg886.seiko.util.storage.JSONObjectStorage;
 import org.json.JSONObject;
 
@@ -32,7 +32,7 @@ public class DICAdapter extends BaseAdapter {
     }
 
     private void refresh() {
-        DICPlugin.getDicLists().refresh(avt);
+        DICList.getInstance().refresh();
         String file = avt.getExternalFilesDir("config").toPath().resolve("dicList.json").toFile().getAbsolutePath();
         JSONObjectStorage.destroy(file);
         JSONObjectStorage.obtain(file);
@@ -41,15 +41,15 @@ public class DICAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        if (DICPlugin.getDicLists() == null) {
+        if (DICList.getInstance() == null) {
             return 0;
         }
-        return DICPlugin.getDicLists().size();
+        return DICList.getInstance().size();
     }
 
     @Override
     public Object getItem(int i) {
-        return DICPlugin.getDicLists().get(i);
+        return DICList.getInstance().get(i);
     }
 
     @Override
@@ -63,10 +63,10 @@ public class DICAdapter extends BaseAdapter {
         SwitchCompat sw = v.findViewById(R.id.adapter_dicitem_status);
         TextView tx = v.findViewById(R.id.adapter_dicitem_name);
 
-        DICList l = DICPlugin.getDicLists();
+        DICList l = DICList.getInstance();
         tx.setText(l.get(i).getName());
 
-        final JSONObject a = DICPlugin.getDicConfig().optJSONObject(l.get(i).getName());
+        final JSONObject a = DictionaryEnvironment.getInstance().getDicConfig().optJSONObject(l.get(i).getName());
         if (a == null) {
             sw.setChecked(true);
         } else {
@@ -85,8 +85,8 @@ public class DICAdapter extends BaseAdapter {
             }
             try {
                 tmp.put("enabled", isChecked);
-                DICPlugin.getDicConfig().put(l.get(i).getName(), tmp);
-                DICPlugin.getDicConfig().save();
+                DictionaryEnvironment.getInstance().getDicConfig().put(l.get(i).getName(), tmp);
+                DictionaryEnvironment.getInstance().getDicConfig().save();
             } catch (Throwable e) {
                 throw new RuntimeException(e);
             }

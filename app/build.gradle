@@ -59,7 +59,7 @@ dependencies {
 
 
     implementation project(':PluginAPI')
-    implementation project(':SeikoDic')
+    implementation project(':DictionaryCore')
     implementation project(':Tools')
 
 }

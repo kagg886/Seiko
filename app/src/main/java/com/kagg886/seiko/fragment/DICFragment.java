@@ -16,7 +16,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.kagg886.seiko.R;
 import com.kagg886.seiko.activity.MainActivity;
 import com.kagg886.seiko.adapter.DICAdapter;
-import com.kagg886.seiko.dic.DICPlugin;
+import com.kagg886.seiko.dic.DICList;
 import com.kagg886.seiko.dic.entity.DictionaryFile;
 import com.kagg886.seiko.event.SnackBroadCast;
 import org.jetbrains.annotations.NotNull;
@@ -55,7 +55,7 @@ public class DICFragment extends Fragment implements View.OnClickListener, Swipe
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(avt);
-                DictionaryFile file = DICPlugin.getDicLists().get(position);
+                DictionaryFile file = DICList.getInstance().get(position);
                 builder.setTitle("操作:" + file.getName());
                 builder.setItems(new String[]{"删除词库"}, new DialogInterface.OnClickListener() {
                     @Override

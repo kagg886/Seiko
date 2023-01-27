@@ -1,13 +1,12 @@
 package com.kagg886.seiko.dic.entity;
 
-import android.text.TextUtils;
-import androidx.annotation.Nullable;
 import com.kagg886.seiko.dic.entity.func.Function;
 import com.kagg886.seiko.dic.entity.impl.Expression;
 import com.kagg886.seiko.dic.entity.impl.PlainText;
 import com.kagg886.seiko.dic.exception.DictionaryOnLoadException;
 import com.kagg886.seiko.util.ArrayIterator;
 import com.kagg886.seiko.util.IOUtil;
+import com.kagg886.seiko.util.TextUtils;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -26,8 +25,6 @@ public class DictionaryFile {
     private static final boolean STRICT_MODE = false;
     private final File dicFile;
     private final HashMap<DictionaryCommandMatcher, ArrayList<DictionaryCode>> commands = new HashMap<DictionaryCommandMatcher, ArrayList<DictionaryCode>>() {
-        @Nullable
-        @org.jetbrains.annotations.Nullable
         @Override
         public ArrayList<DictionaryCode> put(DictionaryCommandMatcher key, ArrayList<DictionaryCode> value) {
             if (STRICT_MODE) {
