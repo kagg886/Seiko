@@ -28,7 +28,7 @@ Seiko是一个基于Mirai，并适用于Android端的一个QQ机器人软件
 ## 五.词库示例
 
 本页面仍需完善，但已有了一些雏形
-[前往SeikoDIC工程查看](SeikoDic/README.md)
+[前往SeikoDIC工程查看](DictionaryCore/README.md)
 ## 六.我的联系方式
 
 [点击链接加入群聊【次元空间】](https://jq.qq.com/?_wv=1027&k=8vQZES3X)
