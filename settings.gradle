@@ -20,7 +20,7 @@ include ':SeikoDic'
 include ':PluginDemo'
 include ':Tools'
 include ':DictionaryCore'
-
+include ':ConsolePlugin'
 
 gradle.ext.mirai_version = "2.13.4"
 

@@ -58,7 +58,7 @@ public abstract class AbsRuntime<T> {
 
     protected abstract void clearMessageCache();
 
-    public void clearMessage() { //清空缓冲区
+    public void clearMessage() { //清空缓冲区，之所以如此设计是因为不同事件发送消息的方法是不同的
         clearMessageCache();
         context.put("缓冲区", new MessageChainBuilder());
     }

@@ -40,7 +40,7 @@ public class DictionaryFile {
 
     public DictionaryFile(File dicFile) throws Throwable {
         this.dicFile = dicFile;
-        String dicCodes = IOUtil.loadStringFromFile(dicFile.getAbsolutePath());
+        String dicCodes = IOUtil.loadStringFromFile(dicFile.getAbsolutePath()).replace("\r", "");
         if (dicCodes.length() == 0) {
             throw new DictionaryOnLoadException("[" + dicFile.getName() + "]为空!");
         }

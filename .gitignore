@@ -1,6 +1,10 @@
 *.iml
 .gradle
 /local.properties
+/ConsolePlugin/debug-sandbox
+/ConsolePlugin/build
+/DictionaryCore/build
+/Tools/build
 /.idea/caches
 /.idea/libraries
 /.idea/modules.xml

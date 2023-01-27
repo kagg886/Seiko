@@ -63,7 +63,6 @@ public class DICPlugin extends SeikoPlugin implements ErrorListener {
         this.context = (Context) ctx;
         DictionaryEnvironment.getInstance().setDicRoot(context.getExternalFilesDir("dic"));
         DictionaryEnvironment.getInstance().setErrorListener(this);
-
         DictionaryEnvironment.getInstance().setDicConfigPoint(context.getExternalFilesDir("config").toPath().resolve("dicList.json").toFile().getAbsolutePath());
         DictionaryEnvironment.getInstance().setDicData(context.getExternalFilesDir("dicData").toPath());
     }

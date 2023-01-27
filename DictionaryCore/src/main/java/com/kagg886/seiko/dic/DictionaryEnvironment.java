@@ -16,7 +16,7 @@ import java.nio.file.Path;
  * @version: 1.0
  */
 public class DictionaryEnvironment {
-    public static final DictionaryEnvironment DICTIONARY_ENVIRONMENT = new DictionaryEnvironment();
+    private static final DictionaryEnvironment DICTIONARY_ENVIRONMENT = new DictionaryEnvironment();
 
     private String dicConfigPoint; //dicConfig存储路径
 
