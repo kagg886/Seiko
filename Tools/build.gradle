@@ -1,0 +1,23 @@
+plugins {
+    id 'java'
+    id 'org.jetbrains.kotlin.jvm'
+}
+
+group 'com.kagg886.seiko.util'
+version 'unspecified'
+
+dependencies {
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+
+    implementation 'org.json:json:20220924'
+    implementation 'org.jsoup:jsoup:1.15.3'
+}
+
+test {
+    useJUnitPlatform()
+}
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+}
