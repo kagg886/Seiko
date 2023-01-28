@@ -65,6 +65,11 @@ public class DictionaryFile {
                 comm = "";
             }
             if (behindLineIsEmpty) {
+                /*
+                 判断此行的上一行是否为空。
+                 若为空则判断此行是否为空，
+                 不为空证明此行是指令开始解析指令。
+                 */
                 if (TextUtils.isEmpty(comm)) {
                     continue;
                 }
@@ -75,13 +80,22 @@ public class DictionaryFile {
             }
             if (TextUtils.isEmpty(comm)) {
                 if (dictionaryCodes.size() == 0) {
+                    //排除只有指令没有伪代码实现的情况
                     throw new DictionaryOnLoadException("指令无伪代码实现:" + commandRegex + "(" + dicFile.getName() + ":" + (iterator.getLen() - 1) + ")");
                 }
+                /*
+                    证明这一行指令领导的伪代码已经解析完了，
+                    下面的代码用于装载解析完毕的伪代码示例
+                 */
                 commands.put(new DictionaryCommandMatcher(commandRegex, commandLine, dicFile), dictionaryCodes);
                 dictionaryCodes = new ArrayList<>();
                 behindLineIsEmpty = true;
                 continue;
             }
+            /*
+                对每一行伪代码进行解析。
+                按照[函数->特殊控制字符->纯文本]解析
+            */
             if (comm.startsWith("$")) {
                 try {
                     dictionaryCodes.add(Function.parseFunction(comm, iterator.getLen()));
@@ -98,6 +112,10 @@ public class DictionaryFile {
                 dictionaryCodes.add(new PlainText(iterator.getLen(), comm));
             }
         }
+        /*
+            最后一行若不是空的话，需要强行装载一下
+         */
+
         if (iterator.getLen() == lines.length) {
             commands.put(new DictionaryCommandMatcher(commandRegex, commandLine, dicFile), dictionaryCodes);
         }

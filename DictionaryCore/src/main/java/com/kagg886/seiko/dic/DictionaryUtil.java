@@ -73,6 +73,14 @@ public class DictionaryUtil {
         return clone;
     }
 
+
+    /*
+     * @param str: 传入的布尔表达式
+     * @return boolean
+     * @author kagg886
+     * @description 计算布尔表达式
+     * @date 2023/01/28 21:33
+     */
     public static boolean compareAsString(String str) {
         if (str == null || str.equals("")) {
             throw new NullPointerException("表达式为空");

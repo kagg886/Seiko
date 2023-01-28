@@ -26,7 +26,7 @@ public class DictionaryCommandMatcher {
     private final Pattern pattern;
     private final String source;
     private final int line;
-    private String eventClassName;
+    private String eventClassNames[];
 
     public DictionaryCommandMatcher(String commandRegex, int line, File dicFile) {
         this.source = commandRegex;
@@ -35,20 +35,27 @@ public class DictionaryCommandMatcher {
         if (p == -1 || commandRegex.lastIndexOf("[", p) == -1) {
             throw new DictionaryOnLoadException("方法没有标记事件类型:(" + dicFile.getAbsolutePath() + ":" + line + ")");
         }
-        eventClassName = commandRegex.substring(1, p);
-        for (String[] a : domainQuote) {
-            if (eventClassName.equals(a[0])) {
-                eventClassName = a[1];
-                pattern = Pattern.compile(commandRegex.substring(p + 1));
-                return;
+        eventClassNames = commandRegex.substring(1, p).split("\\|");
+        pattern = Pattern.compile(commandRegex.substring(p + 1));
+
+        int matches = 0;
+        for (int i = 0; i < eventClassNames.length; i++) {
+            for (String[] a : domainQuote) {
+                if (eventClassNames[i].equals(a[0])) {
+                    eventClassNames[i] = a[1];
+                    matches++;
+                    break;
+                }
             }
         }
-        throw new DictionaryOnLoadException("加载过程中发现未定义的事件类型:" + eventClassName + "(" + dicFile.getAbsolutePath() + ":" + line + ")");
+        if (matches != eventClassNames.length) {
+            throw new DictionaryOnLoadException("加载过程中发现未定义的事件类型:" + "(" + dicFile.getAbsolutePath() + ":" + line + ")");
+        }
     }
 
     @Override
     public boolean equals(Object obj) {
-        return source.equals(obj.toString());
+        return obj instanceof DictionaryCommandMatcher && source.equals(obj.toString());
     }
 
     @NotNull
@@ -67,6 +74,11 @@ public class DictionaryCommandMatcher {
     }
 
     public boolean matchesDomain(Object o) {
-        return o.getClass().getName().equals(eventClassName);
+        for (String className : eventClassNames) {
+            if (o.getClass().getName().equals(className)) {
+                return true;
+            }
+        }
+        return false;
     }
 }

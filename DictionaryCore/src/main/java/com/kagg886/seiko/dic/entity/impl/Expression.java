@@ -29,9 +29,7 @@ public abstract class Expression extends DictionaryCode {
         }
 
         public <T> boolean calc(AbsRuntime<T> runtime) {
-            System.out.println("清理变量前的P表达式:" + express);
             String p = DictionaryUtil.cleanVariableCode(express, runtime);
-            System.out.println("清理变量后的P表达式:" + p);
             return DictionaryUtil.compareAsString(p);
         }
     }

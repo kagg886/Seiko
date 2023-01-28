@@ -23,7 +23,10 @@ public abstract class Function extends DictionaryCode {
             {"图片", "addImage"},
             {"读", "Read"},
             {"写", "Write"},
-            {"JAVA方法运行", "JavaMethodInvoke"}
+            {"JAVA方法运行", "JavaMethodInvoke"},
+            {"赋值", "SetVar"},
+            {"删除", "DelVar"},
+            {"随机数", "Random"}
     };
 
     private final String argCode; //去除包装后剩下的参数字符串
@@ -34,6 +37,14 @@ public abstract class Function extends DictionaryCode {
         argCode = code.substring(sIndex + 1, code.length() - 1);
     }
 
+    /*
+     * @param dicLine:
+     * @param line:
+     * @return Function
+     * @author kagg886
+     * @description 返回一个伪代码函数对象。使用反射实现
+     * @date 2023/01/28 21:37
+     */
     public static Function parseFunction(String dicLine, int line) throws Throwable { //一定是$xxxx a b c$
         for (String[] p : interruptedFunctionNames) {
             int spaceIndex = dicLine.indexOf(" ");

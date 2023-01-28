@@ -1,10 +1,15 @@
 package com.kagg886.seiko.dic.mirai_console;
 
 import com.kagg886.seiko.dic.DICList;
+import com.kagg886.seiko.dic.entity.DictionaryCode;
+import com.kagg886.seiko.dic.entity.DictionaryCommandMatcher;
 import com.kagg886.seiko.dic.entity.DictionaryFile;
 import net.mamoe.mirai.console.command.CommandContext;
 import net.mamoe.mirai.console.command.ConsoleCommandSender;
 import net.mamoe.mirai.console.command.java.JCompositeCommand;
+
+import java.util.ArrayList;
+import java.util.Map;
 
 /**
  * @projectName: Seiko
@@ -20,6 +25,30 @@ public class CommandInstance extends JCompositeCommand {
 
     public CommandInstance() {
         super(PluginLoader.INSTANCE, "dic");
+    }
+
+    @SubCommand("info")
+    public void info(CommandContext context, String fileName) {
+        if (!(context.getSender() instanceof ConsoleCommandSender)) {
+            return;
+        }
+        for (DictionaryFile file : DICList.getInstance()) {
+            if (file.getName().equals(fileName)) {
+                StringBuilder builder = new StringBuilder();
+                builder.append("伪代码路径:");
+                builder.append(file.getFile().getAbsolutePath());
+                builder.append("\n伪代码指令:\n[生效范围]指令:行数");
+                for (Map.Entry<DictionaryCommandMatcher, ArrayList<DictionaryCode>> entry : file.getCommands().entrySet()) {
+                    builder.append("\n");
+                    builder.append(entry.getKey().toString());
+                    builder.append(":");
+                    builder.append(entry.getKey().getLine());
+                }
+                PluginLoader.INSTANCE.getLogger().info(builder.toString());
+                return;
+            }
+        }
+        PluginLoader.INSTANCE.getLogger().info("找不到伪代码文件!");
     }
 
     @SubCommand("list") //dic list
