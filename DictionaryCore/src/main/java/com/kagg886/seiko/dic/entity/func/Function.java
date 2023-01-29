@@ -17,7 +17,8 @@ import java.util.List;
  */
 public abstract class Function extends DictionaryCode {
     private static final String[][] interruptedFunctionNames = { //阻断方法列表，后面的是Class名
-            {"延时", "Delay"}
+            {"延时", "Delay"},
+            {"语音", "Ptt"}
     };
     private static final String[][] uninterruptedFunctionNames = { //阻断方法列表，后面的是Class名
             {"图片", "addImage"},
@@ -26,7 +27,8 @@ public abstract class Function extends DictionaryCode {
             {"JAVA方法运行", "JavaMethodInvoke"},
             {"赋值", "SetVar"},
             {"删除", "DelVar"},
-            {"随机数", "Random"}
+            {"随机数", "Random"},
+            {"检验变量", "CheckExists"}
     };
 
     private final String argCode; //去除包装后剩下的参数字符串

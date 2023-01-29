@@ -1,5 +1,6 @@
 package com.kagg886.seiko.dic.entity.func.uninterrupted;
 
+import com.kagg886.seiko.dic.DictionaryUtil;
 import com.kagg886.seiko.dic.entity.func.Function;
 import com.kagg886.seiko.dic.session.AbsRuntime;
 
@@ -21,9 +22,11 @@ public class SetVar extends Function.UnInterruptedFunction {
 
     @Override
     protected void run(AbsRuntime<?> runtime, List<Object> args) {
-        //TODO 值可以使用表达式
         String name = args.get(0).toString();
         Object value = args.get(1);
+        if (value instanceof String) {
+            value = DictionaryUtil.cleanVariableCode((String) value, runtime);
+        }
         runtime.getRuntimeObject().put(name, value);
     }
 }
