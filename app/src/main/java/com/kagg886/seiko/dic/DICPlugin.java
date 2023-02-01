@@ -1,7 +1,7 @@
 package com.kagg886.seiko.dic;
 
 import android.content.Context;
-import com.kagg886.seiko.dic.Interface.ErrorListener;
+import com.kagg886.seiko.dic.bridge.ErrorListener;
 import com.kagg886.seiko.dic.entity.DictionaryFile;
 import com.kagg886.seiko.dic.session.impl.FriendMessageRuntime;
 import com.kagg886.seiko.dic.session.impl.GroupMessageRuntime;

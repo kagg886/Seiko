@@ -1,6 +1,6 @@
 package com.kagg886.seiko.dic;
 
-import com.kagg886.seiko.dic.Interface.ErrorListener;
+import com.kagg886.seiko.dic.bridge.ErrorListener;
 import com.kagg886.seiko.util.storage.JSONObjectStorage;
 
 import java.io.File;

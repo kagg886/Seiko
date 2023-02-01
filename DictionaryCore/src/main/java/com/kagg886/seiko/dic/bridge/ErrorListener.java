@@ -1,4 +1,4 @@
-package com.kagg886.seiko.dic.Interface;
+package com.kagg886.seiko.dic.bridge;
 
 import java.io.File;
 

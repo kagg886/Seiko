@@ -25,10 +25,16 @@ public abstract class Function extends DictionaryCode {
             {"读", "Read"},
             {"写", "Write"},
             {"JAVA方法运行", "JavaMethodInvoke"},
-            {"赋值", "SetVar"},
-            {"删除", "DelVar"},
             {"随机数", "Random"},
-            {"检验变量", "CheckExists"}
+            {"变量赋值", "ContextControl$SetVar"},
+            {"变量删除", "ContextControl$DelVar"},
+            {"变量检验", "ContextControl$CheckExists"},
+
+            {"集合创建", "CollectionControl$Create"},
+            {"集合赋值", "CollectionControl$SetVar"},
+            {"集合删除", "CollectionControl$DelVar"},
+            {"集合检验", "CollectionControl$CheckExists"},
+            {"集合转", "CollectionControl$To"},
     };
 
     private final String argCode; //去除包装后剩下的参数字符串
