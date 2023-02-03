@@ -23,7 +23,8 @@ import com.kagg886.seiko.event.SnackBroadCast;
 import com.kagg886.seiko.plugin.api.SeikoPlugin;
 import com.kagg886.seiko.service.BotRunnerService;
 import com.kagg886.seiko.util.IOUtil;
-import org.jsoup.Jsoup;
+import okhttp3.*;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.IOException;
@@ -82,11 +83,24 @@ public class PluginFragment extends Fragment implements View.OnClickListener, Sw
                 .setMessage("请稍等片刻...")
                 .create();
         mHandler.sendEmptyMessage(2);
-        IOUtil.asyncHttp(Jsoup.connect(url), new IOUtil.Response() {
+
+        OkHttpClient okHttpClient = new OkHttpClient();
+        Request req = new Request.Builder()
+                .url(url)
+                .get()
+                .build();
+        Call call = okHttpClient.newCall(req);
+        call.enqueue(new Callback() {
             @Override
-            public void onSuccess(byte[] data) {
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                notifyError(e);
+            }
+
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 File file = null;
                 try {
+                    byte[] data = response.body().source().readByteArray();
                     File pluginDir = avt.getExternalFilesDir("plugin");
                     String fileName = UUID.randomUUID().toString().replace("-", "") + ".apk";
                     file = Paths.get(pluginDir.getAbsolutePath(), fileName).toFile();
@@ -97,7 +111,7 @@ public class PluginFragment extends Fragment implements View.OnClickListener, Sw
                     });
                 } catch (Exception e) {
                     // 下载失败，删除文件
-                    if(file != null && file.exists()) {
+                    if (file != null && file.exists()) {
                         file.delete();
                     }
                     notifyError(e);
@@ -105,13 +119,37 @@ public class PluginFragment extends Fragment implements View.OnClickListener, Sw
                 }
                 mHandler.sendEmptyMessage(0);
             }
-
-            @Override
-            public void onFailed(IOException e) {
-                e.printStackTrace();
-                notifyError(e);
-            }
         });
+//        IOUtil.asyncHttp(Jsoup.connect(url), new IOUtil.Response() {
+//            @Override
+//            public void onSuccess(byte[] data) {
+//                File file = null;
+//                try {
+//                    File pluginDir = avt.getExternalFilesDir("plugin");
+//                    String fileName = UUID.randomUUID().toString().replace("-", "") + ".apk";
+//                    file = Paths.get(pluginDir.getAbsolutePath(), fileName).toFile();
+//                    IOUtil.writeByteToFile(file.getAbsolutePath(), data);
+//                    avt.runOnUiThread(() -> {
+//                        BotRunnerService.INSTANCE.getSeikoPluginList().refresh();
+//                        adapter.notifyDataSetChanged();
+//                    });
+//                } catch (Exception e) {
+//                    // 下载失败，删除文件
+//                    if(file != null && file.exists()) {
+//                        file.delete();
+//                    }
+//                    notifyError(e);
+//                    return;
+//                }
+//                mHandler.sendEmptyMessage(0);
+//            }
+//
+//            @Override
+//            public void onFailed(IOException e) {
+//                e.printStackTrace();
+//                notifyError(e);
+//            }
+//        });
     }
 
     public void notifyError(Throwable e) {
