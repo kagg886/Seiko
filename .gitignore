@@ -1,5 +1,6 @@
 *.iml
 .gradle
+/app/release
 /local.properties
 /ConsolePlugin/debug-sandbox
 /ConsolePlugin/build

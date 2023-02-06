@@ -12,10 +12,9 @@ import androidx.annotation.NonNull;
 import androidx.preference.PreferenceManager;
 import com.kagg886.seiko.util.LimitedArrayList;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.IOException;
 
 /**
  * @projectName: Seiko
@@ -27,68 +26,52 @@ import java.io.FileReader;
  * @version: 1.0
  */
 public class LogAdapter extends BaseAdapter {
+    private static final String SPLIT_STR = "\u001B";
     private final LimitedArrayList<String> log;
     private final Context ctx;
-
-    private final BufferedReader reader;
-
-    private static final String SPLIT_STR = "\u001B";
-
     private final Handler mHandler = new Handler(Looper.getMainLooper()) {
         @Override
         public void handleMessage(@NonNull Message msg) {
             notifyDataSetChanged();
         }
     };
+    private FileReader reader;
 
     public LogAdapter(Context ctx, File logFile) {
         log = new LimitedArrayList<>(Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(ctx).getString("maxLogNum", "40")));
         this.ctx = ctx;
-
         try {
-            reader = new BufferedReader(new FileReader(logFile));
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
-        }
+            reader = new FileReader(logFile);
+            new Thread(() -> {
+                char buf[] = new char[1];
+                while (true) {
+                    StringBuilder builder = new StringBuilder();
+                    boolean isCollected = false;
+                    try {
+                        while (reader.read(buf) != -1) {
+                            if (new String(buf).equals(SPLIT_STR)) {
+                                if (isCollected) { //遇到配对的符号了，切割然后合成大字符串
+                                    log.add(builder.substring(3));
+                                    builder = new StringBuilder();
+                                    isCollected = false;
+                                    mHandler.sendEmptyMessage(0);
+                                } else { //未配对，开启配对
+                                    isCollected = true;
+                                    continue;
+                                }
+                            }
+                            if (isCollected) {
+                                builder.append(buf);
+                            }
+                        }
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            }).start();
+        } catch (Exception e) {
 
-        new Thread(() -> {
-            String a = null;
-            boolean needDelay = false;
-            while (true) {
-                try {
-                    if (needDelay) {
-                        Thread.sleep(1000);
-                    }
-                    a = reader.readLine();
-                } catch (Exception e) {
-                }
-                if (a == null) {
-                    needDelay = true;
-                    continue;
-                } else {
-                    needDelay = false;
-                }
-                openBox:
-                {
-                    if (a.contains(SPLIT_STR)) {
-                        int lIndex = a.indexOf("m");
-                        if (lIndex == -1) {
-                            break openBox;
-                        }
-                        int rIndex = a.lastIndexOf(SPLIT_STR);
-                        if (lIndex >= rIndex) {
-                            break openBox;
-                        }
-                        a = a.substring(lIndex + 1, rIndex);
-                    }
-                }
-                if (a.equals(SPLIT_STR + "[0m")) {
-                    continue;
-                }
-                log.add(a);
-                mHandler.sendEmptyMessage(0);
-            }
-        }).start();
+        }
     }
 
     @Override

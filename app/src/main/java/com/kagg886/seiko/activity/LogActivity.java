@@ -10,6 +10,7 @@ import android.widget.Toast;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
@@ -27,7 +28,7 @@ import java.text.SimpleDateFormat;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
-public class LogActivity extends AppCompatActivity implements View.OnClickListener {
+public class LogActivity extends AppCompatActivity implements View.OnClickListener, SwipeRefreshLayout.OnRefreshListener {
     private ListView log;
     private LogAdapter adapter;
     private FloatingActionButton btn;
@@ -36,11 +37,15 @@ public class LogActivity extends AppCompatActivity implements View.OnClickListen
 
     private String nowBot;
 
+    private SwipeRefreshLayout noLay;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_plugin);
         nowBot = getIntent().getStringExtra("uin");
+        noLay = findViewById(R.id.fragment_plugin_refresh);
+        noLay.setOnRefreshListener(this);
         File file;
         Bot bot = Bot.findInstance(Long.parseLong(nowBot));
         if (bot == null) { //bot未登录时拉取今日的日志
@@ -111,5 +116,10 @@ public class LogActivity extends AppCompatActivity implements View.OnClickListen
                 snack("导出失败!");
             }
         });
+    }
+
+    @Override
+    public void onRefresh() {
+        noLay.setRefreshing(false);
     }
 }

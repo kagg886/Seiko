@@ -1,6 +1,7 @@
 package com.kagg886.seiko.plugin;
 
 import android.content.Context;
+import androidx.preference.PreferenceManager;
 import com.kagg886.seiko.dic.DICPlugin;
 import com.kagg886.seiko.event.DialogBroadCast;
 import com.kagg886.seiko.event.SnackBroadCast;
@@ -39,7 +40,9 @@ public class PluginList extends ArrayList<SeikoPlugin> {
             try {
                 loadClass(f);
             } catch (Throwable e) {
-                //f.delete();
+                if (PreferenceManager.getDefaultSharedPreferences(ctx).getBoolean("badPluginAutoDel", false)) {
+                    f.delete();
+                }
                 DialogBroadCast.sendBroadCast(ctx, f.getName() + "加载失败,此插件已自动删除", IOUtil.getException(e));
             }
         }

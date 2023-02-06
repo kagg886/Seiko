@@ -1,6 +1,7 @@
 package com.kagg886.seiko.dic;
 
 import android.content.Context;
+import androidx.preference.PreferenceManager;
 import com.kagg886.seiko.dic.bridge.ErrorListener;
 import com.kagg886.seiko.dic.entity.DictionaryFile;
 import com.kagg886.seiko.dic.session.impl.FriendMessageRuntime;
@@ -79,6 +80,9 @@ public class DICPlugin extends SeikoPlugin implements ErrorListener {
 
     @Override
     public void onError(File p, Throwable e) {
+        if (PreferenceManager.getDefaultSharedPreferences(context).getBoolean("badDicAutoDel", false)) {
+            p.delete();
+        }
         DialogBroadCast.sendBroadCast(context, "加载伪代码文件:[" + p.getName() + "]时发生错误!", IOUtil.getException(e));
     }
 }

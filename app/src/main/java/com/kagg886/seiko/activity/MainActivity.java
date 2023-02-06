@@ -3,6 +3,9 @@ package com.kagg886.seiko.activity;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.text.TextUtils;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.LinearLayout;
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultLauncher;
@@ -11,6 +14,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
 import com.google.android.material.tabs.TabLayout;
+import com.google.android.material.textfield.TextInputLayout;
 import com.kagg886.seiko.R;
 import com.kagg886.seiko.adapter.ModuleAdapter;
 import com.kagg886.seiko.event.DialogBroadCast;
@@ -27,6 +31,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.UUID;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -49,6 +54,8 @@ public class MainActivity extends AppCompatActivity {
     private ActivityResult result;
 
     public ActivityResultLauncher<Intent> verifyCall = this.registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> MainActivity.this.result = result);
+    private DialogBroadCast dialogBroadCast;
+    private SnackBroadCast snackBroadCast;
 
     public ActivityResult getResult() {
         while (result == null) {
@@ -61,9 +68,6 @@ public class MainActivity extends AppCompatActivity {
         result = null;
         return p;
     }
-
-    private DialogBroadCast dialogBroadCast;
-    private SnackBroadCast snackBroadCast;
 
     @Override
     protected void onDestroy() {
@@ -135,10 +139,41 @@ public class MainActivity extends AppCompatActivity {
 
         //填充列表
         ArrayList<ModuleAdapter.Structure> fragments = new ArrayList<>();
-        fragments.add(new ModuleAdapter.Structure("BOT列表", new LoginFragment(this)));
-        fragments.add(new ModuleAdapter.Structure("插件", new PluginFragment(this)));
-        fragments.add(new ModuleAdapter.Structure("伪代码", new DICFragment(this)));
+        fragments.add(new ModuleAdapter.Structure("BOT列表", new LoginFragment()));
+        fragments.add(new ModuleAdapter.Structure("插件", new PluginFragment()));
+        DICFragment fragment = new DICFragment();
+        fragments.add(new ModuleAdapter.Structure("伪代码", fragment));
         fragments.add(new ModuleAdapter.Structure("设置", new SettingsFragment()));
+
+
+        fragment.setLauncher(registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+            if (result.getData() == null) {
+                return;
+            }
+            try {
+                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                builder.setCancelable(false);
+                View v = LayoutInflater.from(MainActivity.this).inflate(R.layout.dialog_import_plugin, null);
+                TextInputLayout edt = v.findViewById(R.id.dialog_importPluginUrl);
+                edt.setHint("为导入的词库命名(随机命名则为空)");
+                builder.setView(v);
+                builder.setPositiveButton("确定", (dialog, which) -> {
+                    String txt = (TextUtils.isEmpty(edt.getEditText().getText().toString()) ? UUID.randomUUID().toString().replace("-", "") : edt.getEditText().getText().toString()) + ".txt";
+                    try {
+                        String s = IOUtil.loadStringFromStream(MainActivity.this.getContentResolver().openInputStream(result.getData().getData()));
+                        IOUtil.writeStringToFile(MainActivity.this.getExternalFilesDir("dic").toPath().resolve(txt).toFile().getAbsolutePath(), s);
+                        SnackBroadCast.sendBroadCast(MainActivity.this, "导入成功!");
+                        fragment.getAdapter().notifyDataSetChanged();
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                });
+                builder.show();
+            } catch (Exception e) {
+                e.printStackTrace();
+                SnackBroadCast.sendBroadCast(MainActivity.this, "导入失败!");
+            }
+        }));
         adapter.setViews(fragments);
         pager.setAdapter(adapter);
         layout.setupWithViewPager(pager);
