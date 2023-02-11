@@ -31,7 +31,9 @@ public abstract class Function extends DictionaryCode {
             {"变量检验", "ContextControl$CheckExists"},
 
             {"集合创建", "CollectionControl$Create"},
+            {"集合导入", "CollectionControl$From"},
             {"集合赋值", "CollectionControl$SetVar"},
+            {"取集合", "CollectionControl$Get"},
             {"集合删除", "CollectionControl$DelVar"},
             {"集合检验", "CollectionControl$CheckExists"},
             {"集合转", "CollectionControl$To"},
