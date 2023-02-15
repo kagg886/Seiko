@@ -1,5 +1,6 @@
 pluginManagement {
     repositories {
+        maven { url 'https://maven.aliyun.com/repository/public' }
         gradlePluginPortal()
         google()
         mavenCentral()
@@ -21,5 +22,5 @@ include ':Tools'
 include ':DictionaryCore'
 include ':ConsolePlugin'
 
-gradle.ext.mirai_version = "2.13.4"
+gradle.ext.mirai_version = "2.14.0"
 
