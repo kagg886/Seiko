@@ -39,7 +39,7 @@ public class HTTP extends Function.InterruptedFunction {
 
 
         Connection conn = Jsoup.connect(url).ignoreContentType(true).method(me);
-        if (args.size() == 4) {
+        if (args.size() >= 4) {
             Object unknown = args.get(3);
             if (unknown.toString().equals("null")) {
                 return;

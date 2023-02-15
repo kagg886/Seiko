@@ -1,5 +1,6 @@
 package com.kagg886.seiko.dic;
 
+import com.kagg886.seiko.dic.exception.DictionaryOnRunningException;
 import com.kagg886.seiko.dic.session.AbsRuntime;
 
 import java.util.ArrayList;
@@ -145,6 +146,9 @@ public class DictionaryUtil {
 
 
     public static Double mathExpressionCalc(String str) {
+        if (str.equals("")) {
+            throw new DictionaryOnRunningException("中括号内不能为空");
+        }
         Double a = null;
         try {
             a = Double.parseDouble(str);
