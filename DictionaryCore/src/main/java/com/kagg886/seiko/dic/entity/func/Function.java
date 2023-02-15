@@ -18,7 +18,8 @@ import java.util.List;
 public abstract class Function extends DictionaryCode {
     private static final String[][] interruptedFunctionNames = { //阻断方法列表，后面的是Class名
             {"延时", "Delay"},
-            {"语音", "Ptt"}
+            {"语音", "Ptt"},
+            {"访问", "HTTP"}
     };
     private static final String[][] uninterruptedFunctionNames = { //阻断方法列表，后面的是Class名
             {"图片", "addImage"},
