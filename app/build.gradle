@@ -6,6 +6,11 @@ apply plugin: 'kotlin-android'
 android {
     compileSdk 33
 
+    packagingOptions { //Mirai升级2.14.0时需要添加这两项来排除，否则报错
+        exclude 'META-INF/INDEX.LIST'
+        exclude 'META-INF/io.netty.versions.properties'
+    }
+
     defaultConfig {
         applicationId "com.kagg886.seiko"
         minSdk 28
