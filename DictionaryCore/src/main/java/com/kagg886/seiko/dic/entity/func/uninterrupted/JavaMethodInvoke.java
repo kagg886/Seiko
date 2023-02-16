@@ -6,7 +6,6 @@ import com.kagg886.seiko.dic.session.AbsRuntime;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -34,15 +33,12 @@ public class JavaMethodInvoke extends Function.UnInterruptedFunction {
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
-        for (Method p : clazz.getDeclaredMethods()) {
-            p.setAccessible(true);
-            if (p.getName().equals(args.get(2).toString())) {
-                System.out.println("找到方法");
+        for (Method p : clazz.getMethods()) {
+            if (p.getName().equals(args.get(2).toString()) && p.getParameterCount() == (args.size() - 4)) {
                 List<Object> paramList = new ArrayList<>();
                 if (args.size() > 4) {
-                    paramList.addAll(Collections.singletonList(args).subList(4, args.size()));
+                    paramList.addAll(args.subList(4, args.size()));
                 }
-                System.out.println("参数填充:" + paramList);
                 try {
                     Object rtn = p.invoke(args.get(3), paramList.toArray());
                     if (rtn != null) {
@@ -50,7 +46,6 @@ public class JavaMethodInvoke extends Function.UnInterruptedFunction {
                     } else {
                         runtime.getRuntimeObject().put(putVar, "null");
                     }
-                    System.out.println("invoke完成!" + rtn.toString());
                 } catch (IllegalAccessException e) {
                     throw new RuntimeException(e);
                 } catch (InvocationTargetException e) {

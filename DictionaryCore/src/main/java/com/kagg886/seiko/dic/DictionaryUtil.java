@@ -62,19 +62,17 @@ public class DictionaryUtil {
             }
         }
 
-        //计算表达式
-        int x = 0;
-        while ((x = clone.indexOf("[", x)) != -1) {
-            int y = clone.indexOf("]", x);
-            String expression = clone.substring(x + 1, y);
-            String result;
-            try {
-                result = String.valueOf(DictionaryUtil.mathExpressionCalc(expression));
-            } catch (Exception e) { //检测不是数学表达式则直接回退
-                break;
+        try {
+            //计算表达式，若出错则不计算
+            int x = 0;
+            while ((x = clone.indexOf("[", x)) != -1) {
+                int y = clone.indexOf("]", x);
+                String expression = clone.substring(x + 1, y);
+                String result = String.valueOf(DictionaryUtil.mathExpressionCalc(expression));
+                clone = clone.replace("[" + expression + "]", result);
+                x = y;
             }
-            clone = clone.replace("[" + expression + "]", result);
-            x = y;
+        } catch (Exception ignored) {
         }
 
         return clone;

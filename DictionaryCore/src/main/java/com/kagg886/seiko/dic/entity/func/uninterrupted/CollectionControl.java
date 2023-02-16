@@ -54,6 +54,30 @@ public abstract class CollectionControl extends Function.UnInterruptedFunction {
         }
     }
 
+
+    /**
+     * @projectName: Seiko
+     * @package: com.kagg886.seiko.dic.entity.func.uninterrupted
+     * @className: CollectionControl
+     * @author: kagg886
+     * @description: $集合长 存入变量 集合名$
+     * @date: 2023/2/1 12:35
+     * @version: 1.0
+     */
+    public static class Length extends CollectionControl {
+
+        public Length(int line, String code) {
+            super(line, code);
+        }
+
+        @Override
+        protected void run(AbsRuntime<?> runtime, List<Object> args) {
+            String putVar = args.get(0).toString();
+            String colName = args.get(1).toString();
+            runtime.getRuntimeObject().put(putVar, ((HashMap) runtime.getRuntimeObject().get(colName)).size());
+        }
+    }
+
     /**
      * @projectName: Seiko
      * @package: com.kagg886.seiko.dic.entity.func.uninterrupted
@@ -72,28 +96,31 @@ public abstract class CollectionControl extends Function.UnInterruptedFunction {
         @Override
         protected void run(AbsRuntime<?> runtime, List<Object> args) {
             String varName = args.get(0).toString();
-            Object val = args.get(1).toString();
-            if (val instanceof String) {
-                try {
-                    runtime.getRuntimeObject().put(varName, new JSONObject(val.toString()).toMap());
-                    return;
-                } catch (Exception e) {
-                }
-                try {
-                    runtime.getRuntimeObject().put(varName, XML.toJSONObject(val.toString()).toMap());
-                    return;
-                } catch (Exception e) {
-                }
-                try {
-                    runtime.getRuntimeObject().put(varName, HTTP.toJSONObject(val.toString()).toMap());
-                    return;
-                } catch (Exception e) {
-                }
-                try {
-                    runtime.getRuntimeObject().put(varName, Cookie.toJSONObject(val.toString()).toMap());
-                    return;
-                } catch (Exception e) {
-                }
+            StringBuilder val = new StringBuilder();
+            int i = 0;
+            while (++i < args.size()) {
+                val.append(" ");
+                val.append(args.get(i).toString());
+            }
+            try {
+                runtime.getRuntimeObject().put(varName, new JSONObject(val.substring(1)).toMap());
+                return;
+            } catch (Exception e) {
+            }
+            try {
+                runtime.getRuntimeObject().put(varName, XML.toJSONObject(val.substring(1)).toMap());
+                return;
+            } catch (Exception e) {
+            }
+            try {
+                runtime.getRuntimeObject().put(varName, HTTP.toJSONObject(val.substring(1)).toMap());
+                return;
+            } catch (Exception e) {
+            }
+            try {
+                runtime.getRuntimeObject().put(varName, Cookie.toJSONObject(val.substring(1)).toMap());
+                return;
+            } catch (Exception e) {
             }
         }
     }
