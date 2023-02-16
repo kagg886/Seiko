@@ -4,6 +4,8 @@ import com.kagg886.seiko.dic.DictionaryUtil;
 import com.kagg886.seiko.dic.entity.func.Function;
 import com.kagg886.seiko.dic.session.AbsRuntime;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -22,6 +24,46 @@ public abstract class ContextControl extends Function.UnInterruptedFunction {
         super(line, code);
     }
 
+
+    /**
+     * @projectName: Seiko
+     * @package: com.kagg886.seiko.dic.entity.func.uninterrupted
+     * @className: ChainGet
+     * @author: kagg886
+     * @description: $变量提取 存入变量 链式表达式$
+     * @date: 2023/1/28 21:49
+     * @version: 1.0
+     */
+    public static class ChainGet extends ContextControl {
+
+        public ChainGet(int line, String code) {
+            super(line, code);
+        }
+
+        @Override
+        protected void run(AbsRuntime<?> runtime, List<Object> args) {
+            String putVar = args.get(0).toString();
+            StringBuilder val = new StringBuilder();
+            int i = 0;
+            while (++i < args.size()) {
+                val.append(" ");
+                val.append(args.get(i).toString());
+            }
+            String[] exps = val.substring(1).split("\\.");
+            Object point = runtime.getRuntimeObject(); //待返回的变量
+            for (i = 0; i < exps.length; i++) {
+                String k = exps[i];
+                if (k.contains("(") && k.contains(")")) { //按数组处理
+                    String arrayIndex = k.substring(k.indexOf("(") + 1, k.length() - 1);
+                    String arrayName = k.replace("(" + arrayIndex + ")", "");
+                    point = ((ArrayList) ((HashMap) point).get(arrayName)).get(Integer.parseInt(arrayIndex));
+                    continue;
+                }
+                point = ((HashMap) point).get(k);
+            }
+            runtime.getRuntimeObject().put(putVar, point);
+        }
+    }
 
     /**
      * @projectName: Seiko

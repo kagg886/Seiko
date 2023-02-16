@@ -31,6 +31,7 @@ public abstract class Function extends DictionaryCode {
             {"变量赋值", "ContextControl$SetVar"},
             {"变量删除", "ContextControl$DelVar"},
             {"变量检验", "ContextControl$CheckExists"},
+            {"变量提取", "ContextControl$ChainGet"},
 
             {"数组创建", "ArrayControl$Create"},
             {"数组导入", "ArrayControl$Import"},

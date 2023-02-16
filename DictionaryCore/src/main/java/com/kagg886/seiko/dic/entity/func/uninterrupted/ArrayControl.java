@@ -13,7 +13,7 @@ import java.util.List;
  * @className: ArrayControl
  * @author: kagg886
  * @description: 数组控制。
- * @date: 2023/2/16 14:59
+ * @date: 2023/2/16 16:32
  * @version: 1.0
  */
 public abstract class ArrayControl extends Function.UnInterruptedFunction {
@@ -28,7 +28,7 @@ public abstract class ArrayControl extends Function.UnInterruptedFunction {
      * @className: Length
      * @author: kagg886
      * @description: $数组转 数组名 存入变量$
-     * @date: 2023/2/1 12:35
+     * @date: 2023/2/16 16:15
      * @version: 1.0
      */
     public static class To extends ArrayControl {
@@ -52,7 +52,7 @@ public abstract class ArrayControl extends Function.UnInterruptedFunction {
      * @className: Length
      * @author: kagg886
      * @description: $数组长 数组名 存入变量$
-     * @date: 2023/2/1 12:35
+     * @date: 2023/2/16 15:59
      * @version: 1.0
      */
     public static class Length extends ArrayControl {
@@ -76,7 +76,7 @@ public abstract class ArrayControl extends Function.UnInterruptedFunction {
      * @className: Get
      * @author: kagg886
      * @description: $取数组 数组名 序号 存入变量$
-     * @date: 2023/2/1 12:35
+     * @date: 2023/2/16 15:47
      * @version: 1.0
      */
     public static class Get extends ArrayControl {
@@ -101,7 +101,7 @@ public abstract class ArrayControl extends Function.UnInterruptedFunction {
      * @className: Put
      * @author: kagg886
      * @description: $数组赋值 数组名 添加的变量 序号(可选)$
-     * @date: 2023/2/1 12:35
+     * @date: 2023/2/16 15:21
      * @version: 1.0
      */
     public static class Put extends ArrayControl {
@@ -130,7 +130,7 @@ public abstract class ArrayControl extends Function.UnInterruptedFunction {
      * @className: Del
      * @author: kagg886
      * @description: $数组删除 数组名 序号$
-     * @date: 2023/2/1 12:35
+     * @date: 2023/2/16 15:10
      * @version: 1.0
      */
     public static class Del extends ArrayControl {
@@ -153,7 +153,7 @@ public abstract class ArrayControl extends Function.UnInterruptedFunction {
      * @className: Import
      * @author: kagg886
      * @description: $数组导入 存入变量 数组字符串(json格式)$
-     * @date: 2023/2/1 12:35
+     * @date: 2023/2/16 14:45
      * @version: 1.0
      */
     public static class Import extends ArrayControl {
@@ -176,7 +176,7 @@ public abstract class ArrayControl extends Function.UnInterruptedFunction {
      * @className: Create
      * @author: kagg886
      * @description: $数组创建 数组名$
-     * @date: 2023/2/1 12:35
+     * @date: 2023/2/16 14:31
      * @version: 1.0
      */
     public static class Create extends ArrayControl {
