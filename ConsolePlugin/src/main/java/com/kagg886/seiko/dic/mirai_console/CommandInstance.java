@@ -1,12 +1,15 @@
 package com.kagg886.seiko.dic.mirai_console;
 
 import com.kagg886.seiko.dic.DICList;
+import com.kagg886.seiko.dic.DictionaryEnvironment;
 import com.kagg886.seiko.dic.entity.DictionaryCode;
 import com.kagg886.seiko.dic.entity.DictionaryCommandMatcher;
 import com.kagg886.seiko.dic.entity.DictionaryFile;
+import com.kagg886.seiko.util.storage.JSONObjectStorage;
 import net.mamoe.mirai.console.command.CommandContext;
 import net.mamoe.mirai.console.command.ConsoleCommandSender;
 import net.mamoe.mirai.console.command.java.JCompositeCommand;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -25,6 +28,27 @@ public class CommandInstance extends JCompositeCommand {
 
     public CommandInstance() {
         super(PluginLoader.INSTANCE, "dic");
+    }
+
+    @SubCommand("toggle")
+    public void toggle(CommandContext context, String fileName) {
+        if (!(context.getSender() instanceof ConsoleCommandSender)) {
+            return;
+        }
+
+        for (DictionaryFile dic : DICList.getInstance()) {
+            if (dic.getName().equals(fileName)) {
+                JSONObjectStorage storage = DictionaryEnvironment.getInstance().getDicConfig();
+                JSONObject config = storage.optJSONObject(fileName, new JSONObject());
+                boolean st = !config.optBoolean("enabled", true);
+                config.put("enabled", st);
+                storage.put(fileName, config);
+                storage.save();
+                PluginLoader.INSTANCE.getLogger().info("已将" + fileName + "的状态设置为:" + st);
+                return;
+            }
+        }
+        PluginLoader.INSTANCE.getLogger().error("未找到伪代码文件:" + fileName);
     }
 
     @SubCommand("info")
@@ -60,12 +84,17 @@ public class CommandInstance extends JCompositeCommand {
         builder.append("\n加载了");
         builder.append(DICList.getInstance().size());
         builder.append("项伪代码文件,下面是详细信息:");
-        builder.append("\n文件名---指令数");
+        builder.append("\n文件名---指令数---状态");
         for (DictionaryFile file : DICList.getInstance()) {
             builder.append("\n");
             builder.append(file.getName());
             builder.append("---");
             builder.append(file.getCommands().size());
+            builder.append("---");
+            builder.append(DictionaryEnvironment.getInstance()
+                    .getDicConfig()
+                    .optJSONObject(file.getName(), new JSONObject())
+                    .optBoolean("enabled", true));
         }
         builder.append("\n--------打印结束--------");
         PluginLoader.INSTANCE.getLogger().info(builder.toString());

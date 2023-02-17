@@ -77,9 +77,9 @@ public class JSONObjectStorage extends JSONObject {
 		} catch (IOException e) {
 			return false;
 		}
-	}
-	
-	public JSONObject put(String name, String value) {
+    }
+
+    public JSONObject put(String name, String value) {
         try {
             return super.put(name, value);
         } catch (JSONException e) {
@@ -87,10 +87,10 @@ public class JSONObjectStorage extends JSONObject {
         }
     }
 
-    public JSONObject optJSONObject(String name, JSONObject jsonObject) {
-        if (isNull(name)) {
-            return jsonObject;
-        }
-        return super.optJSONObject(name);
-    }
+//    public JSONObject optJSONObject(String name, JSONObject jsonObject) {
+//        if (isNull(name)) {
+//            return jsonObject;
+//        }
+//        return super.optJSONObject(name);
+//    }
 }
