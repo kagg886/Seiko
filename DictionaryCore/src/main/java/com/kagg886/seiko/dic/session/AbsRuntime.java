@@ -7,6 +7,7 @@ import com.kagg886.seiko.dic.entity.DictionaryFile;
 import com.kagg886.seiko.dic.entity.func.Function;
 import com.kagg886.seiko.dic.entity.impl.Expression;
 import com.kagg886.seiko.dic.entity.impl.PlainText;
+import com.kagg886.seiko.dic.session.impl.FunctionRuntime;
 import net.mamoe.mirai.contact.Contact;
 import net.mamoe.mirai.message.data.MessageChainBuilder;
 
@@ -82,7 +83,7 @@ public abstract class AbsRuntime<T> {
             DictionaryCommandMatcher matcher = entry.getKey();
             ArrayList<DictionaryCode> code = entry.getValue();
             if (!matcher.matchesDomain(event)) { //匹配指令触发的环境和当前环境是否相符
-                return;
+                continue;
             }
             if (matcher.matchesCommand(command)) { //正则匹配
                 String[] x = command.split(" ");
@@ -113,6 +114,9 @@ public abstract class AbsRuntime<T> {
 
         for (DictionaryCode dic : code) {
             if (dic instanceof Expression.Return && !isJumpCode) { //兼容返回写法
+                if (this instanceof FunctionRuntime) {
+                    return;
+                }
                 clearMessage();
                 return;
             }

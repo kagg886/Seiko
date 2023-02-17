@@ -1,6 +1,7 @@
 package com.kagg886.seiko.dic.entity;
 
 import com.kagg886.seiko.dic.exception.DictionaryOnLoadException;
+import com.kagg886.seiko.dic.session.AbsRuntime;
 import net.mamoe.mirai.event.events.FriendMessageEvent;
 import net.mamoe.mirai.event.events.GroupMessageEvent;
 import org.jetbrains.annotations.NotNull;
@@ -21,7 +22,8 @@ import java.util.regex.Pattern;
 public class DictionaryCommandMatcher {
     private static final String[][] domainQuote = { //允许的事件类型
             {"群", GroupMessageEvent.class.getName()},
-            {"好友", FriendMessageEvent.class.getName()}
+            {"好友", FriendMessageEvent.class.getName()},
+            {"函数", AbsRuntime.class.getName()} //这个触发事件是由runTime调用
     };
     private final Pattern pattern;
     private final String source;
@@ -75,9 +77,12 @@ public class DictionaryCommandMatcher {
 
     public boolean matchesDomain(Object o) {
         for (String className : eventClassNames) {
-            if (o.getClass().getName().equals(className)) {
-                return true;
-            }
+            Class clazz = o.getClass();
+            do {
+                if (clazz.getName().equals(className)) {
+                    return true;
+                }
+            } while ((clazz = clazz.getSuperclass()) != Object.class);
         }
         return false;
     }

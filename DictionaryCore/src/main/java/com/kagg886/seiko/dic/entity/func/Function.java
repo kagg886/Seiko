@@ -27,6 +27,7 @@ public abstract class Function extends DictionaryCode {
             {"写", "Write"},
             {"JAVA方法运行", "JavaMethodInvoke"},
             {"随机数", "Random"},
+            {"调用", "TransferDicMethod"},
 
             {"变量赋值", "ContextControl$SetVar"},
             {"变量删除", "ContextControl$DelVar"},
