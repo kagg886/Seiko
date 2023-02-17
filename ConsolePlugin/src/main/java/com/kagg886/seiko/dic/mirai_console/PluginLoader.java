@@ -59,8 +59,12 @@ public class PluginLoader extends JavaPlugin implements ErrorListener {
 
     @Override
     public void onEnable() {
+        reloadPluginConfig(SeikoPluginConfig.INSTANCE);
         CommandManager.INSTANCE.registerCommand(CommandInstance.INSTANCE, false);
         GlobalEventChannel.INSTANCE.subscribeAlways(GroupMessageEvent.class, event -> {
+            if (SeikoPluginConfig.INSTANCE.getAlwaysRefreshOnceMessageGetting()) {
+                DICList.getInstance().refresh();
+            }
             JSONObject dicConfigUnit;
             for (DictionaryFile dic : DICList.getInstance()) {
                 dicConfigUnit = DictionaryEnvironment.getInstance().getDicConfig().optJSONObject(dic.getName(), new JSONObject());
@@ -72,6 +76,9 @@ public class PluginLoader extends JavaPlugin implements ErrorListener {
         });
 
         GlobalEventChannel.INSTANCE.subscribeAlways(FriendMessageEvent.class, event -> {
+            if (SeikoPluginConfig.INSTANCE.getAlwaysRefreshOnceMessageGetting()) {
+                DICList.getInstance().refresh();
+            }
             JSONObject dicConfigUnit;
             for (DictionaryFile dic : DICList.getInstance()) {
                 if ((dicConfigUnit = DictionaryEnvironment.getInstance().getDicConfig().optJSONObject(dic.getName(), new JSONObject())) != null) {
