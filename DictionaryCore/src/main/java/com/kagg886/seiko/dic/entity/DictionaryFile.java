@@ -62,7 +62,7 @@ public class DictionaryFile {
         while (iterator.hasNext()) {
             String comm = iterator.next();
             if (comm.startsWith("//")) { //注释判空处理
-                comm = "";
+                continue; //注释直接跳过
             }
             if (behindLineIsEmpty) {
                 /*

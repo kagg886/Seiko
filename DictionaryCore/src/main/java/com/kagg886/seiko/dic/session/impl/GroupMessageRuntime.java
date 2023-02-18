@@ -2,6 +2,7 @@ package com.kagg886.seiko.dic.session.impl;
 
 import com.kagg886.seiko.dic.entity.DictionaryFile;
 import com.kagg886.seiko.dic.session.AbsRuntime;
+import com.kagg886.seiko.util.TextUtils;
 import net.mamoe.mirai.contact.Contact;
 import net.mamoe.mirai.event.events.GroupMessageEvent;
 import net.mamoe.mirai.message.data.At;
@@ -28,8 +29,16 @@ public class GroupMessageRuntime extends AbsRuntime<GroupMessageEvent> {
         context.put("群名称", event.getGroup().getName());
 
         context.put("QQ", event.getSender().getId());
-        context.put("昵称", event.getSender().getNick());
-        context.put("群名片", event.getSender().getNameCard());
+
+        String nick = event.getSender().getNick();
+        String nameCard = event.getSender().getNameCard();
+        context.put("昵称", nick);
+        if (TextUtils.isEmpty(nameCard)) {
+            context.put("群名片", nick);
+        } else {
+            context.put("群名片", nameCard); //保证没有获取到群名片的人能正常获取到群名片
+        }
+
         context.put("特殊头衔", event.getSender().getSpecialTitle());
         context.put("头衔", event.getSender().getTemperatureTitle());
         context.put("权限", event.getSender().getPermission().toString());

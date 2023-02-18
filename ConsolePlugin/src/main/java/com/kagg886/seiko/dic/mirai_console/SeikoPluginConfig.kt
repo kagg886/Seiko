@@ -14,8 +14,4 @@ import net.mamoe.mirai.console.data.value
  */
 object SeikoPluginConfig : AutoSavePluginConfig("pluginConfig") {
     val alwaysRefreshOnceMessageGetting by value<Boolean>(false) //每次接受到消息时都要刷新一遍伪代码
-
-//    val isDisableTheDataLog by value<Boolean>(false)
-//    val Header by value<String>("{}")
-//    val ServerAddress by value<String>("ws://youmucloud.kagg886.top/youmu/api/");
 }

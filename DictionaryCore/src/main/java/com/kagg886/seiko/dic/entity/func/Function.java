@@ -29,6 +29,16 @@ public abstract class Function extends DictionaryCode {
             {"随机数", "Random"},
             {"调用", "TransferDicMethod"},
 
+
+            {"文字替换", "StringUtil$Replace"},
+            {"文字分割", "StringUtil$Split"},
+            {"文字查索", "StringUtil$IndexOf"},
+            {"文字匹配", "StringUtil$Matches"},
+            {"文字包含", "StringUtil$Contains"},
+            {"转大写", "StringUtil$UpperCase"},
+            {"转小写", "StringUtil$LowerCase"},
+
+
             {"变量赋值", "ContextControl$SetVar"},
             {"变量删除", "ContextControl$DelVar"},
             {"变量检验", "ContextControl$CheckExists"},
