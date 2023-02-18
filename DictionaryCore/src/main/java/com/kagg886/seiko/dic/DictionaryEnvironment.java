@@ -1,6 +1,6 @@
 package com.kagg886.seiko.dic;
 
-import com.kagg886.seiko.dic.bridge.ErrorListener;
+import com.kagg886.seiko.dic.bridge.DictionaryListener;
 import com.kagg886.seiko.util.storage.JSONObjectStorage;
 
 import java.io.File;
@@ -25,7 +25,7 @@ public class DictionaryEnvironment {
 
     private File dicRoot; //dic存储的根目录
 
-    private ErrorListener errorListener; //DIC刷新监听器
+    private DictionaryListener dictionaryListener; //DIC刷新监听器
 
     private DictionaryEnvironment() {
 
@@ -35,12 +35,12 @@ public class DictionaryEnvironment {
         return DICTIONARY_ENVIRONMENT;
     }
 
-    public ErrorListener getErrorListener() {
-        return errorListener;
+    public DictionaryListener getErrorListener() {
+        return dictionaryListener;
     }
 
-    public void setErrorListener(ErrorListener errorListener) {
-        this.errorListener = errorListener;
+    public void setErrorListener(DictionaryListener dictionaryListener) {
+        this.dictionaryListener = dictionaryListener;
     }
 
     public File getDicRoot() {

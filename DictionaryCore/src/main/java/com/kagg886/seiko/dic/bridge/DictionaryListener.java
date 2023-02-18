@@ -7,10 +7,12 @@ import java.io.File;
  * @package: com.kagg886.seiko.dic.Interface
  * @className: ErrorListener
  * @author: kagg886
- * @description: DIC被刷新时调用此方法
+ * @description: DIC的总监听器
  * @date: 2023/1/27 15:38
  * @version: 1.0
  */
-public interface ErrorListener {
+public interface DictionaryListener {
     void onError(File p, Throwable e);
+
+    void onWarn(File p, String message);
 }

@@ -2,7 +2,7 @@ package com.kagg886.seiko.dic.mirai_console;
 
 import com.kagg886.seiko.dic.DICList;
 import com.kagg886.seiko.dic.DictionaryEnvironment;
-import com.kagg886.seiko.dic.bridge.ErrorListener;
+import com.kagg886.seiko.dic.bridge.DictionaryListener;
 import com.kagg886.seiko.dic.entity.DictionaryFile;
 import com.kagg886.seiko.dic.session.impl.FriendMessageRuntime;
 import com.kagg886.seiko.dic.session.impl.GroupMessageRuntime;
@@ -27,7 +27,7 @@ import java.io.File;
  * @date: 2023/1/27 17:38
  * @version: 1.0
  */
-public class PluginLoader extends JavaPlugin implements ErrorListener {
+public class PluginLoader extends JavaPlugin implements DictionaryListener {
 
     public static final PluginLoader INSTANCE = new PluginLoader();
 
@@ -81,11 +81,10 @@ public class PluginLoader extends JavaPlugin implements ErrorListener {
             }
             JSONObject dicConfigUnit;
             for (DictionaryFile dic : DICList.getInstance()) {
-                if ((dicConfigUnit = DictionaryEnvironment.getInstance().getDicConfig().optJSONObject(dic.getName(), new JSONObject())) != null) {
-                    if (dicConfigUnit.optBoolean("enabled", true)) {
-                        FriendMessageRuntime runtime = new FriendMessageRuntime(dic, event);
-                        runtime.invoke(event.getMessage().contentToString());
-                    }
+                dicConfigUnit = DictionaryEnvironment.getInstance().getDicConfig().optJSONObject(dic.getName());
+                if (dicConfigUnit == null || dicConfigUnit.optBoolean("enabled", true)) {
+                    FriendMessageRuntime runtime = new FriendMessageRuntime(dic, event);
+                    runtime.invoke(event.getMessage().contentToString());
                 }
             }
         });
@@ -99,5 +98,10 @@ public class PluginLoader extends JavaPlugin implements ErrorListener {
     @Override
     public void onError(File p, Throwable e) {
         getLogger().error(p.getName() + "加载失败!", e);
+    }
+
+    @Override
+    public void onWarn(File p, String message) {
+        PluginLoader.INSTANCE.getLogger().warning(p.getName() + "发现一个潜在性问题:s" + message);
     }
 }

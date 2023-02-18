@@ -2,14 +2,19 @@
         xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <PreferenceCategory
-            android:title="加载">
+            android:title="伪代码">
 
         <SwitchPreference
                 android:defaultValue="false"
                 android:title="自动删除加载失败的伪代码文件" android:key="badDicAutoDel"/>
+
         <SwitchPreference
                 android:defaultValue="true"
                 android:title="自动删除加载失败的插件" android:key="badPluginAutoDel"/>
+
+        <SwitchPreference
+                android:defaultValue="false"
+                android:title="收到消息时自动重载伪代码" android:key="alwaysRefreshOnceMessageGetting"/>
     </PreferenceCategory>
     <PreferenceCategory app:title="日志">
         <EditTextPreference app:title="设置日志页面最大记录数" app:key="maxLogNum"/>

@@ -1,5 +1,6 @@
 package com.kagg886.seiko.dic.entity;
 
+import com.kagg886.seiko.dic.DictionaryEnvironment;
 import com.kagg886.seiko.dic.entity.func.Function;
 import com.kagg886.seiko.dic.entity.impl.Expression;
 import com.kagg886.seiko.dic.entity.impl.PlainText;
@@ -63,6 +64,9 @@ public class DictionaryFile {
             String comm = iterator.next();
             if (comm.startsWith("//")) { //注释判空处理
                 continue; //注释直接跳过
+            }
+            if (comm.contains("％")) { //我帮你排错... 我居然分不清这两个符号。2023/2/18
+                DictionaryEnvironment.getInstance().getErrorListener().onWarn(dicFile, "在第" + iterator.getLen() + "行发现全角符号％。\n在某些设备上%和％无法准确辨别，可能会导致伪代码变量无法正确解析");
             }
             if (behindLineIsEmpty) {
                 /*
