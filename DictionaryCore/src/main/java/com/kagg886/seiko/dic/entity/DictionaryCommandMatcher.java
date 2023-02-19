@@ -75,6 +75,10 @@ public class DictionaryCommandMatcher {
         return matcher.matches();
     }
 
+    public Pattern getPattern() {
+        return pattern;
+    }
+
     public boolean matchesDomain(Object o) {
         for (String className : eventClassNames) {
             Class clazz = o.getClass();

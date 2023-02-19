@@ -14,6 +14,7 @@ import net.mamoe.mirai.message.data.MessageChainBuilder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Matcher;
 
 /**
  * @projectName: Seiko
@@ -57,7 +58,7 @@ public abstract class AbsRuntime<T> {
         return (MessageChainBuilder) context.get("缓冲区");
     }
 
-    protected abstract void clearMessageCache();
+    protected abstract void clearMessageCache(); //抽象的清空缓冲区方法
 
     public void clearMessage() { //清空缓冲区，之所以如此设计是因为不同事件发送消息的方法是不同的
         if (getMessageCache().size() == 0) {
@@ -89,12 +90,28 @@ public abstract class AbsRuntime<T> {
                 String[] x = command.split(" ");
                 context.put("文本", command);
                 context.put("参数长", x.length);
-                if (x.length == 1) {
-                    context.put("参数0", command);
-                } else {
+                if (x.length != 1) {
                     for (int i = 0; i < x.length; i++) {
                         context.put("参数" + i, x[i]);
                     }
+                }
+                Matcher groupFinder = matcher.getPattern().matcher(command);
+                int groups = 0;
+                while (groupFinder.find()) {
+                    int i;
+                    if (groups == 0) {
+                        for (i = 1; i <= groupFinder.groupCount(); i++) {
+                            context.put("括号" + i, groupFinder.group(i));
+                        }
+                        context.put("括号组", --i);
+                    } else {
+                        //TODO 可能永远也不会被调用，待测试
+                        for (i = 1; i <= groupFinder.groupCount(); i++) {
+                            context.put("括号" + groups + "_" + i, groupFinder.group(i));
+                        }
+                        context.put("括号组" + groups, --i);
+                    }
+                    groups++;
                 }
                 invoke(code);
             }
