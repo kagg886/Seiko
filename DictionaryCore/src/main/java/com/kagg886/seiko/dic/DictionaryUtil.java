@@ -118,7 +118,21 @@ public class DictionaryUtil {
 
         if (str.contains("==")) {
             int idx = str.indexOf("==");
-            return Objects.equals(mathExpressionCalc(str.substring(0, idx)), mathExpressionCalc(str.substring(idx + 2)));
+            try {
+                return Objects.equals(mathExpressionCalc(str.substring(0, idx)), mathExpressionCalc(str.substring(idx + 2)));
+            } catch (Exception e) {
+                // 代表等式左边或右边是字符串，按照字符串进行匹配
+                return str.substring(0, idx).equals(str.substring(idx + 2));
+            }
+        }
+
+        if (str.contains("!=")) {
+            int idx = str.indexOf("!=");
+            try {
+                return !Objects.equals(mathExpressionCalc(str.substring(0, idx)), mathExpressionCalc(str.substring(idx + 2)));
+            } catch (Exception e) {
+                return !str.substring(0, idx).equals(str.substring(idx + 2));
+            }
         }
         if (str.contains(">=")) {
             int idx = str.indexOf(">=");
