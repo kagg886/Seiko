@@ -4,6 +4,7 @@ import com.kagg886.seiko.dic.entity.DictionaryFile;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Objects;
 
 /**
  * @projectName: Seiko
@@ -28,7 +29,7 @@ public class DICList extends ArrayList<DictionaryFile> {
 
     public void refresh() {
         clear();
-        for (File p : DictionaryEnvironment.getInstance().getDicRoot().listFiles()) {
+        for (File p : Objects.requireNonNull(DictionaryEnvironment.getInstance().getDicRoot().listFiles())) {
             try {
                 add(new DictionaryFile(p));
             } catch (Throwable e) {

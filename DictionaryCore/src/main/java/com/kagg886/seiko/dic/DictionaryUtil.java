@@ -24,7 +24,6 @@ public class DictionaryUtil {
      * @return Object
      * @author kagg886
      * @description 用于函数，将参数变量提取成字符串
-     * //TODO 针对JavaObject未做测试，日后再说。
      * @date 2023/01/19 18:51
      */
     public static List<Object> variableToObject(String code, AbsRuntime<?> runtime) {
@@ -48,11 +47,11 @@ public class DictionaryUtil {
      * @description 变量转换成字符串
      * @date 2023/01/13 09:44
      */
-    public static String cleanVariableCode(String code, AbsRuntime runtime) {
+    public static String cleanVariableCode(String code, AbsRuntime<?> runtime) {
         //变量替换成常量
         String clone = code.replace("\\n", "\n");
-        for (Object s : runtime.getRuntimeObject().keySet()) { //s一定是String
-            String var = "%" + s.toString() + "%";
+        for (String s : runtime.getRuntimeObject().keySet()) { //s一定是String
+            String var = "%" + s + "%";
             if (clone.contains(var)) {
                 Object q = runtime.getRuntimeObject().get(s);
                 if (q == null) {
@@ -64,13 +63,13 @@ public class DictionaryUtil {
 
         try {
             //计算表达式，若出错则不计算
-            int x = 0;
-            while ((x = clone.indexOf("[", x)) != -1) {
-                int y = clone.indexOf("]", x);
-                String expression = clone.substring(x + 1, y);
+            int xLeft = 0;
+            while ((xLeft = clone.indexOf("[", xLeft)) != -1) {
+                int xRight = clone.indexOf("]", xLeft);
+                String expression = clone.substring(xLeft + 1, xRight);
                 String result = String.valueOf(DictionaryUtil.mathExpressionCalc(expression));
                 clone = clone.replace("[" + expression + "]", result);
-                x = y;
+                xLeft = xRight;
             }
         } catch (Exception ignored) {
         }

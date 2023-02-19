@@ -27,7 +27,7 @@ public abstract class ArrayControl extends Function.UnInterruptedFunction {
      * @package: com.kagg886.seiko.dic.entity.func.uninterrupted
      * @className: Length
      * @author: kagg886
-     * @description: $数组转 数组名 存入变量$
+     * @description: $数组转 数组名/数组变量 存入变量名$
      * @date: 2023/2/16 16:15
      * @version: 1.0
      */
@@ -39,9 +39,12 @@ public abstract class ArrayControl extends Function.UnInterruptedFunction {
 
         @Override
         protected void run(AbsRuntime<?> runtime, List<Object> args) {
+            Object o = args.get(0);
+            if (o instanceof String) {
+                o = runtime.getRuntimeObject().get(o.toString());
+            }
             String putVar = args.get(1).toString();
-            String name = args.get(0).toString();
-            List<Object> objects = (List<Object>) runtime.getRuntimeObject().get(name);
+            List<Object> objects = (List<Object>) o;
             runtime.getRuntimeObject().put(putVar, new JSONArray(objects).toString());
         }
     }
@@ -51,7 +54,7 @@ public abstract class ArrayControl extends Function.UnInterruptedFunction {
      * @package: com.kagg886.seiko.dic.entity.func.uninterrupted
      * @className: Length
      * @author: kagg886
-     * @description: $数组长 数组名 存入变量$
+     * @description: $数组长 数组名/数组变量 存入变量$
      * @date: 2023/2/16 15:59
      * @version: 1.0
      */
@@ -63,8 +66,11 @@ public abstract class ArrayControl extends Function.UnInterruptedFunction {
 
         @Override
         protected void run(AbsRuntime<?> runtime, List<Object> args) {
-            String name = args.get(0).toString();
-            List<Object> objects = (List<Object>) runtime.getRuntimeObject().get(name);
+            Object o = args.get(0);
+            if (o instanceof String) {
+                o = runtime.getRuntimeObject().get(o.toString());
+            }
+            List<Object> objects = (List<Object>) o;
             String putVar = args.get(1).toString();
             runtime.getRuntimeObject().put(putVar, objects.size());
         }
@@ -75,7 +81,7 @@ public abstract class ArrayControl extends Function.UnInterruptedFunction {
      * @package: com.kagg886.seiko.dic.entity.func.uninterrupted
      * @className: Get
      * @author: kagg886
-     * @description: $取数组 数组名 序号 存入变量$
+     * @description: $取数组 数组名/数组变量 序号 存入变量$
      * @date: 2023/2/16 15:47
      * @version: 1.0
      */
@@ -87,8 +93,11 @@ public abstract class ArrayControl extends Function.UnInterruptedFunction {
 
         @Override
         protected void run(AbsRuntime<?> runtime, List<Object> args) {
-            String name = args.get(0).toString();
-            List<Object> objects = (List<Object>) runtime.getRuntimeObject().get(name);
+            Object o = args.get(0);
+            if (o instanceof String) {
+                o = runtime.getRuntimeObject().get(o.toString());
+            }
+            List<Object> objects = (List<Object>) o;
             int idx = Integer.parseInt(args.get(1).toString());
             String putVar = args.get(2).toString();
             runtime.getRuntimeObject().put(putVar, objects.get(idx));
@@ -112,8 +121,11 @@ public abstract class ArrayControl extends Function.UnInterruptedFunction {
 
         @Override
         protected void run(AbsRuntime<?> runtime, List<Object> args) {
-            String putVar = args.get(0).toString();
-            List<Object> objects = (List<Object>) runtime.getRuntimeObject().get(putVar);
+            Object o = args.get(0);
+            if (o instanceof String) {
+                o = runtime.getRuntimeObject().get(o.toString());
+            }
+            List<Object> objects = (List<Object>) o;
             if (args.size() == 3) {
                 int idx = Integer.parseInt(args.get(2).toString());
                 objects.remove(idx);
@@ -129,7 +141,7 @@ public abstract class ArrayControl extends Function.UnInterruptedFunction {
      * @package: com.kagg886.seiko.dic.entity.func.uninterrupted
      * @className: Del
      * @author: kagg886
-     * @description: $数组删除 数组名 序号$
+     * @description: $数组删除 数组名/数组变量 序号$
      * @date: 2023/2/16 15:10
      * @version: 1.0
      */
@@ -141,8 +153,11 @@ public abstract class ArrayControl extends Function.UnInterruptedFunction {
 
         @Override
         protected void run(AbsRuntime<?> runtime, List<Object> args) {
-            String putVar = args.get(0).toString();
-            List<Object> objects = (List<Object>) runtime.getRuntimeObject().get(putVar);
+            Object o = args.get(0);
+            if (o instanceof String) {
+                o = runtime.getRuntimeObject().get(o.toString());
+            }
+            List<Object> objects = (List<Object>) o;
             objects.remove(Integer.parseInt(args.get(1).toString()));
         }
     }
@@ -152,7 +167,7 @@ public abstract class ArrayControl extends Function.UnInterruptedFunction {
      * @package: com.kagg886.seiko.dic.entity.func.uninterrupted
      * @className: Import
      * @author: kagg886
-     * @description: $数组导入 存入变量 数组字符串(json格式)$
+     * @description: $数组导入 存入变量名 数组字符串(json格式)$
      * @date: 2023/2/16 14:45
      * @version: 1.0
      */
