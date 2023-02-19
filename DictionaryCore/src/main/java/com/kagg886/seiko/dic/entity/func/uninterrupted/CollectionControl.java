@@ -31,7 +31,7 @@ public abstract class CollectionControl extends Function.UnInterruptedFunction {
      * @package: com.kagg886.seiko.dic.entity.func.uninterrupted
      * @className: CollectionControl
      * @author: kagg886
-     * @description: $取集合 存入的变量名 集合名 键$
+     * @description: $取集合 存入的变量名 集合名/集合对象 键$
      * @date: 2023/2/1 12:35
      * @version: 1.0
      */
@@ -44,9 +44,11 @@ public abstract class CollectionControl extends Function.UnInterruptedFunction {
         @Override
         protected void run(AbsRuntime<?> runtime, List<Object> args) {
             String putVar = args.get(0).toString();
-            String name = args.get(1).toString();
+            Object o = args.get(1);
+            if (o instanceof String) {
+                o = runtime.getRuntimeObject().get(o.toString());
+            }
             String key = args.get(2).toString();
-            Object o = runtime.getRuntimeObject().get(name);
             if (!(o instanceof HashMap)) {
                 throw new DictionaryOnRunningException(String.format("此变量不是集合，无法按照集合方法操作  %s:%s", runtime.getFile().getName(), this));
             }
@@ -60,7 +62,7 @@ public abstract class CollectionControl extends Function.UnInterruptedFunction {
      * @package: com.kagg886.seiko.dic.entity.func.uninterrupted
      * @className: CollectionControl
      * @author: kagg886
-     * @description: $集合长 存入变量 集合名$
+     * @description: $集合长 存入变量 集合名/集合变量$
      * @date: 2023/2/1 12:35
      * @version: 1.0
      */
@@ -73,8 +75,11 @@ public abstract class CollectionControl extends Function.UnInterruptedFunction {
         @Override
         protected void run(AbsRuntime<?> runtime, List<Object> args) {
             String putVar = args.get(0).toString();
-            String colName = args.get(1).toString();
-            runtime.getRuntimeObject().put(putVar, ((HashMap) runtime.getRuntimeObject().get(colName)).size());
+            Object o = args.get(1);
+            if (o instanceof String) {
+                o = runtime.getRuntimeObject().get(o.toString());
+            }
+            runtime.getRuntimeObject().put(putVar, ((HashMap) o).size());
         }
     }
 
@@ -83,7 +88,7 @@ public abstract class CollectionControl extends Function.UnInterruptedFunction {
      * @package: com.kagg886.seiko.dic.entity.func.uninterrupted
      * @className: CollectionControl
      * @author: kagg886
-     * @description: $集合导入 存入的变量 字符串$
+     * @description: $集合导入 集合变量名 字符串$
      * @date: 2023/2/1 12:35
      * @version: 1.0
      */
@@ -130,7 +135,7 @@ public abstract class CollectionControl extends Function.UnInterruptedFunction {
      * @package: com.kagg886.seiko.dic.entity.func.uninterrupted
      * @className: CollectionControl
      * @author: kagg886
-     * @description: $集合转 集合名 转入变量 JSON/JAVA$
+     * @description: $集合转 集合名/集合变量 转入变量名 JSON/JAVA$
      * @date: 2023/2/1 12:35
      * @version: 1.0
      */
@@ -141,10 +146,12 @@ public abstract class CollectionControl extends Function.UnInterruptedFunction {
 
         @Override
         protected void run(AbsRuntime<?> runtime, List<Object> args) {
-            String name = args.get(0).toString();
+            Object o = args.get(0);
+            if (o instanceof String) {
+                o = runtime.getRuntimeObject().get(o.toString());
+            }
             String varName = args.get(1).toString();
             String input = args.get(2).toString();
-            Object o = runtime.getRuntimeObject().get(name);
             if (!(o instanceof HashMap)) {
                 throw new DictionaryOnRunningException(String.format("此变量不是集合，无法按照集合方法操作  %s:%s", runtime.getFile().getName(), this));
             }
@@ -160,7 +167,7 @@ public abstract class CollectionControl extends Function.UnInterruptedFunction {
      * @package: com.kagg886.seiko.dic.entity.func.uninterrupted
      * @className: CollectionControl
      * @author: kagg886
-     * @description: $集合检验 集合名 检验变量 存入变量$
+     * @description: $集合检验 集合名/集合对象 检验变量 存入变量$
      * @date: 2023/2/1 12:35
      * @version: 1.0
      */
@@ -171,10 +178,12 @@ public abstract class CollectionControl extends Function.UnInterruptedFunction {
 
         @Override
         protected void run(AbsRuntime<?> runtime, List<Object> args) {
-            String name = args.get(0).toString();
+            Object o = args.get(0);
+            if (o instanceof String) {
+                o = runtime.getRuntimeObject().get(o.toString());
+            }
             String varName = args.get(1).toString();
             String input = args.get(2).toString();
-            Object o = runtime.getRuntimeObject().get(name);
             if (!(o instanceof HashMap)) {
                 throw new DictionaryOnRunningException(String.format("此变量不是集合，无法按照集合方法操作  %s:%s", runtime.getFile().getName(), this));
             }
@@ -188,7 +197,7 @@ public abstract class CollectionControl extends Function.UnInterruptedFunction {
      * @package: com.kagg886.seiko.dic.entity.func.uninterrupted
      * @className: CollectionControl
      * @author: kagg886
-     * @description: $集合删除 集合名 集合变量$
+     * @description: $集合删除 集合名/集合对象 集合变量$
      * @date: 2023/2/1 12:20
      * @version: 1.0
      */
@@ -199,9 +208,11 @@ public abstract class CollectionControl extends Function.UnInterruptedFunction {
 
         @Override
         protected void run(AbsRuntime<?> runtime, List<Object> args) {
-            String name = args.get(0).toString();
+            Object o = args.get(0);
+            if (o instanceof String) {
+                o = runtime.getRuntimeObject().get(o.toString());
+            }
             String varName = args.get(1).toString();
-            Object o = runtime.getRuntimeObject().get(name);
             if (!(o instanceof HashMap)) {
                 throw new DictionaryOnRunningException(String.format("此变量不是集合，无法按照集合方法操作  %s:%s", runtime.getFile().getName(), this));
             }
@@ -215,7 +226,7 @@ public abstract class CollectionControl extends Function.UnInterruptedFunction {
      * @package: com.kagg886.seiko.dic.entity.func.uninterrupted
      * @className: CollectionControl
      * @author: kagg886
-     * @description: $集合赋值 集合名 集合变量 要赋予的值$
+     * @description: $集合赋值 集合名/集合对象 集合变量 要赋予的值$
      * @date: 2023/2/1 12:10
      * @version: 1.0
      */
@@ -226,10 +237,12 @@ public abstract class CollectionControl extends Function.UnInterruptedFunction {
 
         @Override
         protected void run(AbsRuntime<?> runtime, List<Object> args) {
-            String name = args.get(0).toString();
+            Object o = args.get(0);
+            if (o instanceof String) {
+                o = runtime.getRuntimeObject().get(o.toString());
+            }
             String varName = args.get(1).toString();
             Object value = args.get(2);
-            Object o = runtime.getRuntimeObject().get(name);
             if (!(o instanceof HashMap)) {
                 throw new DictionaryOnRunningException(String.format("此变量不是集合，无法按照集合方法操作  %s:%s", runtime.getFile().getName(), this));
             }

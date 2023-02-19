@@ -77,7 +77,7 @@ public abstract class StringUtil extends Function.UnInterruptedFunction {
      * @package: com.kagg886.seiko.dic.entity.func.uninterrupted
      * @className: StringUtil
      * @author: kagg886
-     * @description: $文字匹配 待匹配变量名 要匹配的正则表达式 存入变量(可选)$
+     * @description: $文字包含 待匹配变量名 文字 存入变量(可选)$
      * @date: 2023/2/18 18:44
      * @version: 1.0
      */
