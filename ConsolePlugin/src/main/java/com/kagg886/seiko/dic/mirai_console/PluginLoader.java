@@ -87,6 +87,8 @@ public class PluginLoader extends JavaPlugin implements DictionaryListener {
                     runtime.invoke(event.getMessage().contentToString());
                 }
             }
+
+
         });
     }
 

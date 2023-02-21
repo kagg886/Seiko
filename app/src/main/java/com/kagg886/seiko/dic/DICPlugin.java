@@ -1,7 +1,7 @@
 package com.kagg886.seiko.dic;
 
 import android.content.Context;
-import androidx.preference.PreferenceManager;
+import com.kagg886.seiko.SeikoApplication;
 import com.kagg886.seiko.dic.bridge.DictionaryListener;
 import com.kagg886.seiko.dic.entity.DictionaryFile;
 import com.kagg886.seiko.dic.session.impl.FriendMessageRuntime;
@@ -37,7 +37,7 @@ public class DICPlugin extends SeikoPlugin implements DictionaryListener {
         EventChannel<BotEvent> event = Bot.findInstance(botQQ).getEventChannel();
 
         event.subscribeAlways(GroupMessageEvent.class, groupMessageEvent -> {
-            if (PreferenceManager.getDefaultSharedPreferences(context).getBoolean("alwaysRefreshOnceMessageGetting", false)) {
+            if (SeikoApplication.globalConfig.getBoolean("alwaysRefreshOnceMessageGetting", false)) {
                 DICList.getInstance().refresh();
             }
             JSONObject dicConfigUnit;
@@ -51,7 +51,7 @@ public class DICPlugin extends SeikoPlugin implements DictionaryListener {
         });
 
         event.subscribeAlways(FriendMessageEvent.class, friendMessageEvent -> {
-            if (PreferenceManager.getDefaultSharedPreferences(context).getBoolean("alwaysRefreshOnceMessageGetting", false)) {
+            if (SeikoApplication.globalConfig.getBoolean("alwaysRefreshOnceMessageGetting", false)) {
                 DICList.getInstance().refresh();
             }
             JSONObject dicConfigUnit;
@@ -86,7 +86,7 @@ public class DICPlugin extends SeikoPlugin implements DictionaryListener {
 
     @Override
     public void onError(File p, Throwable e) {
-        if (PreferenceManager.getDefaultSharedPreferences(context).getBoolean("badDicAutoDel", false)) {
+        if (SeikoApplication.globalConfig.getBoolean("badDicAutoDel", false)) {
             p.delete();
         }
         DialogBroadCast.sendBroadCast(context, "加载伪代码文件:[" + p.getName() + "]时发生错误!", IOUtil.getException(e));

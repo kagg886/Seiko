@@ -1,6 +1,7 @@
 package com.kagg886.seiko;
 
 import android.app.Application;
+import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Build;
@@ -8,6 +9,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 import androidx.annotation.NonNull;
+import androidx.preference.PreferenceManager;
 import com.kagg886.seiko.util.IOUtil;
 
 import java.io.File;
@@ -23,11 +25,14 @@ import java.text.SimpleDateFormat;
  * @date: 2023/1/12 14:50
  * @version: 1.0
  */
-public class CrashHandler extends Application implements Runnable, Thread.UncaughtExceptionHandler {
+public class SeikoApplication extends Application implements Runnable, Thread.UncaughtExceptionHandler {
+
+    public static SharedPreferences globalConfig;
 
     @Override
     public void onCreate() {
         super.onCreate();
+        globalConfig = PreferenceManager.getDefaultSharedPreferences(this);
         Thread.setDefaultUncaughtExceptionHandler(this);
         new Handler(Looper.getMainLooper()).post(this);
     }

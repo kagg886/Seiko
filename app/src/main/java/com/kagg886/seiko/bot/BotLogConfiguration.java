@@ -1,5 +1,6 @@
 package com.kagg886.seiko.bot;
 
+import com.kagg886.seiko.SeikoApplication;
 import com.kagg886.seiko.activity.MainActivity;
 import net.mamoe.mirai.utils.BotConfiguration;
 
@@ -37,7 +38,12 @@ public class BotLogConfiguration extends BotConfiguration {
         fileBasedDeviceInfo(p.getAbsolutePath());
         setLoginSolver(new AndroidSolver(avt));
 
-        File f1 = parentPath.resolve("log").resolve(new SimpleDateFormat("yyyy-MM-dd").format(System.currentTimeMillis()) + ".log").toFile();
+        File f1;
+        if (SeikoApplication.globalConfig.getBoolean("mergeAllLogs", false)) {
+            f1 = avt.getExternalFilesDir("logs").toPath().resolve(new SimpleDateFormat("yyyy-MM-dd").format(System.currentTimeMillis()) + ".log").toFile();
+        } else {
+            f1 = parentPath.resolve("log").resolve(new SimpleDateFormat("yyyy-MM-dd").format(System.currentTimeMillis()) + ".log").toFile();
+        }
         if (!f1.exists()) {
             f1.getParentFile().mkdirs();
             try {

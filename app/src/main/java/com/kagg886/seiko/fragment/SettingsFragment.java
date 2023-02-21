@@ -1,21 +1,25 @@
 package com.kagg886.seiko.fragment;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.InputType;
+import androidx.annotation.NonNull;
 import androidx.preference.EditTextPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import com.kagg886.seiko.BuildConfig;
 import com.kagg886.seiko.R;
 import com.kagg886.seiko.event.SnackBroadCast;
+import com.kagg886.seiko.util.TextUtils;
+import net.mamoe.mirai.Bot;
+import org.jetbrains.annotations.NotNull;
 
-import java.io.File;
-
-public class SettingsFragment extends PreferenceFragmentCompat implements Preference.OnPreferenceClickListener {
+public class SettingsFragment extends PreferenceFragmentCompat implements Preference.OnPreferenceClickListener, Preference.OnPreferenceChangeListener {
+    @SuppressLint("DefaultLocale")
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         setPreferencesFromResource(R.xml.root_preferences, rootKey);
@@ -37,73 +41,55 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Prefer
         s = findPreference("MiraiInfo");
         s.setSummary(BuildConfig.MIRAI_VERSION);
 
-        s = findPreference("cleanCache");
-
-        StringBuilder str = new StringBuilder("已发现");
-        int total = 0;
-
-        File f = getContext().getExternalFilesDir("bots");
-        for (File bot : f.listFiles()) {
-            f = new File(bot.getAbsolutePath() + "/log");
-            if (!f.isDirectory()) {
-                continue;
-            }
-            for (File log : f.listFiles()) {
-                total += log.length();
-            }
-        }
-        appends: {
-            if ((total / 1024) < 1) {
-                str.append(total).append("Byte");
-                break appends;
-            }
-            if ((total / 1024 / 1024) < 1) {
-                str.append(String.format("%.2f", total / 1024.0)).append("KB");
-                break appends;
-            }
-            str.append(String.format("%.2f", total / 1024.0 / 1024.0)).append("MB");
-        }
-
-        s.setSummary(str.toString());
-        s.setOnPreferenceClickListener(this);
-
         EditTextPreference sp = findPreference("maxLogNum");
         sp.setOnBindEditTextListener(editText -> editText.setInputType(InputType.TYPE_CLASS_NUMBER));
-        sp.setOnPreferenceChangeListener((preference, newValue) -> {
+        sp.setOnPreferenceChangeListener(this);
+        sp.setSummary(String.format("当前设置的值为:%s", sp.getSharedPreferences().getString("maxLogNum", "40")));
+
+        s = findPreference("goGithub");
+        s.setOnPreferenceClickListener(this);
+
+        s = findPreference("mergeAllLogs");
+        s.setOnPreferenceChangeListener(this);
+
+
+    }
+
+    @Override
+    public boolean onPreferenceClick(Preference preference) {
+        if (preference.getKey().equals("goGithub")) {
+            Uri uri = Uri.parse("https://github.com/kagg886/Seiko");
+            startActivity(new Intent(Intent.ACTION_VIEW, uri));
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean onPreferenceChange(@NonNull @NotNull Preference preference, Object newValue) {
+        if (preference.getKey().equals("maxLogNum")) {
+            if (TextUtils.isEmpty(((String) newValue))) {
+                SnackBroadCast.sendBroadCast(getContext(), "至少输入一个值!");
+                return false;
+            }
             if (Integer.parseInt((String) newValue) > 0) {
-                sp.setSummary(String.format("当前设置的值为:%s", newValue));
+                preference.setSummary(String.format("当前设置的值为:%s", newValue));
                 SnackBroadCast.sendBroadCast(getContext(), "保存成功!");
                 return true;
             }
             SnackBroadCast.sendBroadCast(getContext(), "不能为0和负数!");
             return false;
-        });
-        sp.setSummary(String.format("当前设置的值为:%s", sp.getSharedPreferences().getString("maxLogNum", "40")));
-
-        s = findPreference("goGithub");
-        s.setOnPreferenceClickListener(preference -> {
-            Uri uri = Uri.parse("https://github.com/kagg886/Seiko");
-            startActivity(new Intent(Intent.ACTION_VIEW, uri));
-            return true;
-        });
-    }
-
-    @Override
-    public boolean onPreferenceClick(Preference preference) {
-        if (preference.getKey().equals("cleanCache")) {
-            File f = getContext().getExternalFilesDir("bots");
-            for (File bot : f.listFiles()) {
-                f = new File(bot.getAbsolutePath() + "/log");
-                if (!f.isDirectory()) {
-                    continue;
-                }
-                for (File log : f.listFiles()) {
-                    log.delete();
-                }
-                f.delete();
-            }
-            preference.setSummary("清理完毕(๑′ᴗ‵๑)");
         }
+
+
+        if (preference.getKey().equals("mergeAllLogs")) {
+            if (Bot.getInstances().size() != 0) {
+                SnackBroadCast.sendBroadCast(getContext(), "请下线所有bot后重试");
+                return false;
+            }
+            return true;
+        }
+
         return false;
     }
 }

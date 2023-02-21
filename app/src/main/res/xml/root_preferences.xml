@@ -16,9 +16,12 @@
                 android:defaultValue="false"
                 android:title="收到消息时自动重载伪代码" android:key="alwaysRefreshOnceMessageGetting"/>
     </PreferenceCategory>
+
     <PreferenceCategory app:title="日志">
+        <SwitchPreference
+                android:defaultValue="false"
+                android:title="合并bot日志到一个文件夹" android:key="mergeAllLogs"/>
         <EditTextPreference app:title="设置日志页面最大记录数" app:key="maxLogNum"/>
-        <DropDownPreference app:title="清除缓存" app:key="cleanCache"/>
     </PreferenceCategory>
 
     <PreferenceCategory app:title="程序信息">

@@ -13,11 +13,11 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.preference.PreferenceManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputLayout;
 import com.kagg886.seiko.R;
+import com.kagg886.seiko.SeikoApplication;
 import com.kagg886.seiko.activity.MainActivity;
 import com.kagg886.seiko.adapter.PluginAdapter;
 import com.kagg886.seiko.event.SnackBroadCast;
@@ -107,7 +107,7 @@ public class PluginFragment extends Fragment implements View.OnClickListener, Sw
                 } catch (Exception e) {
                     // 下载失败，删除文件
                     if (file != null && file.exists()) {
-                        if (PreferenceManager.getDefaultSharedPreferences(getActivity()).getBoolean("badPluginAutoDel", true)) {
+                        if (SeikoApplication.globalConfig.getBoolean("badPluginAutoDel", true)) {
                             file.delete();
                         }
                     }

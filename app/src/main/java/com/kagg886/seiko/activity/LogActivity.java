@@ -15,6 +15,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
 import com.kagg886.seiko.R;
+import com.kagg886.seiko.SeikoApplication;
 import com.kagg886.seiko.adapter.LogAdapter;
 import com.kagg886.seiko.bot.BotLogConfiguration;
 import com.kagg886.seiko.util.IOUtil;
@@ -51,7 +52,14 @@ public class LogActivity extends AppCompatActivity implements View.OnClickListen
         if (bot == null) { //bot未登录时拉取今日的日志
             //String parentPath = String.format("%s/%s/", getExternalFilesDir("bots").getAbsolutePath(), nowBot);
             Path parentPath = Paths.get(getExternalFilesDir("bots").getAbsolutePath(), nowBot);
-            File offlineLogFile = parentPath.resolve("log").resolve(new SimpleDateFormat("yyyy-MM-dd").format(System.currentTimeMillis()) + ".log").toFile();
+            File offlineLogFile;
+
+            if (SeikoApplication.globalConfig.getBoolean("mergeAllLogs", false)) {
+                offlineLogFile = getExternalFilesDir("logs").toPath().resolve(new SimpleDateFormat("yyyy-MM-dd").format(System.currentTimeMillis()) + ".log").toFile();
+            } else {
+                offlineLogFile = parentPath.resolve("log").resolve(new SimpleDateFormat("yyyy-MM-dd").format(System.currentTimeMillis()) + ".log").toFile();
+            }
+
             if (offlineLogFile.exists()) {
                 file = offlineLogFile;
             } else {

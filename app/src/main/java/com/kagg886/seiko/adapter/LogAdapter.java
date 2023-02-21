@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
-import androidx.preference.PreferenceManager;
+import com.kagg886.seiko.SeikoApplication;
 import com.kagg886.seiko.util.LimitedArrayList;
 
 import java.io.File;
@@ -38,7 +38,7 @@ public class LogAdapter extends BaseAdapter {
     private FileReader reader;
 
     public LogAdapter(Context ctx, File logFile) {
-        log = new LimitedArrayList<>(Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(ctx).getString("maxLogNum", "40")));
+        log = new LimitedArrayList<>(Integer.parseInt(SeikoApplication.globalConfig.getString("maxLogNum", "40")));
         this.ctx = ctx;
         try {
             reader = new FileReader(logFile);
