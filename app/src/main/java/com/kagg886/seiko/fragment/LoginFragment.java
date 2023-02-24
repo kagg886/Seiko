@@ -87,7 +87,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
             keyEdit.getEditText().setEnabled(false);
             valueEdit.getEditText().setText(account.optString("pass"));
             int i = 0;
-            while (!account.optString("platform",protocols[0]).equals(protocols[i])) {
+            while (!account.optString("platform", protocols[0]).equals(protocols[i])) {
                 i++;
             }
             spinner.setSelection(i);
@@ -103,18 +103,18 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
             try {
                 qq = Long.parseLong(key);
             } catch (Exception e) {
-                SnackBroadCast.sendBroadCast(avt, "请输入合法的qq号!");
+                SnackBroadCast.sendBroadCast("请输入合法的qq号!");
                 return;
             }
 
             if (Bot.getInstanceOrNull(qq) != null) {
-                SnackBroadCast.sendBroadCast(avt, "请勿输入已存在的QQ");
+                SnackBroadCast.sendBroadCast("请勿输入已存在的QQ");
             }
             JSONArrayStorage botList = JSONArrayStorage.obtain(avt.getExternalFilesDir("config").getAbsolutePath() + "/botList.json");
             try {
                 account.put("uin", qq);
                 account.put("pass", value);
-                account.put("platform",protocols[spinner.getSelectedItemPosition()]);
+                account.put("platform", protocols[spinner.getSelectedItemPosition()]);
             } catch (JSONException e) {
                 throw new RuntimeException(e);
             }
@@ -122,7 +122,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
                 botList.put(account);
             }
             botList.save();
-            SnackBroadCast.sendBroadCast(avt, "添加成功!");
+            SnackBroadCast.sendBroadCast("添加成功!");
             adapter.notifyDataSetChanged();
         });
         return builder.create();

@@ -69,22 +69,22 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Prefer
     public boolean onPreferenceChange(@NonNull @NotNull Preference preference, Object newValue) {
         if (preference.getKey().equals("maxLogNum")) {
             if (TextUtils.isEmpty(((String) newValue))) {
-                SnackBroadCast.sendBroadCast(getContext(), "至少输入一个值!");
+                SnackBroadCast.sendBroadCast("至少输入一个值!");
                 return false;
             }
             if (Integer.parseInt((String) newValue) > 0) {
                 preference.setSummary(String.format("当前设置的值为:%s", newValue));
-                SnackBroadCast.sendBroadCast(getContext(), "保存成功!");
+                SnackBroadCast.sendBroadCast("保存成功!");
                 return true;
             }
-            SnackBroadCast.sendBroadCast(getContext(), "不能为0和负数!");
+            SnackBroadCast.sendBroadCast("不能为0和负数!");
             return false;
         }
 
 
         if (preference.getKey().equals("mergeAllLogs")) {
             if (Bot.getInstances().size() != 0) {
-                SnackBroadCast.sendBroadCast(getContext(), "请下线所有bot后重试");
+                SnackBroadCast.sendBroadCast("请下线所有bot后重试");
                 return false;
             }
             return true;

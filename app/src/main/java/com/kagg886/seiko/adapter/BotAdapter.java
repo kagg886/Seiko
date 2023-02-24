@@ -94,7 +94,7 @@ public class BotAdapter extends BaseAdapter {
                 return;
             }
             if (isChecked) {
-                BotRunnerService.INSTANCE.login(avt, target, nick, sw);
+                BotRunnerService.INSTANCE.login(target, nick, sw);
             } else {
                 Bot.getInstance(target.optLong("uin")).close();
                 //SnackBroadCast.sendBroadCast(avt,target.optLong("uin") + "已下线");
@@ -111,14 +111,14 @@ public class BotAdapter extends BaseAdapter {
                     case 0:
                         File p = new File(avt.getExternalFilesDir("bots") + "/" + uin + "/device.json");
                         if (!p.exists()) {
-                            SnackBroadCast.sendBroadCast(avt, "从未登陆过，无法获取到设备信息");
+                            SnackBroadCast.sendBroadCast("从未登陆过，无法获取到设备信息");
                             return;
                         }
                         ShareUtil.quickShare(avt, p, "*/*");
                         break;
                     case 1:
                         if (Bot.getInstanceOrNull(object.optLong("uin")) != null) {
-                            SnackBroadCast.sendBroadCast(avt, "请下线BOT然后再执行此操作!");
+                            SnackBroadCast.sendBroadCast("请下线BOT然后再执行此操作!");
                             return;
                         }
                         LoginFragment.editDialog(avt, this, true, object).show();
@@ -130,13 +130,13 @@ public class BotAdapter extends BaseAdapter {
                         break;
                     case 3:
                         if (Bot.getInstanceOrNull(object.optLong("uin")) != null) {
-                            SnackBroadCast.sendBroadCast(avt, "请下线BOT然后再执行此操作!");
+                            SnackBroadCast.sendBroadCast("请下线BOT然后再执行此操作!");
                             return;
                         }
                         botList.remove(position);
                         botList.save();
                         notifyDataSetChanged();
-                        SnackBroadCast.sendBroadCast(avt, "删除完毕");
+                        SnackBroadCast.sendBroadCast("删除完毕");
                         break;
                 }
             });

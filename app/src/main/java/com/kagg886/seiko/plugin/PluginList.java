@@ -43,7 +43,7 @@ public class PluginList extends ArrayList<SeikoPlugin> {
                 if (SeikoApplication.globalConfig.getBoolean("badPluginAutoDel", false)) {
                     f.delete();
                 }
-                DialogBroadCast.sendBroadCast(ctx, f.getName() + "加载失败,此插件已自动删除", IOUtil.getException(e));
+                DialogBroadCast.sendBroadCast(f.getName() + "加载失败,此插件已自动删除", IOUtil.getException(e));
             }
         }
         ArrayList<SeikoPlugin> remove = new ArrayList<>(); //可恶的ConcurrentModificationException
@@ -59,14 +59,14 @@ public class PluginList extends ArrayList<SeikoPlugin> {
                             a.put(plugin.getDescription().getId(), bot.getId());
                         } catch (Throwable e) {
                             bot.getLogger().error("加载插件:" + plugin.getDescription().getName() + "(" + plugin.getDescription().getId() + ")发生错误!", e);
-                            SnackBroadCast.sendBroadCast(ctx, "初始化:" + plugin.getDescription().getName() + "时发生错误,请前往bot日志查看。");
+                            SnackBroadCast.sendBroadCast("初始化:" + plugin.getDescription().getName() + "时发生错误,请前往bot日志查看。");
                         }
                     }
                 });
             } catch (Exception e) {
                 remove.add(plugin);
                 plugin.getFile().delete();
-                DialogBroadCast.sendBroadCast(ctx, plugin.getDescription().getId() + "初始化失败", IOUtil.getException(e));
+                DialogBroadCast.sendBroadCast(plugin.getDescription().getId() + "初始化失败", IOUtil.getException(e));
             }
         }
         for (SeikoPlugin p : remove) {

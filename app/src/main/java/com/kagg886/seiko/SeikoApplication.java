@@ -1,6 +1,9 @@
 package com.kagg886.seiko;
 
+import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.Application;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -14,7 +17,11 @@ import com.kagg886.seiko.util.IOUtil;
 
 import java.io.File;
 import java.io.FileWriter;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
+import java.util.Map;
 
 /**
  * @projectName: Seiko
@@ -28,6 +35,71 @@ import java.text.SimpleDateFormat;
 public class SeikoApplication extends Application implements Runnable, Thread.UncaughtExceptionHandler {
 
     public static SharedPreferences globalConfig;
+
+    /*
+     * @param :
+     * @return Activity
+     * @author kagg886
+     * @description 获取正在运行的Activity。请不要在不确定Activity类型的地方调用
+     * @date 2023/02/24 23:26
+     */
+    @SuppressLint({"DiscouragedPrivateApi", "PrivateApi"})
+    public static Activity getCurrentActivity() {
+        Activity current = null;
+        try {
+            Class<?> activityThreadClass = Class.forName("android.app.ActivityThread");
+            Object activityThread = activityThreadClass.getMethod("currentActivityThread").invoke(
+                    null);
+            Field activitiesField = activityThreadClass.getDeclaredField("mActivities");
+            activitiesField.setAccessible(true);
+            Map<?, ?> activities = (Map<?, ?>) activitiesField.get(activityThread);
+            for (Object activityRecord : activities.values()) {
+                Class<?> activityRecordClass = activityRecord.getClass();
+                Field pausedField = activityRecordClass.getDeclaredField("paused");
+                pausedField.setAccessible(true);
+                if (!pausedField.getBoolean(activityRecord)) {
+                    Field activityField = activityRecordClass.getDeclaredField("activity");
+                    activityField.setAccessible(true);
+                    current = (Activity) activityField.get(activityRecord);
+                }
+            }
+        } catch (ClassNotFoundException | InvocationTargetException | NoSuchMethodException | NoSuchFieldException |
+                 IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        Log.d("SeikoApplication", "access getCurrentActivity:" + current);
+        return current;
+    }
+
+
+    /*
+     * @param :
+     * @return Application
+     * @author kagg886
+     * @description 调用隐藏方法获取ApplicationContext
+     * @date 2023/02/23 14:35
+     */
+    @SuppressLint({"DiscouragedPrivateApi", "PrivateApi"})
+    public static Context getSeikoApplicationContext() {
+        Application application = null;
+        try {
+            Class<?> atClass = Class.forName("android.app.ActivityThread");
+            Method currentApplicationMethod = atClass.getDeclaredMethod("currentApplication");
+            currentApplicationMethod.setAccessible(true);
+            application = (Application) currentApplicationMethod.invoke(null);
+        } catch (Exception ignored) {
+        }
+        if (application != null) return application;
+        try {
+            Class<?> atClass = Class.forName("android.app.AppGlobals");
+            Method currentApplicationMethod = atClass.getDeclaredMethod("getInitialApplication");
+            currentApplicationMethod.setAccessible(true);
+            application = (Application) currentApplicationMethod.invoke(null);
+        } catch (Exception ignored) {
+        }
+        return application;
+    }
+
 
     @Override
     public void onCreate() {

@@ -9,7 +9,6 @@ import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ListView;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -49,11 +48,11 @@ public class PluginFragment extends Fragment implements View.OnClickListener, Sw
                     PluginFragment.this.dialog.show();
                     break;
                 case 0:
-                    SnackBroadCast.sendBroadCast(getContext(), "下载完成");
+                    SnackBroadCast.sendBroadCast("下载完成");
                     PluginFragment.this.dialog.dismiss();
                     break;
                 case 1:
-                    SnackBroadCast.sendBroadCast(getContext(), "发生异常:" + ((Throwable) msg.getData().getSerializable("exception")).getMessage());
+                    SnackBroadCast.sendBroadCast("发生异常:" + ((Throwable) msg.getData().getSerializable("exception")).getMessage());
                     PluginFragment.this.dialog.dismiss();
                     break;
             }
@@ -71,8 +70,8 @@ public class PluginFragment extends Fragment implements View.OnClickListener, Sw
         dialog.show();
     }
 
-    public void downloadPlugin(MainActivity avt, String url) {
-        PluginFragment.this.dialog = new AlertDialog.Builder(((MainActivity) getActivity()))
+    public void downloadPlugin(String url) {
+        PluginFragment.this.dialog = new AlertDialog.Builder(getActivity())
                 .setTitle("下载中...")
                 .setCancelable(false)
                 .setMessage("请稍等片刻...")
@@ -96,11 +95,11 @@ public class PluginFragment extends Fragment implements View.OnClickListener, Sw
                 File file = null;
                 try {
                     byte[] data = response.body().source().readByteArray();
-                    File pluginDir = ((MainActivity) getActivity()).getExternalFilesDir("plugin");
+                    File pluginDir = getActivity().getExternalFilesDir("plugin");
                     String fileName = UUID.randomUUID().toString().replace("-", "") + ".apk";
                     file = Paths.get(pluginDir.getAbsolutePath(), fileName).toFile();
                     IOUtil.writeByteToFile(file.getAbsolutePath(), data);
-                    ((MainActivity) getActivity()).runOnUiThread(() -> {
+                    getActivity().runOnUiThread(() -> {
                         BotRunnerService.INSTANCE.getSeikoPluginList().refresh();
                         adapter.notifyDataSetChanged();
                     });
@@ -133,31 +132,28 @@ public class PluginFragment extends Fragment implements View.OnClickListener, Sw
         View v = inflater.inflate(R.layout.fragment_plugin, container, false);
 
         listView = v.findViewById(R.id.fragment_plugin_list);
-        adapter = new PluginAdapter(((MainActivity) getActivity()));
+        adapter = new PluginAdapter();
         listView.setAdapter(adapter);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(((MainActivity) getActivity()));
-                SeikoPlugin desc = BotRunnerService.INSTANCE.getSeikoPluginList().get(position);
-                builder.setTitle("操作:" + desc.getDescription().getName());
-                builder.setItems(new String[]{"删除插件"}, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        if (which == 0) {
-                            if (desc.getFile() == null) {
-                                SnackBroadCast.sendBroadCast(((MainActivity) getActivity()), "内置插件不可删除");
-                                return;
-                            }
-                            desc.getFile().delete();
-                            BotRunnerService.INSTANCE.getSeikoPluginList().remove(desc);
-                            adapter.notifyDataSetChanged();
-                            SnackBroadCast.sendBroadCast(((MainActivity) getActivity()), "删除成功!");
+        listView.setOnItemClickListener((parent, view, position, id) -> {
+            androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(((MainActivity) getActivity()));
+            SeikoPlugin desc = BotRunnerService.INSTANCE.getSeikoPluginList().get(position);
+            builder.setTitle("操作:" + desc.getDescription().getName());
+            builder.setItems(new String[]{"删除插件"}, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    if (which == 0) {
+                        if (desc.getFile() == null) {
+                            SnackBroadCast.sendBroadCast("内置插件不可删除");
+                            return;
                         }
+                        desc.getFile().delete();
+                        BotRunnerService.INSTANCE.getSeikoPluginList().remove(desc);
+                        adapter.notifyDataSetChanged();
+                        SnackBroadCast.sendBroadCast("删除成功!");
                     }
-                });
-                builder.create().show();
-            }
+                }
+            });
+            builder.create().show();
         });
         button = v.findViewById(R.id.fragment_plugin_menu);
         button.setOnClickListener(this);
@@ -176,10 +172,10 @@ public class PluginFragment extends Fragment implements View.OnClickListener, Sw
             TextInputLayout importPluginUrl = view.findViewById(R.id.dialog_importPluginUrl);
             String url = importPluginUrl.getEditText().getText().toString();
             if (url.trim().length() == 0 || !(url.startsWith("http://") || url.startsWith("https://"))) {
-                SnackBroadCast.sendBroadCast(((MainActivity) getActivity()), "请正确填写链接");
+                SnackBroadCast.sendBroadCast("请正确填写链接");
                 return;
             }
-            downloadPlugin(((MainActivity) getActivity()), url);
+            downloadPlugin(url);
         });
         return builder.create();
     }
@@ -188,7 +184,7 @@ public class PluginFragment extends Fragment implements View.OnClickListener, Sw
     public void onRefresh() {
         //TODO 此处刷新一次则伪代码会刷新两次，知道原因但是不知道怎么解，求助
         if (BotRunnerService.INSTANCE == null) {
-            SnackBroadCast.sendBroadCast(((MainActivity) getActivity()), "服务启动中，请稍等片刻");
+            SnackBroadCast.sendBroadCast("服务启动中，请稍等片刻");
             layout.setRefreshing(false);
             return;
         }

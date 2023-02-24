@@ -2,24 +2,30 @@ package com.kagg886.seiko.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
-import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.ActivityResult;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.textfield.TextInputLayout;
 import com.kagg886.seiko.R;
 import com.kagg886.seiko.activity.MainActivity;
 import com.kagg886.seiko.adapter.DICAdapter;
 import com.kagg886.seiko.dic.DICList;
 import com.kagg886.seiko.dic.entity.DictionaryFile;
 import com.kagg886.seiko.event.SnackBroadCast;
+import com.kagg886.seiko.util.IOUtil;
 import org.jetbrains.annotations.NotNull;
+
+import java.io.IOException;
+import java.util.UUID;
 
 /**
  * @projectName: Seiko
@@ -31,7 +37,6 @@ import org.jetbrains.annotations.NotNull;
  * @version: 1.0
  */
 public class DICFragment extends Fragment implements View.OnClickListener, SwipeRefreshLayout.OnRefreshListener {
-    private ActivityResultLauncher<Intent> launcher;
     private ListView listView;
     private SwipeRefreshLayout layout;
     private DICAdapter adapter;
@@ -41,21 +46,13 @@ public class DICFragment extends Fragment implements View.OnClickListener, Swipe
         super();
     }
 
-    public DICAdapter getAdapter() {
-        return adapter;
-    }
-
-    public void setLauncher(ActivityResultLauncher<Intent> launcher) {
-        this.launcher = launcher;
-    }
-
     @Nullable
     @org.jetbrains.annotations.Nullable
     @Override
     public View onCreateView(@NonNull @NotNull LayoutInflater inflater, @Nullable @org.jetbrains.annotations.Nullable ViewGroup container, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_plugin, container, false);
         listView = v.findViewById(R.id.fragment_plugin_list);
-        adapter = new DICAdapter((MainActivity) getActivity());
+        adapter = new DICAdapter();
         listView.setAdapter(adapter);
         listView.setOnItemClickListener((parent, view, position, id) -> {
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -65,7 +62,7 @@ public class DICFragment extends Fragment implements View.OnClickListener, Swipe
                 if (which == 0) {
                     file.getFile().delete();
                     adapter.notifyDataSetChanged();
-                    SnackBroadCast.sendBroadCast(getActivity(), "删除成功!");
+                    SnackBroadCast.sendBroadCast("删除成功!");
                 }
             });
             builder.create().show();
@@ -86,7 +83,39 @@ public class DICFragment extends Fragment implements View.OnClickListener, Swipe
                             Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
                             intent.setType("*/*");//无类型限制
                             intent.addCategory(Intent.CATEGORY_OPENABLE);
-                            launcher.launch(intent);
+                            MainActivity avt = ((MainActivity) requireActivity());
+                            avt.verifyCall.launch(intent);
+                            new Thread(() -> {
+                                ActivityResult result = ((MainActivity) requireActivity()).getResult();
+                                if (result.getData() == null) {
+                                    return;
+                                }
+                                avt.runOnUiThread(() -> {
+                                    try {
+                                        AlertDialog.Builder builder = new AlertDialog.Builder(avt);
+                                        builder.setCancelable(false);
+                                        View v = LayoutInflater.from(avt).inflate(R.layout.dialog_import_plugin, null);
+                                        TextInputLayout edt = v.findViewById(R.id.dialog_importPluginUrl);
+                                        edt.setHint("为导入的词库命名(随机命名则为空)");
+                                        builder.setView(v);
+                                        builder.setPositiveButton("确定", (dialog2, which1) -> {
+                                            String txt = (TextUtils.isEmpty(edt.getEditText().getText().toString()) ? UUID.randomUUID().toString().replace("-", "") : edt.getEditText().getText().toString()) + ".txt";
+                                            try {
+                                                String s = IOUtil.loadStringFromStream(avt.getContentResolver().openInputStream(result.getData().getData()));
+                                                IOUtil.writeStringToFile(avt.getExternalFilesDir("dic").toPath().resolve(txt).toFile().getAbsolutePath(), s);
+                                                SnackBroadCast.sendBroadCast("导入成功!");
+                                                adapter.notifyDataSetChanged();
+                                            } catch (IOException e) {
+                                                throw new RuntimeException(e);
+                                            }
+                                        });
+                                        builder.show();
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                        SnackBroadCast.sendBroadCast("导入失败!");
+                                    }
+                                });
+                            }).start();
                             break;
                     }
                 }).create();

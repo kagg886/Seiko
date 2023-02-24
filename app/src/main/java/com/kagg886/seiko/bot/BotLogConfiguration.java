@@ -1,5 +1,6 @@
 package com.kagg886.seiko.bot;
 
+import android.content.Context;
 import com.kagg886.seiko.SeikoApplication;
 import com.kagg886.seiko.activity.MainActivity;
 import net.mamoe.mirai.utils.BotConfiguration;
@@ -22,8 +23,9 @@ public class BotLogConfiguration extends BotConfiguration {
 
     private final File logFile;
 
-    public BotLogConfiguration(Long bot, MainActivity avt) {
+    public BotLogConfiguration(Long bot) {
         super();
+        Context avt = SeikoApplication.getSeikoApplicationContext();
         Path parentPath = avt.getExternalFilesDir("bots").toPath().resolve(String.valueOf(bot));
         setWorkingDir(parentPath.toFile());
         File p = parentPath.resolve("device.json").toFile();
@@ -36,7 +38,7 @@ public class BotLogConfiguration extends BotConfiguration {
             }
         }
         fileBasedDeviceInfo(p.getAbsolutePath());
-        setLoginSolver(new AndroidSolver(avt));
+        setLoginSolver(new AndroidSolver((MainActivity) SeikoApplication.getCurrentActivity()));
 
         File f1;
         if (SeikoApplication.globalConfig.getBoolean("mergeAllLogs", false)) {

@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import androidx.appcompat.app.AlertDialog;
+import com.kagg886.seiko.SeikoApplication;
 import com.kagg886.seiko.activity.MainActivity;
 
 /**
@@ -26,11 +27,11 @@ public class DialogBroadCast extends BroadcastReceiver {
         this.avt = avt;
     }
 
-    public static void sendBroadCast(Context context, String name, String message) {
+    public static void sendBroadCast(String name, String message) {
         Intent broadcast = new Intent(TAG);
         broadcast.putExtra("error", message);
         broadcast.putExtra("name", name);
-        context.sendBroadcast(broadcast);
+        SeikoApplication.getSeikoApplicationContext().sendBroadcast(broadcast);
     }
 
     @Override

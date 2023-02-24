@@ -7,7 +7,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 import androidx.appcompat.widget.SwitchCompat;
 import com.kagg886.seiko.R;
-import com.kagg886.seiko.activity.MainActivity;
+import com.kagg886.seiko.SeikoApplication;
 import com.kagg886.seiko.dic.DICList;
 import com.kagg886.seiko.dic.DictionaryEnvironment;
 import org.json.JSONObject;
@@ -22,13 +22,6 @@ import org.json.JSONObject;
  * @version: 1.0
  */
 public class DICAdapter extends BaseAdapter {
-
-    private final MainActivity avt;
-
-
-    public DICAdapter(MainActivity avt) {
-        this.avt = avt;
-    }
 
     @Override
     public int getCount() {
@@ -50,7 +43,7 @@ public class DICAdapter extends BaseAdapter {
 
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
-        View v = LayoutInflater.from(avt).inflate(R.layout.adapter_dicitem,null);
+        View v = LayoutInflater.from(SeikoApplication.getSeikoApplicationContext()).inflate(R.layout.adapter_dicitem, null);
         SwitchCompat sw = v.findViewById(R.id.adapter_dicitem_status);
         TextView tx = v.findViewById(R.id.adapter_dicitem_name);
 

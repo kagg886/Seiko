@@ -111,11 +111,11 @@ public class BotRunnerService extends Service {
             flag = PendingIntent.FLAG_UPDATE_CURRENT;
         }
         pIntent = PendingIntent.getActivity(this, UUID.randomUUID().hashCode(), i, flag);
-        SnackBroadCast.sendBroadCast(this, "绑定服务成功");
+        SnackBroadCast.sendBroadCast("绑定服务成功");
     }
 
-    public void login(MainActivity avt, JSONObject target, TextView nick, SwitchCompat sw) {
-        executor.execute(new LoginThread(avt, target, sw, nick));
+    public void login(JSONObject target, TextView nick, SwitchCompat sw) {
+        executor.execute(new LoginThread(target, sw, nick));
     }
 
     private Notification getNotification(String content) {

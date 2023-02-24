@@ -83,7 +83,6 @@ public class LogActivity extends AppCompatActivity implements View.OnClickListen
         btn.setOnClickListener(this);
 
         registerActivityResultLauncher();
-
     }
 
     @Override

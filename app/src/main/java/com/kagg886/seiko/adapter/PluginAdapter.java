@@ -6,7 +6,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 import com.kagg886.seiko.R;
-import com.kagg886.seiko.activity.MainActivity;
+import com.kagg886.seiko.SeikoApplication;
 import com.kagg886.seiko.plugin.SeikoDescription;
 import com.kagg886.seiko.service.BotRunnerService;
 
@@ -20,11 +20,6 @@ import com.kagg886.seiko.service.BotRunnerService;
  * @version: 1.0
  */
 public class PluginAdapter extends BaseAdapter {
-    private final MainActivity avt;
-
-    public PluginAdapter(MainActivity avt) {
-        this.avt = avt;
-    }
 
     @Override
     public int getCount() {
@@ -47,7 +42,7 @@ public class PluginAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        View v = LayoutInflater.from(avt).inflate(R.layout.adapter_plugin, null);
+        View v = LayoutInflater.from(SeikoApplication.getSeikoApplicationContext()).inflate(R.layout.adapter_plugin, null);
         TextView name = v.findViewById(R.id.adapter_plugin_name);
         TextView author = v.findViewById(R.id.adapter_plugin_author);
         TextView desc = v.findViewById(R.id.adapter_plugin_description);
