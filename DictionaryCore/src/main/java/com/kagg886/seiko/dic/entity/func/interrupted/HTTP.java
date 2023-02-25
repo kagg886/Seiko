@@ -16,7 +16,7 @@ import java.util.Map;
  * @package: com.kagg886.seiko.dic.entity.func.interrupted
  * @className: Delay
  * @author: kagg886
- * @description: $访问 结果存入变量 请求方式 网址 头集合(可以使用null占位) 参数集合/参数体$
+ * @description: $访问 结果存入变量 请求方式 网址 头集合/头集合名(可以使用null占位) 参数集合/参数体$
  * @date: 2023/1/18 12:01
  * @version: 1.0
  */
@@ -43,6 +43,9 @@ public class HTTP extends Function.InterruptedFunction {
             Object unknown = args.get(3);
             if (unknown.toString().equals("null")) {
                 return;
+            }
+            if (unknown instanceof String) {
+                unknown = runtime.getRuntimeObject().get(unknown.toString());
             }
             HashMap<String, ?> headers_origin = (HashMap<String, ?>) unknown;
 

@@ -11,7 +11,7 @@ import java.util.List;
  * @package: com.kagg886.seiko.dic.entity.func.uninterrupted
  * @className: TransferDicMethod
  * @author: kagg886
- * @description: $调用 词库方法名$
+ * @description: $调用 词库方法名 次数(可选) 自定义循环变量名(可选)$
  * @date: 2023/2/17 10:39
  * @version: 1.0
  */
@@ -25,6 +25,16 @@ public class TransferDicMethod extends Function.UnInterruptedFunction {
     protected void run(AbsRuntime<?> runtime, List<Object> args) {
         String dicMethod = args.get(0).toString();
         FunctionRuntime dicRun = new FunctionRuntime(runtime.getFile(), runtime);
-        dicRun.invoke(dicMethod);
+        if (args.size() >= 2) {
+            int count = Integer.parseInt(args.get(1).toString());
+            for (int i = 0; i < count; i++) {
+                if (args.size() >= 3) {
+                    runtime.getRuntimeObject().put(args.get(2).toString(), String.valueOf(i));
+                }
+                dicRun.invoke(dicMethod);
+            }
+        } else {
+            dicRun.invoke(dicMethod);
+        }
     }
 }
