@@ -9,8 +9,6 @@ import com.kagg886.seiko.plugin.api.SeikoPlugin;
 import net.mamoe.mirai.Bot;
 import net.mamoe.mirai.event.events.GroupMessageEvent;
 
-import java.util.function.Consumer;
-
 /**
  * @projectName: Seiko
  * @package: com.example.demo
@@ -33,11 +31,8 @@ public class PluginDemo extends SeikoPlugin {
     @Override
     public void onBotGoLine(long botQQ) {
         Log.i("LIFECYCLE", "onBotGoLine被调用");
-        Bot.findInstance(botQQ).getEventChannel().subscribeAlways(GroupMessageEvent.class, new Consumer<GroupMessageEvent>() {
-            @Override
-            public void accept(GroupMessageEvent groupMessageEvent) {
-                //在此处编写自定义逻辑
-            }
+        Bot.findInstance(botQQ).getEventChannel().subscribeAlways(GroupMessageEvent.class, groupMessageEvent -> {
+            //在此处编写自定义逻辑
         });
     }
 
