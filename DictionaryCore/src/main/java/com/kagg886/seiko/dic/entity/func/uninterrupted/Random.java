@@ -1,7 +1,6 @@
 package com.kagg886.seiko.dic.entity.func.uninterrupted;
 
 import com.kagg886.seiko.dic.entity.func.Function;
-import com.kagg886.seiko.dic.exception.DictionaryOnRunningException;
 import com.kagg886.seiko.dic.session.AbsRuntime;
 
 import java.util.List;
@@ -17,7 +16,7 @@ import java.util.List;
  */
 public class Random extends Function.UnInterruptedFunction {
 
-    private static java.util.Random random = new java.util.Random();
+    private static final java.util.Random random = new java.util.Random();
 
     public Random(int line, String code) {
         super(line, code);
@@ -27,12 +26,13 @@ public class Random extends Function.UnInterruptedFunction {
     protected void run(AbsRuntime<?> runtime, List<Object> args) {
         int a, b;
         String put;
+        put = args.get(0).toString();
+        a = Integer.parseInt(args.get(1).toString());
         try {
-            put = args.get(0).toString();
-            a = Integer.parseInt(args.get(1).toString());
             b = Integer.parseInt(args.get(2).toString());
-        } catch (Throwable e) {
-            throw new DictionaryOnRunningException(String.format("运行词库方法时出现错误---%s(%s)", runtime.getFile().getName(), this), e);
+        } catch (NullPointerException e) {
+            b = a;
+            a = 0;
         }
         runtime.getRuntimeObject().put(put, random.nextInt(b) + a);
     }
