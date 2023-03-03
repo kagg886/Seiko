@@ -71,7 +71,7 @@ public abstract class ArrayControl extends Function.UnInterruptedFunction {
             if (o instanceof String) {
                 o = runtime.getRuntimeObject().get(o.toString());
             }
-            List<Object> objects = (List<Object>) o;
+            List<?> objects = toList(o);
             String putVar = args.get(1).toString();
             runtime.getRuntimeObject().put(putVar, objects.size());
         }
@@ -98,7 +98,7 @@ public abstract class ArrayControl extends Function.UnInterruptedFunction {
             if (o instanceof String) {
                 o = runtime.getRuntimeObject().get(o.toString());
             }
-            List<Object> objects = (List<Object>) o;
+            List<?> objects = toList(o);
             int idx = Integer.parseInt(args.get(1).toString());
             String putVar = args.get(2).toString();
             runtime.getRuntimeObject().put(putVar, objects.get(idx));
@@ -126,7 +126,7 @@ public abstract class ArrayControl extends Function.UnInterruptedFunction {
             if (o instanceof String) {
                 o = runtime.getRuntimeObject().get(o.toString());
             }
-            List<Object> objects = (List<Object>) o;
+            List<Object> objects = toList(o);
             if (args.size() == 3) {
                 int idx = Integer.parseInt(args.get(2).toString());
                 objects.remove(idx);
@@ -158,7 +158,7 @@ public abstract class ArrayControl extends Function.UnInterruptedFunction {
             if (o instanceof String) {
                 o = runtime.getRuntimeObject().get(o.toString());
             }
-            List<Object> objects = (List<Object>) o;
+            List<?> objects = toList(o);
             objects.remove(Integer.parseInt(args.get(1).toString()));
         }
     }
@@ -209,10 +209,10 @@ public abstract class ArrayControl extends Function.UnInterruptedFunction {
         }
     }
 
-    public List<?> toList(Object o) {
+    private static List<Object> toList(Object o) {
         if (o instanceof List<?>) {
             throw new DictionaryOnRunningException("此对象不是数组!");
         }
-        return ((List<?>) o);
+        return (List<Object>) o;
     }
 }

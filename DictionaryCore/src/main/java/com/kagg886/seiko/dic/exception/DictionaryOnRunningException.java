@@ -2,7 +2,9 @@ package com.kagg886.seiko.dic.exception;
 
 import com.kagg886.seiko.dic.entity.DictionaryFile;
 
+import java.util.Comparator;
 import java.util.Stack;
+import java.util.stream.Collectors;
 
 /**
  * @projectName: Seiko
@@ -18,9 +20,18 @@ public class DictionaryOnRunningException extends RuntimeException {
     private String msg;
 
     public DictionaryOnRunningException(DictionaryFile file, String msg, Stack<String> stack, Exception cause) {
-        super(String.format("词库运行出错!\n文件:%s\n原因:%s\n词库栈:%s\nJava栈", file.getFile().getAbsolutePath(), msg, stack.toString()));
+        super(String.format("词库运行出错!\n文件:%s\n原因:%s\n词库栈:%s\nJava栈", file.getFile().getAbsolutePath(), msg, stackToString(stack)));
         setStackTrace(cause.getStackTrace());
         this.msg = msg;
+    }
+
+    public static String stackToString(Stack<String> stack) {
+        StringBuilder builder = new StringBuilder();
+        stack.stream().sorted(Comparator.reverseOrder()).forEach(s -> {
+            builder.append("\n");
+            builder.append(s);
+        });
+        return builder.substring(1);
     }
 
     public DictionaryOnRunningException(Throwable e) {
@@ -36,6 +47,6 @@ public class DictionaryOnRunningException extends RuntimeException {
     }
 
     public String getMsg() {
-        return msg;
+        return msg == null ? getMessage() : msg;
     }
 }

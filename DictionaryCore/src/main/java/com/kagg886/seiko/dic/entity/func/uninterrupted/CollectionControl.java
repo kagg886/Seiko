@@ -49,10 +49,7 @@ public abstract class CollectionControl extends Function.UnInterruptedFunction {
                 o = runtime.getRuntimeObject().get(o.toString());
             }
             String key = args.get(2).toString();
-            if (!(o instanceof HashMap)) {
-                throw new DictionaryOnRunningException("此变量不是集合，无法按照集合方法操作");
-            }
-            runtime.getRuntimeObject().put(putVar, ((HashMap<?, ?>) o).get(key));
+            runtime.getRuntimeObject().put(putVar, toMap(o).get(key));
         }
     }
 
@@ -76,10 +73,7 @@ public abstract class CollectionControl extends Function.UnInterruptedFunction {
         protected void run(AbsRuntime<?> runtime, List<Object> args) {
             String putVar = args.get(0).toString();
             Object o = args.get(1);
-            if (o instanceof String) {
-                o = runtime.getRuntimeObject().get(o.toString());
-            }
-            runtime.getRuntimeObject().put(putVar, ((HashMap) o).size());
+            runtime.getRuntimeObject().put(putVar, toMap(o).size());
         }
     }
 
@@ -124,7 +118,6 @@ public abstract class CollectionControl extends Function.UnInterruptedFunction {
             }
             try {
                 runtime.getRuntimeObject().put(varName, Cookie.toJSONObject(val.substring(1)).toMap());
-                return;
             } catch (Exception e) {
             }
         }
@@ -152,10 +145,7 @@ public abstract class CollectionControl extends Function.UnInterruptedFunction {
             }
             String varName = args.get(1).toString();
             String input = args.get(2).toString();
-            if (!(o instanceof HashMap)) {
-                throw new DictionaryOnRunningException("此变量不是集合，无法按照集合方法操作");
-            }
-            HashMap<String, Object> map = (HashMap<String, Object>) o;
+            HashMap<String, Object> map = toMap(o);
             if (input.equals("JSON")) {
                 runtime.getRuntimeObject().put(varName, new JSONObject(map).toString());
             }
@@ -184,10 +174,7 @@ public abstract class CollectionControl extends Function.UnInterruptedFunction {
             }
             String varName = args.get(1).toString();
             String input = args.get(2).toString();
-            if (!(o instanceof HashMap)) {
-                throw new DictionaryOnRunningException("此变量不是集合，无法按照集合方法操作");
-            }
-            HashMap<String, Object> map = (HashMap<String, Object>) o;
+            HashMap<String, Object> map = toMap(o);
             runtime.getRuntimeObject().put(input, map.containsKey(varName));
         }
     }
@@ -213,10 +200,8 @@ public abstract class CollectionControl extends Function.UnInterruptedFunction {
                 o = runtime.getRuntimeObject().get(o.toString());
             }
             String varName = args.get(1).toString();
-            if (!(o instanceof HashMap)) {
-                throw new DictionaryOnRunningException("此变量不是集合，无法按照集合方法操作");
-            }
-            HashMap<String, Object> map = (HashMap<String, Object>) o;
+
+            HashMap<String, Object> map = toMap(o);
             map.remove(varName);
         }
     }
@@ -243,10 +228,7 @@ public abstract class CollectionControl extends Function.UnInterruptedFunction {
             }
             String varName = args.get(1).toString();
             Object value = args.get(2);
-            if (!(o instanceof HashMap)) {
-                throw new DictionaryOnRunningException("此变量不是集合，无法按照集合方法操作");
-            }
-            HashMap<String, Object> map = (HashMap<String, Object>) o;
+            HashMap<String, Object> map = toMap(o);
             map.put(varName, value);
         }
     }
@@ -271,6 +253,13 @@ public abstract class CollectionControl extends Function.UnInterruptedFunction {
             HashMap<String, Object> map = new HashMap<>();
             runtime.getRuntimeObject().put(var, map);
         }
+    }
+
+    private static HashMap<String,Object> toMap(Object o) {
+        if (!(o instanceof HashMap)) {
+            throw new DictionaryOnRunningException("此变量不是集合，无法按照集合方法操作");
+        }
+        return (HashMap<String, Object>) o;
     }
 
 }
