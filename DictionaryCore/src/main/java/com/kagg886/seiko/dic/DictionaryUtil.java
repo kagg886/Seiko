@@ -152,7 +152,7 @@ public class DictionaryUtil {
             return mathExpressionCalc(str.substring(0, idx)) < mathExpressionCalc(str.substring(idx + 1));
 
         }
-        throw new RuntimeException("计算表达式出错!" + str);
+        throw new DictionaryOnRunningException("计算表达式出错!" + str);
     }
 
 
@@ -204,6 +204,6 @@ public class DictionaryUtil {
             return mathExpressionCalc(str.substring(0, index)) % mathExpressionCalc(str.substring(index + 1));
         }
         // 出错
-        throw new RuntimeException("无法解析的表达式:" + str);
+        throw new DictionaryOnRunningException("无法解析的表达式:" + str);
     }
 }

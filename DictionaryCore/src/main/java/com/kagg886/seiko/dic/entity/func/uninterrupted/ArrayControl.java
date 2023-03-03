@@ -1,6 +1,7 @@
 package com.kagg886.seiko.dic.entity.func.uninterrupted;
 
 import com.kagg886.seiko.dic.entity.func.Function;
+import com.kagg886.seiko.dic.exception.DictionaryOnRunningException;
 import com.kagg886.seiko.dic.session.AbsRuntime;
 import org.json.JSONArray;
 
@@ -206,5 +207,12 @@ public abstract class ArrayControl extends Function.UnInterruptedFunction {
             //JSON内部使用ArrayList做维护。故使用此
             runtime.getRuntimeObject().put(name, new ArrayList<>());
         }
+    }
+
+    public List<?> toList(Object o) {
+        if (o instanceof List<?>) {
+            throw new DictionaryOnRunningException("此对象不是数组!");
+        }
+        return ((List<?>) o);
     }
 }

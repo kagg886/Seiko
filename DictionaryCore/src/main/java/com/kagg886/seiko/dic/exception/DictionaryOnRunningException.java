@@ -1,5 +1,9 @@
 package com.kagg886.seiko.dic.exception;
 
+import com.kagg886.seiko.dic.entity.DictionaryFile;
+
+import java.util.Stack;
+
 /**
  * @projectName: Seiko
  * @package: com.kagg886.seiko.dic.exception
@@ -11,11 +15,27 @@ package com.kagg886.seiko.dic.exception;
  */
 public class DictionaryOnRunningException extends RuntimeException {
 
+    private String msg;
+
+    public DictionaryOnRunningException(DictionaryFile file, String msg, Stack<String> stack, Exception cause) {
+        super(String.format("词库运行出错!\n文件:%s\n原因:%s\n词库栈:%s\nJava栈", file.getFile().getAbsolutePath(), msg, stack.toString()));
+        setStackTrace(cause.getStackTrace());
+        this.msg = msg;
+    }
+
+    public DictionaryOnRunningException(Throwable e) {
+        super(e);
+    }
+
     public DictionaryOnRunningException(String s) {
         super(s);
     }
 
     public DictionaryOnRunningException(String s, Throwable e) {
         super(s, e);
+    }
+
+    public String getMsg() {
+        return msg;
     }
 }

@@ -7,6 +7,7 @@ import com.kagg886.seiko.dic.entity.DictionaryFile;
 import com.kagg886.seiko.dic.entity.func.Function;
 import com.kagg886.seiko.dic.entity.impl.Expression;
 import com.kagg886.seiko.dic.entity.impl.PlainText;
+import com.kagg886.seiko.dic.exception.DictionaryOnRunningException;
 import com.kagg886.seiko.dic.session.impl.FunctionRuntime;
 import net.mamoe.mirai.contact.Contact;
 import net.mamoe.mirai.message.data.MessageChainBuilder;
@@ -14,6 +15,7 @@ import net.mamoe.mirai.message.data.MessageChainBuilder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Stack;
 import java.util.regex.Matcher;
 
 /**
@@ -29,6 +31,7 @@ public abstract class AbsRuntime<T> {
     protected final T event; //此次执行伪代码所需要的事件
     protected DictionaryFile file; //被执行的伪代码指令集
     protected HashMap<String, Object> context; //此次伪代码执行过程中存取的变量
+    protected Stack<String> exceptionStacks; //词库调用栈，每次*执行完一条命令*就会存储一条信息到栈中。
 
     /*
      * @param file: 需要执行的dicFile
@@ -41,11 +44,16 @@ public abstract class AbsRuntime<T> {
         this.file = file;
         this.event = event;
         context = new HashMap<>();
+        exceptionStacks = new Stack<>();
 
         //通用的变量会存储在这里。
         context.put("上下文", event);
         context.put("缓冲区", new MessageChainBuilder());
         context.put("时间戳", System.currentTimeMillis());
+    }
+
+    public Stack<String> getExceptionStacks() {
+        return exceptionStacks;
     }
 
     public DictionaryFile getFile() {
@@ -113,7 +121,15 @@ public abstract class AbsRuntime<T> {
                     }
                     groups++;
                 }
+            }
+            try {
                 invoke(code);
+            } catch (Exception e) { //异常处理，生成调用栈信息向上抛出
+                String msg = e.getMessage();
+                if (e instanceof DictionaryOnRunningException) {
+                    msg = ((DictionaryOnRunningException) e).getMsg();
+                }
+                throw new DictionaryOnRunningException(file, msg, exceptionStacks, e);
             }
         }
     }
@@ -127,7 +143,7 @@ public abstract class AbsRuntime<T> {
      */
     private void invoke(ArrayList<DictionaryCode> code) {
         boolean sendSwitch = !(code.get(0) instanceof PlainText); //若第一行为PlainText返回false。为Function返回true
-        boolean isJumpCode = false;
+        boolean isJumpCode = false; //是否跳过解析，配合如果表达式使用
 
         for (DictionaryCode dic : code) {
             if (dic instanceof Expression.Return && !isJumpCode) { //兼容返回写法
@@ -149,6 +165,8 @@ public abstract class AbsRuntime<T> {
 
             if (isJumpCode) {
                 continue;
+            } else {
+                exceptionStacks.push(dic.toString());
             }
 
             if (dic instanceof Function) {
@@ -158,7 +176,12 @@ public abstract class AbsRuntime<T> {
                         sendSwitch = true;
                     }
                 }
+                int popStart = exceptionStacks.size();
                 ((Function) dic).invoke(this);
+                int popEnd = exceptionStacks.size();
+                for (int i = popStart; i < popEnd; i++) {
+                    exceptionStacks.pop(); //方法成功执行时会移除调用栈
+                }
             }
 
             if (dic instanceof PlainText) {
@@ -178,10 +201,10 @@ public abstract class AbsRuntime<T> {
                 }
             }
 
-
             if (dic == code.get(code.size() - 1)) {
                 clearMessage();
             }
         }
+        //System.out.println(exceptionStacks.toString());
     }
 }

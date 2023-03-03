@@ -61,7 +61,7 @@ public class PluginLoader extends JavaPlugin implements DictionaryListener {
     public void onEnable() {
         reloadPluginConfig(SeikoPluginConfig.INSTANCE);
         CommandManager.INSTANCE.registerCommand(CommandInstance.INSTANCE, false);
-        GlobalEventChannel.INSTANCE.subscribeAlways(GroupMessageEvent.class, event -> {
+        GlobalEventChannel.INSTANCE.parentScope(INSTANCE).subscribeAlways(GroupMessageEvent.class, event -> {
             if (SeikoPluginConfig.INSTANCE.getAlwaysRefreshOnceMessageGetting()) {
                 DICList.getInstance().refresh();
             }
@@ -75,7 +75,7 @@ public class PluginLoader extends JavaPlugin implements DictionaryListener {
             }
         });
 
-        GlobalEventChannel.INSTANCE.subscribeAlways(FriendMessageEvent.class, event -> {
+        GlobalEventChannel.INSTANCE.parentScope(INSTANCE).subscribeAlways(FriendMessageEvent.class, event -> {
             if (SeikoPluginConfig.INSTANCE.getAlwaysRefreshOnceMessageGetting()) {
                 DICList.getInstance().refresh();
             }
