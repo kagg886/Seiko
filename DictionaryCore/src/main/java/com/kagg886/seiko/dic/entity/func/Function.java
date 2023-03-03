@@ -29,6 +29,12 @@ public abstract class Function extends DictionaryCode {
             {"随机数", "Random"},
             {"调用", "TransferDicMethod"},
 
+            {"群成员列表","MemberControl$MemberList"},
+//            {"改名","MemberControl$ChangeName"},
+            {"禁言","MemberControl$Mute"},
+//            {"踢","MemberControl$Kick"},
+
+
 
             {"文字替换", "StringUtil$Replace"},
             {"文字分割", "StringUtil$Split"},
