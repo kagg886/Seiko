@@ -100,9 +100,6 @@ public class LoginThread extends Thread {
                 BotRunnerService.INSTANCE.getLastLoad().put(plugin.getDescription().getId(), bot.getId());
             }
             bot.join();
-            for (SeikoPlugin plugin : BotRunnerService.INSTANCE.getSeikoPluginList()) {
-                plugin.onBotOffLine(bot.getId());
-            }
             SnackBroadCast.sendBroadCast("用户操作，BOT主动下线");
         } catch (Throwable e) {
             Message m = new Message();

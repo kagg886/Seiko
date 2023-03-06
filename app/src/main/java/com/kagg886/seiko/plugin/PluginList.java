@@ -1,6 +1,7 @@
 package com.kagg886.seiko.plugin;
 
 import android.content.Context;
+import androidx.annotation.Nullable;
 import com.kagg886.seiko.SeikoApplication;
 import com.kagg886.seiko.dic.DICPlugin;
 import com.kagg886.seiko.event.DialogBroadCast;
@@ -34,6 +35,7 @@ public class PluginList extends ArrayList<SeikoPlugin> {
     }
 
     public void refresh() {
+        List<SeikoPlugin> clone = List.copyOf(this); //做备份，待会对比然后发送停用广播
         clear();
         add(new DICPlugin());
         for (File f : Objects.requireNonNull(ctx.getExternalFilesDir("plugin").listFiles())) {
@@ -64,13 +66,24 @@ public class PluginList extends ArrayList<SeikoPlugin> {
                     }
                 });
             } catch (Exception e) {
-                remove.add(plugin);
-                plugin.getFile().delete();
+                if (SeikoApplication.globalConfig.getBoolean("badPluginAutoDel", true)) {
+                    remove.add(plugin);
+                }
                 DialogBroadCast.sendBroadCast(plugin.getDescription().getId() + "初始化失败", IOUtil.getException(e));
             }
         }
         for (SeikoPlugin p : remove) {
             remove(p);
+        }
+
+        a:
+        for (SeikoPlugin k : clone) {
+            for (SeikoPlugin v : this) {
+                if (k.getDescription().getId().equals(v.getDescription().getId())) {
+                    continue a;
+                }
+                k.onUnLoad(); //被动加载
+            }
         }
     }
 
@@ -100,6 +113,12 @@ public class PluginList extends ArrayList<SeikoPlugin> {
             }
         }
         return super.add(seikoPlugin);
+    }
+
+    @Override
+    public boolean remove(@Nullable @org.jetbrains.annotations.Nullable Object o) {
+        ((SeikoPlugin) o).onUnLoad();
+        return super.remove(o);
     }
 }
 

@@ -36,14 +36,16 @@ import java.util.concurrent.ThreadPoolExecutor;
  */
 public class BotRunnerService extends Service {
 
-    private static final ThreadPoolExecutor executor = (ThreadPoolExecutor) Executors.newCachedThreadPool();
-
-    public static BotRunnerService INSTANCE;
-
+    //通知id
     private static final String CHANNEL_ID = "114514";
-
+    //Service静态上下文。由于技术不够，只能这么写了
+    public static BotRunnerService INSTANCE;
+    //线程池，用于运行Bot线程
+    private final ThreadPoolExecutor executor = (ThreadPoolExecutor) Executors.newCachedThreadPool();
+    //通知图标
     private Bitmap icon;
 
+    //内部维护的插件列表
     private PluginList seikoPluginList;
     private final HashMap<String, Long> lastLoad = new HashMap<>();
 
@@ -97,7 +99,7 @@ public class BotRunnerService extends Service {
         notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
         seikoPluginList = new PluginList(this);
-        NotificationChannel chan = new NotificationChannel(CHANNEL_ID, "botRunner", NotificationManager.IMPORTANCE_DEFAULT);
+        NotificationChannel chan = new NotificationChannel(CHANNEL_ID, "botRunner", NotificationManager.IMPORTANCE_MIN);
         chan.setLightColor(Color.BLUE);
         chan.setLockscreenVisibility(Notification.VISIBILITY_PRIVATE);
         notificationManager.createNotificationChannel(chan);
@@ -123,7 +125,8 @@ public class BotRunnerService extends Service {
         builder.setContentTitle("Seiko")
                 .setContentText(content)
                 .setWhen(System.currentTimeMillis())//通知显示时间
-                .setSmallIcon(R.mipmap.ic_launcher).setOngoing(true).setPriority(NotificationCompat.PRIORITY_MAX).setLargeIcon(icon);
+                .setOnlyAlertOnce(true) //不加这行等着吵死你 哼唧
+                .setSmallIcon(R.mipmap.ic_launcher).setOngoing(true).setLargeIcon(icon);
         builder.setContentIntent(pIntent);
         return builder.build();
     }

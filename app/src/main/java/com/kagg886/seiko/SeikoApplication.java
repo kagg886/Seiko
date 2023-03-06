@@ -3,7 +3,6 @@ package com.kagg886.seiko;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Application;
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -80,7 +79,7 @@ public class SeikoApplication extends Application implements Runnable, Thread.Un
      * @date 2023/02/23 14:35
      */
     @SuppressLint({"DiscouragedPrivateApi", "PrivateApi"})
-    public static Context getSeikoApplicationContext() {
+    public static SeikoApplication getSeikoApplicationContext() {
         Application application = null;
         try {
             Class<?> atClass = Class.forName("android.app.ActivityThread");
@@ -89,7 +88,7 @@ public class SeikoApplication extends Application implements Runnable, Thread.Un
             application = (Application) currentApplicationMethod.invoke(null);
         } catch (Exception ignored) {
         }
-        if (application != null) return application;
+        if (application != null) return (SeikoApplication) application;
         try {
             Class<?> atClass = Class.forName("android.app.AppGlobals");
             Method currentApplicationMethod = atClass.getDeclaredMethod("getInitialApplication");
@@ -97,7 +96,7 @@ public class SeikoApplication extends Application implements Runnable, Thread.Un
             application = (Application) currentApplicationMethod.invoke(null);
         } catch (Exception ignored) {
         }
-        return application;
+        return (SeikoApplication) application;
     }
 
 

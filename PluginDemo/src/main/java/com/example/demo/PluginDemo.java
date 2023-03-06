@@ -49,6 +49,11 @@ public class PluginDemo extends SeikoPlugin {
         Toast.makeText((Context) context, getClass().getName() + "已加载!", Toast.LENGTH_SHORT).show();
     }
 
+    @Override
+    public void onUnLoad() {
+        Log.i("LIFECYCLE", "onUnLoad被调用");
+    }
+
     /*
      * @param :
      * @return SeikoDescription

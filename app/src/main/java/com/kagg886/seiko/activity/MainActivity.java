@@ -136,8 +136,7 @@ public class MainActivity extends AppCompatActivity {
         ArrayList<ModuleAdapter.Structure> fragments = new ArrayList<>();
         fragments.add(new ModuleAdapter.Structure("BOT列表", new LoginFragment()));
         fragments.add(new ModuleAdapter.Structure("插件", new PluginFragment()));
-        DICFragment fragment = new DICFragment();
-        fragments.add(new ModuleAdapter.Structure("伪代码", fragment));
+        fragments.add(new ModuleAdapter.Structure("伪代码", new DICFragment()));
         fragments.add(new ModuleAdapter.Structure("设置", new SettingsFragment()));
 
         adapter.setViews(fragments);
