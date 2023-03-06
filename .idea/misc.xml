@@ -1,31 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="DesignSurface">
-    <option name="filePathToZoomLevelMap">
-      <map>
-        <entry key="..\:/IDEAProjects/Seiko/app/src/main/res/layout/activity_main.xml" value="0.1" />
-        <entry key="..\:/IDEAProjects/Seiko/app/src/main/res/layout/activity_sms.xml" value="0.1" />
-        <entry key="..\:/IDEAProjects/Seiko/app/src/main/res/layout/adapter_botitem.xml" value="0.1" />
-        <entry key="..\:/IDEAProjects/Seiko/app/src/main/res/layout/adapter_plugin.xml" value="0.3333333333333333" />
-        <entry key="..\:/IDEAProjects/Seiko/app/src/main/res/layout/dialog_kv.xml" value="0.1" />
-        <entry key="..\:/IDEAProjects/Seiko/app/src/main/res/layout/fragment_login.xml" value="0.17395833333333333" />
-        <entry key="..\:/IDEAProjects/Seiko/app/src/main/res/layout/fragment_plugin.xml" value="0.1" />
-        <entry key="..\:/IDEAProjects/Seiko/app/src/main/res/layout/notification_botrunner.xml" value="0.22" />
-        <entry key="..\:/IDEAProjects/Seiko/app/src/main/res/layout/notify_bortunner.xml" value="0.17395833333333333" />
-        <entry key="..\:/IDEAProjects/Seiko/app/src/main/res/layout/notify_botrunner.xml" value="0.15806159420289856" />
-        <entry key="..\:/IDEAProjects/Seiko/app/src/main/res/xml/file_paths.xml" value="0.175" />
-        <entry key="..\:/IDEAProjects/Seiko/app/src/main/res/xml/root_preferences.xml" value="0.175" />
-      </map>
-    </option>
-  </component>
+  <component name="ExternalStorageConfigurationManager" enabled="true" />
   <component name="FrameworkDetectionExcludesConfiguration">
     <file type="web" url="file://$PROJECT_DIR$" />
   </component>
-<<<<<<< HEAD
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_16" default="true" project-jdk-name="corretto-16" project-jdk-type="JavaSDK">
-=======
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_16_PREVIEW" project-jdk-name="Android API 33, extension level 4 Platform" project-jdk-type="Android SDK">
->>>>>>> master
+  <component name="PWA">
+    <option name="enabled" value="true" />
+    <option name="wasEnabledAtLeastOnce" value="true" />
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" project-jdk-name="corretto-16" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
   <component name="ProjectType">
