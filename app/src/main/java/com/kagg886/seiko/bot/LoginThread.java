@@ -68,6 +68,9 @@ public class LoginThread extends Thread {
         String pass = botConfig.optString("pass");
         BotConfiguration.MiraiProtocol protocol = BotConfiguration.MiraiProtocol.valueOf(botConfig.optString("platform", "ANDROID_PHONE"));
 
+        //在此处配置QRLogin
+        //botConfig.optBoolean("useQRLogin");
+
         dialog = new AlertDialog.Builder(SeikoApplication.getCurrentActivity()).setTitle("登录中...(" + uin + ")").setCancelable(false).setMessage("请稍等片刻...").create();
         BotLogConfiguration configuration = new BotLogConfiguration(uin);
         configuration.setProtocol(protocol);

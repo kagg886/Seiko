@@ -5,10 +5,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.BaseAdapter;
-import android.widget.ListView;
-import android.widget.Spinner;
+import android.widget.*;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
@@ -82,6 +79,18 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
         TextInputLayout keyEdit = view.findViewById(R.id.dialog_editKey);
         TextInputLayout valueEdit = view.findViewById(R.id.dialog_editValue);
 
+        CheckBox useQrScan = view.findViewById(R.id.dialog_useQRScan);
+        useQrScan.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (!buttonView.isPressed()) {
+                return;
+            }
+            if (isChecked) {
+                valueEdit.setVisibility(View.GONE);
+            } else {
+                valueEdit.setVisibility(View.VISIBLE);
+            }
+        });
+
         if (isEdit) {
             keyEdit.getEditText().setText(account.optString("uin"));
             keyEdit.getEditText().setEnabled(false);
@@ -95,25 +104,34 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
         builder.setPositiveButton("确定", (dialog, which) -> {
             String key = keyEdit.getEditText().getText().toString();
             String value = valueEdit.getEditText().getText().toString();
+            boolean useQRLogin = useQrScan.isChecked();
 
-            if (TextUtils.isEmpty(key) || TextUtils.isEmpty(value)) {
+            if (TextUtils.isEmpty(key) || (TextUtils.isEmpty(value) && !useQRLogin)) {
                 return;
             }
-            Long qq = 0L;
+            Long qq;
             try {
                 qq = Long.parseLong(key);
             } catch (Exception e) {
                 SnackBroadCast.sendBroadCast("请输入合法的qq号!");
                 return;
             }
+            JSONArrayStorage botList = JSONArrayStorage.obtain(avt.getExternalFilesDir("config").getAbsolutePath() + "/botList.json");
 
+            for (int i = 0; i < botList.length(); i++) {
+                if (botList.optJSONObject(i).optLong("uin") == qq) {
+                    SnackBroadCast.sendBroadCast("请勿输入已存在的QQ");
+                    return;
+                }
+            }
             if (Bot.getInstanceOrNull(qq) != null) {
                 SnackBroadCast.sendBroadCast("请勿输入已存在的QQ");
+                return;
             }
-            JSONArrayStorage botList = JSONArrayStorage.obtain(avt.getExternalFilesDir("config").getAbsolutePath() + "/botList.json");
             try {
                 account.put("uin", qq);
                 account.put("pass", value);
+                account.put("useQRLogin",useQRLogin);
                 account.put("platform", protocols[spinner.getSelectedItemPosition()]);
             } catch (JSONException e) {
                 throw new RuntimeException(e);
