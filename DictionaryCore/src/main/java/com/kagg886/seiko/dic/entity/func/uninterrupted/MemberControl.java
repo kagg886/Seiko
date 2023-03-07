@@ -5,6 +5,7 @@ import com.kagg886.seiko.dic.session.AbsRuntime;
 import net.mamoe.mirai.Bot;
 import net.mamoe.mirai.contact.NormalMember;
 import net.mamoe.mirai.event.events.GroupMessageEvent;
+import net.mamoe.mirai.message.data.At;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -26,8 +27,53 @@ public abstract class MemberControl extends Function.UnInterruptedFunction {
      * @package: com.kagg886.seiko.dic.entity.func.uninterrupted
      * @className: Random
      * @author: kagg886
+     * @description: $踢 %上下文%$ 或 $踢 QQ$ 或 $踢 QQ 群号$ 或 $踢 QQ 群号 bot账号$ 或 $踢 %集合对象%$
+     * @date: 2023/3/7 19:16
+     * @version: 1.0
+     */
+    public static class Kick extends Function.UnInterruptedFunction {
+
+        public Kick(int line, String code) {
+            super(line, code);
+        }
+
+        @Override
+        protected void run(AbsRuntime<?> runtime, List<Object> args) {
+            Object obj = args.get(0); //QQ或上下文
+            long qq,groupId,botId;
+            if (obj instanceof GroupMessageEvent) {
+                qq = ((GroupMessageEvent) obj).getSender().getId();
+                groupId = ((GroupMessageEvent) obj).getGroup().getId();
+                botId = ((GroupMessageEvent) obj).getBot().getId();
+            } else if (obj instanceof HashMap<?, ?>) {
+                qq = Long.parseLong(((HashMap<?, ?>) obj).get("QQ").toString());
+                groupId = Long.parseLong(((HashMap<?, ?>) obj).get("所属群").toString());
+                botId = Long.parseLong(((HashMap<?, ?>) obj).get("所属BOT").toString());
+            } else {
+                qq = Long.parseLong(obj.toString());
+                if (args.size() >= 2) {
+                    groupId = Long.parseLong(args.get(1).toString());
+                    if (args.size() >= 3) {
+                        botId = Long.parseLong(args.get(2).toString());
+                    } else {
+                        botId = ((GroupMessageEvent) runtime.getRuntimeObject().get("上下文")).getBot().getId();
+                    }
+                } else {
+                    groupId = ((GroupMessageEvent) runtime.getRuntimeObject().get("上下文")).getGroup().getId();
+                    botId = ((GroupMessageEvent) runtime.getRuntimeObject().get("上下文")).getBot().getId();
+                }
+            }
+            Bot.findInstance(botId).getGroup(groupId).get(qq).kick("您已被移出本群,请重新加群");
+        }
+    }
+
+    /**
+     * @projectName: Seiko
+     * @package: com.kagg886.seiko.dic.entity.func.uninterrupted
+     * @className: MuteControl
+     * @author: kagg886
      * @description: $禁言 时长(秒为单位) QQ 群号(可选) bot账号(可选)$ 或 $禁言 时长(秒为单位) %上下文%$ 或 $禁言 时长(秒为单位) 集合对象$
-     * @date: 2023/3/3 17:31
+     * @date: 2023/3/6 20:30
      * @version: 1.0
      */
     public static class Mute extends Function.UnInterruptedFunction {
@@ -75,7 +121,7 @@ public abstract class MemberControl extends Function.UnInterruptedFunction {
     /**
      * @projectName: Seiko
      * @package: com.kagg886.seiko.dic.entity.func.uninterrupted
-     * @className: Random
+     * @className: MuteControl
      * @author: kagg886
      * @description: $群成员列表 存入变量 群号 bot账号(可选)$ 或 $群成员列表 存入变量 %上下文%$
      * @date: 2023/3/3 17:31

@@ -32,7 +32,7 @@ public abstract class Function extends DictionaryCode {
             {"群成员列表","MemberControl$MemberList"},
 //            {"改名","MemberControl$ChangeName"},
             {"禁言","MemberControl$Mute"},
-//            {"踢","MemberControl$Kick"},
+            {"踢","MemberControl$Kick"},
 
 
 
