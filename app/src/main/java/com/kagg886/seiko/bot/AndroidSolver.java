@@ -1,9 +1,18 @@
 package com.kagg886.seiko.bot;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.util.Log;
+import android.widget.ImageView;
 import androidx.activity.result.ActivityResult;
+import androidx.annotation.NonNull;
 import com.kagg886.seiko.activity.CaptchaActivity;
 import com.kagg886.seiko.activity.MainActivity;
 import com.kagg886.seiko.activity.SMSActivity;
@@ -13,7 +22,10 @@ import kotlin.coroutines.Continuation;
 import kotlin.coroutines.CoroutineContext;
 import kotlin.coroutines.EmptyCoroutineContext;
 import net.mamoe.mirai.Bot;
+import net.mamoe.mirai.auth.QRCodeLoginListener;
+import net.mamoe.mirai.network.LoginFailedException;
 import net.mamoe.mirai.network.RetryLaterException;
+import net.mamoe.mirai.network.UnsupportedQRCodeCaptchaException;
 import net.mamoe.mirai.network.UnsupportedSliderCaptchaException;
 import net.mamoe.mirai.utils.DeviceVerificationRequests;
 import net.mamoe.mirai.utils.DeviceVerificationResult;
@@ -30,11 +42,76 @@ import org.jetbrains.annotations.Nullable;
  * @date: 2022/12/13 12:31
  * @version: 1.0
  */
-public class AndroidSolver extends LoginSolver {
+public class AndroidSolver extends LoginSolver implements QRCodeLoginListener {
+
     private final MainActivity avt;
+
+    //扫码登录的Dialog
+    private AlertDialog dialog;
+
+    private Handler dialogController = new Handler(Looper.myLooper()) {
+        @Override
+        public void handleMessage(@NonNull Message msg) {
+            switch (msg.what) {
+                case 0:
+                    dialog.show();
+                    break;
+                case 1:
+                    State state = State.valueOf(msg.getData().getString("state"));
+                    switch (state) {
+                        case CANCELLED:
+                            SnackBroadCast.sendBroadCast("用户主动取消扫码，登录取消");
+                            dialog.dismiss();
+                            throw new UnsupportedQRCodeCaptchaException("扫码登录已取消");
+                        case TIMEOUT:
+                            SnackBroadCast.sendBroadCast("未在规定时间内扫码，登录取消");
+                            dialog.dismiss();
+                            throw new UnsupportedQRCodeCaptchaException("扫码登录已取消");
+                        case WAITING_FOR_SCAN:
+                            dialogController.sendEmptyMessage(0);
+                            break;
+                        case WAITING_FOR_CONFIRM:
+                            SnackBroadCast.sendBroadCast("扫码成功，等待客户端确认");
+                            break;
+                        case CONFIRMED:
+                            dialog.dismiss();
+                            break;
+                    }
+            }
+        }
+    };
 
     public AndroidSolver(MainActivity avt) {
         this.avt = avt;
+    }
+
+    @NotNull
+    @Override
+    public QRCodeLoginListener createQRCodeLoginListener(@NotNull Bot bot) {
+        return this;
+    }
+
+    @Override
+    public void onFetchQRCode(@NotNull Bot bot, @NotNull byte[] bytes) {
+        Bitmap bitmap = BitmapFactory.decodeByteArray(bytes,0,bytes.length);
+        AlertDialog.Builder builder = new AlertDialog.Builder(avt);
+        builder.setTitle("扫码登录:" + bot.getId());
+        ImageView i = new ImageView(avt);
+        i.setImageBitmap(bitmap);
+        builder.setView(i);
+
+        builder.setCancelable(false);
+        dialog = builder.create();
+    }
+
+    @Override
+    public void onStateChanged(@NotNull Bot bot, @NotNull State state) {
+        Message msg = new Message();
+        msg.what = 1;
+        Bundle bundle = new Bundle();
+        bundle.putString("state",state.toString());
+        msg.setData(bundle);
+        dialogController.sendMessage(msg);
     }
 
     @Nullable

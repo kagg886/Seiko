@@ -17,6 +17,8 @@ object FixProtocolVersion {
             "A6 B7 45 BF 24 A2 C2 77 52 77 16 F6 F3 6E B6 8D",
             1673599898L,
             19,
+            false
+
         )
         MiraiProtocolInternal.protocols[BotConfiguration.MiraiProtocol.ANDROID_PAD] = MiraiProtocolInternal(
             "com.tencent.mobileqq",
@@ -29,6 +31,7 @@ object FixProtocolVersion {
             "A6 B7 45 BF 24 A2 C2 77 52 77 16 F6 F3 6E B6 8D",
             1673599898L,
             19,
+            false
         )
     }
 }

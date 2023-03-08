@@ -3,7 +3,14 @@ package com.kagg886.seiko.bot;
 import android.content.Context;
 import com.kagg886.seiko.SeikoApplication;
 import com.kagg886.seiko.activity.MainActivity;
+import kotlin.coroutines.Continuation;
+import net.mamoe.mirai.auth.BotAuthInfo;
+import net.mamoe.mirai.auth.BotAuthResult;
+import net.mamoe.mirai.auth.BotAuthSession;
+import net.mamoe.mirai.auth.BotAuthorization;
 import net.mamoe.mirai.utils.BotConfiguration;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.IOException;
@@ -25,6 +32,7 @@ public class BotLogConfiguration extends BotConfiguration {
 
     public BotLogConfiguration(Long bot) {
         super();
+        //拼接log路径
         Context avt = SeikoApplication.getSeikoApplicationContext();
         Path parentPath = avt.getExternalFilesDir("bots").toPath().resolve(String.valueOf(bot));
         setWorkingDir(parentPath.toFile());
@@ -57,6 +65,7 @@ public class BotLogConfiguration extends BotConfiguration {
         redirectBotLogToFile(f1);
         redirectNetworkLogToFile(f1);
         enableContactCache();
+
         this.logFile = f1;
     }
 

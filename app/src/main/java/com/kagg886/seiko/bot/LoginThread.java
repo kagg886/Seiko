@@ -15,9 +15,16 @@ import com.kagg886.seiko.event.SnackBroadCast;
 import com.kagg886.seiko.plugin.api.SeikoPlugin;
 import com.kagg886.seiko.service.BotRunnerService;
 import com.kagg886.seiko.util.storage.JSONArrayStorage;
+import kotlin.coroutines.Continuation;
 import net.mamoe.mirai.Bot;
 import net.mamoe.mirai.BotFactory;
+import net.mamoe.mirai.auth.BotAuthInfo;
+import net.mamoe.mirai.auth.BotAuthResult;
+import net.mamoe.mirai.auth.BotAuthSession;
+import net.mamoe.mirai.auth.BotAuthorization;
 import net.mamoe.mirai.utils.BotConfiguration;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.json.JSONObject;
 
 /**
@@ -74,7 +81,12 @@ public class LoginThread extends Thread {
         dialog = new AlertDialog.Builder(SeikoApplication.getCurrentActivity()).setTitle("登录中...(" + uin + ")").setCancelable(false).setMessage("请稍等片刻...").create();
         BotLogConfiguration configuration = new BotLogConfiguration(uin);
         configuration.setProtocol(protocol);
-        bot = BotFactory.INSTANCE.newBot(uin, pass, configuration);
+
+        if (botConfig.optBoolean("useQRLogin")) {
+            bot = BotFactory.INSTANCE.newBot(uin, (botAuthSession, botAuthInfo, continuation) -> botAuthSession.authByQRCode(continuation),configuration);
+        } else {
+            bot = BotFactory.INSTANCE.newBot(uin, pass, configuration);
+        }
     }
 
     @SuppressLint("UnsafeOptInUsageError")
