@@ -3,6 +3,7 @@ package com.kagg886.seiko.adapter;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,7 +26,12 @@ import org.json.JSONObject;
 import org.jsoup.Jsoup;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.UUID;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 /**
  * @projectName: Seiko
@@ -106,15 +112,24 @@ public class BotAdapter extends BaseAdapter {
             String uin = String.valueOf(object.optLong("uin"));
             AlertDialog.Builder builder = new AlertDialog.Builder(avt);
             builder.setTitle(uin);
-            builder.setItems(new String[]{"导出设备信息", "登录配置", "查看日志", "删除BOT"}, (dialog, which) -> {
+            builder.setItems(new String[]{"导出登录信息", "登录配置", "查看日志", "删除BOT"}, (dialog, which) -> {
                 switch (which) {
                     case 0:
-                        File p = new File(avt.getExternalFilesDir("bots") + "/" + uin + "/device.json");
+                        File p = new File(avt.getExternalFilesDir("bots") + "/" + uin);
                         if (!p.exists()) {
-                            SnackBroadCast.sendBroadCast("从未登陆过，无法获取到设备信息");
+                            SnackBroadCast.sendBroadCast("从未登陆过，无法获取到登录信息");
                             return;
                         }
-                        ShareUtil.quickShare(avt, p, "*/*");
+
+                        File zipFile = new File(avt.getExternalFilesDir("tmp"), UUID.randomUUID().toString().replace("-","") + ".zip");
+
+                        try {
+                            IOUtil.zipFile(p,zipFile);
+                        } catch (IOException e) {
+                            Log.w("BotAdapter",e);
+                            SnackBroadCast.sendBroadCast("导出信息失败...");
+                        }
+                        ShareUtil.quickShare(avt, zipFile, "*/*");
                         break;
                     case 1:
                         if (Bot.getInstanceOrNull(object.optLong("uin")) != null) {

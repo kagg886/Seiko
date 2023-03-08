@@ -6,8 +6,34 @@ import java.io.*;
 import java.nio.ByteBuffer;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 public class IOUtil {
+
+    public static void zipFile(File src,File dst) throws IOException {
+        if (!dst.exists()) {
+            dst.createNewFile();
+        }
+        ZipOutputStream outputStream = new ZipOutputStream(new FileOutputStream(dst));
+        if (src.isDirectory()) {
+            zipFile(outputStream,src,src);
+        } else {
+        }
+        outputStream.flush();
+        outputStream.close();
+    }
+
+    private static void zipFile(ZipOutputStream outputStream,File base,File file) throws IOException {
+        if (!file.isDirectory()) {
+            outputStream.putNextEntry(new ZipEntry(file.getAbsolutePath().replace(base.getAbsolutePath(),"")));
+            outputStream.write(IOUtil.loadByteFromFile(file.getAbsolutePath()));
+        } else {
+            for (File k : file.listFiles()) {
+                zipFile(outputStream,base,k);
+            }
+        }
+    }
 
     public static void asyncHttp(Connection c, Response resp) {
         new Thread(() -> {
