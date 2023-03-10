@@ -14,11 +14,17 @@ import com.kagg886.seiko.event.DialogBroadCast;
 import com.kagg886.seiko.event.SnackBroadCast;
 import com.kagg886.seiko.plugin.api.SeikoPlugin;
 import com.kagg886.seiko.service.BotRunnerService;
+import com.kagg886.seiko.util.IOUtil;
 import com.kagg886.seiko.util.storage.JSONArrayStorage;
 import net.mamoe.mirai.Bot;
 import net.mamoe.mirai.BotFactory;
+import net.mamoe.mirai.network.LoginFailedException;
+import net.mamoe.mirai.network.WrongPasswordException;
 import net.mamoe.mirai.utils.BotConfiguration;
 import org.json.JSONObject;
+
+import java.io.File;
+import java.nio.file.Paths;
 
 /**
  * @projectName: Seiko
@@ -50,8 +56,17 @@ public class LoginThread extends Thread {
                     break;
                 case 1:
                     Throwable throwable = ((Throwable) msg.getData().getSerializable("exception"));
+                    if (throwable instanceof LoginFailedException) {
+                        if (((LoginFailedException) throwable).getKillBot()) {
+                            //重置设备信息
+                            File file = Paths.get(SeikoApplication.getSeikoApplicationContext().getExternalFilesDir("bot").getAbsolutePath(),
+                                    "bot",
+                                    String.valueOf(bot.getId())).toFile();
+                            IOUtil.delFile(file);
+                            bot.getLogger().error("bot登录失败，自动清除设备信息");
+                        }
+                    }
                     DialogBroadCast.sendBroadCast("登录失败", throwable.getMessage() + "\n完整信息请查看bot日志");
-                    bot.getLogger().error("在Bot登录时发现异常:", throwable);
                     sw.setChecked(false);
                     dialog.dismiss();
                     break;
