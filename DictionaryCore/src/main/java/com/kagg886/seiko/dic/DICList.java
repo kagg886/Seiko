@@ -31,7 +31,8 @@ public class DICList extends ArrayList<DictionaryFile> {
         clear();
         for (File p : Objects.requireNonNull(DictionaryEnvironment.getInstance().getDicRoot().listFiles())) {
             try {
-                add(new DictionaryFile(p));
+                DictionaryFile dictionaryFile = new DictionaryFile(p);
+                add(dictionaryFile);
             } catch (Throwable e) {
                 DictionaryEnvironment.getInstance().getErrorListener().onError(p, e);
             }

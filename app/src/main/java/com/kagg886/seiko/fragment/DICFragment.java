@@ -1,6 +1,7 @@
 package com.kagg886.seiko.fragment;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -8,6 +9,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
@@ -16,15 +19,23 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputLayout;
 import com.kagg886.seiko.R;
+import com.kagg886.seiko.activity.DICEditActivity;
 import com.kagg886.seiko.activity.MainActivity;
 import com.kagg886.seiko.adapter.DICAdapter;
+import com.kagg886.seiko.constant.GlobalConstant;
 import com.kagg886.seiko.dic.DICList;
 import com.kagg886.seiko.dic.entity.DictionaryFile;
 import com.kagg886.seiko.event.SnackBroadCast;
+import com.kagg886.seiko.service.BotRunnerService;
 import com.kagg886.seiko.util.IOUtil;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -42,6 +53,10 @@ public class DICFragment extends Fragment implements View.OnClickListener, Swipe
     private DICAdapter adapter;
     private FloatingActionButton button;
 
+    private final ActivityResultLauncher<Intent> launchDICEditor = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), (r) -> {
+        adapter.notifyDataSetChanged();
+    });
+
     public DICFragment() {
         super();
     }
@@ -58,11 +73,16 @@ public class DICFragment extends Fragment implements View.OnClickListener, Swipe
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
             DictionaryFile file = DICList.getInstance().get(position);
             builder.setTitle("操作:" + file.getName());
-            builder.setItems(new String[]{"删除伪代码"}, (dialog, which) -> {
-                if (which == 0) {
-                    file.getFile().delete();
-                    adapter.notifyDataSetChanged();
-                    SnackBroadCast.sendBroadCast("删除成功!");
+            builder.setItems(new String[]{"编辑伪代码", "删除伪代码"}, (dialog, which) -> {
+                switch (which) {
+                    case 0:
+                        openDICCodeEditor(true, file.getName());
+                        break;
+                    case 1:
+                        file.getFile().delete();
+                        adapter.notifyDataSetChanged();
+                        SnackBroadCast.sendBroadCast("删除成功!");
+                        break;
                 }
             });
             builder.create().show();
@@ -77,7 +97,7 @@ public class DICFragment extends Fragment implements View.OnClickListener, Swipe
     @Override
     public void onClick(View view) {
         AlertDialog dialog = new AlertDialog.Builder(requireContext())
-                .setTitle("您要...").setItems(new String[]{"导入伪代码"}, (dialog1, which) -> {
+                .setTitle("您要...").setItems(new String[]{"导入伪代码", "新建伪代码"}, (dialog1, which) -> {
                     switch (which) {
                         case 0:
                             Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
@@ -99,7 +119,7 @@ public class DICFragment extends Fragment implements View.OnClickListener, Swipe
                                         edt.setHint("为导入的词库命名(随机命名则为空)");
                                         builder.setView(v);
                                         builder.setPositiveButton("确定", (dialog2, which1) -> {
-                                            String txt = (TextUtils.isEmpty(edt.getEditText().getText().toString()) ? UUID.randomUUID().toString().replace("-", "") : edt.getEditText().getText().toString()) + ".txt";
+                                            String txt = (TextUtils.isEmpty(edt.getEditText().getText().toString()) ? UUID.randomUUID().toString().replace("-", "").substring(0, 8) : edt.getEditText().getText().toString()) + GlobalConstant.dicFileExt;
                                             try {
                                                 String s = IOUtil.loadStringFromStream(avt.getContentResolver().openInputStream(result.getData().getData()));
                                                 IOUtil.writeStringToFile(avt.getExternalFilesDir("dic").toPath().resolve(txt).toFile().getAbsolutePath(), s);
@@ -117,10 +137,23 @@ public class DICFragment extends Fragment implements View.OnClickListener, Swipe
                                 });
                             }).start();
                             break;
+                        case 1:
+                            // 新建伪代码 / 打开编辑器
+                            openDICCodeEditor(false, null);
+                            break;
                     }
                 }).create();
         dialog.show();
     }
+
+    private void openDICCodeEditor(boolean exist, String filename) {
+        // 弹出编辑页面
+        final Intent intent = new Intent(getActivity(), DICEditActivity.class);
+        intent.putExtra("exist_file", exist);
+        intent.putExtra("filename", filename);
+        launchDICEditor.launch(intent);
+    }
+
 
     @Override
     public void onRefresh() {
