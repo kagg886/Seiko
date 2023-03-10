@@ -60,7 +60,6 @@ public class LoginThread extends Thread {
                         if (((LoginFailedException) throwable).getKillBot()) {
                             //重置设备信息
                             File file = Paths.get(SeikoApplication.getSeikoApplicationContext().getExternalFilesDir("bot").getAbsolutePath(),
-                                    "bot",
                                     String.valueOf(bot.getId())).toFile();
                             IOUtil.delFile(file);
                             bot.getLogger().error("bot登录失败，自动清除设备信息");
