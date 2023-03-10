@@ -16,8 +16,6 @@ import androidx.preference.PreferenceManager;
 import com.kagg886.seiko.util.FixProtocolVersion;
 import com.kagg886.seiko.util.IOUtil;
 
-import net.mamoe.mirai.utils.BotConfiguration;
-
 import java.io.File;
 import java.io.FileWriter;
 import java.lang.reflect.Field;

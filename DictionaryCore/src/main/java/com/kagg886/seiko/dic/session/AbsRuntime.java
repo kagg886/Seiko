@@ -121,16 +121,16 @@ public abstract class AbsRuntime<T> {
                     }
                     groups++;
                 }
-            }
-            try {
-                invoke(code);
-            } catch (Exception e) { //异常处理，生成调用栈信息向上抛出
-                String msg = e.getMessage();
-                if (e instanceof DictionaryOnRunningException) {
-                    msg = ((DictionaryOnRunningException) e).getMsg();
+                try {
+                    invoke(code);
+                } catch (Exception e) { //异常处理，生成调用栈信息向上抛出
+                    String msg = e.getMessage();
+                    if (e instanceof DictionaryOnRunningException) {
+                        msg = ((DictionaryOnRunningException) e).getMsg();
+                    }
+                    throw new DictionaryOnRunningException(file, msg, exceptionStacks, e);
+                    //我也不知道这一坨怎么写的，能正常运行就行
                 }
-                throw new DictionaryOnRunningException(file, msg, exceptionStacks, e);
-                //TODO 我也不知道这一坨怎么写的，能正常运行就行
             }
         }
     }

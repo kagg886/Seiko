@@ -2,6 +2,8 @@ package com.kagg886.seiko.fragment;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -10,9 +12,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.core.net.UriKt;
 import androidx.fragment.app.Fragment;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputLayout;
 import com.kagg886.seiko.R;
@@ -23,13 +30,25 @@ import com.kagg886.seiko.event.SnackBroadCast;
 import com.kagg886.seiko.plugin.api.SeikoPlugin;
 import com.kagg886.seiko.service.BotRunnerService;
 import com.kagg886.seiko.util.IOUtil;
-import okhttp3.*;
+
 import org.jetbrains.annotations.NotNull;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
+import java.net.URI;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Optional;
 import java.util.UUID;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 
 public class PluginFragment extends Fragment implements View.OnClickListener, SwipeRefreshLayout.OnRefreshListener {
@@ -39,6 +58,27 @@ public class PluginFragment extends Fragment implements View.OnClickListener, Sw
     private FloatingActionButton button;
     private PluginAdapter adapter;
     private AlertDialog dialog;
+
+    private final ActivityResultLauncher<Intent> getFileLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), (r) -> {
+        Optional.ofNullable(r.getData()).ifPresent((i) -> {
+            Uri uri = i.getData();
+            String fileName = UUID.randomUUID().toString().replace("-", "") + ".apk";
+            Optional.ofNullable(getActivity()).ifPresent((activity) -> {
+                File pluginDir = activity.getExternalFilesDir("plugin");
+                Path target = Paths.get(pluginDir.getAbsolutePath(), fileName);
+                try {
+                    Files.copy(getActivity().getContentResolver().openInputStream(uri), target);
+                    activity.runOnUiThread(() -> {
+                        BotRunnerService.INSTANCE.getSeikoPluginList().refresh();
+                        adapter.notifyDataSetChanged();
+                    });
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    SnackBroadCast.sendBroadCast("导入失败");
+                }
+            });
+        });
+    });
 
     private final Handler mHandler = new Handler(Looper.getMainLooper()) {
         @Override
@@ -62,11 +102,15 @@ public class PluginFragment extends Fragment implements View.OnClickListener, Sw
     @Override
     public void onClick(View v) {
         AlertDialog dialog = new AlertDialog.Builder(getActivity())
-                .setTitle("您要...").setItems(new String[]{"从网络导入"}, (dialog1, which) -> {
-                    if (which == 0) {
-                        importPluginDialog().show();
+                .setTitle("您要...")
+                .setItems(
+                    new String[]{"从本地导入", "从网络导入"}, (dialog1, which) -> {
+                        if (which == 0)
+                            localImportPlugin();
+                        else if (which == 1)
+                            networkImportPlugin();
                     }
-                }).create();
+                ).create();
         dialog.show();
     }
 
@@ -164,7 +208,7 @@ public class PluginFragment extends Fragment implements View.OnClickListener, Sw
         return v;
     }
 
-    public AlertDialog importPluginDialog() {
+    public AlertDialog networkImportPluginDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(((MainActivity) getActivity()));
         View view = LayoutInflater.from(((MainActivity) getActivity())).inflate(R.layout.dialog_import_plugin, null);
         builder.setView(view);
@@ -178,6 +222,20 @@ public class PluginFragment extends Fragment implements View.OnClickListener, Sw
             downloadPlugin(url);
         });
         return builder.create();
+    }
+
+    public void networkImportPlugin() {
+        networkImportPluginDialog().show();
+    }
+
+    public void localImportPlugin() {
+        // 选择文件
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.setType("*/*");
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+
+
+        getFileLauncher.launch(Intent.createChooser(intent, "选择导入的插件"));
     }
 
     @Override

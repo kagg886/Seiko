@@ -1,12 +1,13 @@
 package com.kagg886.seiko.util
 
 import net.mamoe.mirai.internal.utils.*
-import net.mamoe.mirai.utils.*
+import net.mamoe.mirai.utils.BotConfiguration.MiraiProtocol
 
 @Suppress("INVISIBLE_MEMBER", "INVISIBLE_REFERENCE")
 object FixProtocolVersion {
     fun update() {
-        MiraiProtocolInternal.protocols[BotConfiguration.MiraiProtocol.ANDROID_PHONE] = MiraiProtocolInternal(
+        val protocols = MiraiProtocolInternal.protocols;
+        protocols[MiraiProtocol.ANDROID_PHONE] = MiraiProtocolInternal(
             "com.tencent.mobileqq",
             537151682,
             "8.9.33.10335",
@@ -20,7 +21,8 @@ object FixProtocolVersion {
             false
 
         )
-        MiraiProtocolInternal.protocols[BotConfiguration.MiraiProtocol.ANDROID_PAD] = MiraiProtocolInternal(
+        //Updated from MiraiGo (2023/3/7)
+        protocols[MiraiProtocol.ANDROID_PAD] = MiraiProtocolInternal(
             "com.tencent.mobileqq",
             537151218,
             "8.9.33.10335",
