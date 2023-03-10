@@ -28,7 +28,7 @@ public class DictionaryCommandMatcher {
     private final Pattern pattern;
     private final String source;
     private final int line;
-    private String eventClassNames[];
+    private final String[] eventClassNames;
 
     public DictionaryCommandMatcher(String commandRegex, int line, File dicFile) {
         this.source = commandRegex;
