@@ -15,8 +15,8 @@ android {
         applicationId "com.kagg886.seiko"
         minSdk 28
         targetSdk 32
-        versionCode 7
-        versionName "0.0.7"
+        versionCode 8
+        versionName "0.0.8"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         buildConfigField "String", "BUILD_TIME", getDate()
         buildConfigField "String", "MIRAI_VERSION", "\"" + gradle.mirai_version + "\""
