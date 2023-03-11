@@ -24,5 +24,5 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" android:id="@+id/adapter_dicitem_name"
             app:layout_constraintStart_toEndOf="@+id/adapter_dicitem_img" app:layout_constraintTop_toTopOf="parent"
-            android:textSize="32sp" app:layout_constraintBottom_toBottomOf="@+id/adapter_dicitem_img"/>
+            android:textSize="22sp" app:layout_constraintBottom_toBottomOf="@+id/adapter_dicitem_img"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

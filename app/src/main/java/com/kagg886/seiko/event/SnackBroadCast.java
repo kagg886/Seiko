@@ -4,6 +4,8 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.view.View;
+import android.widget.TextView;
+
 import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
 import com.kagg886.seiko.SeikoApplication;
@@ -34,6 +36,10 @@ public class SnackBroadCast extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        Snackbar.make(rootView, intent.getStringExtra("msg"), BaseTransientBottomBar.LENGTH_LONG).show();
+        Snackbar msg = Snackbar.make(rootView, intent.getStringExtra("msg"), BaseTransientBottomBar.LENGTH_LONG);
+        View view = msg.getView();
+        TextView textView = view.findViewById(com.google.android.material.R.id.snackbar_text);
+        textView.setMaxLines(10);
+        msg.show();
     }
 }
