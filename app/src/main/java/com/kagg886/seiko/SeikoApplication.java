@@ -13,6 +13,7 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.preference.PreferenceManager;
 
+import com.kagg886.seiko.util.FixProtocol;
 import com.kagg886.seiko.util.FixProtocolVersion;
 import com.kagg886.seiko.util.IOUtil;
 
@@ -105,8 +106,8 @@ public class SeikoApplication extends Application implements Runnable, Thread.Un
     @Override
     public void onCreate() {
         super.onCreate();
-        // 修复安卓协议, 更新mirai2.15后可移除
-        FixProtocolVersion.INSTANCE.update();
+        // 修复安卓/MACOS协议, 更新mirai2.15后可移除
+        FixProtocol.INSTANCE.fix();
 
         globalConfig = PreferenceManager.getDefaultSharedPreferences(this);
         Thread.setDefaultUncaughtExceptionHandler(this);
