@@ -63,7 +63,10 @@ public class PluginLoader extends JavaPlugin implements DictionaryListener {
         CommandManager.INSTANCE.registerCommand(CommandInstance.INSTANCE, false);
         GlobalEventChannel.INSTANCE.parentScope(INSTANCE).subscribeAlways(GroupMessageEvent.class, event -> {
             if (SeikoPluginConfig.INSTANCE.getAlwaysRefreshOnceMessageGetting()) {
-                DICList.getInstance().refresh();
+                boolean success = DICList.getInstance().refresh().success;
+                if(!success) {
+                    PluginLoader.INSTANCE.getLogger().warning("插件解析中存在问题！请检查无法被启用的插件");
+                }
             }
             JSONObject dicConfigUnit;
             for (DictionaryFile dic : DICList.getInstance()) {
@@ -77,7 +80,10 @@ public class PluginLoader extends JavaPlugin implements DictionaryListener {
 
         GlobalEventChannel.INSTANCE.parentScope(INSTANCE).subscribeAlways(FriendMessageEvent.class, event -> {
             if (SeikoPluginConfig.INSTANCE.getAlwaysRefreshOnceMessageGetting()) {
-                DICList.getInstance().refresh();
+                boolean success = DICList.getInstance().refresh().success;
+                if(!success) {
+                    PluginLoader.INSTANCE.getLogger().warning("插件解析中存在问题！请检查无法被启用的插件");
+                }
             }
             JSONObject dicConfigUnit;
             for (DictionaryFile dic : DICList.getInstance()) {

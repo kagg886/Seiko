@@ -97,9 +97,13 @@ public class DICFragment extends Fragment implements View.OnClickListener, Swipe
     @Override
     public void onClick(View view) {
         AlertDialog dialog = new AlertDialog.Builder(requireContext())
-                .setTitle("您要...").setItems(new String[]{"导入伪代码", "新建伪代码"}, (dialog1, which) -> {
+                .setTitle("您要...").setItems(new String[]{"新建伪代码", "导入伪代码"}, (dialog1, which) -> {
                     switch (which) {
                         case 0:
+                            // 新建伪代码 / 打开编辑器
+                            openDICCodeEditor(false, null);
+                            break;
+                        case 1:
                             Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
                             intent.setType("*/*");//无类型限制
                             intent.addCategory(Intent.CATEGORY_OPENABLE);
@@ -136,10 +140,6 @@ public class DICFragment extends Fragment implements View.OnClickListener, Swipe
                                     }
                                 });
                             }).start();
-                            break;
-                        case 1:
-                            // 新建伪代码 / 打开编辑器
-                            openDICCodeEditor(false, null);
                             break;
                     }
                 }).create();

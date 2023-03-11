@@ -43,6 +43,12 @@ public class DictionaryEnvironment {
         this.dictionaryListener = dictionaryListener;
     }
 
+    public void updateDICConfig(String dicName, Object newConfig) {
+        final JSONObjectStorage dicConfig = getDicConfig();
+        dicConfig.put(dicName, newConfig);
+        dicConfig.save();
+    }
+
     public File getDicRoot() {
         return dicRoot;
     }

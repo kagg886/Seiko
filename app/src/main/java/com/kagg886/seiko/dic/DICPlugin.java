@@ -4,9 +4,11 @@ import android.content.Context;
 import com.kagg886.seiko.SeikoApplication;
 import com.kagg886.seiko.dic.bridge.DictionaryListener;
 import com.kagg886.seiko.dic.entity.DictionaryFile;
+import com.kagg886.seiko.dic.model.DICParseResult;
 import com.kagg886.seiko.dic.session.impl.FriendMessageRuntime;
 import com.kagg886.seiko.dic.session.impl.GroupMessageRuntime;
 import com.kagg886.seiko.event.DialogBroadCast;
+import com.kagg886.seiko.event.SnackBroadCast;
 import com.kagg886.seiko.plugin.SeikoDescription;
 import com.kagg886.seiko.plugin.api.SeikoPlugin;
 import com.kagg886.seiko.util.IOUtil;
@@ -38,7 +40,10 @@ public class DICPlugin extends SeikoPlugin implements DictionaryListener {
 
         event.subscribeAlways(GroupMessageEvent.class, groupMessageEvent -> {
             if (SeikoApplication.globalConfig.getBoolean("alwaysRefreshOnceMessageGetting", false)) {
-                DICList.getInstance().refresh();
+                DICParseResult result = DICList.getInstance().refresh();
+                if(!result.success) {
+                    SnackBroadCast.sendBroadCast("伪代码解析中存在问题！请检查无法被启用的伪代码，出现的问题：" + result.err);
+                }
             }
             JSONObject dicConfigUnit;
             for (DictionaryFile dic : DICList.getInstance()) {
@@ -52,7 +57,10 @@ public class DICPlugin extends SeikoPlugin implements DictionaryListener {
 
         event.subscribeAlways(FriendMessageEvent.class, friendMessageEvent -> {
             if (SeikoApplication.globalConfig.getBoolean("alwaysRefreshOnceMessageGetting", false)) {
-                DICList.getInstance().refresh();
+                DICParseResult result = DICList.getInstance().refresh();
+                if(!result.success) {
+                    SnackBroadCast.sendBroadCast("伪代码解析中存在问题！请检查无法被启用的伪代码，出现的问题：" + result.err);
+                }
             }
             JSONObject dicConfigUnit;
             for (DictionaryFile dic : DICList.getInstance()) {
