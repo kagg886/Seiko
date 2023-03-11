@@ -80,8 +80,6 @@ public class DICEditActivity extends AppCompatActivity {
             String content = IOUtil.loadStringFromStream(this.getContentResolver().openInputStream(dicFileUri));
             code.setText(content);
         }
-
-        code.setEditorLanguage(new JavaLanguage());
     }
 
     private void askFilename(Consumer<String> stringConsumer) {
