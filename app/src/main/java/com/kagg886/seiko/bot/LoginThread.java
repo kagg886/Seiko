@@ -56,13 +56,15 @@ public class LoginThread extends Thread {
                     break;
                 case 1:
                     Throwable throwable = ((Throwable) msg.getData().getSerializable("exception"));
-                    if (throwable instanceof LoginFailedException) {
-                        if (((LoginFailedException) throwable).getKillBot()) {
-                            //重置设备信息
-                            File file = Paths.get(SeikoApplication.getSeikoApplicationContext().getExternalFilesDir("bot").getAbsolutePath(),
-                                    String.valueOf(bot.getId())).toFile();
-                            IOUtil.delFile(file);
-                            bot.getLogger().error("bot登录失败，自动清除设备信息");
+                    if (SeikoApplication.globalConfig.getBoolean("badDeviceAutoDel",true)) {
+                        if (throwable instanceof LoginFailedException) {
+                            if (((LoginFailedException) throwable).getKillBot()) {
+                                //重置设备信息
+                                File file = Paths.get(SeikoApplication.getSeikoApplicationContext().getExternalFilesDir("bot").getAbsolutePath(),
+                                        String.valueOf(bot.getId())).toFile();
+                                IOUtil.delFile(file);
+                                bot.getLogger().error("bot登录失败，自动清除设备信息");
+                            }
                         }
                     }
                     DialogBroadCast.sendBroadCast("登录失败", throwable.getMessage() + "\n完整信息请查看bot日志");

@@ -15,6 +15,7 @@ import androidx.appcompat.widget.SwitchCompat;
 import com.kagg886.seiko.R;
 import com.kagg886.seiko.activity.LogActivity;
 import com.kagg886.seiko.activity.MainActivity;
+import com.kagg886.seiko.event.DialogBroadCast;
 import com.kagg886.seiko.event.SnackBroadCast;
 import com.kagg886.seiko.fragment.LoginFragment;
 import com.kagg886.seiko.service.BotRunnerService;
@@ -29,7 +30,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.UUID;
+import java.util.*;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -102,7 +103,24 @@ public class BotAdapter extends BaseAdapter {
             if (isChecked) {
                 BotRunnerService.INSTANCE.login(target, nick, sw);
             } else {
-                Bot.getInstance(target.optLong("uin")).close();
+                try {
+                    Bot.getInstance(target.optLong("uin")).close();
+                } catch (NoSuchElementException e) {
+                    //TODO 抓bug用，解决了就删除
+                    StringBuilder builder = new StringBuilder();
+                    builder.append("程序发现Mirai内建Bot存储库并没有这个bot号:" + target.optLong("uin"));
+                    builder.append("\nMirai内建Bot存储库列表:" + Bot.getInstances());
+
+                    List<Long> nativeBots = new ArrayList<>();
+                    for (int i = 0; i < botList.length(); i++) {
+                        nativeBots.add(botList.optJSONObject(i).optLong("uin"));
+                    }
+
+                    builder.append("\nSeiko内部维护的Bot列表:" + nativeBots);
+                    builder.append("\n若您遇到了这个弹窗，证明在几天之前有人触发了这个bug并且闪退。请前往Seiko的仓库提issue并截图此页面。");
+
+                    DialogBroadCast.sendBroadCast("小小的警告",builder.toString());
+                }
                 //SnackBroadCast.sendBroadCast(avt,target.optLong("uin") + "已下线");
             }
         });
