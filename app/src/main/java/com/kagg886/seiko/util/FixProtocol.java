@@ -82,10 +82,10 @@ public class FixProtocol {
     }
 
     private void fixProtocol(EnumMap protocolMap, MiraiProtocol miraiProtocol, Object... params) throws InvocationTargetException, InstantiationException, IllegalAccessException {
-        protocolMap.put(miraiProtocol, creatMiraiProtocolInternal(params));
+        protocolMap.put(miraiProtocol, createMiraiProtocolInternal(params));
     }
 
-    private Object creatMiraiProtocolInternal(Object... params) throws InvocationTargetException, InstantiationException, IllegalAccessException {
+    private Object createMiraiProtocolInternal(Object... params) throws InvocationTargetException, InstantiationException, IllegalAccessException {
         return constructor.newInstance(params);
     }
 
