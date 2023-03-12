@@ -14,7 +14,6 @@ import androidx.annotation.NonNull;
 import androidx.preference.PreferenceManager;
 
 import com.kagg886.seiko.util.FixProtocol;
-import com.kagg886.seiko.util.FixProtocolVersion;
 import com.kagg886.seiko.util.IOUtil;
 
 import java.io.File;

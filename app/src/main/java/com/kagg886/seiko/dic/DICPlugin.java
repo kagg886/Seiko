@@ -93,14 +93,6 @@ public class DICPlugin extends SeikoPlugin implements DictionaryListener {
     }
 
     @Override
-    public void onError(File p, Throwable e) {
-        if (SeikoApplication.globalConfig.getBoolean("badDicAutoDel", false)) {
-            p.delete();
-        }
-        DialogBroadCast.sendBroadCast("加载伪代码文件:[" + p.getName() + "]时发生错误!", IOUtil.getException(e));
-    }
-
-    @Override
     public void onWarn(File p, String message) {
         DialogBroadCast.sendBroadCast("加载伪代码文件:[" + p.getName() + "]发现一个潜在性问题:", message);
     }

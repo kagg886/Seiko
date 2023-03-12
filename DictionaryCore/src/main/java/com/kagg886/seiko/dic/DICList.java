@@ -50,7 +50,7 @@ public class DICList extends ArrayList<DictionaryFile> {
                 jsonObject.put("enabled", false);
                 // 这里最好不返回异常，而是用bool指代是否刷新成功
                 dicParseResult.success = false;
-                dicParseResult.err = e.getMessage();
+                dicParseResult.err.add(e);
             } finally {
                 add(dictionaryFile);
                 DictionaryEnvironment.getInstance().updateDICConfig(dictionaryFile.getName(), jsonObject);

@@ -26,7 +26,7 @@ import java.util.HashMap;
 public class DictionaryFile {
     private static final boolean STRICT_MODE = false;
     private final File dicFile;
-    private final HashMap<DictionaryCommandMatcher, ArrayList<DictionaryCode>> commands = new HashMap<DictionaryCommandMatcher, ArrayList<DictionaryCode>>() {
+    private final HashMap<DictionaryCommandMatcher, ArrayList<DictionaryCode>> commands = new HashMap<>() {
         @Override
         public ArrayList<DictionaryCode> put(DictionaryCommandMatcher key, ArrayList<DictionaryCode> value) {
             if (STRICT_MODE) {
