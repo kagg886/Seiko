@@ -104,11 +104,6 @@ public class PluginLoader extends JavaPlugin implements DictionaryListener {
     }
 
     @Override
-    public void onError(File p, Throwable e) {
-        getLogger().error(p.getName() + "加载失败!", e);
-    }
-
-    @Override
     public void onWarn(File p, String message) {
         PluginLoader.INSTANCE.getLogger().warning(p.getName() + "发现一个潜在性问题:s" + message);
     }
