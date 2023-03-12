@@ -1,12 +1,14 @@
 <PreferenceScreen
         xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
 
+
+
     <PreferenceCategory
-            android:title="伪代码">
+            android:title="自动删除">
 
         <SwitchPreference
-                android:defaultValue="false"
-                android:title="自动删除加载失败的伪代码文件" android:key="badDicAutoDel"/>
+                android:defaultValue="true"
+                android:title="自动删除登录失败的设备信息文件" android:key="badDeviceAutoDel"/>
 
         <SwitchPreference
                 android:defaultValue="true"

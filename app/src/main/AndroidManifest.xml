@@ -48,6 +48,10 @@
             </intent-filter>
         </activity>
 
+        <activity android:name=".activity.DICEditActivity">
+
+        </activity>
+
         <provider
                 android:name="androidx.core.content.FileProvider"
                 android:authorities="com.kagg886.seiko.fileprovider"

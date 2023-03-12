@@ -12,7 +12,6 @@ import java.io.File;
  * @version: 1.0
  */
 public interface DictionaryListener {
-    void onError(File p, Throwable e);
 
     void onWarn(File p, String message);
 }

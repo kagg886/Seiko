@@ -105,7 +105,10 @@ public class CommandInstance extends JCompositeCommand {
         if (!(context.getSender() instanceof ConsoleCommandSender)) {
             return;
         }
-        DICList.getInstance().refresh();
+        boolean success = DICList.getInstance().refresh().success;
+        if(!success) {
+            PluginLoader.INSTANCE.getLogger().info("伪代码解析中存在问题！请检查无法被启用的伪代码");
+        }
         PluginLoader.INSTANCE.getLogger().info("重载所有伪代码文件...成功!");
     }
 }

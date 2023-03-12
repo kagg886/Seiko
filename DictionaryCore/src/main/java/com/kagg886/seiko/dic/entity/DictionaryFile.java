@@ -10,6 +10,7 @@ import com.kagg886.seiko.util.IOUtil;
 import com.kagg886.seiko.util.TextUtils;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -25,7 +26,7 @@ import java.util.HashMap;
 public class DictionaryFile {
     private static final boolean STRICT_MODE = false;
     private final File dicFile;
-    private final HashMap<DictionaryCommandMatcher, ArrayList<DictionaryCode>> commands = new HashMap<DictionaryCommandMatcher, ArrayList<DictionaryCode>>() {
+    private final HashMap<DictionaryCommandMatcher, ArrayList<DictionaryCode>> commands = new HashMap<>() {
         @Override
         public ArrayList<DictionaryCode> put(DictionaryCommandMatcher key, ArrayList<DictionaryCode> value) {
             if (STRICT_MODE) {
@@ -39,8 +40,19 @@ public class DictionaryFile {
         }
     };
 
-    public DictionaryFile(File dicFile) throws Throwable {
+    public DictionaryFile(File dicFile) {
         this.dicFile = dicFile;
+    }
+
+    // 清除变量
+    private void clear() {
+        commands.clear();
+    }
+
+    public void parseDICCodeFile() throws IOException {
+        // 先clear
+        clear();
+
         String dicCodes = IOUtil.loadStringFromFile(dicFile.getAbsolutePath()).replace("\r", "");
         if (dicCodes.length() == 0) {
             throw new DictionaryOnLoadException("[" + dicFile.getName() + "]为空!");
