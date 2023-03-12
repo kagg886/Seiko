@@ -30,7 +30,8 @@ public abstract class Function extends DictionaryCode {
             {"调用", "TransferDicMethod"},
 
             {"群成员列表","MemberControl$MemberList"},
-//            {"改名","MemberControl$ChangeName"},
+            {"改名","MemberControl$ChangeName"},
+            {"群头衔","MemberControl$ChangeTitle"},
             {"禁言","MemberControl$Mute"},
             {"踢","MemberControl$Kick"},
 
