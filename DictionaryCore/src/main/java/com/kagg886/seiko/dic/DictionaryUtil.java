@@ -72,8 +72,26 @@ public class DictionaryUtil {
         ArrayList<Object> k = new ArrayList<>();
         for (int i = 0; i < args.length; i++) {
             String arg = (String) args[i];
-            if (arg.startsWith("%") && arg.endsWith("%")) {//是变量
+            if (arg.startsWith("%") && arg.endsWith("%")) {//第一步：%A%变量解析
                 k.add(runtime.getRuntimeObject().getOrDefault(arg.substring(1, arg.length() - 1), "null"));
+                continue;
+            }
+
+            if (arg.startsWith("<") && arg.endsWith(">")) { //第二步：<A>变量解析
+                String[] exps = cleanVariableCode(arg.substring(1,arg.length()-1),runtime).split("\\.");
+                //针对{a[0].%A%}这种情况。要先脱去最外层大括号，然后再执行内层内容。这样可以保证最外层不会被整体替换成字符串。
+                //解析后real为a[0].b，可以放心解析
+                Object point = runtime.getRuntimeObject();
+                for (String str : exps) {
+                    if (str.contains("(") && str.contains(")")) { //按数组处理
+                        String arrayIndex = str.substring(str.indexOf("(") + 1, str.length() - 1);
+                        String arrayName = str.replace("(" + arrayIndex + ")", "");
+                        point = ((ArrayList<?>) ((HashMap<?, ?>) point).get(arrayName)).get(Integer.parseInt(arrayIndex));
+                        continue;
+                    }
+                    point = ((HashMap<?, ?>) point).get(str);
+                }
+                k.add(point);
                 continue;
             }
             k.add(cleanVariableCode(arg, runtime));
@@ -85,13 +103,13 @@ public class DictionaryUtil {
      * @param :
      * @return String
      * @author kagg886
-     * @description 变量转换成字符串
+     * @description 形如%A%的变量和{a.b.c}或{a(0).b}转换成字符串
      * @date 2023/01/13 09:44
      */
     public static String cleanVariableCode(String code, AbsRuntime<?> runtime) {
-        //变量替换成常量
         String clone = code.replace("\\n", "\n");
         for (String s : runtime.getRuntimeObject().keySet()) { //s一定是String
+            //第一步：解析%A%的情况
             String var = "%" + s + "%";
             if (clone.contains(var)) {
                 Object q = runtime.getRuntimeObject().get(s);
@@ -102,8 +120,30 @@ public class DictionaryUtil {
             }
         }
 
+        //第二步：解析含{}的情况
+        int lIndex;
+        int rIndex;
+        while ((lIndex = clone.indexOf("<")) != -1 && (rIndex = clone.indexOf(">",lIndex)) != -1) { //防止出现括号不匹配的情况发生
+            //TODO 待测试
+            String[] exps = clone.substring(lIndex+1,rIndex).split("\\."); //提取出表达式
+            Object point = runtime.getRuntimeObject(); //待返回的变量
+            for (String k : exps) {
+                if (k.contains("(") && k.contains(")")) { //按数组处理
+                    String arrayIndex = k.substring(k.indexOf("(") + 1, k.length() - 1);
+                    String arrayName = k.replace("(" + arrayIndex + ")", "");
+                    point = ((ArrayList<?>) ((HashMap<?, ?>) point).get(arrayName)).get(Integer.parseInt(arrayIndex));
+                    continue;
+                }
+                point = ((HashMap<?, ?>) point).get(k);
+                if (point == null) {
+                    throw new DictionaryOnRunningException("无法访问到变量:" + k);
+                }
+            }
+            clone = clone.replace(clone.substring(lIndex,rIndex+1),point.toString());
+        }
+
         try {
-            //计算表达式，若出错则不计算
+            //第三步：计算表达式，若出错则不计算
             int xLeft = 0;
             while ((xLeft = clone.indexOf("[", xLeft)) != -1) {
                 int xRight = clone.indexOf("]", xLeft);
