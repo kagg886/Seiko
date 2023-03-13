@@ -24,6 +24,7 @@ import net.mamoe.mirai.utils.BotConfiguration;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.io.FileFilter;
 import java.nio.file.Paths;
 
 /**
@@ -62,8 +63,15 @@ public class LoginThread extends Thread {
                                 //重置设备信息
                                 File file = Paths.get(SeikoApplication.getSeikoApplicationContext().getExternalFilesDir("bots").getAbsolutePath(),
                                         String.valueOf(bot.getId())).toFile();
-                                IOUtil.delFile(file);
                                 bot.getLogger().error("bot登录失败，自动清除设备信息");
+                                IOUtil.delFile(file, pathname -> {
+                                    for (File t = pathname; !t.getAbsolutePath().equals("/"); t = t.getParentFile()) {
+                                        if (t.getName().equals("log") && t.isDirectory()) {
+                                            return false;
+                                        }
+                                    }
+                                    return true;
+                                });
                             }
                         }
                     }
