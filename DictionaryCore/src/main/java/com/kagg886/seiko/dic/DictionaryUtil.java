@@ -100,7 +100,7 @@ public class DictionaryUtil {
      * @param runtime:运行时
      * @return Object
      * @author kagg886
-     * @description 用于函数，将参数变量提取成字符串
+     * @description 用于函数，将参数变量提取成字符串。
      * @date 2023/01/19 18:51
      */
     public static List<Object> variableToObject(String code, AbsRuntime<?> runtime) {
@@ -132,13 +132,13 @@ public class DictionaryUtil {
      * @param :
      * @return String
      * @author kagg886
-     * @description 形如%A%的变量和<a.b.c>或<a(0).b>转换成字符串
+     * @description 将形如%A%的变量和<a.b.c>或<a(0).b>转换成字符串
      * @date 2023/01/13 09:44
      */
     public static String cleanVariableCode(String code, AbsRuntime<?> runtime) {
         String clone = code.replace("\\n", "\n");
 
-        //第一步：解析增强表达式
+        //第一步：解析增强表达式。把这一步放在前面是为了防止基础表达式展开为集合对象时对此步造成的干扰
         int lIndex;
         int rIndex;
         while ((lIndex = clone.indexOf(CHAIN_VARIABLE_PREFIX)) != -1 && (rIndex = clone.indexOf(CHAIN_VARIABLE_SUFFIX, lIndex)) != -1) { //防止出现括号不匹配的情况发生

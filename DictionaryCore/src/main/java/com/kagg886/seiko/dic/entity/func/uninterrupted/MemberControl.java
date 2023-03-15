@@ -22,6 +22,8 @@ import static com.kagg886.seiko.dic.DictionaryUtil.getMemberInfoByObjectList;
  * @version: 1.0
  */
 public abstract class MemberControl extends Function.UnInterruptedFunction {
+
+
     /**
      * @projectName: Seiko
      * @package: com.kagg886.seiko.dic.entity.func.uninterrupted

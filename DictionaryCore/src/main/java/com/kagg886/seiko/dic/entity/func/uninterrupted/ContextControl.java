@@ -49,19 +49,7 @@ public abstract class ContextControl extends Function.UnInterruptedFunction {
                 val.append(" ");
                 val.append(args.get(i).toString());
             }
-            String[] exps = val.substring(1).split("\\.");
-            Object point = runtime.getRuntimeObject(); //待返回的变量
-            for (i = 0; i < exps.length; i++) {
-                String k = exps[i];
-                if (k.contains("(") && k.contains(")")) { //按数组处理
-                    String arrayIndex = k.substring(k.indexOf("(") + 1, k.length() - 1);
-                    String arrayName = k.replace("(" + arrayIndex + ")", "");
-                    point = ((ArrayList) ((HashMap) point).get(arrayName)).get(Integer.parseInt(arrayIndex));
-                    continue;
-                }
-                point = ((HashMap) point).get(k);
-            }
-            runtime.getRuntimeObject().put(putVar, point);
+            runtime.getRuntimeObject().put(putVar, DictionaryUtil.chainExpressionCalc(runtime,val.substring(1)));
         }
     }
 
@@ -96,7 +84,7 @@ public abstract class ContextControl extends Function.UnInterruptedFunction {
      * @package: com.kagg886.seiko.dic.entity.func.uninterrupted
      * @className: CheckExists
      * @author: kagg886
-     * @description: $变量检验 要存入的变量 要检验的变量$
+     * @description: $变量检验 要存入的变量 要检验的变量 是否返回详细类型$
      * @date: 2023/1/29 9:03
      * @version: 1.0
      */
@@ -110,7 +98,15 @@ public abstract class ContextControl extends Function.UnInterruptedFunction {
         protected void run(AbsRuntime<?> runtime, List<Object> args) {
             String in = args.get(0).toString();
             String out = args.get(1).toString();
-            runtime.getRuntimeObject().put(in, String.valueOf(runtime.getRuntimeObject().containsKey(out)));
+            boolean isOutputDetail = Boolean.parseBoolean(args.get(2) == null ? "false" : args.get(2).toString());
+
+            String detail;
+            if (isOutputDetail) {
+                detail = runtime.getRuntimeObject().get(out).getClass().getName();
+            } else {
+                detail = String.valueOf(runtime.getRuntimeObject().containsKey(out));
+            }
+            runtime.getRuntimeObject().put(in, detail);
         }
     }
 
