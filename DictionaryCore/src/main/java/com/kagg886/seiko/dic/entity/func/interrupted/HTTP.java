@@ -3,6 +3,7 @@ package com.kagg886.seiko.dic.entity.func.interrupted;
 import com.kagg886.seiko.dic.entity.func.Function;
 import com.kagg886.seiko.dic.exception.DictionaryOnRunningException;
 import com.kagg886.seiko.dic.session.AbsRuntime;
+import com.kagg886.seiko.util.TextUtils;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 
@@ -41,14 +42,20 @@ public class HTTP extends Function.InterruptedFunction {
             HashMap<?,?> tmp = (HashMap<?, ?>) args.get(1);
             me = Connection.Method.valueOf(tmp.get("请求方式").toString());
             url = tmp.get("网址").toString();
-            header = tmp.get("头集合") == null || tmp.get("头集合").equals("null") ? null : (HashMap<String, ?>) tmp.get("头集合");
+
+            header = tmp.containsKey("头集合") ? (HashMap<String, ?>) tmp.get("头集合") : null;
             vars = tmp.get("参数");
-            simpleResult = Boolean.parseBoolean(tmp.get("简易信息").toString());
+            if (tmp.containsKey("简易信息")) {
+                simpleResult = Boolean.parseBoolean(tmp.get("简易信息").toString());
+            } else {
+                simpleResult = true;
+            }
         } else {
             me = Connection.Method.valueOf(args.get(1).toString());
             url = args.get(2).toString();
-            header = args.get(3) == null ? null : (HashMap<String, ?>) args.get(3);
-            vars = args.get(4);
+            //$访问 结果存入变量 请求方式 网址 %头集合%(可以使用null占位) 参数集合/参数体$
+            header = args.size() >=  4 ? (args.get(3).equals("null") ? null : (HashMap<String, ?>) args.get(3)) : null;
+            vars = args.size() >= 5 ? args.get(4) : null;
             simpleResult = true;
         }
 
@@ -81,10 +88,10 @@ public class HTTP extends Function.InterruptedFunction {
             HashMap<String,Object> details = new HashMap<>();
             details.put("响应码",resp.statusCode());
             details.put("响应头",resp.headers());
-            details.put("响应内容",resp.body());
+            details.put("响应内容", TextUtils.isEmpty(resp.body()) ? "" : resp.body());
             runtime.getRuntimeObject().put(putVar,details);
         } catch (IOException e) {
-            throw new DictionaryOnRunningException("访问网络出错!",e);
+            throw new RuntimeException("访问网络出错!",e);
         }
 //        if (args.size() >= 4) {
 //            Object unknown = args.get(3);
