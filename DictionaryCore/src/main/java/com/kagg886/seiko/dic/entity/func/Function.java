@@ -34,7 +34,7 @@ public abstract class Function extends DictionaryCode {
             {"群头衔","MemberControl$ChangeTitle"},
             {"禁言","MemberControl$Mute"},
             {"踢","MemberControl$Kick"},
-
+            {"管理员","MemberControl$ModifyAdmin"},
 
 
             {"文字替换", "StringUtil$Replace"},

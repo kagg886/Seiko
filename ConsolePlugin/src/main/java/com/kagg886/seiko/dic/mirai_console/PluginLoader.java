@@ -5,6 +5,7 @@ import com.kagg886.seiko.dic.DictionaryEnvironment;
 import com.kagg886.seiko.dic.bridge.DictionaryListener;
 import com.kagg886.seiko.dic.entity.DictionaryFile;
 import com.kagg886.seiko.dic.session.impl.FriendMessageRuntime;
+import com.kagg886.seiko.dic.session.impl.GroupMemberRuntime;
 import com.kagg886.seiko.dic.session.impl.GroupMessageRuntime;
 import net.mamoe.mirai.console.command.CommandManager;
 import net.mamoe.mirai.console.extension.PluginComponentStorage;
@@ -12,7 +13,9 @@ import net.mamoe.mirai.console.plugin.jvm.JavaPlugin;
 import net.mamoe.mirai.console.plugin.jvm.JvmPluginDescriptionBuilder;
 import net.mamoe.mirai.event.GlobalEventChannel;
 import net.mamoe.mirai.event.events.FriendMessageEvent;
+import net.mamoe.mirai.event.events.GroupMemberEvent;
 import net.mamoe.mirai.event.events.GroupMessageEvent;
+import net.mamoe.mirai.event.events.MemberLeaveEvent;
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONObject;
 
@@ -62,6 +65,31 @@ public class PluginLoader extends JavaPlugin implements DictionaryListener {
     public void onEnable() {
         reloadPluginConfig(SeikoPluginConfig.INSTANCE);
         CommandManager.INSTANCE.registerCommand(CommandInstance.INSTANCE, false);
+
+        GlobalEventChannel.INSTANCE.parentScope(INSTANCE).subscribeAlways(GroupMemberEvent.class, event -> {
+            if (SeikoPluginConfig.INSTANCE.getAlwaysRefreshOnceMessageGetting()) {
+                boolean success = DICList.getInstance().refresh().success;
+                if(!success) {
+                    PluginLoader.INSTANCE.getLogger().warning("插件解析中存在问题！请检查无法被启用的插件");
+                }
+            }
+            JSONObject dicConfigUnit;
+            for (DictionaryFile dic : DICList.getInstance()) {
+                dicConfigUnit = DictionaryEnvironment.getInstance().getDicConfig().optJSONObject(dic.getName(), new JSONObject());
+                if (dicConfigUnit.optBoolean("enabled", true)) {
+                    GroupMemberRuntime runtime = new GroupMemberRuntime(dic, event);
+                    if (event instanceof MemberLeaveEvent.Kick) {
+                        runtime.invoke("成员被踢");
+                        return;
+                    }
+                    if (event instanceof MemberLeaveEvent.Quit) {
+                        runtime.invoke("成员主动退群");
+                        return;
+                    }
+                }
+            }
+        });
+
         GlobalEventChannel.INSTANCE.parentScope(INSTANCE).subscribeAlways(GroupMessageEvent.class, event -> {
             if (SeikoPluginConfig.INSTANCE.getAlwaysRefreshOnceMessageGetting()) {
                 boolean success = DICList.getInstance().refresh().success;

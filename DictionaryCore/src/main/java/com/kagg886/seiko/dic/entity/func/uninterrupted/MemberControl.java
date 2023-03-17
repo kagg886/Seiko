@@ -1,6 +1,7 @@
 package com.kagg886.seiko.dic.entity.func.uninterrupted;
 
 import com.kagg886.seiko.dic.entity.func.Function;
+import com.kagg886.seiko.dic.exception.DictionaryOnRunningException;
 import com.kagg886.seiko.dic.session.AbsRuntime;
 import net.mamoe.mirai.Bot;
 import net.mamoe.mirai.contact.NormalMember;
@@ -22,6 +23,37 @@ import static com.kagg886.seiko.dic.DictionaryUtil.getMemberInfoByObjectList;
  * @version: 1.0
  */
 public abstract class MemberControl extends Function.UnInterruptedFunction {
+
+    /**
+     * @projectName: Seiko
+     * @package: com.kagg886.seiko.dic.entity.func.uninterrupted
+     * @className: ModifyAdmin
+     * @author: kagg886
+     * @description: $管理员 上/下 QQ 群号(可选) bot账号(可选)$ 或 $管理员 上/下 %集合对象%$ 或 $管理员 上/下 %上下文%$
+     * @date: 2023/3/12 18:56
+     * @version: 1.0
+     */
+    public static class ModifyAdmin extends MemberControl {
+
+        public ModifyAdmin(int line, String code) {
+            super(line, code);
+        }
+
+        @Override
+        protected void run(AbsRuntime<?> runtime, List<Object> args) {
+            NormalMember i = getMemberInfoByObjectList(runtime, args, 1);
+            String s = args.get(0).toString();
+            boolean x;
+            if (s.equals("上")) {
+                x = true;
+            } else if (s.equals("下")) {
+                x = false;
+            } else {
+                throw new DictionaryOnRunningException("未知状态:" + s);
+            }
+            i.modifyAdmin(x);
+        }
+    }
 
 
     /**
