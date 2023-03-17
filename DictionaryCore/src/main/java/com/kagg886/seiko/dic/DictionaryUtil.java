@@ -140,14 +140,17 @@ public class DictionaryUtil {
 
         //第一步：解析增强表达式。把这一步放在前面是为了防止基础表达式展开为集合对象时对此步造成的干扰
         int lIndex;
-        int rIndex;
-        while ((lIndex = clone.indexOf(CHAIN_VARIABLE_PREFIX)) != -1 && (rIndex = clone.indexOf(CHAIN_VARIABLE_SUFFIX, lIndex)) != -1) { //防止出现括号不匹配的情况发生
+        int rIndex = 0;
+
+        //这里一定要加accessPoint限定，不然会死循环
+        int errorPoint = 0;
+        while ((lIndex = clone.indexOf(CHAIN_VARIABLE_PREFIX,errorPoint)) != -1 && (rIndex = clone.indexOf(CHAIN_VARIABLE_SUFFIX, lIndex)) != -1) { //防止出现括号不匹配的情况发生
             try {
                 Object point = chainExpressionCalc(runtime,clone.substring(lIndex + CHAIN_VARIABLE_PREFIX_OFFSET, rIndex));
                 clone = clone.replace(clone.substring(lIndex, rIndex + 1), point.toString());
             } catch (Exception ignored) {
-                //表达式解析失败，可能是字符串。跳过解析
-                break;
+                //表达式解析失败，可能是字符串。跳过本次进行下一次解析。不能break，因为不知道解析是否已完成
+                errorPoint = rIndex;
             }
         }
 
