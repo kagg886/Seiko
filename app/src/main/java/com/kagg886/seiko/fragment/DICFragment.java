@@ -98,7 +98,7 @@ public class DICFragment extends Fragment implements View.OnClickListener, Swipe
     @Override
     public void onClick(View view) {
         AlertDialog dialog = new AlertDialog.Builder(requireContext())
-                .setTitle("您要...").setItems(new String[]{"新建伪代码", "导入伪代码","查看在线教程(可能需要翻墙)"}, (dialog1, which) -> {
+                .setTitle("您要...").setItems(new String[]{"新建伪代码", "导入伪代码","查看在线教程(可能需要翻墙)","查看在线教程(无需翻墙)"}, (dialog1, which) -> {
                     switch (which) {
                         case 0:
                             // 新建伪代码 / 打开编辑器

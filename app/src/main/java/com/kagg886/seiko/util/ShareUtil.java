@@ -20,8 +20,8 @@ import java.io.File;
 public class ShareUtil {
 
     public static void openUrlByBrowser(String url) {
-        Uri uri = Uri.parse("https://github.com/kagg886/Seiko");
-        SeikoApplication.getSeikoApplicationContext().startActivity(new Intent(Intent.ACTION_VIEW, uri));
+        Uri uri = Uri.parse(url);
+        SeikoApplication.getCurrentActivity().startActivity(new Intent(Intent.ACTION_VIEW, uri));
     }
     public static void quickShare(Activity ctx, File p, String type) {
         Intent intent = new Intent("android.intent.action.SEND");
