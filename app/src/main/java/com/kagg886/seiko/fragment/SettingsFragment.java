@@ -14,6 +14,7 @@ import androidx.preference.PreferenceFragmentCompat;
 import com.kagg886.seiko.BuildConfig;
 import com.kagg886.seiko.R;
 import com.kagg886.seiko.event.SnackBroadCast;
+import com.kagg886.seiko.util.ShareUtil;
 import com.kagg886.seiko.util.TextUtils;
 import net.mamoe.mirai.Bot;
 import org.jetbrains.annotations.NotNull;
@@ -58,8 +59,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Prefer
     @Override
     public boolean onPreferenceClick(Preference preference) {
         if (preference.getKey().equals("goGithub")) {
-            Uri uri = Uri.parse("https://github.com/kagg886/Seiko");
-            startActivity(new Intent(Intent.ACTION_VIEW, uri));
+            ShareUtil.openUrlByBrowser("https://github.com/kagg886/Seiko");
             return true;
         }
         return false;

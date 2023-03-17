@@ -59,6 +59,7 @@ public class DICPlugin extends SeikoPlugin implements DictionaryListener {
                         runtime.invoke("成员主动退群");
                         return;
                     }
+
                 }
             }
         });

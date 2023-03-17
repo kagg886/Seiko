@@ -12,3 +12,4 @@ app/src/test
 /captures
 .externalNativeBuild
 .cxx
+/ConsolePlugin/debug-sandbox
