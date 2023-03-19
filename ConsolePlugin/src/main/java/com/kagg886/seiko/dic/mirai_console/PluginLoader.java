@@ -12,10 +12,7 @@ import net.mamoe.mirai.console.extension.PluginComponentStorage;
 import net.mamoe.mirai.console.plugin.jvm.JavaPlugin;
 import net.mamoe.mirai.console.plugin.jvm.JvmPluginDescriptionBuilder;
 import net.mamoe.mirai.event.GlobalEventChannel;
-import net.mamoe.mirai.event.events.FriendMessageEvent;
-import net.mamoe.mirai.event.events.GroupMemberEvent;
-import net.mamoe.mirai.event.events.GroupMessageEvent;
-import net.mamoe.mirai.event.events.MemberLeaveEvent;
+import net.mamoe.mirai.event.events.*;
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONObject;
 
@@ -79,11 +76,28 @@ public class PluginLoader extends JavaPlugin implements DictionaryListener {
                 if (dicConfigUnit.optBoolean("enabled", true)) {
                     GroupMemberRuntime runtime = new GroupMemberRuntime(dic, event);
                     if (event instanceof MemberLeaveEvent.Kick) {
+                        runtime.getRuntimeObject().put("操作人", ((MemberLeaveEvent.Kick) event).getOperator().getId());
                         runtime.invoke("成员被踢");
                         return;
                     }
                     if (event instanceof MemberLeaveEvent.Quit) {
                         runtime.invoke("成员主动退群");
+                        return;
+                    }
+
+                    if (event instanceof MemberJoinEvent.Invite) {
+                        runtime.getRuntimeObject().put("邀请人", ((MemberJoinEvent.Invite) event).getInvitor().getId());
+                        runtime.invoke("成员邀请入群");
+                        return;
+                    }
+
+                    if (event instanceof MemberJoinEvent.Active) {
+                        runtime.invoke("成员主动入群");
+                        return;
+                    }
+
+                    if (event instanceof MemberJoinEvent.Retrieve) {
+                        runtime.invoke("群主恢复解散群");
                         return;
                     }
                 }

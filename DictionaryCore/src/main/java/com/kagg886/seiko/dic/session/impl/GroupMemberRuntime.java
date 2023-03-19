@@ -25,9 +25,6 @@ public class GroupMemberRuntime extends AbsRuntime<GroupMemberEvent> {
         context.put("群名称", event.getGroup().getName());
         context.put("QQ", event.getMember().getId());
         context.put("昵称",event.getMember().getNick());
-        if (event instanceof MemberLeaveEvent.Kick) {
-            context.put("操作人", ((MemberLeaveEvent.Kick) event).getOperator().getId());
-        }
     }
 
     @Override
