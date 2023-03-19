@@ -20,6 +20,7 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         buildConfigField "String", "BUILD_TIME", getDate()
         buildConfigField "String", "MIRAI_VERSION", "\"" + gradle.mirai_version + "\""
+        buildConfigField "String", "COMMIT_HASH", "\"" + getGitSha() + "\""
     }
 
     buildTypes {
@@ -79,4 +80,12 @@ String getDate() {
     Date date = new Date()
     String dates = "\"" + date.format("yyyy-MM-dd HH:mm:ss") + "\""
     return dates
+}
+
+String getGitSha() {
+    InputStream out = Runtime.getRuntime().exec("git rev-parse --short HEAD").getInputStream()
+    byte[] a = new byte[7]
+    out.read(a)
+    out.close()
+    return new String(a)
 }

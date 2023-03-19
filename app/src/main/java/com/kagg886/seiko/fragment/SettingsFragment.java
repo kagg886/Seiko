@@ -32,7 +32,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Prefer
         } catch (PackageManager.NameNotFoundException e) {
             throw new RuntimeException(e);
         }
-        s.setTitle("当前版本:" + p.versionName);
+        s.setTitle("当前版本:" + p.versionName + "(" + BuildConfig.COMMIT_HASH + ")");
         s.setSummary("版本号:" + p.getLongVersionCode());
 
         s = findPreference("buildTime");
