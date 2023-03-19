@@ -120,18 +120,26 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
                 SnackBroadCast.sendBroadCast("请输入合法的qq号!");
                 return;
             }
+
             JSONArrayStorage botList = JSONArrayStorage.obtain(avt.getExternalFilesDir("config").getAbsolutePath() + "/botList.json");
 
-            for (int i = 0; i < botList.length(); i++) {
-                if (botList.optJSONObject(i).optLong("uin") == qq && !isEdit) {
-                    SnackBroadCast.sendBroadCast("请勿输入已存在的QQ");
-                    return;
-                }
-            }
-            if (Bot.getInstanceOrNull(qq) != null && !isEdit) {
+            if (Bot.getInstanceOrNull(qq) != null && !isEdit) { //只有新增对话框中才需要检查新填写的qq和已存在列表是否相同
                 SnackBroadCast.sendBroadCast("请勿输入已存在的QQ");
                 return;
             }
+
+            for (int i = 0; i < botList.length(); i++) {
+                if (botList.optJSONObject(i).optLong("uin") == qq) {
+                    if (isEdit) {
+                        botList.remove(i); //找到了就删掉!
+                        break;
+                    } else {
+                        SnackBroadCast.sendBroadCast("请勿输入已存在的QQ");
+                        return;
+                    }
+                }
+            }
+
             try {
                 account.put("uin", qq);
                 account.put("pass", value);
@@ -140,11 +148,13 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
             } catch (JSONException e) {
                 throw new RuntimeException(e);
             }
-            if (!isEdit) {
-                botList.put(account);
-            }
+            botList.put(account);
             botList.save();
-            SnackBroadCast.sendBroadCast("添加成功!");
+            if (isEdit) {
+                SnackBroadCast.sendBroadCast("修改成功!");
+            } else {
+                SnackBroadCast.sendBroadCast("添加成功!");
+            }
             adapter.notifyDataSetChanged();
         });
         return builder.create();
