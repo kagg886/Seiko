@@ -181,7 +181,7 @@ public abstract class ArrayControl extends Function.UnInterruptedFunction {
         @Override
         protected void run(AbsRuntime<?> runtime, List<Object> args) {
             String putVar = args.get(0).toString();
-            String json = args.get(0).toString();
+            String json = args.get(1).toString();
             runtime.getRuntimeObject().put(putVar, new JSONArray(json).toList());
         }
     }
@@ -210,7 +210,7 @@ public abstract class ArrayControl extends Function.UnInterruptedFunction {
     }
 
     private static List<Object> toList(Object o) {
-        if (o instanceof List<?>) {
+        if (!(o instanceof List<?>)) {
             throw new DictionaryOnRunningException("此对象不是数组!");
         }
         return (List<Object>) o;

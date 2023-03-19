@@ -106,7 +106,7 @@ public class SeikoApplication extends Application implements Runnable, Thread.Un
     public void onCreate() {
         super.onCreate();
         // 修复安卓/macos协议, 更新mirai2.15后可移除
-        FixProtocol.INSTANCE.fix();
+        FixProtocol.fix();
 
         globalConfig = PreferenceManager.getDefaultSharedPreferences(this);
         Thread.setDefaultUncaughtExceptionHandler(this);

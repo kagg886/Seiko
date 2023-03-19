@@ -6,6 +6,7 @@ import com.kagg886.seiko.dic.bridge.DictionaryListener;
 import com.kagg886.seiko.dic.entity.DictionaryFile;
 import com.kagg886.seiko.dic.model.DICParseResult;
 import com.kagg886.seiko.dic.session.impl.FriendMessageRuntime;
+import com.kagg886.seiko.dic.session.impl.GroupMemberRuntime;
 import com.kagg886.seiko.dic.session.impl.GroupMessageRuntime;
 import com.kagg886.seiko.event.DialogBroadCast;
 import com.kagg886.seiko.event.SnackBroadCast;
@@ -14,9 +15,8 @@ import com.kagg886.seiko.plugin.api.SeikoPlugin;
 import com.kagg886.seiko.util.IOUtil;
 import net.mamoe.mirai.Bot;
 import net.mamoe.mirai.event.EventChannel;
-import net.mamoe.mirai.event.events.BotEvent;
-import net.mamoe.mirai.event.events.FriendMessageEvent;
-import net.mamoe.mirai.event.events.GroupMessageEvent;
+import net.mamoe.mirai.event.GlobalEventChannel;
+import net.mamoe.mirai.event.events.*;
 import org.json.JSONObject;
 
 import java.io.File;
@@ -37,6 +37,33 @@ public class DICPlugin extends SeikoPlugin implements DictionaryListener {
     @Override
     public void onBotGoLine(long botQQ) {
         EventChannel<BotEvent> event = Bot.findInstance(botQQ).getEventChannel();
+
+        event.subscribeAlways(GroupMemberEvent.class, e -> {
+            if (SeikoApplication.globalConfig.getBoolean("alwaysRefreshOnceMessageGetting", false)) {
+                DICParseResult result = DICList.getInstance().refresh();
+                if(!result.success) {
+                    SnackBroadCast.sendBroadCast("伪代码解析中存在问题！请检查无法被启用的伪代码，出现的问题：" + result.err);
+                }
+            }
+            JSONObject dicConfigUnit;
+            for (DictionaryFile dic : DICList.getInstance()) {
+                dicConfigUnit = DictionaryEnvironment.getInstance().getDicConfig().optJSONObject(dic.getName());
+                if (dicConfigUnit.optBoolean("enabled", true)) {
+                    GroupMemberRuntime runtime = new GroupMemberRuntime(dic, e);
+                    if (e instanceof MemberLeaveEvent.Kick) {
+                        runtime.invoke("成员被踢");
+                        return;
+                    }
+
+                    if (e instanceof MemberLeaveEvent.Quit) {
+                        runtime.invoke("成员主动退群");
+                        return;
+                    }
+
+                }
+            }
+        });
+
 
         event.subscribeAlways(GroupMessageEvent.class, groupMessageEvent -> {
             if (SeikoApplication.globalConfig.getBoolean("alwaysRefreshOnceMessageGetting", false)) {

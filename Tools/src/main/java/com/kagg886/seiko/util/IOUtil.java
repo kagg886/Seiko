@@ -11,26 +11,28 @@ import java.util.zip.ZipOutputStream;
 
 public class IOUtil {
 
-    public static void zipFile(File src,File dst) throws IOException {
+    private static final FileFilter emptyFilter = pathname -> true;
+
+    public static void zipFile(File src, File dst) throws IOException {
         if (!dst.exists()) {
             dst.createNewFile();
         }
         ZipOutputStream outputStream = new ZipOutputStream(new FileOutputStream(dst));
         if (src.isDirectory()) {
-            zipFile(outputStream,src,src);
+            zipFile(outputStream, src, src);
         } else {
         }
         outputStream.flush();
         outputStream.close();
     }
 
-    private static void zipFile(ZipOutputStream outputStream,File base,File file) throws IOException {
+    private static void zipFile(ZipOutputStream outputStream, File base, File file) throws IOException {
         if (!file.isDirectory()) {
-            outputStream.putNextEntry(new ZipEntry(file.getAbsolutePath().replace(base.getAbsolutePath(),"")));
+            outputStream.putNextEntry(new ZipEntry(file.getAbsolutePath().replace(base.getAbsolutePath(), "")));
             outputStream.write(IOUtil.loadByteFromFile(file.getAbsolutePath()));
         } else {
             for (File k : file.listFiles()) {
-                zipFile(outputStream,base,k);
+                zipFile(outputStream, base, k);
             }
         }
     }
@@ -63,11 +65,22 @@ public class IOUtil {
      * 删除文件
      * */
     public static void delFile(File f) {
+        delFile(f,emptyFilter);
+    }
+
+    /*
+     * @param f:
+     * @return void
+     * @author kagg886
+     * @description 删除文件，但是有过滤器
+     * @date 2023/03/13 17:12
+     */
+    public static void delFile(File f,FileFilter filter) {
         if (!f.isDirectory()) {
             f.delete();
             return;
         }
-        for (File t : f.listFiles()) {
+        for (File t : f.listFiles(filter)) {
             delFile(t);
         }
         f.delete();

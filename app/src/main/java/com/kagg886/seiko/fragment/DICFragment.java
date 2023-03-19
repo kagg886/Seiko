@@ -28,6 +28,7 @@ import com.kagg886.seiko.dic.entity.DictionaryFile;
 import com.kagg886.seiko.event.SnackBroadCast;
 import com.kagg886.seiko.service.BotRunnerService;
 import com.kagg886.seiko.util.IOUtil;
+import com.kagg886.seiko.util.ShareUtil;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
@@ -97,7 +98,7 @@ public class DICFragment extends Fragment implements View.OnClickListener, Swipe
     @Override
     public void onClick(View view) {
         AlertDialog dialog = new AlertDialog.Builder(requireContext())
-                .setTitle("您要...").setItems(new String[]{"新建伪代码", "导入伪代码"}, (dialog1, which) -> {
+                .setTitle("您要...").setItems(new String[]{"新建伪代码", "导入伪代码","查看在线教程(可能需要翻墙)","查看在线教程(无需翻墙)"}, (dialog1, which) -> {
                     switch (which) {
                         case 0:
                             // 新建伪代码 / 打开编辑器
@@ -140,6 +141,12 @@ public class DICFragment extends Fragment implements View.OnClickListener, Swipe
                                     }
                                 });
                             }).start();
+                            break;
+                        case 2:
+                            ShareUtil.openUrlByBrowser("https://github.com/kagg886/Seiko/blob/master/DictionaryCore/README.md");
+                            break;
+                        case 3:
+                            ShareUtil.openUrlByBrowser("https://gitee.com/kagg886/Seiko/blob/master/DictionaryCore/README.md");
                             break;
                     }
                 }).create();

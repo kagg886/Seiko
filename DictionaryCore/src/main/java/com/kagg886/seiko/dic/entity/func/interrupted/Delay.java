@@ -26,6 +26,5 @@ public class Delay extends Function.InterruptedFunction {
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
-        System.out.println("方法调用完成");
     }
 }

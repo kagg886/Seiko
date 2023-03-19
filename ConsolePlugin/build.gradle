@@ -8,7 +8,7 @@ plugins {
 }
 
 group 'com.kagg886.seiko.dic.mirai_console'
-version '0.0.3'
+version '0.0.5'
 
 dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
