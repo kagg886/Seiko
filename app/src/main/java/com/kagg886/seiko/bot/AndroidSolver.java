@@ -49,7 +49,7 @@ public class AndroidSolver extends LoginSolver implements QRCodeLoginListener {
     //扫码登录的Dialog
     private AlertDialog dialog;
 
-    private Handler dialogController = new Handler(Looper.myLooper()) {
+    private final Handler dialogController = new Handler(Looper.myLooper()) {
         @Override
         public void handleMessage(@NonNull Message msg) {
             switch (msg.what) {

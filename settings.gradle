@@ -1,6 +1,8 @@
 pluginManagement {
     repositories {
+        maven{ url "https://repo.mirai.mamoe.net/snapshots"}
         maven { url 'https://maven.aliyun.com/repository/public' }
+
         gradlePluginPortal()
         google()
         mavenCentral()
@@ -9,6 +11,7 @@ pluginManagement {
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
+        maven{ url "https://repo.mirai.mamoe.net/snapshots"}
         google()
         mavenCentral()
     }
@@ -22,5 +25,5 @@ include ':Tools'
 include ':DictionaryCore'
 include ':ConsolePlugin'
 
-gradle.ext.mirai_version = "2.14.0"
+gradle.ext.mirai_version = "2.15.0-dev-27"
 
