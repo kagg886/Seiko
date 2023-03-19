@@ -2,6 +2,7 @@ package com.kagg886.seiko.bot;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -49,9 +50,17 @@ public class AndroidSolver extends LoginSolver implements QRCodeLoginListener {
     //扫码登录的Dialog
     private AlertDialog dialog;
 
+    //扫码登录是否被取消
+    private boolean cancel = false;
+
     @Override
     public int getQrCodeSize() {
         return 15;
+    }
+
+    @Override
+    public long getQrCodeStateUpdateInterval() {
+        return 500;
     }
 
     private final Handler dialogController = new Handler(Looper.myLooper()) {
@@ -93,7 +102,6 @@ public class AndroidSolver extends LoginSolver implements QRCodeLoginListener {
     @NotNull
     @Override
     public QRCodeLoginListener createQRCodeLoginListener(@NotNull Bot bot) {
-
         return this;
     }
 
@@ -106,8 +114,21 @@ public class AndroidSolver extends LoginSolver implements QRCodeLoginListener {
         i.setImageBitmap(bitmap);
         builder.setView(i);
 
-        builder.setCancelable(false);
+        builder.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialog) {
+                cancel = true;
+            }
+        });
         avt.runOnUiThread(() -> dialog = builder.create());
+    }
+
+    @Override
+    public void onIntervalLoop() {
+        QRCodeLoginListener.super.onIntervalLoop();
+        if (cancel) {
+            throw new UnsupportedQRCodeCaptchaException("扫码登录被用户取消");
+        }
     }
 
     @Override

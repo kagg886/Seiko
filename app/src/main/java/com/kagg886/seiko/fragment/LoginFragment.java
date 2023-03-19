@@ -101,6 +101,9 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
             }
             spinner.setSelection(i);
             useQrScan.setChecked(account.optBoolean("useQRLogin"));
+            if (useQrScan.isChecked()) {
+                valueEdit.setVisibility(View.GONE);
+            }
         }
         builder.setPositiveButton("确定", (dialog, which) -> {
             String key = keyEdit.getEditText().getText().toString();
