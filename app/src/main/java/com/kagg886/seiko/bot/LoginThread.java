@@ -16,21 +16,13 @@ import com.kagg886.seiko.plugin.api.SeikoPlugin;
 import com.kagg886.seiko.service.BotRunnerService;
 import com.kagg886.seiko.util.IOUtil;
 import com.kagg886.seiko.util.storage.JSONArrayStorage;
-import kotlin.coroutines.Continuation;
 import net.mamoe.mirai.Bot;
 import net.mamoe.mirai.BotFactory;
-import net.mamoe.mirai.auth.BotAuthInfo;
-import net.mamoe.mirai.auth.BotAuthResult;
-import net.mamoe.mirai.auth.BotAuthSession;
-import net.mamoe.mirai.auth.BotAuthorization;
 import net.mamoe.mirai.network.LoginFailedException;
 import net.mamoe.mirai.utils.BotConfiguration;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.json.JSONObject;
 
 import java.io.File;
-import java.io.FileFilter;
 import java.nio.file.Paths;
 
 /**
@@ -63,6 +55,13 @@ public class LoginThread extends Thread {
                     break;
                 case 1:
                     Throwable throwable = ((Throwable) msg.getData().getSerializable("exception"));
+                    if (throwable.getClass().getName().equals("net.mamoe.mirai.internal.network.auth.ProducerFailureException")) {
+                        try {
+                            throwable = throwable.getSuppressed()[0];
+                        } catch (Exception ignored) {
+
+                        }
+                    }
                     if (SeikoApplication.globalConfig.getBoolean("badDeviceAutoDel",true)) {
                         if (throwable instanceof LoginFailedException) {
                             if (((LoginFailedException) throwable).getKillBot()) {
@@ -81,7 +80,7 @@ public class LoginThread extends Thread {
                             }
                         }
                     }
-                    DialogBroadCast.sendBroadCast("登录失败", throwable.getMessage() + "\n完整信息请查看bot日志");
+                    DialogBroadCast.sendBroadCast("登录失败", throwable.getMessage() == null ? "bot登陆时发现未知异常" : throwable.getMessage() + "\n完整信息请查看bot日志");
                     bot.getLogger().error("在Bot登录时发现异常:", throwable);
                     sw.setChecked(false);
                     dialog.dismiss();
@@ -98,9 +97,6 @@ public class LoginThread extends Thread {
         long uin = botConfig.optLong("uin");
         String pass = botConfig.optString("pass");
         BotConfiguration.MiraiProtocol protocol = BotConfiguration.MiraiProtocol.valueOf(botConfig.optString("platform", "ANDROID_PHONE"));
-
-        //在此处配置QRLogin
-        //botConfig.optBoolean("useQRLogin");
 
         dialog = new AlertDialog.Builder(SeikoApplication.getCurrentActivity()).setTitle("登录中...(" + uin + ")").setCancelable(false).setMessage("请稍等片刻...").create();
         BotLogConfiguration configuration = new BotLogConfiguration(uin);

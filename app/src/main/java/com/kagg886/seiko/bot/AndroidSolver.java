@@ -49,6 +49,11 @@ public class AndroidSolver extends LoginSolver implements QRCodeLoginListener {
     //扫码登录的Dialog
     private AlertDialog dialog;
 
+    @Override
+    public int getQrCodeSize() {
+        return 15;
+    }
+
     private final Handler dialogController = new Handler(Looper.myLooper()) {
         @Override
         public void handleMessage(@NonNull Message msg) {
@@ -88,6 +93,7 @@ public class AndroidSolver extends LoginSolver implements QRCodeLoginListener {
     @NotNull
     @Override
     public QRCodeLoginListener createQRCodeLoginListener(@NotNull Bot bot) {
+
         return this;
     }
 
@@ -101,7 +107,7 @@ public class AndroidSolver extends LoginSolver implements QRCodeLoginListener {
         builder.setView(i);
 
         builder.setCancelable(false);
-        dialog = builder.create();
+        avt.runOnUiThread(() -> dialog = builder.create());
     }
 
     @Override

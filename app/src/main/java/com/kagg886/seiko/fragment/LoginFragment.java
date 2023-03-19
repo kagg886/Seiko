@@ -100,6 +100,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
                 i++;
             }
             spinner.setSelection(i);
+            useQrScan.setChecked(account.optBoolean("useQRLogin"));
         }
         builder.setPositiveButton("确定", (dialog, which) -> {
             String key = keyEdit.getEditText().getText().toString();
@@ -119,12 +120,12 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
             JSONArrayStorage botList = JSONArrayStorage.obtain(avt.getExternalFilesDir("config").getAbsolutePath() + "/botList.json");
 
             for (int i = 0; i < botList.length(); i++) {
-                if (botList.optJSONObject(i).optLong("uin") == qq) {
+                if (botList.optJSONObject(i).optLong("uin") == qq && !isEdit) {
                     SnackBroadCast.sendBroadCast("请勿输入已存在的QQ");
                     return;
                 }
             }
-            if (Bot.getInstanceOrNull(qq) != null) {
+            if (Bot.getInstanceOrNull(qq) != null && !isEdit) {
                 SnackBroadCast.sendBroadCast("请勿输入已存在的QQ");
                 return;
             }
