@@ -22,12 +22,15 @@ public abstract class Function extends DictionaryCode {
             {"访问", "HTTP"}
     };
     private static final String[][] uninterruptedFunctionNames = { //阻断方法列表，后面的是Class名
-            {"图片", "addImage"},
+
             {"读", "FileControl$Read"},
             {"写", "FileControl$Write"},
             {"JAVA方法运行", "JavaMethodInvoke"},
             {"随机数", "Random"},
             {"调用", "TransferDicMethod"},
+
+            {"图片", "MessageControl$addImage"},
+            {"艾特", "MessageControl$addAt"},
 
             {"群成员列表","MemberControl$MemberList"},
             {"改名","MemberControl$ChangeName"},
