@@ -7,6 +7,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @projectName: Seiko
@@ -41,14 +42,8 @@ public class JavaMethodInvoke extends Function.UnInterruptedFunction {
                 }
                 try {
                     Object rtn = p.invoke(args.get(3), paramList.toArray());
-                    if (rtn != null) {
-                        runtime.getRuntimeObject().put(putVar, rtn);
-                    } else {
-                        runtime.getRuntimeObject().put(putVar, "null");
-                    }
-                } catch (IllegalAccessException e) {
-                    throw new RuntimeException(e);
-                } catch (InvocationTargetException e) {
+                    runtime.getRuntimeObject().put(putVar, Objects.requireNonNullElse(rtn, "null"));
+                } catch (IllegalAccessException | InvocationTargetException e) {
                     throw new RuntimeException(e);
                 }
             }

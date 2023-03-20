@@ -29,6 +29,30 @@ public abstract class MemberControl extends Function.UnInterruptedFunction {
      * @package: com.kagg886.seiko.dic.entity.func.uninterrupted
      * @className: ModifyAdmin
      * @author: kagg886
+     * @description: $群成员 存入变量 QQ号 群号 bot账号(可选)$ 或 $群成员 存入变量 %上下文%$
+     * @date: 2023/3/12 18:56
+     * @version: 1.0
+     */
+    public static class GetMember extends MemberControl {
+
+        public GetMember(int line, String code) {
+            super(line, code);
+        }
+
+        @Override
+        protected void run(AbsRuntime<?> runtime, List<Object> args) {
+            NormalMember i = getMemberInfoByObjectList(runtime, args, 1);
+            String s = args.get(0).toString();
+            HashMap<String, String> memberInfo = spawnMemberInfo(i);
+            runtime.getRuntimeObject().put(s,memberInfo);
+        }
+    }
+
+    /**
+     * @projectName: Seiko
+     * @package: com.kagg886.seiko.dic.entity.func.uninterrupted
+     * @className: ModifyAdmin
+     * @author: kagg886
      * @description: $管理员 上/下 QQ 群号(可选) bot账号(可选)$ 或 $管理员 上/下 %集合对象%$ 或 $管理员 上/下 %上下文%$
      * @date: 2023/3/12 18:56
      * @version: 1.0
@@ -184,22 +208,26 @@ public abstract class MemberControl extends Function.UnInterruptedFunction {
             }
             ArrayList<HashMap<String, String>> lists = new ArrayList<>();
             for (NormalMember i : Bot.findInstance(botAccount).getGroup(groupId).getMembers()) {
-                HashMap<String, String> memberInfo = new HashMap<>();
-                memberInfo.put("QQ", String.valueOf(i.getId()));
-                memberInfo.put("所属群", String.valueOf(i.getGroup().getId()));
-                memberInfo.put("所属BOT", String.valueOf(i.getBot().getId()));
-                memberInfo.put("昵称", i.getNick());
-                memberInfo.put("群名片", i.getNameCard());
-                memberInfo.put("权限", i.getPermission().toString());
-                memberInfo.put("权限代码", String.valueOf(i.getPermission().getLevel()));
-                memberInfo.put("特殊头衔", i.getSpecialTitle());
-                memberInfo.put("加群时间戳", String.valueOf(i.getJoinTimestamp()));
-                memberInfo.put("禁言剩余", String.valueOf(i.getMuteTimeRemaining()));
-                memberInfo.put("最近发言时间戳", String.valueOf(i.getLastSpeakTimestamp()));
-                lists.add(memberInfo);
+                lists.add(spawnMemberInfo(i));
             }
             runtime.getRuntimeObject().put(putVar, lists);
         }
+    }
+
+    private static HashMap<String, String> spawnMemberInfo(NormalMember i) {
+        HashMap<String, String> memberInfo = new HashMap<>();
+        memberInfo.put("QQ", String.valueOf(i.getId()));
+        memberInfo.put("所属群", String.valueOf(i.getGroup().getId()));
+        memberInfo.put("所属BOT", String.valueOf(i.getBot().getId()));
+        memberInfo.put("昵称", i.getNick());
+        memberInfo.put("群名片", i.getNameCard());
+        memberInfo.put("权限", i.getPermission().toString());
+        memberInfo.put("权限代码", String.valueOf(i.getPermission().getLevel()));
+        memberInfo.put("特殊头衔", i.getSpecialTitle());
+        memberInfo.put("加群时间戳", String.valueOf(i.getJoinTimestamp()));
+        memberInfo.put("禁言剩余", String.valueOf(i.getMuteTimeRemaining()));
+        memberInfo.put("最近发言时间戳", String.valueOf(i.getLastSpeakTimestamp()));
+        return memberInfo;
     }
 
     public MemberControl(int line, String code) {

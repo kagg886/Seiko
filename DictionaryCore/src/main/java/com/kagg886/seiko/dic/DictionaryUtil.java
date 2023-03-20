@@ -6,10 +6,8 @@ import net.mamoe.mirai.Bot;
 import net.mamoe.mirai.contact.NormalMember;
 import net.mamoe.mirai.event.events.GroupMessageEvent;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @projectName: Seiko
@@ -81,16 +79,22 @@ public class DictionaryUtil {
         //解析后real为a[0].b，可以放心解析
         Object point = runtime.getRuntimeObject();
         for (String str : exps) {
+            if (point == null) {
+                break;
+            }
             if (str.contains("(") && str.contains(")")) { //按数组处理
                 String arrayIndex = str.substring(str.indexOf("(") + 1, str.length() - 1);
                 String arrayName = str.replace("(" + arrayIndex + ")", "");
-                point = ((ArrayList<?>) ((HashMap<?, ?>) point).get(arrayName)).get(Integer.parseInt(arrayIndex));
+
+                List<?> list = ((List<?>) ((HashMap<?, ?>) point).get(arrayName));
+                int idx = Integer.parseInt(arrayIndex);
+                point =  idx < list.size() ? list.get(idx) : null;
                 continue;
             }
-            point = ((HashMap<?, ?>) point).get(str);
-            if (point == null) {
-                throw new DictionaryOnRunningException("找不到变量:" + str);
-            }
+            point = ((HashMap<?, ?>) point).getOrDefault(str,null);
+        }
+        if (point == null) {
+            point = "null";
         }
         return point;
     }
@@ -113,7 +117,7 @@ public class DictionaryUtil {
                 continue;
             }
 
-            if (arg.startsWith(CHAIN_VARIABLE_PREFIX) && arg.endsWith(CHAIN_VARIABLE_SUFFIX)) { //第二步：<A>变量解析
+            if (arg.startsWith(CHAIN_VARIABLE_PREFIX) && arg.endsWith(CHAIN_VARIABLE_SUFFIX)) { //第二步：{A}变量解析
                 //使用subString，防止表达式本身被解析
                 try {
                     k.add(chainExpressionCalc(runtime, cleanVariableCode(arg.substring(1, arg.length() - 1), runtime)));
@@ -132,7 +136,7 @@ public class DictionaryUtil {
      * @param :
      * @return String
      * @author kagg886
-     * @description 将形如%A%的变量和<a.b.c>或<a(0).b>转换成字符串
+     * @description 将形如%A%的变量和{a.b.c}或{a(0).b}转换成字符串
      * @date 2023/01/13 09:44
      */
     public static String cleanVariableCode(String code, AbsRuntime<?> runtime) {
@@ -140,7 +144,7 @@ public class DictionaryUtil {
 
         //第一步：解析增强表达式。把这一步放在前面是为了防止基础表达式展开为集合对象时对此步造成的干扰
         int lIndex;
-        int rIndex = 0;
+        int rIndex;
 
         //这里一定要加accessPoint限定，不然会死循环
         int errorPoint = 0;
@@ -158,7 +162,7 @@ public class DictionaryUtil {
         for (String s : runtime.getRuntimeObject().keySet()) { //s一定是String
             String var = NORMAL_VARIABLE_SURROUND + s + NORMAL_VARIABLE_SURROUND;
             if (clone.contains(var)) {
-                Object q = runtime.getRuntimeObject().get(s);
+                Object q = runtime.getRuntimeObject().getOrDefault(s,null);
                 if (q == null) {
                     q = "null";
                 }
@@ -312,3 +316,89 @@ public class DictionaryUtil {
         throw new DictionaryOnRunningException("无法解析的表达式:" + str);
     }
 }
+
+
+/*
+嵌套括号表达式求值探究
+package com.kagg886;
+
+
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Stack;
+import java.util.stream.Collectors;
+public class Main {
+    public static void main(String[] args) throws Exception {
+        String regex = "{a.b(3).{f.b.i}.d({c.n.m}).e.f({q.{s.b(2).n}.p}).g(2).i.j.k.l.m.n}";
+        DeepStack stack = new DeepStack();
+
+        for (int i = 0; i < regex.length(); i++) {
+            char a = regex.charAt(i);
+            if (a == '{' || a == '}') {
+                stack.push(a,i);
+            }
+        }
+
+        List<RegexItem> sort = stack.getResult().stream()
+                .sorted(Comparator.comparingInt(o -> o.deep))
+                .collect(Collectors.toList());
+        for (RegexItem i : sort) {
+            System.out.printf("第%d层:%s\n",i.deep,regex.substring(i.lIndex+1, i.rIndex));
+        }
+    }
+
+    static class DeepStack extends Stack<CharItem> {
+
+        private ArrayList<RegexItem> result = new ArrayList<RegexItem>();
+        private int deep = 0;
+
+        public ArrayList<RegexItem> getResult() {
+            if (size()!=0) {
+                throw new RuntimeException();
+            }
+            return result;
+        }
+
+        public void push(char chr, int index) {
+            if (size() == 0) {
+                super.push(new CharItem(chr,index));
+                deep++;
+                return;
+            }
+            CharItem charItem = peek();
+            if (chr == '}' && charItem.chr == '{') {
+                pop();
+                result.add(new RegexItem(charItem.index,index,deep--));
+                return;
+            }
+
+            super.push(new CharItem(chr,index));
+            deep++;
+        }
+    }
+
+    static class RegexItem {
+        private int lIndex;
+        private int rIndex;
+        private int deep;
+
+        public RegexItem(int lIndex,int rIndex,int deep) {
+            this.deep = deep;
+            this.rIndex = rIndex;
+            this.lIndex = lIndex;
+        }
+    }
+
+    static class CharItem {
+        public int index;
+        public char chr;
+
+        public CharItem(char chr,int index) {
+            this.index = index;
+            this.chr = chr;
+        }
+    }
+}
+
+ */

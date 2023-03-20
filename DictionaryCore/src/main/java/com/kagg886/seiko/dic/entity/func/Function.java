@@ -32,6 +32,8 @@ public abstract class Function extends DictionaryCode {
             {"图片", "MessageControl$addImage"},
             {"艾特", "MessageControl$addAt"},
 
+
+            {"群成员","MemberControl$GetMember"},
             {"群成员列表","MemberControl$MemberList"},
             {"改名","MemberControl$ChangeName"},
             {"群头衔","MemberControl$ChangeTitle"},
