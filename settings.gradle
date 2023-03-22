@@ -20,7 +20,9 @@ include ':PluginAPI'
 include ':PluginDemo'
 include ':Tools'
 include ':DictionaryCore'
+include ':BotMock'
 include ':ConsolePlugin'
 
 gradle.ext.mirai_version = "2.14.0"
+
 

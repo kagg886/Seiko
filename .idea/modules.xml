@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Seiko.iml" filepath="$PROJECT_DIR$/.idea/modules/Seiko.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/ConsolePlugin/Seiko.ConsolePlugin.iml" filepath="$PROJECT_DIR$/.idea/modules/ConsolePlugin/Seiko.ConsolePlugin.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/ConsolePlugin/Seiko.ConsolePlugin.main.iml" filepath="$PROJECT_DIR$/.idea/modules/ConsolePlugin/Seiko.ConsolePlugin.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/DictionaryCore/Seiko.DictionaryCore.iml" filepath="$PROJECT_DIR$/.idea/modules/DictionaryCore/Seiko.DictionaryCore.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/DictionaryCore/Seiko.DictionaryCore.main.iml" filepath="$PROJECT_DIR$/.idea/modules/DictionaryCore/Seiko.DictionaryCore.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/PluginAPI/Seiko.PluginAPI.iml" filepath="$PROJECT_DIR$/.idea/modules/PluginAPI/Seiko.PluginAPI.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/PluginAPI/Seiko.PluginAPI.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/PluginAPI/Seiko.PluginAPI.androidTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/PluginAPI/Seiko.PluginAPI.main.iml" filepath="$PROJECT_DIR$/.idea/modules/PluginAPI/Seiko.PluginAPI.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/PluginAPI/Seiko.PluginAPI.unitTest.iml" filepath="$PROJECT_DIR$/.idea/modules/PluginAPI/Seiko.PluginAPI.unitTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/PluginDemo/Seiko.PluginDemo.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/PluginDemo/Seiko.PluginDemo.androidTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/PluginDemo/Seiko.PluginDemo.main.iml" filepath="$PROJECT_DIR$/.idea/modules/PluginDemo/Seiko.PluginDemo.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Tools/Seiko.Tools.iml" filepath="$PROJECT_DIR$/.idea/modules/Tools/Seiko.Tools.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Tools/Seiko.Tools.main.iml" filepath="$PROJECT_DIR$/.idea/modules/Tools/Seiko.Tools.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/Seiko.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/Seiko.app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/Seiko.app.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/Seiko.app.androidTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/Seiko.app.main.iml" filepath="$PROJECT_DIR$/.idea/modules/app/Seiko.app.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/Seiko.app.unitTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/Seiko.app.unitTest.iml" />
+    </modules>
+  </component>
+</project>
