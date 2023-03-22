@@ -16,11 +16,8 @@ import net.mamoe.mirai.mock.contact.MockMember;
 import java.io.File;
 import java.io.IOException;
 import java.util.Scanner;
-import java.util.function.Consumer;
 
 public class Main {
-
-    private static DictionaryFile file;
     public static void main(String[] args) throws IOException {
         initDictionaryEnvironment();
 
@@ -32,8 +29,10 @@ public class Main {
         group.changeOwner(b);
         mockBot.login();
         mockBot.getEventChannel().subscribeAlways(GroupMessageEvent.class, event -> {
-            GroupMessageRuntime runtime = new GroupMessageRuntime(file,event);
-            runtime.invoke(event.getMessage().contentToString());
+            for (DictionaryFile file : DICList.getInstance()) {
+                GroupMessageRuntime runtime = new GroupMessageRuntime(file,event);
+                runtime.invoke(event.getMessage().contentToString());
+            }
         });
         Scanner scanner = new Scanner(System.in);
 
@@ -49,8 +48,9 @@ public class Main {
         DictionaryEnvironment.getInstance().setDicConfigPoint("BotMock/mock/dicConfig.json");
         DictionaryEnvironment.getInstance().setErrorListener((p, message) -> System.out.println(p.getName() + "---" + message));
 
-        file = new DictionaryFile(new File(DictionaryEnvironment.getInstance().getDicRoot().getAbsolutePath() + "\\dic.txt"));
-        System.out.println(file.getFile().getAbsolutePath());
-        file.parseDICCodeFile();
+        DICList.getInstance().refresh();
+//        file = new DictionaryFile(new File(DictionaryEnvironment.getInstance().getDicRoot().getAbsolutePath() + "\\dic.txt"));
+//        System.out.println(file.getFile().getAbsolutePath());
+//        file.parseDICCodeFile();
     }
 }

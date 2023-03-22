@@ -13,3 +13,4 @@ app/src/test
 .externalNativeBuild
 .cxx
 /ConsolePlugin/debug-sandbox
+/BotMock/build
