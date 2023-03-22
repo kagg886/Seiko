@@ -19,4 +19,5 @@
     <string name="code_file_name_init">未命名.seiko</string>
     <string name="get_plugin_download_url">请输入插件下载链接</string>
     <string name="input_dic_name">输入词库文件名</string>
+    <string name="qq_QAuxiliary">若您的QQ已安装QAuxiliary，请勾选&quot;去除相册扫码登录检验&quot;后截图扫码。\n若未安装请点击下面的&quot;发送到…&quot;发送到电脑上然后打开QQ进行扫码></string>
 </resources>

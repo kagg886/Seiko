@@ -18,6 +18,12 @@
                 android:layout_height="wrap_content"/>
     </com.google.android.material.textfield.TextInputLayout>
 
+    <CheckBox
+            android:text="使用扫码登录"
+            android:textColor="@color/black"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:id="@+id/dialog_useQRScan"/>
+
     <com.google.android.material.textfield.TextInputLayout
             app:hintEnabled="true"
             android:id="@+id/dialog_editValue"

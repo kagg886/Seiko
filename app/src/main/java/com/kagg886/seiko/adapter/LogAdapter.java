@@ -1,6 +1,7 @@
 package com.kagg886.seiko.adapter;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
@@ -26,12 +27,13 @@ import java.io.IOException;
  * @version: 1.0
  */
 public class LogAdapter extends BaseAdapter {
-    private static final String SPLIT_STR = "\u001B";
+    private static final char SPLIT_STR = '\u001B';
     private final LimitedArrayList<String> log;
     private final Context ctx;
     private final Handler mHandler = new Handler(Looper.getMainLooper()) {
         @Override
         public void handleMessage(@NonNull Message msg) {
+            log.add(msg.getData().getString("str"));
             notifyDataSetChanged();
         }
     };
@@ -43,18 +45,21 @@ public class LogAdapter extends BaseAdapter {
         try {
             reader = new FileReader(logFile);
             new Thread(() -> {
-                char buf[] = new char[1];
+                char[] buf = new char[1];
                 while (true) {
                     StringBuilder builder = new StringBuilder();
                     boolean isCollected = false;
                     try {
                         while (reader.read(buf) != -1) {
-                            if (new String(buf).equals(SPLIT_STR)) {
+                            if (buf[0] == SPLIT_STR) {
                                 if (isCollected) { //遇到配对的符号了，切割然后合成大字符串
-                                    log.add(builder.substring(3));
+                                    Bundle b = new Bundle();
+                                    b.putString("str", builder.substring(3));
+                                    Message msg = new Message();
+                                    msg.setData(b);
+                                    mHandler.sendMessage(msg);
                                     builder = new StringBuilder();
                                     isCollected = false;
-                                    mHandler.sendEmptyMessage(0);
                                 } else { //未配对，开启配对
                                     isCollected = true;
                                     continue;

@@ -5,10 +5,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.BaseAdapter;
-import android.widget.ListView;
-import android.widget.Spinner;
+import android.widget.*;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
@@ -82,6 +79,18 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
         TextInputLayout keyEdit = view.findViewById(R.id.dialog_editKey);
         TextInputLayout valueEdit = view.findViewById(R.id.dialog_editValue);
 
+        CheckBox useQrScan = view.findViewById(R.id.dialog_useQRScan);
+        useQrScan.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (!buttonView.isPressed()) {
+                return;
+            }
+            if (isChecked) {
+                valueEdit.setVisibility(View.GONE);
+            } else {
+                valueEdit.setVisibility(View.VISIBLE);
+            }
+        });
+
         if (isEdit) {
             keyEdit.getEditText().setText(account.optString("uin"));
             keyEdit.getEditText().setEnabled(false);
@@ -91,15 +100,20 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
                 i++;
             }
             spinner.setSelection(i);
+            useQrScan.setChecked(account.optBoolean("useQRLogin"));
+            if (useQrScan.isChecked()) {
+                valueEdit.setVisibility(View.GONE);
+            }
         }
         builder.setPositiveButton("确定", (dialog, which) -> {
             String key = keyEdit.getEditText().getText().toString();
             String value = valueEdit.getEditText().getText().toString();
+            boolean useQRLogin = useQrScan.isChecked();
 
-            if (TextUtils.isEmpty(key) || TextUtils.isEmpty(value)) {
+            if (TextUtils.isEmpty(key) || (TextUtils.isEmpty(value) && !useQRLogin)) {
                 return;
             }
-            Long qq = 0L;
+            Long qq;
             try {
                 qq = Long.parseLong(key);
             } catch (Exception e) {
@@ -107,22 +121,40 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
                 return;
             }
 
-            if (Bot.getInstanceOrNull(qq) != null) {
-                SnackBroadCast.sendBroadCast("请勿输入已存在的QQ");
-            }
             JSONArrayStorage botList = JSONArrayStorage.obtain(avt.getExternalFilesDir("config").getAbsolutePath() + "/botList.json");
+
+            if (Bot.getInstanceOrNull(qq) != null && !isEdit) { //只有新增对话框中才需要检查新填写的qq和已存在列表是否相同
+                SnackBroadCast.sendBroadCast("请勿输入已存在的QQ");
+                return;
+            }
+
+            for (int i = 0; i < botList.length(); i++) {
+                if (botList.optJSONObject(i).optLong("uin") == qq) {
+                    if (isEdit) {
+                        botList.remove(i); //找到了就删掉!
+                        break;
+                    } else {
+                        SnackBroadCast.sendBroadCast("请勿输入已存在的QQ");
+                        return;
+                    }
+                }
+            }
+
             try {
                 account.put("uin", qq);
                 account.put("pass", value);
+                account.put("useQRLogin",useQRLogin);
                 account.put("platform", protocols[spinner.getSelectedItemPosition()]);
             } catch (JSONException e) {
                 throw new RuntimeException(e);
             }
-            if (!isEdit) {
-                botList.put(account);
-            }
+            botList.put(account);
             botList.save();
-            SnackBroadCast.sendBroadCast("添加成功!");
+            if (isEdit) {
+                SnackBroadCast.sendBroadCast("修改成功!");
+            } else {
+                SnackBroadCast.sendBroadCast("添加成功!");
+            }
             adapter.notifyDataSetChanged();
         });
         return builder.create();

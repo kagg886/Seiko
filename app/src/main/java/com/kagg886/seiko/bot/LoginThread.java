@@ -19,12 +19,10 @@ import com.kagg886.seiko.util.storage.JSONArrayStorage;
 import net.mamoe.mirai.Bot;
 import net.mamoe.mirai.BotFactory;
 import net.mamoe.mirai.network.LoginFailedException;
-import net.mamoe.mirai.network.WrongPasswordException;
 import net.mamoe.mirai.utils.BotConfiguration;
 import org.json.JSONObject;
 
 import java.io.File;
-import java.io.FileFilter;
 import java.nio.file.Paths;
 
 /**
@@ -57,6 +55,13 @@ public class LoginThread extends Thread {
                     break;
                 case 1:
                     Throwable throwable = ((Throwable) msg.getData().getSerializable("exception"));
+                    if (throwable.getClass().getName().equals("net.mamoe.mirai.internal.network.auth.ProducerFailureException")) {
+                        try {
+                            throwable = throwable.getSuppressed()[0];
+                        } catch (Exception ignored) {
+
+                        }
+                    }
                     if (SeikoApplication.globalConfig.getBoolean("badDeviceAutoDel",true)) {
                         if (throwable instanceof LoginFailedException) {
                             if (((LoginFailedException) throwable).getKillBot()) {
@@ -75,7 +80,8 @@ public class LoginThread extends Thread {
                             }
                         }
                     }
-                    DialogBroadCast.sendBroadCast("登录失败", throwable.getMessage() + "\n完整信息请查看bot日志");
+                    DialogBroadCast.sendBroadCast("登录失败", throwable.getMessage() == null ? "bot登陆时发现未知异常" : throwable.getMessage() + "\n完整信息请查看bot日志");
+                    bot.getLogger().error("在Bot登录时发现异常:", throwable);
                     sw.setChecked(false);
                     dialog.dismiss();
                     break;
@@ -95,7 +101,12 @@ public class LoginThread extends Thread {
         dialog = new AlertDialog.Builder(SeikoApplication.getCurrentActivity()).setTitle("登录中...(" + uin + ")").setCancelable(false).setMessage("请稍等片刻...").create();
         BotLogConfiguration configuration = new BotLogConfiguration(uin);
         configuration.setProtocol(protocol);
-        bot = BotFactory.INSTANCE.newBot(uin, pass, configuration);
+
+        if (botConfig.optBoolean("useQRLogin")) {
+            bot = BotFactory.INSTANCE.newBot(uin, (botAuthSession, botAuthInfo, continuation) -> botAuthSession.authByQRCode(continuation),configuration);
+        } else {
+            bot = BotFactory.INSTANCE.newBot(uin, pass, configuration);
+        }
     }
 
     @SuppressLint("UnsafeOptInUsageError")
