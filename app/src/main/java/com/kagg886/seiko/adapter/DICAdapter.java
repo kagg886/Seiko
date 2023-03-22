@@ -57,7 +57,7 @@ public class DICAdapter extends BaseAdapter {
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
         @SuppressLint("ViewHolder")
-        View v = LayoutInflater.from(SeikoApplication.getSeikoApplicationContext()).inflate(R.layout.adapter_dicitem, null);
+        View v = LayoutInflater.from(SeikoApplication.getCurrentActivity()).inflate(R.layout.adapter_dicitem, null);
         SwitchCompat sw = v.findViewById(R.id.adapter_dicitem_status);
         TextView tx = v.findViewById(R.id.adapter_dicitem_name);
 

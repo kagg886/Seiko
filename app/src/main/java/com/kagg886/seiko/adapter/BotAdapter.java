@@ -30,6 +30,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.channels.FileChannel;
 import java.util.*;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
@@ -119,7 +120,7 @@ public class BotAdapter extends BaseAdapter {
                     builder.append("\nSeiko内部维护的Bot列表:" + nativeBots);
                     builder.append("\n若您遇到了这个弹窗，证明在几天之前有人触发了这个bug并且闪退。请前往Seiko的仓库提issue并截图此页面。");
 
-                    DialogBroadCast.sendBroadCast("小小的警告",builder.toString());
+                    DialogBroadCast.sendBroadCast("小小的警告", builder.toString());
                 }
                 //SnackBroadCast.sendBroadCast(avt,target.optLong("uin") + "已下线");
             }
@@ -134,17 +135,31 @@ public class BotAdapter extends BaseAdapter {
                 switch (which) {
                     case 0:
                         File p = new File(avt.getExternalFilesDir("bots") + "/" + uin);
-                        if (!p.exists()) {
+                        if (!new File(p.getAbsolutePath(),"cache").exists()) {
                             SnackBroadCast.sendBroadCast("从未登陆过，无法获取到登录信息");
                             return;
                         }
+                        File config = new File(p, "loginTemplate.yml");
+                        if (config.exists()) {
+                            config.delete();
+                        }
+                        try {
+                            config.createNewFile();
+                            String template = String.format(IOUtil.loadStringFromStream(avt.getAssets().open("loginTemplate.yml")),
+                                    uin,
+                                    object.optString("pass"),
+                                    object.optString("platform"));
+                            IOUtil.writeStringToFile(config.getAbsolutePath(),template);
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
 
-                        File zipFile = new File(avt.getExternalFilesDir("tmp"), UUID.randomUUID().toString().replace("-","") + ".zip");
+                        File zipFile = new File(avt.getExternalFilesDir("tmp"), UUID.randomUUID().toString().replace("-", "") + ".zip");
 
                         try {
-                            IOUtil.zipFile(p,zipFile);
+                            IOUtil.zipFile(p, zipFile);
                         } catch (IOException e) {
-                            Log.w("BotAdapter",e);
+                            Log.w("BotAdapter", e);
                             SnackBroadCast.sendBroadCast("导出信息失败...");
                         }
                         ShareUtil.quickShare(avt, zipFile, "*/*");

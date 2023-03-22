@@ -103,7 +103,7 @@ public class BotRunnerService extends Service {
         chan.setLightColor(Color.BLUE);
         chan.setLockscreenVisibility(Notification.VISIBILITY_PRIVATE);
         notificationManager.createNotificationChannel(chan);
-        icon = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);
+        icon = BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher);
 
         Intent i = new Intent(this, MainActivity.class);
         int flag;
@@ -126,7 +126,7 @@ public class BotRunnerService extends Service {
                 .setContentText(content)
                 .setWhen(System.currentTimeMillis())//通知显示时间
                 .setOnlyAlertOnce(true) //不加这行等着吵死你 哼唧
-                .setSmallIcon(R.mipmap.ic_launcher).setOngoing(true).setLargeIcon(icon);
+                .setSmallIcon(R.drawable.ic_launcher).setOngoing(true).setLargeIcon(icon);
         builder.setContentIntent(pIntent);
         return builder.build();
     }

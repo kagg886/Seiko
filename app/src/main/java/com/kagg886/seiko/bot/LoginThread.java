@@ -59,7 +59,11 @@ public class LoginThread extends Thread {
                         try {
                             throwable = throwable.getSuppressed()[0];
                         } catch (Exception ignored) {
+                            try {
+                                throwable = throwable.getCause();
+                            } catch (Exception ignored1) {
 
+                            }
                         }
                     }
                     if (SeikoApplication.globalConfig.getBoolean("badDeviceAutoDel",true)) {

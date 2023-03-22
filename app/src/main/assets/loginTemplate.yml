@@ -1,0 +1,10 @@
+# 请将此文件的内容复制到MCL目录/config/Console/AutoLogin.yml的最后一行
+- account: %s
+  password:
+    kind: PLAIN
+    value: %s
+  configuration:
+    protocol: %s
+    device: device.json
+    enable: true
+    heartbeatStrategy: STAT_HB
