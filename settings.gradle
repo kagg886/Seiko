@@ -23,6 +23,6 @@ include ':DictionaryCore'
 include ':BotMock'
 include ':ConsolePlugin'
 
-gradle.ext.mirai_version = "2.14.0"
+gradle.ext.mirai_version = "2.15.0-M1"
 
 
