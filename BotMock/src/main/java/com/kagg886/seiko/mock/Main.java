@@ -29,6 +29,7 @@ public class Main {
         group.changeOwner(b);
         mockBot.login();
         mockBot.getEventChannel().subscribeAlways(GroupMessageEvent.class, event -> {
+            DICList.getInstance().refresh();
             for (DictionaryFile file : DICList.getInstance()) {
                 GroupMessageRuntime runtime = new GroupMessageRuntime(file,event);
                 runtime.invoke(event.getMessage().contentToString());

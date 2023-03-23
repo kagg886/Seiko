@@ -23,16 +23,18 @@ public abstract class Function extends DictionaryCode {
     };
     private static final String[][] uninterruptedFunctionNames = { //阻断方法列表，后面的是Class名
 
+            //杂项方法
             {"读", "FileControl$Read"},
             {"写", "FileControl$Write"},
             {"JAVA方法运行", "JavaMethodInvoke"},
             {"随机数", "Random"},
             {"调用", "TransferDicMethod"},
 
+            //与消息有关
             {"图片", "MessageControl$addImage"},
             {"艾特", "MessageControl$addAt"},
 
-
+            //与群成员有关
             {"群成员","MemberControl$GetMember"},
             {"群成员列表","MemberControl$MemberList"},
             {"改名","MemberControl$ChangeName"},
@@ -41,9 +43,21 @@ public abstract class Function extends DictionaryCode {
             {"踢","MemberControl$Kick"},
             {"管理员","MemberControl$ModifyAdmin"},
 
+            //与bot有关
+            {"群列表","BotControl$getGroups"},
+            {"获取群","BotControl$getGroup"},
+//            {"","BotControl$"},
+//            {"","BotControl$"},
+//            {"","BotControl$"},
+//            {"","BotControl$"},
+//            {"","BotControl$"},
+//            {"","BotControl$"},
+
+            //与日期有关
             {"转时间","DateParser$StampToDate"},
             {"转时间戳","DateParser$DateToStamp"},
 
+            //与字符串有关
             {"文字替换", "StringUtil$Replace"},
             {"文字分割", "StringUtil$Split"},
             {"文字查索", "StringUtil$IndexOf"},
@@ -52,11 +66,13 @@ public abstract class Function extends DictionaryCode {
             {"转大写", "StringUtil$UpperCase"},
             {"转小写", "StringUtil$LowerCase"},
 
+            //与变量有关
             {"变量赋值", "ContextControl$SetVar"},
             {"变量删除", "ContextControl$DelVar"},
             {"变量检验", "ContextControl$CheckExists"},
             {"变量提取", "ContextControl$ChainGet"},
 
+            //与集合有关
             {"集合创建", "CollectionControl$Create"},
             {"集合导入", "CollectionControl$From"},
             {"集合删除", "CollectionControl$DelVar"},
@@ -66,6 +82,7 @@ public abstract class Function extends DictionaryCode {
             {"集合长", "CollectionControl$Length"},
             {"集合转", "CollectionControl$To"},
 
+            //与数组有关
             {"数组创建", "ArrayControl$Create"},
             {"数组导入", "ArrayControl$Import"},
             {"数组删除", "ArrayControl$Del"},
