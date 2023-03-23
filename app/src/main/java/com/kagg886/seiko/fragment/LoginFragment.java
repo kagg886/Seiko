@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputLayout;
 import com.kagg886.seiko.R;
@@ -30,8 +31,10 @@ import org.json.JSONObject;
  * @date: 2022/12/12 19:14
  * @version: 1.0
  */
-public class LoginFragment extends Fragment implements View.OnClickListener {
+public class LoginFragment extends Fragment implements View.OnClickListener, SwipeRefreshLayout.OnRefreshListener {
     private BotAdapter adapter;
+
+    private SwipeRefreshLayout refresh;
 
     private static final String[] protocols = {
             "ANDROID_PHONE",
@@ -46,6 +49,9 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         adapter = new BotAdapter((MainActivity) getActivity());
         View v = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_login, null);
+
+        refresh = v.findViewById(R.id.fragment_login_view_refresh);
+        refresh.setOnRefreshListener(this);
         ListView lv = v.findViewById(R.id.fragment_login_view_list);
         FloatingActionButton btn = v.findViewById(R.id.fragment_login_widget_add);
 
@@ -158,5 +164,11 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
             adapter.notifyDataSetChanged();
         });
         return builder.create();
+    }
+
+    @Override
+    public void onRefresh() {
+        adapter.notifyDataSetChanged();
+        refresh.setRefreshing(false);
     }
 }
