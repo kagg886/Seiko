@@ -28,7 +28,8 @@ public class IOUtil {
 
     private static void zipFile(ZipOutputStream outputStream, File base, File file) throws IOException {
         if (!file.isDirectory()) {
-            outputStream.putNextEntry(new ZipEntry(file.getAbsolutePath().replace(base.getAbsolutePath(), "")));
+            String filePath = file.getAbsolutePath().replace(base.getAbsolutePath() + "/", "");
+            outputStream.putNextEntry(new ZipEntry(filePath));
             outputStream.write(IOUtil.loadByteFromFile(file.getAbsolutePath()));
         } else {
             for (File k : file.listFiles()) {
