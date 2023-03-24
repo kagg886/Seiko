@@ -34,7 +34,7 @@ public abstract class ContextControl extends Function.UnInterruptedFunction {
      * @date: 2023/1/28 21:49
      * @version: 1.0
      */
-    public static class ChainGet extends ContextControl {
+    public static class ChainGet extends ContextControl implements ArgumentLimiter {
 
         public ChainGet(int line, String code) {
             super(line, code);
@@ -43,13 +43,12 @@ public abstract class ContextControl extends Function.UnInterruptedFunction {
         @Override
         protected void run(AbsRuntime<?> runtime, List<Object> args) {
             String putVar = args.get(0).toString();
-            StringBuilder val = new StringBuilder();
-            int i = 0;
-            while (++i < args.size()) {
-                val.append(" ");
-                val.append(args.get(i).toString());
-            }
-            runtime.getRuntimeObject().put(putVar, DictionaryUtil.chainExpressionCalc(runtime,val.substring(1)));
+            runtime.getRuntimeObject().put(putVar, DictionaryUtil.chainExpressionCalc(runtime,args.get(1).toString()));
+        }
+
+        @Override
+        public int getArgumentLength() {
+            return 2;
         }
     }
 

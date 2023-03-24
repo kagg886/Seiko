@@ -15,6 +15,7 @@ import net.mamoe.mirai.mock.contact.MockMember;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Scanner;
 
 public class Main {

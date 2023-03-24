@@ -46,6 +46,8 @@ public abstract class Function extends DictionaryCode {
             //与bot有关
             {"群列表","BotControl$getGroups"},
             {"获取群","BotControl$getGroup"},
+            {"好友列表","BotControl$getFriends"},
+            {"获取好友","BotControl$getFriend"},
 //            {"","BotControl$"},
 //            {"","BotControl$"},
 //            {"","BotControl$"},
@@ -136,7 +138,11 @@ public abstract class Function extends DictionaryCode {
     }
 
     public void invoke(AbsRuntime<?> runtime) {
-        run(runtime, DictionaryUtil.variableToObject(argCode, runtime));
+        int limit = 0;
+        if (this instanceof ArgumentLimiter) {
+            limit = ((ArgumentLimiter) this).getArgumentLength();
+        }
+        run(runtime, DictionaryUtil.variableToObject(argCode.split(" ",limit), runtime));
     }
 
     protected abstract void run(AbsRuntime<?> runtime, List<Object> args);
@@ -171,5 +177,18 @@ public abstract class Function extends DictionaryCode {
         public UnInterruptedFunction(int line, String code) {
             super(line, code);
         }
+    }
+
+    /**
+     * @projectName: Seiko
+     * @package: com.kagg886.seiko.dic.entity.impl
+     * @className: ArgumentLimiter
+     * @author: kagg886
+     * @description: 限制了参数的Function，最多只能拥有getArgumentLength()个参数
+     * @date: 2023/1/18 11:45
+     * @version: 1.0
+     */
+    public interface ArgumentLimiter {
+        int getArgumentLength();
     }
 }

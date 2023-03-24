@@ -23,18 +23,7 @@ import com.kagg886.seiko.util.IOUtil;
 
 import java.io.IOException;
 import java.util.function.Consumer;
-
-import io.github.rosemoe.sora.lang.Language;
-import io.github.rosemoe.sora.lang.analysis.AnalyzeManager;
-import io.github.rosemoe.sora.lang.completion.CompletionCancelledException;
-import io.github.rosemoe.sora.lang.completion.CompletionPublisher;
-import io.github.rosemoe.sora.lang.format.Formatter;
-import io.github.rosemoe.sora.lang.smartEnter.NewlineHandler;
-import io.github.rosemoe.sora.langs.java.JavaLanguage;
-import io.github.rosemoe.sora.text.CharPosition;
-import io.github.rosemoe.sora.text.ContentReference;
 import io.github.rosemoe.sora.widget.CodeEditor;
-import io.github.rosemoe.sora.widget.SymbolPairMatch;
 
 public class DICEditActivity extends AppCompatActivity {
     private CodeEditor code;

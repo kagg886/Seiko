@@ -107,11 +107,9 @@ public class DictionaryUtil {
      * @description 用于函数，将参数变量提取成字符串。
      * @date 2023/01/19 18:51
      */
-    public static List<Object> variableToObject(String code, AbsRuntime<?> runtime) {
-        Object[] args = code.split(" ");
+    public static List<Object> variableToObject(String[] args, AbsRuntime<?> runtime) {
         ArrayList<Object> k = new ArrayList<>();
-        for (Object o : args) {
-            String arg = (String) o;
+        for (String arg : args) {
             if (arg.startsWith(NORMAL_VARIABLE_SURROUND) && arg.endsWith(NORMAL_VARIABLE_SURROUND)) {//第一步：%A%变量解析
                 k.add(runtime.getRuntimeObject().getOrDefault(arg.substring(1, arg.length() - 1), "null"));
                 continue;

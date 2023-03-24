@@ -216,6 +216,7 @@ public abstract class MemberControl extends Function.UnInterruptedFunction {
 
     private static HashMap<String, String> spawnMemberInfo(NormalMember i) {
         HashMap<String, String> memberInfo = new HashMap<>();
+        memberInfo.put("类型","群成员");
         memberInfo.put("QQ", String.valueOf(i.getId()));
         memberInfo.put("所属群", String.valueOf(i.getGroup().getId()));
         memberInfo.put("所属BOT", String.valueOf(i.getBot().getId()));
