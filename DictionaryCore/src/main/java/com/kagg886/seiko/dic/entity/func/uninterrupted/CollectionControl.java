@@ -86,7 +86,7 @@ public abstract class CollectionControl extends Function.UnInterruptedFunction {
      * @date: 2023/2/1 12:35
      * @version: 1.0
      */
-    public static class From extends CollectionControl {
+    public static class From extends CollectionControl implements ArgumentLimiter {
 
         public From(int line, String code) {
             super(line, code);
@@ -95,31 +95,31 @@ public abstract class CollectionControl extends Function.UnInterruptedFunction {
         @Override
         protected void run(AbsRuntime<?> runtime, List<Object> args) {
             String varName = args.get(0).toString();
-            StringBuilder val = new StringBuilder();
-            int i = 0;
-            while (++i < args.size()) {
-                val.append(" ");
-                val.append(args.get(i).toString());
-            }
+            String val = args.get(1).toString();
             try {
-                runtime.getRuntimeObject().put(varName, new JSONObject(val.substring(1)).toMap());
+                runtime.getRuntimeObject().put(varName, new JSONObject(val).toMap());
                 return;
             } catch (Exception e) {
             }
             try {
-                runtime.getRuntimeObject().put(varName, XML.toJSONObject(val.substring(1)).toMap());
+                runtime.getRuntimeObject().put(varName, XML.toJSONObject(val).toMap());
                 return;
             } catch (Exception e) {
             }
             try {
-                runtime.getRuntimeObject().put(varName, HTTP.toJSONObject(val.substring(1)).toMap());
+                runtime.getRuntimeObject().put(varName, HTTP.toJSONObject(val).toMap());
                 return;
             } catch (Exception e) {
             }
             try {
-                runtime.getRuntimeObject().put(varName, Cookie.toJSONObject(val.substring(1)).toMap());
+                runtime.getRuntimeObject().put(varName, Cookie.toJSONObject(val).toMap());
             } catch (Exception e) {
             }
+        }
+
+        @Override
+        public int getArgumentLength() {
+            return 2;
         }
     }
 

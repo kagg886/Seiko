@@ -61,7 +61,7 @@ public abstract class ContextControl extends Function.UnInterruptedFunction {
      * @date: 2023/1/28 21:49
      * @version: 1.0
      */
-    public static class SetVar extends ContextControl {
+    public static class SetVar extends ContextControl implements ArgumentLimiter {
 
         public SetVar(int line, String code) {
             super(line, code);
@@ -75,6 +75,11 @@ public abstract class ContextControl extends Function.UnInterruptedFunction {
                 value = DictionaryUtil.cleanVariableCode((String) value, runtime);
             }
             runtime.getRuntimeObject().put(name, value);
+        }
+
+        @Override
+        public int getArgumentLength() {
+            return 2;
         }
     }
 

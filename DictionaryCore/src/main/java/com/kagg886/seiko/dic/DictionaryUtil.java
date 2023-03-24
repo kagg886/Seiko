@@ -78,9 +78,10 @@ public class DictionaryUtil {
         //针对{a[0].%A%}这种情况。要先脱去最外层大括号，然后再执行内层内容。这样可以保证最外层不会被整体替换成字符串。
         //解析后real为a[0].b，可以放心解析
         Object point = runtime.getRuntimeObject();
+        int checkCount = 0; //使用checkCount判断根变量是否为null。是则直接抛出异常
         for (String str : exps) {
-            if (point == null) {
-                break;
+            if (point == null) { //上一个已经为null了，直接抛异常
+                throw new IllegalArgumentException("找不到键:" + exps[Arrays.binarySearch(exps,str)-1]);
             }
             if (str.contains("(") && str.contains(")")) { //按数组处理
                 String arrayIndex = str.substring(str.indexOf("(") + 1, str.length() - 1);
@@ -89,11 +90,15 @@ public class DictionaryUtil {
                 List<?> list = ((List<?>) ((HashMap<?, ?>) point).get(arrayName));
                 int idx = Integer.parseInt(arrayIndex);
                 point =  idx < list.size() ? list.get(idx) : null;
-                continue;
+            } else {
+                point = ((HashMap<?, ?>) point).getOrDefault(str,null);
             }
-            point = ((HashMap<?, ?>) point).getOrDefault(str,null);
+            checkCount++;
         }
         if (point == null) {
+            if (checkCount == 1) {
+                throw new IllegalArgumentException("变量不存在:" + exps[0]);
+            }
             point = "null";
         }
         return point;
