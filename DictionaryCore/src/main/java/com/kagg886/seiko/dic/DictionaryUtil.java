@@ -185,8 +185,7 @@ public class DictionaryUtil {
                 clone = clone.replace("[" + expression + "]", result);
                 xLeft = xRight;
             }
-        } catch (Exception ignored) {
-        }
+        } catch (Exception ignored) {}
 
         return clone;
     }
