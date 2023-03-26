@@ -6,6 +6,7 @@ import net.mamoe.mirai.Bot;
 import net.mamoe.mirai.contact.NormalMember;
 import net.mamoe.mirai.event.events.GroupMessageEvent;
 
+import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -179,7 +180,8 @@ public class DictionaryUtil {
             while ((xLeft = clone.indexOf("[", xLeft)) != -1) {
                 int xRight = clone.indexOf("]", xLeft);
                 String expression = clone.substring(xLeft + 1, xRight);
-                String result = String.valueOf(DictionaryUtil.mathExpressionCalc(expression));
+                //String result = String.valueOf(DictionaryUtil.mathExpressionCalc(expression));
+                String result = new BigDecimal(Double.toString(DictionaryUtil.mathExpressionCalc(expression))).toPlainString();
                 clone = clone.replace("[" + expression + "]", result);
                 xLeft = xRight;
             }
