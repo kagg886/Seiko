@@ -21,6 +21,7 @@ import com.kagg886.seiko.dic.model.DICParseResult;
 import com.kagg886.seiko.event.DialogBroadCast;
 import com.kagg886.seiko.event.SnackBroadCast;
 
+import com.kagg886.seiko.util.IOUtil;
 import org.json.JSONObject;
 
 import java.io.IOException;
@@ -92,7 +93,7 @@ public class DICAdapter extends BaseAdapter {
                 try {
                     dictionaryFile.parseDICCodeFile();
                 } catch (Exception e) {
-                    DialogBroadCast.sendBroadCast("解析" + dictionaryFile.getName() + "时遇到问题!",e.getMessage());
+                    DialogBroadCast.sendBroadCast("解析'" + dictionaryFile.getName() + "'时遇到问题!", IOUtil.getException(e));
                     sw.setChecked(false);
                     // 结束函数
                     return;

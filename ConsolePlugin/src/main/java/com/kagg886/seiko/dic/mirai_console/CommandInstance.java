@@ -5,12 +5,15 @@ import com.kagg886.seiko.dic.DictionaryEnvironment;
 import com.kagg886.seiko.dic.entity.DictionaryCode;
 import com.kagg886.seiko.dic.entity.DictionaryCommandMatcher;
 import com.kagg886.seiko.dic.entity.DictionaryFile;
+import com.kagg886.seiko.dic.model.DICParseResult;
+import com.kagg886.seiko.util.IOUtil;
 import com.kagg886.seiko.util.storage.JSONObjectStorage;
 import net.mamoe.mirai.console.command.CommandContext;
 import net.mamoe.mirai.console.command.ConsoleCommandSender;
 import net.mamoe.mirai.console.command.java.JCompositeCommand;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -38,6 +41,15 @@ public class CommandInstance extends JCompositeCommand {
 
         for (DictionaryFile dic : DICList.getInstance()) {
             if (dic.getName().equals(fileName)) {
+                if (dic.getCommands().size() == 0) {
+                    try {
+                        dic.parseDICCodeFile();
+                    } catch (Throwable e) {
+                        PluginLoader.INSTANCE.getLogger().error(IOUtil.getException(e));
+                        PluginLoader.INSTANCE.getLogger().info("启用伪代码'" + dic.getName() + "'失败!");
+                        return;
+                    }
+                }
                 JSONObjectStorage storage = DictionaryEnvironment.getInstance().getDicConfig();
                 JSONObject config = storage.optJSONObject(fileName, new JSONObject());
                 boolean st = !config.optBoolean("enabled", true);
@@ -105,9 +117,13 @@ public class CommandInstance extends JCompositeCommand {
         if (!(context.getSender() instanceof ConsoleCommandSender)) {
             return;
         }
-        boolean success = DICList.getInstance().refresh().success;
-        if(!success) {
+        DICParseResult result = DICList.getInstance().refresh();
+        if(!result.success) {
+            for (Throwable e : result.err) {
+                PluginLoader.INSTANCE.getLogger().error(IOUtil.getException(e));
+            }
             PluginLoader.INSTANCE.getLogger().info("伪代码解析中存在问题！请检查无法被启用的伪代码");
+            return;
         }
         PluginLoader.INSTANCE.getLogger().info("重载所有伪代码文件...成功!");
     }
