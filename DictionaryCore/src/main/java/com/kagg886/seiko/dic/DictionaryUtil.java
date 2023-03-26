@@ -165,8 +165,11 @@ public class DictionaryUtil {
         for (String s : runtime.getRuntimeObject().keySet()) { //s一定是String
             String var = NORMAL_VARIABLE_SURROUND + s + NORMAL_VARIABLE_SURROUND;
             if (clone.contains(var)) {
-                //得于Map，还于Map。根本不需要判空
-                clone = clone.replace(var, runtime.getRuntimeObject().getOrDefault(s,null).toString());
+                Object val = runtime.getRuntimeObject().getOrDefault(s,null);
+                if (val == null) { //不排除有脑瘫手动往里面加null值
+                    val = "null";
+                }
+                clone = clone.replace(var, val.toString());
             }
         }
 

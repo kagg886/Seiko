@@ -128,7 +128,7 @@ public abstract class AbsRuntime<T> {
                     if (e instanceof DictionaryOnRunningException) {
                         msg = ((DictionaryOnRunningException) e).getMsg();
                     }
-                    throw new DictionaryOnRunningException(file, msg, exceptionStacks, e);
+                    throw new DictionaryOnRunningException(file, msg, this ,exceptionStacks, e);
                     //我也不知道这一坨怎么写的，能正常运行就行
                 }
             }
