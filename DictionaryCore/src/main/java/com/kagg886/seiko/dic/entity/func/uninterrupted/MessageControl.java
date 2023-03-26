@@ -33,7 +33,7 @@ public abstract class MessageControl extends Function.UnInterruptedFunction {
      * @date: 2023/1/18 12:25
      * @version: 1.0
      */
-    public class addAt extends Function.UnInterruptedFunction {
+    public static class addAt extends Function.UnInterruptedFunction {
 
         public addAt(int line, String code) {
             super(line, code);
@@ -59,7 +59,7 @@ public abstract class MessageControl extends Function.UnInterruptedFunction {
      * @date: 2023/1/18 12:25
      * @version: 1.0
      */
-    public class addImage extends Function.UnInterruptedFunction {
+    public static class addImage extends Function.UnInterruptedFunction {
 
         public addImage(int line, String code) {
             super(line, code);
