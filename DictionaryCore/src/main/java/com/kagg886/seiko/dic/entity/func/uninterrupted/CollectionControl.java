@@ -215,7 +215,7 @@ public abstract class CollectionControl extends Function.UnInterruptedFunction {
      * @date: 2023/2/1 12:10
      * @version: 1.0
      */
-    public static class SetVar extends CollectionControl {
+    public static class SetVar extends CollectionControl implements ArgumentLimiter {
         public SetVar(int line, String code) {
             super(line, code);
         }
@@ -230,6 +230,12 @@ public abstract class CollectionControl extends Function.UnInterruptedFunction {
             Object value = args.get(2);
             HashMap<String, Object> map = toMap(o);
             map.put(varName, value);
+        }
+
+
+        @Override
+        public int getArgumentLength() {
+            return 3;
         }
     }
 

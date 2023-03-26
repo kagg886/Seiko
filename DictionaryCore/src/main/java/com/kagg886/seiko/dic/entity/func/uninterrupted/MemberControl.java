@@ -43,7 +43,7 @@ public abstract class MemberControl extends Function.UnInterruptedFunction {
         protected void run(AbsRuntime<?> runtime, List<Object> args) {
             NormalMember i = getMemberInfoByObjectList(runtime, args, 1);
             String s = args.get(0).toString();
-            HashMap<String, String> memberInfo = spawnMemberInfo(i);
+            HashMap<String, Object> memberInfo = spawnMemberInfo(i);
             runtime.getRuntimeObject().put(s,memberInfo);
         }
     }
@@ -206,7 +206,7 @@ public abstract class MemberControl extends Function.UnInterruptedFunction {
                     botAccount = Long.parseLong(runtime.getRuntimeObject().get("BOT").toString());
                 }
             }
-            ArrayList<HashMap<String, String>> lists = new ArrayList<>();
+            ArrayList<HashMap<String, Object>> lists = new ArrayList<>();
             for (NormalMember i : Bot.findInstance(botAccount).getGroup(groupId).getMembers()) {
                 lists.add(spawnMemberInfo(i));
             }
@@ -214,20 +214,20 @@ public abstract class MemberControl extends Function.UnInterruptedFunction {
         }
     }
 
-    private static HashMap<String, String> spawnMemberInfo(NormalMember i) {
-        HashMap<String, String> memberInfo = new HashMap<>();
+    private static HashMap<String, Object> spawnMemberInfo(NormalMember i) {
+        HashMap<String,Object> memberInfo = new HashMap<>();
         memberInfo.put("类型","群成员");
-        memberInfo.put("QQ", String.valueOf(i.getId()));
-        memberInfo.put("所属群", String.valueOf(i.getGroup().getId()));
-        memberInfo.put("所属BOT", String.valueOf(i.getBot().getId()));
+        memberInfo.put("QQ", i.getId());
+        memberInfo.put("所属群", i.getGroup().getId());
+        memberInfo.put("所属BOT", i.getBot().getId());
         memberInfo.put("昵称", i.getNick());
         memberInfo.put("群名片", i.getNameCard());
         memberInfo.put("权限", i.getPermission().toString());
-        memberInfo.put("权限代码", String.valueOf(i.getPermission().getLevel()));
+        memberInfo.put("权限代码", i.getPermission().getLevel());
         memberInfo.put("特殊头衔", i.getSpecialTitle());
-        memberInfo.put("加群时间戳", String.valueOf(i.getJoinTimestamp()));
-        memberInfo.put("禁言剩余", String.valueOf(i.getMuteTimeRemaining()));
-        memberInfo.put("最近发言时间戳", String.valueOf(i.getLastSpeakTimestamp()));
+        memberInfo.put("加群时间戳", i.getJoinTimestamp());
+        memberInfo.put("禁言剩余",i.getMuteTimeRemaining());
+        memberInfo.put("最近发言时间戳", i.getLastSpeakTimestamp());
         return memberInfo;
     }
 

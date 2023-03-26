@@ -27,6 +27,32 @@ public abstract class StringUtil extends Function.UnInterruptedFunction {
      * @package: com.kagg886.seiko.dic.entity.func.uninterrupted
      * @className: StringUtil
      * @author: kagg886
+     * @description: $格式化 存入变量 格式化字符串 参数$
+     * @date: 2023/2/18 18:48
+     * @version: 1.0
+     */
+    public static class Format extends CollectionControl {
+        public Format(int line, String code) {
+            super(line, code);
+        }
+
+        @Override
+        protected void run(AbsRuntime<?> runtime, List<Object> args) {
+            String putVal = args.get(0).toString();
+            String format = args.get(1).toString();
+            Object[] formatArg = new Object[args.size() - 2];
+            for (int i = 2; i < args.size(); i++) {
+                formatArg[i-2] = args.get(i);
+            }
+            runtime.getRuntimeObject().put(putVal,String.format(format,formatArg));
+        }
+    }
+
+    /**
+     * @projectName: Seiko
+     * @package: com.kagg886.seiko.dic.entity.func.uninterrupted
+     * @className: StringUtil
+     * @author: kagg886
      * @description: $转小写 变量名 存入变量(可选)$
      * @date: 2023/2/18 18:48
      * @version: 1.0
