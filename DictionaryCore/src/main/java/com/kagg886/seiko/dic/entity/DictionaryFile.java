@@ -13,6 +13,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * @projectName: Seiko
@@ -39,6 +40,8 @@ public class DictionaryFile {
             return super.put(key, value);
         }
     };
+
+    private final List<String> settings = new ArrayList<>(); //伪代码的#号设置
 
     public DictionaryFile(File dicFile) {
         this.dicFile = dicFile;
@@ -72,11 +75,32 @@ public class DictionaryFile {
         String commandRegex = null;
         ArrayList<DictionaryCode> dictionaryCodes = new ArrayList<>();
         int commandLine = 0; //指令所在的行号
+        boolean initConfig = false, //遇到了'#'开头的内容返回true
+                initConfigSuccess = false; //在遇到'#'后，若遇到了空行返回true
+
         while (iterator.hasNext()) {
             String comm = iterator.next();
             if (comm.startsWith("//")) { //注释判空处理
                 continue; //注释直接跳过
             }
+
+            if (!initConfig || !initConfigSuccess) { //跳过解析#的条件:在遇到#后遇到空行
+                if (comm.startsWith("#")) {
+                    initConfig = true;
+                    settings.add(comm.substring(1));
+                    continue;
+                }
+                if (TextUtils.isEmpty(comm)) {
+                    initConfigSuccess = true;
+                    //在此处判断这是不是能正确解析SeikoDIC，先从编码开始
+                    if (!settings.contains("Seiko词库")) {
+                        throw new DictionaryOnLoadException("未检测到必要的标识:Seiko词库。如果你的编辑器里有'#Seiko词库'，那可能说明词库的编码出了问题，请将其以别的编码保存直到此报错消失\n出错的伪代码文件:" + this.dicFile.getAbsolutePath());
+                    }
+                    continue;
+                }
+                throw new DictionaryOnLoadException("请在伪代码文件开头通过#注册必要设置!\n出错的伪代码文件:" + this.dicFile.getAbsolutePath());
+            }
+
             if (comm.contains("％")) { //我帮你排错... 我居然分不清这两个符号。2023/2/18
                 DictionaryEnvironment.getInstance().getErrorListener().onWarn(dicFile, "在第" + iterator.getLen() + "行发现全角符号％。\n在某些设备上%和％无法准确辨别，可能会导致伪代码变量无法正确解析");
             }
@@ -112,7 +136,7 @@ public class DictionaryFile {
                 对每一行伪代码进行解析。
                 按照[函数->特殊控制字符->纯文本]解析
             */
-            if (comm.startsWith("$")) {
+            if (comm.startsWith("$") && comm.endsWith("$")) { //真的会有人最后一行跟换行符(
                 try {
                     dictionaryCodes.add(Function.parseFunction(comm, iterator.getLen()));
                 } catch (Throwable e) {

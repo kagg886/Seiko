@@ -21,7 +21,7 @@ public abstract class Function extends DictionaryCode {
             {"语音", "Ptt"},
             {"访问", "HTTP"}
     };
-    public static final String[][] uninterruptedFunctionNames = { //阻断方法列表，后面的是Class名
+    private static final String[][] uninterruptedFunctionNames = { //阻断方法列表，后面的是Class名
 
             //杂项方法
             {"读", "FileControl$Read"},

@@ -4,6 +4,7 @@ import com.kagg886.seiko.dic.DICList;
 import com.kagg886.seiko.dic.DictionaryEnvironment;
 import com.kagg886.seiko.dic.bridge.DictionaryListener;
 import com.kagg886.seiko.dic.entity.DictionaryFile;
+import com.kagg886.seiko.dic.model.DICParseResult;
 import com.kagg886.seiko.dic.session.impl.GroupMessageRuntime;
 import net.mamoe.mirai.Bot;
 import net.mamoe.mirai.contact.NormalMember;
@@ -50,7 +51,12 @@ public class Main {
         DictionaryEnvironment.getInstance().setDicConfigPoint("BotMock/mock/dicConfig.json");
         DictionaryEnvironment.getInstance().setErrorListener((p, message) -> System.out.println(p.getName() + "---" + message));
 
-        DICList.getInstance().refresh();
+        DICParseResult result = DICList.getInstance().refresh();
+        if (!result.success) {
+            for (Throwable e : result.err) {
+                e.printStackTrace();
+            }
+        }
 //        file = new DictionaryFile(new File(DictionaryEnvironment.getInstance().getDicRoot().getAbsolutePath() + "\\dic.txt"));
 //        System.out.println(file.getFile().getAbsolutePath());
 //        file.parseDICCodeFile();
