@@ -68,11 +68,12 @@ public abstract class Function extends DictionaryCode {
             {"转大写", "StringUtil$UpperCase"},
             {"转小写", "StringUtil$LowerCase"},
 
-            //与变量有关
+            //与变量，常量有关
             {"变量赋值", "ContextControl$SetVar"},
             {"变量删除", "ContextControl$DelVar"},
             {"变量检验", "ContextControl$CheckExists"},
             {"变量提取", "ContextControl$ChainGet"},
+            {"常量", "ContextControl$Constant"},
 
             //与集合有关
             {"集合创建", "CollectionControl$Create"},

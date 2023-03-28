@@ -50,6 +50,11 @@ public class DictionaryFile {
     // 清除变量
     private void clear() {
         commands.clear();
+        settings.clear();
+    }
+
+    public List<String> getSettings() {
+        return settings;
     }
 
     public void parseDICCodeFile() throws IOException {
