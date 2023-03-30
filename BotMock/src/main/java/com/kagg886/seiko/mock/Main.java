@@ -14,8 +14,12 @@ import net.mamoe.mirai.mock.MockBotFactory;
 import net.mamoe.mirai.mock.contact.MockGroup;
 import net.mamoe.mirai.mock.contact.MockMember;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.InetSocketAddress;
+import java.net.Socket;
 import java.util.Arrays;
 import java.util.Scanner;
 

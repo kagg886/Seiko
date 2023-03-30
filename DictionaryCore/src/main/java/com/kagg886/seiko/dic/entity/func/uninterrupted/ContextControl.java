@@ -3,6 +3,7 @@ package com.kagg886.seiko.dic.entity.func.uninterrupted;
 import com.kagg886.seiko.dic.DictionaryUtil;
 import com.kagg886.seiko.dic.entity.func.Function;
 import com.kagg886.seiko.dic.session.AbsRuntime;
+import net.mamoe.mirai.message.code.MiraiCode;
 
 import java.util.List;
 

@@ -186,10 +186,23 @@ public abstract class Function extends DictionaryCode {
      * @className: ArgumentLimiter
      * @author: kagg886
      * @description: 限制了参数的Function，最多只能拥有getArgumentLength()个参数
-     * @date: 2023/1/18 11:45
+     * @date: 2023/3/28 12:42
      * @version: 1.0
      */
     public interface ArgumentLimiter {
         int getArgumentLength();
+    }
+
+    /**
+     * @projectName: Seiko
+     * @package: com.kagg886.seiko.dic.entity.impl
+     * @className: Deprecated
+     * @author: kagg886
+     * @description: 实现此接口的方法将不再维护。此外，伪代码被加载时若使用了这些方法则会输出警告提示。
+     * @date: 2023/3/30 13:08
+     * @version: 1.0
+     */
+    public interface Deprecated {
+
     }
 }
