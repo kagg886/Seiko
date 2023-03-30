@@ -203,6 +203,6 @@ public abstract class Function extends DictionaryCode {
      * @version: 1.0
      */
     public interface Deprecated {
-
+        String getAdvice();
     }
 }

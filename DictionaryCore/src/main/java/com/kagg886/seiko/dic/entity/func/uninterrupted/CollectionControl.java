@@ -168,8 +168,10 @@ public abstract class CollectionControl extends Function.UnInterruptedFunction {
                 o = runtime.getRuntimeObject().get(o.toString());
             }
             String varName = args.get(1).toString();
-            if (o instanceof Map<?,?> || o instanceof List<?>) {
-                runtime.getRuntimeObject().put(varName, o.toString());
+            if (o instanceof Map<?,?>) {
+                runtime.getRuntimeObject().put(varName, new JSONObject(o).toString());
+            } else if (o instanceof List<?>) {
+                runtime.getRuntimeObject().put(varName,new JSONArray(o).toString());
             } else {
                 throw new DictionaryOnRunningException("参数不是集合!");
             }

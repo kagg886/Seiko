@@ -17,7 +17,12 @@ import java.util.List;
  * @date: 2023/2/16 16:32
  * @version: 1.0
  */
-public abstract class ArrayControl extends Function.UnInterruptedFunction {
+public abstract class ArrayControl extends Function.UnInterruptedFunction implements Function.Deprecated {
+
+    @Override
+    public String getAdvice() {
+        return "使用集合函数代替此命令";
+    }
 
     public ArrayControl(int line, String code) {
         super(line, code);
@@ -32,7 +37,7 @@ public abstract class ArrayControl extends Function.UnInterruptedFunction {
      * @date: 2023/2/16 16:15
      * @version: 1.0
      */
-    public static class To extends ArrayControl implements Deprecated {
+    public static class To extends ArrayControl {
 
         public To(int line, String code) {
             super(line, code);
@@ -59,7 +64,7 @@ public abstract class ArrayControl extends Function.UnInterruptedFunction {
      * @date: 2023/2/16 15:59
      * @version: 1.0
      */
-    public static class Length extends ArrayControl implements Deprecated {
+    public static class Length extends ArrayControl {
 
         public Length(int line, String code) {
             super(line, code);
@@ -86,7 +91,7 @@ public abstract class ArrayControl extends Function.UnInterruptedFunction {
      * @date: 2023/2/16 15:47
      * @version: 1.0
      */
-    public static class Get extends ArrayControl implements Deprecated {
+    public static class Get extends ArrayControl {
 
         public Get(int line, String code) {
             super(line, code);
@@ -114,7 +119,7 @@ public abstract class ArrayControl extends Function.UnInterruptedFunction {
      * @date: 2023/2/16 15:21
      * @version: 1.0
      */
-    public static class Put extends ArrayControl implements Deprecated {
+    public static class Put extends ArrayControl {
 
         public Put(int line, String code) {
             super(line, code);
@@ -146,7 +151,7 @@ public abstract class ArrayControl extends Function.UnInterruptedFunction {
      * @date: 2023/2/16 15:10
      * @version: 1.0
      */
-    public static class Del extends ArrayControl implements Deprecated {
+    public static class Del extends ArrayControl {
 
         public Del(int line, String code) {
             super(line, code);
@@ -172,7 +177,7 @@ public abstract class ArrayControl extends Function.UnInterruptedFunction {
      * @date: 2023/2/16 14:45
      * @version: 1.0
      */
-    public static class Import extends ArrayControl implements Deprecated {
+    public static class Import extends ArrayControl {
 
         public Import(int line, String code) {
             super(line, code);
@@ -195,7 +200,7 @@ public abstract class ArrayControl extends Function.UnInterruptedFunction {
      * @date: 2023/2/16 14:31
      * @version: 1.0
      */
-    public static class Create extends ArrayControl {
+    public static class Create extends UnInterruptedFunction {
 
         public Create(int line, String code) {
             super(line, code);

@@ -143,7 +143,11 @@ public class DictionaryFile {
             */
             if (comm.startsWith("$") && comm.endsWith("$")) { //真的会有人最后一行跟换行符(
                 try {
-                    dictionaryCodes.add(Function.parseFunction(comm, iterator.getLen()));
+                    Function func = Function.parseFunction(comm, iterator.getLen());
+                    if (func instanceof Function.Deprecated) {
+                        DictionaryEnvironment.getInstance().getErrorListener().onWarn(this.getFile(),"发现过时函数:" + func.getCode() + "\n" + ((Function.Deprecated) func).getAdvice());
+                    }
+                    dictionaryCodes.add(func);
                 } catch (Throwable e) {
                     throw new DictionaryOnLoadException("解析伪代码方法时出错!" + "(" + iterator.getLen() + ":" + comm + ")", e);
                 }
