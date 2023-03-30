@@ -191,10 +191,10 @@ public abstract class AbsRuntime<T> {
             }
 
             if (dic instanceof Expression.If) {
-                if (getMessageCache().size() != 0) {
-                    clearMessageCache();
-                    sendSwitch = true;
-                }
+//                if (getMessageCache().size() != 0) {
+//                    clearMessageCache();
+//                    sendSwitch = true;
+//                }
                 Expression.If iff = (Expression.If) dic;
                 if (!iff.calc(this)) {
                     isJumpCode = true;
