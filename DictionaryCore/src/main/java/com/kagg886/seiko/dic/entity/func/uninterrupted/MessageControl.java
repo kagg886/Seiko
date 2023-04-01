@@ -3,6 +3,8 @@ package com.kagg886.seiko.dic.entity.func.uninterrupted;
 import com.kagg886.seiko.dic.entity.func.Function;
 import com.kagg886.seiko.dic.exception.DictionaryOnRunningException;
 import com.kagg886.seiko.dic.session.AbsRuntime;
+import net.mamoe.mirai.Bot;
+import net.mamoe.mirai.contact.Contact;
 import net.mamoe.mirai.message.data.At;
 import net.mamoe.mirai.message.data.AtAll;
 import net.mamoe.mirai.utils.ExternalResource;
@@ -11,6 +13,7 @@ import org.jsoup.Jsoup;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -23,6 +26,47 @@ import java.util.List;
  * @version: 1.0
  */
 public abstract class MessageControl extends Function.UnInterruptedFunction {
+
+    /**
+     * @projectName: Seiko
+     * @package: com.kagg886.seiko.dic.entity.func.uninterrupted
+     * @className: addAt
+     * @author: kagg886
+     * @description: $设置接收者 %群对象/成员对象/好友对象%$
+     * @date: 2023/4/1 10:42
+     * @version: 1.0
+     */
+    public static class setSender extends Function.InterruptedFunction {
+
+        public setSender(int line, String code) {
+            super(line, code);
+        }
+
+        @Override
+        public void run(AbsRuntime<?> runtime, List<Object> args) {
+            if (args.get(0) instanceof HashMap<?, ?>) {
+                HashMap<?, ?> map = (HashMap<?, ?>) args.get(0);
+                Object type = map.getOrDefault("类型", null);
+                Contact contact;
+
+                Bot bot = Bot.findInstance(Long.parseLong(map.get("BOT").toString()));
+                if (type.equals("群")) {
+                    contact = bot.getGroup(Long.parseLong(map.get("群号").toString()));
+                } else if (type.equals("好友")) {
+                    contact = bot.getFriend(Long.parseLong(map.get("QQ").toString()));
+                } else if (type.equals("群成员")) {
+                    contact = bot.getGroup(Long.parseLong(map.get("群号").toString()))
+                            .getMembers().get(Long.parseLong(map.get("QQ").toString()));
+                } else {
+                    throw new DictionaryOnRunningException("未知的联系人类型:" + map.get("类型"));
+                }
+                runtime.setContact(contact);
+            } else {
+                throw new DictionaryOnRunningException("传参不是集合对象!");
+            }
+
+        }
+    }
 
     /**
      * @projectName: Seiko

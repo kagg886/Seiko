@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Seiko.iml" filepath="$PROJECT_DIR$/.idea/modules/Seiko.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/ConsolePlugin/Seiko.ConsolePlugin.iml" filepath="$PROJECT_DIR$/.idea/modules/ConsolePlugin/Seiko.ConsolePlugin.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/ConsolePlugin/Seiko.ConsolePlugin.main.iml" filepath="$PROJECT_DIR$/.idea/modules/ConsolePlugin/Seiko.ConsolePlugin.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/DictionaryCore/Seiko.DictionaryCore.iml" filepath="$PROJECT_DIR$/.idea/modules/DictionaryCore/Seiko.DictionaryCore.iml" />

@@ -28,12 +28,7 @@ public class GroupMemberRuntime extends AbsRuntime<GroupMemberEvent> {
     }
 
     @Override
-    public Contact getContact() {
-        return event.getMember();
-    }
-
-    @Override
-    protected void clearMessageCache() {
-        event.getGroup().sendMessage(getMessageCache().build());
+    protected Contact initContact(GroupMemberEvent groupMemberEvent) {
+        return groupMemberEvent.getGroup();
     }
 }

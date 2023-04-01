@@ -29,6 +29,7 @@ import java.util.regex.Matcher;
  */
 public abstract class AbsRuntime<T> {
     protected final T event; //此次执行伪代码所需要的事件
+    protected Contact contact; //联系人对象，暴露出来是为了往其他群主动发消息用
     protected DictionaryFile file; //被执行的伪代码指令集
     protected HashMap<String, Object> context; //此次伪代码执行过程中存取的变量
     protected Stack<String> exceptionStacks; //词库调用栈，每次*执行完一条命令*就会存储一条信息到栈中。
@@ -45,12 +46,15 @@ public abstract class AbsRuntime<T> {
         this.event = event;
         context = new HashMap<>();
         exceptionStacks = new Stack<>();
+        contact = initContact(event);
 
         //通用的变量会存储在这里。
         context.put("上下文", event);
         context.put("缓冲区", new MessageChainBuilder());
         context.put("时间戳", System.currentTimeMillis());
     }
+
+    protected abstract Contact initContact(T t); //初始化联系人对象
 
     public Stack<String> getExceptionStacks() {
         return exceptionStacks;
@@ -60,19 +64,23 @@ public abstract class AbsRuntime<T> {
         return file;
     }
 
-    public abstract Contact getContact();
+    public Contact getContact() {
+        return contact;
+    }
+
+    public void setContact(Contact contact) {
+        this.contact = contact;
+    }
 
     public MessageChainBuilder getMessageCache() {
         return (MessageChainBuilder) context.get("缓冲区");
     }
 
-    protected abstract void clearMessageCache(); //抽象的清空缓冲区方法
-
     public void clearMessage() { //清空缓冲区，之所以如此设计是因为不同事件发送消息的方法是不同的
         if (getMessageCache().size() == 0) {
             return;
         }
-        clearMessageCache();
+        contact.sendMessage(getMessageCache().build());
         context.put("缓冲区", new MessageChainBuilder());
     }
 

@@ -218,8 +218,8 @@ public abstract class MemberControl extends Function.UnInterruptedFunction {
         HashMap<String,Object> memberInfo = new HashMap<>();
         memberInfo.put("类型","群成员");
         memberInfo.put("QQ", i.getId());
-        memberInfo.put("所属群", i.getGroup().getId());
-        memberInfo.put("所属BOT", i.getBot().getId());
+        memberInfo.put("群号", i.getGroup().getId());
+        memberInfo.put("BOT", i.getBot().getId());
         memberInfo.put("昵称", i.getNick());
         memberInfo.put("群名片", i.getNameCard());
         memberInfo.put("权限", i.getPermission().toString());

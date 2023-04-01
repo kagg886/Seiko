@@ -19,7 +19,9 @@ public abstract class Function extends DictionaryCode {
     private static final String[][] interruptedFunctionNames = { //阻断方法列表，后面的是Class名
             {"延时", "Delay"},
             {"语音", "Ptt"},
-            {"访问", "HTTP"}
+            {"访问", "HTTP"},
+
+            {"设置接收者","MessageControl$setSender"},
     };
     private static final String[][] uninterruptedFunctionNames = { //阻断方法列表，后面的是Class名
 
@@ -33,6 +35,7 @@ public abstract class Function extends DictionaryCode {
             //与消息有关
             {"图片", "MessageControl$addImage"},
             {"艾特", "MessageControl$addAt"},
+
 
             //与群成员有关
             {"群成员","MemberControl$GetMember"},

@@ -22,6 +22,7 @@ import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.util.Arrays;
 import java.util.Scanner;
+import java.util.UUID;
 
 public class Main {
     public static void main(String[] args) throws IOException {
@@ -32,6 +33,9 @@ public class Main {
         MockGroup group = mockBot.addGroup(786442984,"机器人测群");
         MockMember a = group.addMember(485184047,"猫娘");
         NormalMember b = group.addMember(2513485573L,"狐狸娘");
+        for (int i = 100000; i < 120000; i++) {
+            group.addMember(i, UUID.randomUUID().toString());
+        }
         group.changeOwner(b);
         mockBot.login();
         mockBot.getEventChannel().subscribeAlways(GroupMessageEvent.class, event -> {

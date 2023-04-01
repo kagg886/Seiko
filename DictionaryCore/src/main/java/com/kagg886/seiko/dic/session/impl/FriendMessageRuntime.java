@@ -24,12 +24,7 @@ public class FriendMessageRuntime extends AbsRuntime<FriendMessageEvent> {
     }
 
     @Override
-    public Contact getContact() {
-        return event.getFriend();
-    }
-
-    @Override
-    protected void clearMessageCache() {
-        event.getFriend().sendMessage(getMessageCache().build());
+    protected Contact initContact(FriendMessageEvent friendMessageEvent) {
+        return friendMessageEvent.getFriend();
     }
 }

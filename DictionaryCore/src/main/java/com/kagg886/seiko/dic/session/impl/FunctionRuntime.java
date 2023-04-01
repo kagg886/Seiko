@@ -29,18 +29,23 @@ public class FunctionRuntime extends AbsRuntime<AbsRuntime<?>> {
     }
 
     @Override
-    protected void clearMessageCache() {
-        event.getMessageCache();
-    }
-
-    @Override
-    public HashMap<String, Object> getRuntimeObject() {
-        return event.getRuntimeObject();
+    public void setContact(Contact contact) {
+        event.setContact(contact);
     }
 
     @Override
     public Contact getContact() {
         return event.getContact();
+    }
+
+    @Override
+    protected Contact initContact(AbsRuntime<?> absRuntime) {
+        return absRuntime.getContact();
+    }
+
+    @Override
+    public HashMap<String, Object> getRuntimeObject() {
+        return event.getRuntimeObject();
     }
 
     @Override
