@@ -257,11 +257,11 @@ public class DictionaryUtil {
 
         }
         if (str.contains(">")) {
-            int idx = str.indexOf(CHAIN_VARIABLE_SUFFIX);
+            int idx = str.indexOf(">");
             return mathExpressionCalc(str.substring(0, idx)) > mathExpressionCalc(str.substring(idx + 1));
         }
         if (str.contains("<")) {
-            int idx = str.indexOf(CHAIN_VARIABLE_PREFIX_OFFSET);
+            int idx = str.indexOf("<");
             return mathExpressionCalc(str.substring(0, idx)) < mathExpressionCalc(str.substring(idx + 1));
 
         }

@@ -3,7 +3,6 @@ package com.kagg886.seiko.dic.entity.func.uninterrupted;
 import com.kagg886.seiko.dic.DictionaryUtil;
 import com.kagg886.seiko.dic.entity.func.Function;
 import com.kagg886.seiko.dic.session.AbsRuntime;
-import net.mamoe.mirai.message.code.MiraiCode;
 
 import java.util.List;
 
@@ -28,8 +27,29 @@ public abstract class ContextControl extends Function.UnInterruptedFunction {
      * @package: com.kagg886.seiko.dic.entity.func.uninterrupted
      * @className: ChainGet
      * @author: kagg886
-     * @description: $常量 存入变量 索引值$
-     * @date: 2023/1/28 21:49
+     * @description : $置全局变量 键 值$
+     * @date: 2023/4/2 10:16
+     * @version: 1.0
+     */
+    public static class SetConstant extends ContextControl {
+
+        public SetConstant(int line, String code) {
+            super(line, code);
+        }
+
+        @Override
+        protected void run(AbsRuntime<?> runtime, List<Object> args) {
+            runtime.getFile().getSettings().put(args.get(0).toString(), args.get(1));
+        }
+    }
+
+    /**
+     * @projectName: Seiko
+     * @package: com.kagg886.seiko.dic.entity.func.uninterrupted
+     * @className: ChainGet
+     * @author: kagg886
+     * @description : $取全局变量 存入变量 索引值$
+     * @date: 2023/3/28 21:49
      * @version: 1.0
      */
     public static class Constant extends ContextControl {
@@ -40,8 +60,7 @@ public abstract class ContextControl extends Function.UnInterruptedFunction {
 
         @Override
         protected void run(AbsRuntime<?> runtime, List<Object> args) {
-            int idx = Integer.parseInt(args.get(1).toString());
-            runtime.getRuntimeObject().put(args.get(0).toString(), runtime.getFile().getSettings().get(idx));
+            runtime.getRuntimeObject().put(args.get(0).toString(), runtime.getFile().getSettings().get(args.get(1).toString()));
         }
     }
 

@@ -41,7 +41,7 @@ public class DictionaryFile {
         }
     };
 
-    private final List<String> settings = new ArrayList<>(); //伪代码的#号设置
+    private final HashMap<String,Object> settings = new HashMap<>(); //伪代码的#号设置
 
     public DictionaryFile(File dicFile) {
         this.dicFile = dicFile;
@@ -53,7 +53,7 @@ public class DictionaryFile {
         settings.clear();
     }
 
-    public List<String> getSettings() {
+    public HashMap<String, Object> getSettings() {
         return settings;
     }
 
@@ -83,6 +83,7 @@ public class DictionaryFile {
         boolean initConfig = false, //遇到了'#'开头的内容返回true
                 initConfigSuccess = false; //在遇到'#'后，若遇到了空行返回true
 
+        int headerLine = 0; //解析伪代码头部时存入的变量键
         while (iterator.hasNext()) {
             String comm = iterator.next();
             if (comm.startsWith("//")) { //注释判空处理
@@ -92,13 +93,13 @@ public class DictionaryFile {
             if (!initConfig || !initConfigSuccess) { //跳过解析#的条件:在遇到#后遇到空行
                 if (comm.startsWith("#")) {
                     initConfig = true;
-                    settings.add(comm.substring(1));
+                    settings.put(String.valueOf(headerLine++),comm.substring(1));
                     continue;
                 }
                 if (TextUtils.isEmpty(comm)) {
                     initConfigSuccess = true;
                     //在此处判断这是不是能正确解析SeikoDIC，先从编码开始
-                    if (!settings.contains("Seiko词库")) {
+                    if (!settings.containsValue("Seiko词库")) {
                         throw new DictionaryOnLoadException("未检测到必要的标识:Seiko词库。如果你的编辑器里有'#Seiko词库'，那可能说明词库的编码出了问题，请将其以别的编码保存直到此报错消失\n出错的伪代码文件:" + this.dicFile.getAbsolutePath());
                     }
                     continue;

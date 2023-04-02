@@ -1,11 +1,26 @@
 #Seiko词库
 #主人:485184047
 
-[群]群发
-$群成员列表 A %上下文%$
-$集合长 B A$
-$调用 群发 %B% NUM$
+[群]测试
+如果:3>2
+666
+如果尾
+999
 
-[函数]群发
-$设置接收者 {A(%NUM%)}$
-这是一条群发的消息!
+[群]gpt(.*)
+//头部
+$集合创建 HEADER$
+$集合赋值 HEADER Authorization Bearer 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$
+//请求体
+$集合创建 DATA$
+$集合赋值 DATA model gpt-3.5-turbo$
+$集合赋值 DATA prompt %括号1%$
+$集合转 DATA DATA$
+//创建请求包体
+$集合创建 POSTING$
+$集合赋值 POSTING 请求方式 POST$
+$集合赋值 POSTING 网址 https://api.openai.com/v1$
+$集合赋值 POSTING 头集合 %HEADER%$
+$集合赋值 POSTING 参数 %DATA%$
+$访问 A %POSTING%$
+%A%

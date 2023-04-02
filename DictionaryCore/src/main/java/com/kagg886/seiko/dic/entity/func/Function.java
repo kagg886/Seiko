@@ -76,7 +76,9 @@ public abstract class Function extends DictionaryCode {
             {"变量删除", "ContextControl$DelVar"},
             {"变量检验", "ContextControl$CheckExists"},
             {"变量提取", "ContextControl$ChainGet"},
-            {"常量", "ContextControl$Constant"},
+            {"取全局变量", "ContextControl$Constant"},
+            {"置全局变量", "ContextControl$SetConstant"},
+            //TODO 4/2日写置全局变量的源代码
 
             //与集合有关
             {"集合创建", "CollectionControl$Create"},
