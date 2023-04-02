@@ -2,13 +2,14 @@ package com.kagg886.seiko.dic;
 
 import com.kagg886.seiko.dic.exception.DictionaryOnRunningException;
 import com.kagg886.seiko.dic.session.AbsRuntime;
+import com.kagg886.seiko.util.TextUtils;
 import net.mamoe.mirai.Bot;
 import net.mamoe.mirai.contact.NormalMember;
 import net.mamoe.mirai.event.events.GroupMessageEvent;
 
+import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * @projectName: Seiko
@@ -22,12 +23,23 @@ import java.util.stream.Collectors;
 public class DictionaryUtil {
 
     private static final String NORMAL_VARIABLE_SURROUND = "%";
-    
+
     private static final String CHAIN_VARIABLE_PREFIX = "{";
-    
+
     private static final int CHAIN_VARIABLE_PREFIX_OFFSET = CHAIN_VARIABLE_PREFIX.length();
-    
+
     private static final String CHAIN_VARIABLE_SUFFIX = "}";
+
+    private static final HashMap<String, Method> mathMethods = new HashMap<>();
+
+    static {
+        Class<Math> mathClass = Math.class;
+        for (Method method : mathClass.getMethods()) {
+            if (method.getParameterCount() == 1 && method.getParameterTypes()[0] == double.class) {
+                mathMethods.put(method.getName(), method);
+            }
+        }
+    }
 
     /*
      * @param runtime:
@@ -82,7 +94,7 @@ public class DictionaryUtil {
         int checkCount = 0; //使用checkCount判断根变量是否为null。是则直接抛出异常
         for (String str : exps) {
             if (point == null) { //上一个已经为null了，直接抛异常
-                throw new IllegalArgumentException("找不到键:" + exps[Arrays.binarySearch(exps,str)-1]);
+                throw new IllegalArgumentException("找不到键:" + exps[Arrays.binarySearch(exps, str) - 1]);
             }
             if (str.contains("(") && str.contains(")")) { //按数组处理
                 String arrayIndex = str.substring(str.indexOf("(") + 1, str.length() - 1);
@@ -90,9 +102,9 @@ public class DictionaryUtil {
 
                 List<?> list = ((List<?>) ((HashMap<?, ?>) point).get(arrayName));
                 int idx = Integer.parseInt(arrayIndex);
-                point =  idx < list.size() ? list.get(idx) : null;
+                point = idx < list.size() ? list.get(idx) : null;
             } else {
-                point = ((HashMap<?, ?>) point).getOrDefault(str,null);
+                point = ((HashMap<?, ?>) point).getOrDefault(str, null);
             }
             checkCount++;
         }
@@ -152,9 +164,9 @@ public class DictionaryUtil {
 
         //这里一定要加accessPoint限定，不然会死循环
         int errorPoint = 0;
-        while ((lIndex = clone.indexOf(CHAIN_VARIABLE_PREFIX,errorPoint)) != -1 && (rIndex = clone.indexOf(CHAIN_VARIABLE_SUFFIX, lIndex)) != -1) { //防止出现括号不匹配的情况发生
+        while ((lIndex = clone.indexOf(CHAIN_VARIABLE_PREFIX, errorPoint)) != -1 && (rIndex = clone.indexOf(CHAIN_VARIABLE_SUFFIX, lIndex)) != -1) { //防止出现括号不匹配的情况发生
             try {
-                Object point = chainExpressionCalc(runtime,clone.substring(lIndex + CHAIN_VARIABLE_PREFIX_OFFSET, rIndex));
+                Object point = chainExpressionCalc(runtime, clone.substring(lIndex + CHAIN_VARIABLE_PREFIX_OFFSET, rIndex));
                 clone = clone.replace(clone.substring(lIndex, rIndex + 1), point.toString());
             } catch (Exception ignored) {
                 //表达式解析失败，可能是字符串。跳过本次进行下一次解析。不能break，因为不知道解析是否已完成
@@ -166,7 +178,7 @@ public class DictionaryUtil {
         for (String s : runtime.getRuntimeObject().keySet()) { //s一定是String
             String var = NORMAL_VARIABLE_SURROUND + s + NORMAL_VARIABLE_SURROUND;
             if (clone.contains(var)) {
-                Object val = runtime.getRuntimeObject().getOrDefault(s,null);
+                Object val = runtime.getRuntimeObject().getOrDefault(s, null);
                 if (val == null) { //不排除有脑瘫手动往里面加null值
                     val = "null";
                 }
@@ -185,7 +197,8 @@ public class DictionaryUtil {
                 clone = clone.replace("[" + expression + "]", result);
                 xLeft = xRight;
             }
-        } catch (Exception ignored) {}
+        } catch (Exception ignored) {
+        }
 
         return clone;
     }
@@ -268,19 +281,17 @@ public class DictionaryUtil {
         throw new DictionaryOnRunningException("计算表达式出错!" + str);
     }
 
-
     public static Double mathExpressionCalc(String str) {
-        if (str.equals("")) {
-            throw new DictionaryOnRunningException("中括号内不能为空");
+        str = str.replace(" ", "");
+        if (TextUtils.isEmpty(str)) {
+            return 0.0;
         }
-        Double a = null;
+
+        Double a;
         try {
             a = Double.parseDouble(str);
+            return a;
         } catch (NumberFormatException ignored) {
-        }
-
-        if (str.isEmpty() || a != null) {
-            return str.isEmpty() ? 0 : a;
         }
 
         if (str.contains(")")) {
@@ -290,13 +301,30 @@ public class DictionaryUtil {
             int rIndex = str.indexOf(")", lIndex);
             return mathExpressionCalc(str.substring(0, lIndex) + mathExpressionCalc(str.substring(lIndex + 1, rIndex)) + str.substring(rIndex + 1));
         }
+
+        for (Map.Entry<String, Method> entry : mathMethods.entrySet()) {
+            if (str.startsWith(entry.getKey())) {
+                int lIdx = str.indexOf("<");
+                int rIdx = str.indexOf(">", lIdx);
+                try {
+                    return mathExpressionCalc(entry.getValue().invoke(null, mathExpressionCalc(str.substring(lIdx + 1, rIdx))) + str.substring(rIdx + 1));
+                } catch (Exception ignored) {
+                }
+            }
+        }
+
+//        if (str.startsWith("sin")) {
+//            int lIdx = str.indexOf("<");
+//            int rIdx = str.indexOf(">",lIdx);
+//            try {
+//                return Math.sin(mathExpressionCalc(str.substring(lIdx+1,rIdx)));
+//            } catch (Exception ignored) {}
+//        }
+
+
         if (str.contains("+")) {
             int index = str.lastIndexOf("+");
             return mathExpressionCalc(str.substring(0, index)) + mathExpressionCalc(str.substring(index + 1));
-        }
-        if (str.contains("-")) {
-            int index = str.lastIndexOf("-");
-            return mathExpressionCalc(str.substring(0, index)) - mathExpressionCalc(str.substring(index + 1));
         }
         if (str.contains("*")) {
             int index = str.lastIndexOf("*");
@@ -315,6 +343,11 @@ public class DictionaryUtil {
         if (str.contains("%")) {
             int index = str.lastIndexOf("%");
             return mathExpressionCalc(str.substring(0, index)) % mathExpressionCalc(str.substring(index + 1));
+        }
+        if (str.contains("-")) {
+            //TODO [(sin<5> ^ 2) - (cos<5> ^ 2)]，必须打圆括号才能加载 等待修复
+            int index = str.lastIndexOf("-");
+            return mathExpressionCalc(str.substring(0, index)) - mathExpressionCalc(str.substring(index + 1));
         }
         // 出错
         throw new DictionaryOnRunningException("无法解析的表达式:" + str);
