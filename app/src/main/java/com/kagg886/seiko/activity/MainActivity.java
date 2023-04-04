@@ -3,6 +3,7 @@ package com.kagg886.seiko.activity;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.LinearLayout;
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultLauncher;
@@ -70,6 +71,13 @@ public class MainActivity extends AppCompatActivity {
         unregisterReceiver(dialogBroadCast);
         unregisterReceiver(snackBroadCast);
         super.onDestroy();
+    }
+
+    @Override
+    protected void onResume() {
+        Log.i("Seiko","Refresh!");
+        super.onResume();
+        adapter.notifyDataSetChanged();
     }
 
     @Override

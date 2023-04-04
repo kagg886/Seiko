@@ -194,6 +194,9 @@ public class DictionaryUtil {
                 String expression = clone.substring(xLeft + 1, xRight);
                 //String result = String.valueOf(DictionaryUtil.mathExpressionCalc(expression));
                 String result = new BigDecimal(Double.toString(DictionaryUtil.mathExpressionCalc(expression))).toPlainString();
+                if (result.endsWith(".0")) { //小数整数化
+                    result = result.substring(0,result.length() - 2);
+                }
                 clone = clone.replace("[" + expression + "]", result);
                 xLeft = xRight;
             }
