@@ -17,6 +17,8 @@ dependencies {
     implementation project(':Tools')
 
     implementation("net.mamoe:mirai-core-mock:$gradle.mirai_version")
+
+    implementation 'net.objecthunter:exp4j:0.4.8'
 }
 
 test {

@@ -1,13 +1,12 @@
-package com.kagg886.seiko.dic;
+package com.kagg886.seiko.dic.util;
 
 import com.kagg886.seiko.dic.exception.DictionaryOnRunningException;
 import com.kagg886.seiko.dic.session.AbsRuntime;
-import com.kagg886.seiko.util.TextUtils;
 import net.mamoe.mirai.Bot;
 import net.mamoe.mirai.contact.NormalMember;
 import net.mamoe.mirai.event.events.GroupMessageEvent;
+import net.objecthunter.exp4j.ExpressionBuilder;
 
-import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.util.*;
 
@@ -29,17 +28,6 @@ public class DictionaryUtil {
     private static final int CHAIN_VARIABLE_PREFIX_OFFSET = CHAIN_VARIABLE_PREFIX.length();
 
     private static final String CHAIN_VARIABLE_SUFFIX = "}";
-
-    private static final HashMap<String, Method> mathMethods = new HashMap<>();
-
-    static {
-        Class<Math> mathClass = Math.class;
-        for (Method method : mathClass.getMethods()) {
-            if (method.getParameterCount() == 1 && method.getParameterTypes()[0] == double.class) {
-                mathMethods.put(method.getName(), method);
-            }
-        }
-    }
 
     /*
      * @param runtime:
@@ -193,9 +181,14 @@ public class DictionaryUtil {
                 int xRight = clone.indexOf("]", xLeft);
                 String expression = clone.substring(xLeft + 1, xRight);
                 //String result = String.valueOf(DictionaryUtil.mathExpressionCalc(expression));
-                String result = new BigDecimal(Double.toString(DictionaryUtil.mathExpressionCalc(expression))).toPlainString();
+                String result;
+                try {
+                    result = new BigDecimal(Double.toString(DictionaryUtil.mathExpressionCalc(expression))).toPlainString();
+                } catch (NumberFormatException e) {
+                    result = "NaN";
+                }
                 if (result.endsWith(".0")) { //小数整数化
-                    result = result.substring(0,result.length() - 2);
+                    result = result.substring(0, result.length() - 2);
                 }
                 clone = clone.replace("[" + expression + "]", result);
                 xLeft = xRight;
@@ -285,75 +278,7 @@ public class DictionaryUtil {
     }
 
     public static Double mathExpressionCalc(String str) {
-        str = str.replace(" ", "");
-        if (TextUtils.isEmpty(str)) {
-            return 0.0;
-        }
-
-        Double a;
-        try {
-            a = Double.parseDouble(str);
-            return a;
-        } catch (NumberFormatException ignored) {
-        }
-
-        if (str.contains(")")) {
-            // 最后一个左括号
-            int lIndex = str.lastIndexOf("(");
-            // 对于的右括号
-            int rIndex = str.indexOf(")", lIndex);
-            return mathExpressionCalc(str.substring(0, lIndex) + mathExpressionCalc(str.substring(lIndex + 1, rIndex)) + str.substring(rIndex + 1));
-        }
-
-        for (Map.Entry<String, Method> entry : mathMethods.entrySet()) {
-            if (str.startsWith(entry.getKey())) {
-                int lIdx = str.indexOf("<");
-                int rIdx = str.indexOf(">", lIdx);
-                try {
-                    return mathExpressionCalc(entry.getValue().invoke(null, mathExpressionCalc(str.substring(lIdx + 1, rIdx))) + str.substring(rIdx + 1));
-                } catch (Exception ignored) {
-                }
-            }
-        }
-
-//        if (str.startsWith("sin")) {
-//            int lIdx = str.indexOf("<");
-//            int rIdx = str.indexOf(">",lIdx);
-//            try {
-//                return Math.sin(mathExpressionCalc(str.substring(lIdx+1,rIdx)));
-//            } catch (Exception ignored) {}
-//        }
-
-
-        if (str.contains("+")) {
-            int index = str.lastIndexOf("+");
-            return mathExpressionCalc(str.substring(0, index)) + mathExpressionCalc(str.substring(index + 1));
-        }
-        if (str.contains("*")) {
-            int index = str.lastIndexOf("*");
-            return mathExpressionCalc(str.substring(0, index)) * mathExpressionCalc(str.substring(index + 1));
-        }
-        if (str.contains("/")) {
-            int index = str.lastIndexOf("/");
-            return mathExpressionCalc(str.substring(0, index)) / mathExpressionCalc(str.substring(index + 1));
-        }
-
-        if (str.contains("^")) {
-            int index = str.lastIndexOf("^");
-            return Math.pow(mathExpressionCalc(str.substring(0, index)), mathExpressionCalc(str.substring(index + 1)));
-        }
-
-        if (str.contains("%")) {
-            int index = str.lastIndexOf("%");
-            return mathExpressionCalc(str.substring(0, index)) % mathExpressionCalc(str.substring(index + 1));
-        }
-        if (str.contains("-")) {
-            //TODO [(sin<5> ^ 2) - (cos<5> ^ 2)]，必须打圆括号才能加载 等待修复
-            int index = str.lastIndexOf("-");
-            return mathExpressionCalc(str.substring(0, index)) - mathExpressionCalc(str.substring(index + 1));
-        }
-        // 出错
-        throw new DictionaryOnRunningException("无法解析的表达式:" + str);
+        return new ExpressionBuilder(str).build().evaluate();
     }
 }
 

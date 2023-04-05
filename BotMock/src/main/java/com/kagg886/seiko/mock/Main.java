@@ -13,6 +13,9 @@ import net.mamoe.mirai.mock.MockBot;
 import net.mamoe.mirai.mock.MockBotFactory;
 import net.mamoe.mirai.mock.contact.MockGroup;
 import net.mamoe.mirai.mock.contact.MockMember;
+import net.objecthunter.exp4j.Expression;
+import net.objecthunter.exp4j.ExpressionBuilder;
+import net.objecthunter.exp4j.operator.Operator;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -27,7 +30,6 @@ import java.util.UUID;
 public class Main {
     public static void main(String[] args) throws IOException {
         initDictionaryEnvironment();
-
         MockBotFactory.initialize();
         MockBot mockBot = MockBotFactory.Companion.newMockBotBuilder().id(1693256674).create();
         MockGroup group = mockBot.addGroup(786442984,"机器人测群");

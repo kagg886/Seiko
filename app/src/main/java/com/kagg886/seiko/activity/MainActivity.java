@@ -75,7 +75,6 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onResume() {
-        Log.i("Seiko","Refresh!");
         super.onResume();
         adapter.notifyDataSetChanged();
     }

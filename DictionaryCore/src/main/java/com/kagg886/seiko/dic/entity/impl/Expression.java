@@ -1,6 +1,6 @@
 package com.kagg886.seiko.dic.entity.impl;
 
-import com.kagg886.seiko.dic.DictionaryUtil;
+import com.kagg886.seiko.dic.util.DictionaryUtil;
 import com.kagg886.seiko.dic.entity.DictionaryCode;
 import com.kagg886.seiko.dic.session.AbsRuntime;
 
