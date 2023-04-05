@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import static com.kagg886.seiko.dic.DictionaryUtil.getMemberInfoByObjectList;
+import static com.kagg886.seiko.dic.util.DictionaryUtil.getMemberInfoByObjectList;
 
 /**
  * @projectName: Seiko

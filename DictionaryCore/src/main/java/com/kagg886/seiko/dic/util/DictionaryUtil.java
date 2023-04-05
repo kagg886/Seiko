@@ -1,4 +1,4 @@
-package com.kagg886.seiko.dic;
+package com.kagg886.seiko.dic.util;
 
 import com.kagg886.seiko.dic.exception.DictionaryOnRunningException;
 import com.kagg886.seiko.dic.session.AbsRuntime;
