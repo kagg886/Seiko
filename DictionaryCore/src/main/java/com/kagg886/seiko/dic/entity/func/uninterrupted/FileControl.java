@@ -121,14 +121,12 @@ public abstract class FileControl extends Function.UnInterruptedFunction {
             String key = args.get(1).toString();
             Object obj = args.get(2);
             String val;
-            if (obj instanceof String) {
-                val = obj.toString();
-            } else if (obj instanceof HashMap<?, ?>) {
+            if (obj instanceof HashMap<?, ?>) {
                 val = new JSONObject(obj).toString();
             } else if (obj instanceof ArrayList<?>) {
                 val = new JSONArray(obj).toString();
             } else {
-                throw new DictionaryOnRunningException("不支持写入变量名:" + obj + "至文件:" + storage);
+                val = obj.toString();
             }
             xx(storage, key, val);
         }
