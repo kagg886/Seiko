@@ -1,8 +1,8 @@
 package com.kagg886.seiko.dic.entity.func;
 
-import com.kagg886.seiko.dic.util.DictionaryUtil;
 import com.kagg886.seiko.dic.entity.DictionaryCode;
 import com.kagg886.seiko.dic.session.AbsRuntime;
+import com.kagg886.seiko.dic.util.DictionaryUtil;
 
 import java.util.List;
 
@@ -21,7 +21,7 @@ public abstract class Function extends DictionaryCode {
             {"语音", "Ptt"},
             {"访问", "HTTP"},
 
-            {"设置接收者","MessageControl$setSender"},
+            {"设置接收者", "MessageControl$setSender"},
     };
     private static final String[][] uninterruptedFunctionNames = { //阻断方法列表，后面的是Class名
 
@@ -38,19 +38,19 @@ public abstract class Function extends DictionaryCode {
 
 
             //与群成员有关
-            {"群成员","MemberControl$GetMember"},
-            {"群成员列表","MemberControl$MemberList"},
-            {"改名","MemberControl$ChangeName"},
-            {"群头衔","MemberControl$ChangeTitle"},
-            {"禁言","MemberControl$Mute"},
-            {"踢","MemberControl$Kick"},
-            {"管理员","MemberControl$ModifyAdmin"},
+            {"群成员", "MemberControl$GetMember"},
+            {"群成员列表", "MemberControl$MemberList"},
+            {"改名", "MemberControl$ChangeName"},
+            {"群头衔", "MemberControl$ChangeTitle"},
+            {"禁言", "MemberControl$Mute"},
+            {"踢", "MemberControl$Kick"},
+            {"管理员", "MemberControl$ModifyAdmin"},
 
             //与bot有关
-            {"群列表","BotControl$getGroups"},
-            {"获取群","BotControl$getGroup"},
-            {"好友列表","BotControl$getFriends"},
-            {"获取好友","BotControl$getFriend"},
+            {"群列表", "BotControl$getGroups"},
+            {"获取群", "BotControl$getGroup"},
+            {"好友列表", "BotControl$getFriends"},
+            {"获取好友", "BotControl$getFriend"},
 //            {"","BotControl$"},
 //            {"","BotControl$"},
 //            {"","BotControl$"},
@@ -59,8 +59,8 @@ public abstract class Function extends DictionaryCode {
 //            {"","BotControl$"},
 
             //与日期有关
-            {"转时间","DateParser$StampToDate"},
-            {"转时间戳","DateParser$DateToStamp"},
+            {"转时间", "DateParser$StampToDate"},
+            {"转时间戳", "DateParser$DateToStamp"},
 
             //与字符串有关
             {"文字替换", "StringUtil$Replace"},
@@ -70,6 +70,7 @@ public abstract class Function extends DictionaryCode {
             {"文字包含", "StringUtil$Contains"},
             {"转大写", "StringUtil$UpperCase"},
             {"转小写", "StringUtil$LowerCase"},
+            {"格式化", "StringUtil$Format"},
 
             //与变量，常量有关
             {"变量赋值", "ContextControl$SetVar"},
@@ -148,7 +149,7 @@ public abstract class Function extends DictionaryCode {
         if (this instanceof ArgumentLimiter) {
             limit = ((ArgumentLimiter) this).getArgumentLength();
         }
-        run(runtime, DictionaryUtil.variableToObject(argCode.split(" ",limit), runtime));
+        run(runtime, DictionaryUtil.variableToObject(argCode.split(" ", limit), runtime));
     }
 
     protected abstract void run(AbsRuntime<?> runtime, List<Object> args);
