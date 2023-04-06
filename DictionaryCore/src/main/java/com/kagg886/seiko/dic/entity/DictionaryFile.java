@@ -43,6 +43,12 @@ public class DictionaryFile {
 
     private final HashMap<String,Object> settings = new HashMap<>(); //伪代码的#号设置
 
+    private final char[] illegalChar = {
+            '％',
+            160,
+            12288
+    };
+
     public DictionaryFile(File dicFile) {
         this.dicFile = dicFile;
     }
@@ -107,9 +113,15 @@ public class DictionaryFile {
                 throw new DictionaryOnLoadException("请在伪代码文件开头通过#注册必要设置!\n出错的伪代码文件:" + this.dicFile.getAbsolutePath());
             }
 
-            if (comm.contains("％")) { //我帮你排错... 我居然分不清这两个符号。2023/2/18
-                DictionaryEnvironment.getInstance().getErrorListener().onWarn(dicFile, "在第" + iterator.getLen() + "行发现全角符号％。\n在某些设备上%和％无法准确辨别，可能会导致伪代码变量无法正确解析");
+            for (char a : illegalChar) {
+                int idx;
+                if ((idx = comm.indexOf(a)) != -1) {
+                    DictionaryEnvironment.getInstance().getErrorListener().onWarn(dicFile, "第" + iterator.getLen() + "行的第" + (idx+1) + "个字符是非ASCII字符。\n在某些设备上人的肉眼无法准确辨别，可能会导致伪代码变量无法正确解析");
+                }
             }
+//            if (comm.contains("％")) { //我帮你排错... 我居然分不清这两个符号。2023/2/18
+//                DictionaryEnvironment.getInstance().getErrorListener().onWarn(dicFile, "在第" + iterator.getLen() + "行发现全角符号％。\n在某些设备上%和％无法准确辨别，可能会导致伪代码变量无法正确解析");
+//            }
             if (behindLineIsEmpty) {
                 /*
                  判断此行的上一行是否为空。

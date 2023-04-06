@@ -2,6 +2,7 @@
 <project version="4">
   <component name="CompilerConfiguration">
     <bytecodeTargetLevel target="1.8">
+      <module name="Seiko.BotMock.test" target="16" />
       <module name="Seiko.DictionaryMock.main" target="16" />
       <module name="Seiko.DictionaryMock.test" target="16" />
       <module name="Seiko.RemotePluginConstants" target="16" />

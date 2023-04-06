@@ -2,32 +2,22 @@ package com.kagg886.seiko.mock;
 
 import com.kagg886.seiko.dic.DICList;
 import com.kagg886.seiko.dic.DictionaryEnvironment;
-import com.kagg886.seiko.dic.bridge.DictionaryListener;
 import com.kagg886.seiko.dic.entity.DictionaryFile;
 import com.kagg886.seiko.dic.model.DICParseResult;
 import com.kagg886.seiko.dic.session.impl.GroupMessageRuntime;
-import net.mamoe.mirai.Bot;
 import net.mamoe.mirai.contact.NormalMember;
 import net.mamoe.mirai.event.events.GroupMessageEvent;
 import net.mamoe.mirai.mock.MockBot;
 import net.mamoe.mirai.mock.MockBotFactory;
 import net.mamoe.mirai.mock.contact.MockGroup;
 import net.mamoe.mirai.mock.contact.MockMember;
-import net.objecthunter.exp4j.Expression;
-import net.objecthunter.exp4j.ExpressionBuilder;
-import net.objecthunter.exp4j.operator.Operator;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.InetSocketAddress;
-import java.net.Socket;
-import java.util.Arrays;
 import java.util.Scanner;
 import java.util.UUID;
 
-public class Main {
+public class MockBotTest {
     public static void main(String[] args) throws IOException {
         initDictionaryEnvironment();
         MockBotFactory.initialize();
