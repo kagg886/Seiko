@@ -11,9 +11,10 @@ package com.kagg886.seiko.mock;
  */
 public class UtilsTest {
     public static void main(String[] args) {
-        String a = "【 】\n" +
-                "【 】\n" +
-                "【　】";
+        String a = """
+                【 】
+                【 】
+                【　】""";
 
         for (String k : a.split("\n")) {
             for (int i = 0; i < k.length(); i++) {
