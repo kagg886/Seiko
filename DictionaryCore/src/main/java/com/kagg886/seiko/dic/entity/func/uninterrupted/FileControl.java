@@ -4,6 +4,7 @@ import com.kagg886.seiko.dic.DictionaryEnvironment;
 import com.kagg886.seiko.dic.entity.func.Function;
 import com.kagg886.seiko.dic.exception.DictionaryOnRunningException;
 import com.kagg886.seiko.dic.session.AbsRuntime;
+import com.kagg886.seiko.util.IOUtil;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -26,6 +27,72 @@ public abstract class FileControl extends Function.UnInterruptedFunction {
 
     public FileControl(int line, String code) {
         super(line, code);
+    }
+
+    /**
+     * @projectName: Seiko
+     * @package: com.kagg886.seiko.dic.entity.func.uninterrupted
+     * @className: ReadFile
+     * @author: kagg886
+     * @description: $写文件 文件内容 文件路径$
+     * @date: 2023/4/7 17:56
+     * @version: 1.0
+     */
+    public static class WriteFile extends Function.UnInterruptedFunction implements ArgumentLimiter {
+
+        public WriteFile(int line, String code) {
+            super(line, code);
+        }
+
+        @Override
+        protected void run(AbsRuntime<?> runtime, List<Object> args) {
+            File f = DictionaryEnvironment.getInstance().getDicData().resolve(args.get(1).toString()).toFile();
+            try {
+                if (!f.exists()) {
+                    f.createNewFile();
+                }
+                IOUtil.writeStringToFile(f.getAbsolutePath(),args.get(0).toString());
+            } catch (IOException e) {
+                throw new DictionaryOnRunningException("文件写入失败:" + e.getMessage());
+            }
+        }
+
+        @Override
+        public int getArgumentLength() {
+            return 3;
+        }
+    }
+
+    /**
+     * @projectName: Seiko
+     * @package: com.kagg886.seiko.dic.entity.func.uninterrupted
+     * @className: ReadFile
+     * @author: kagg886
+     * @description: $读文件 存入变量名 文件路径$
+     * @date: 2023/4/7 17:30
+     * @version: 1.0
+     */
+    public static class ReadFile extends Function.UnInterruptedFunction implements ArgumentLimiter {
+
+        public ReadFile(int line, String code) {
+            super(line, code);
+        }
+
+        @Override
+        protected void run(AbsRuntime<?> runtime, List<Object> args) {
+            String putVar = args.get(0).toString();
+            File f = DictionaryEnvironment.getInstance().getDicData().resolve(args.get(1).toString()).toFile();
+            try {
+                runtime.getRuntimeObject().put(putVar, IOUtil.loadStringFromFile(f.getAbsolutePath()));
+            } catch (IOException e) {
+                throw new DictionaryOnRunningException("文件访问失败:" + e.getMessage());
+            }
+        }
+
+        @Override
+        public int getArgumentLength() {
+            return 2;
+        }
     }
 
     /**

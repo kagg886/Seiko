@@ -26,8 +26,6 @@ public abstract class Function extends DictionaryCode {
     private static final String[][] uninterruptedFunctionNames = { //阻断方法列表，后面的是Class名
 
             //杂项方法
-            {"读", "FileControl$Read"},
-            {"写", "FileControl$Write"},
             {"JAVA方法运行", "JavaMethodInvoke"},
             {"随机数", "Random"},
             {"调用", "TransferDicMethod"},
@@ -36,6 +34,11 @@ public abstract class Function extends DictionaryCode {
             {"图片", "MessageControl$addImage"},
             {"艾特", "MessageControl$addAt"},
 
+            //与文件有关
+            {"读", "FileControl$Read"},
+            {"写", "FileControl$Write"},
+            {"读文件","FileControl$ReadFile"},
+            {"写文件","FileControl$WriteFile"},
 
             //与群成员有关
             {"群成员", "MemberControl$GetMember"},

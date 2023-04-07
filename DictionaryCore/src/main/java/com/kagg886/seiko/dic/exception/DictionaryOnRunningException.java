@@ -40,46 +40,36 @@ public class DictionaryOnRunningException extends RuntimeException {
                 builder.append(entry.getKey());
                 builder.append("---");
                 Object value = entry.getValue();
-                if (value == null) {
-                    builder.append("null");
-                } else if (value instanceof HashMap<?, ?>) {
-                    builder.append("{");
-                    mapToString(value, deep + 1, builder);
-                    builder.append("  ".repeat(Math.max(0, deep)));
-                    builder.append("}");
-                } else if (value instanceof List<?>) {
-                    builder.append("[");
-                    mapToString(value, deep + 1, builder);
-                    builder.append("  ".repeat(Math.max(0, deep)));
-                    builder.append("]");
-                } else {
-                    builder.append(value);
-                }
-                builder.append("\n");
+                mapToString0(deep, builder, value);
             }
         } else if (objs instanceof List<?>) {
             List<Object> obj = (List<Object>) objs;
             for (Object value : obj) {
                 builder.append("  ".repeat(Math.max(0, deep)));
-                if (value == null) {
-                    builder.append("null");
-                } else if (value instanceof HashMap<?, ?>) {
-                    builder.append("{");
-                    mapToString(value, deep + 1, builder);
-                    builder.append("  ".repeat(Math.max(0, deep)));
-                    builder.append("}");
-                } else if (value instanceof List<?>) {
-                    builder.append("[");
-                    mapToString(value, deep + 1, builder);
-                    builder.append("  ".repeat(Math.max(0, deep)));
-                    builder.append("]");
-                } else {
-                    builder.append(value);
-                }
-                builder.append("\n");
+                mapToString0(deep, builder, value);
             }
         }
-        return builder.substring(0, builder.length() - 1);
+        return builder.substring(1, builder.length() - 1);
+    }
+
+    private static void mapToString0(int deep, StringBuilder builder, Object value) {
+        if (value == null) {
+            builder.append("null");
+        } else if (value instanceof HashMap<?, ?>) {
+            builder.append("{");
+            mapToString(value, deep + 1, builder);
+            builder.append("  ".repeat(Math.max(0, deep)));
+            builder.append("}");
+        } else if (value instanceof List<?>) {
+            builder.append("[");
+            mapToString(value, deep + 1, builder);
+            builder.append("  ".repeat(Math.max(0, deep)));
+            builder.append("]");
+        } else {
+            builder.append(value);
+            builder.append(",");
+        }
+        builder.append("\n");
     }
 
     public static String stackToString(Stack<String> stack) {
