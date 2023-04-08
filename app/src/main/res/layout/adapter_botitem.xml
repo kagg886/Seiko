@@ -15,8 +15,11 @@
             app:cardElevation="0dp"
             app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="parent">
         <ImageView
-                android:layout_width="100dp"
-                android:layout_height="100dp" app:srcCompat="@drawable/ic_error"
+                android:layout_width="88dp"
+                android:layout_height="88dp"
+                android:paddingStart="16sp"
+                android:paddingEnd="8sp"
+                app:srcCompat="@drawable/ic_error"
                 android:id="@+id/adapter_botitem_imgContent"
                 app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="parent"/>
     </androidx.cardview.widget.CardView>
@@ -25,17 +28,20 @@
             style="@style/TextAppearance.AppCompat.Large"
             android:text="TextView"
             android:textSize="30dp"
-            android:textColor="@color/purple_200"
+            android:textColor="@color/black"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" android:id="@+id/adapter_botitem_botqqnick"
             app:layout_constraintStart_toEndOf="@+id/adapter_botitem_imgView"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="@+id/adapter_dicitem_status"/>
     <androidx.appcompat.widget.SwitchCompat
-            android:scaleX="1.5"
-            android:scaleY="1.5"
+            android:scaleX="1.25"
+            android:scaleY="1.25"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" android:id="@+id/adapter_dicitem_status"
+            android:layout_height="wrap_content"
+            android:paddingStart="8sp"
+            android:paddingEnd="16sp"
+            android:id="@+id/adapter_dicitem_status"
             app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="@+id/adapter_botitem_imgView"/>
     <TextView
