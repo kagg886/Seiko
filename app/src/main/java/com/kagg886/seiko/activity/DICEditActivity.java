@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -73,14 +74,14 @@ public class DICEditActivity extends AppCompatActivity {
 
     private void askFilename(Consumer<String> stringConsumer) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(R.string.input_dic_name);
         builder.setCancelable(false);
         View v = LayoutInflater.from(this).inflate(R.layout.dialog_import_plugin, null);
-        TextInputLayout edt = v.findViewById(R.id.dialog_importPluginUrl);
-        edt.setHint("输入词库文件名");
+        EditText edt = v.findViewById(R.id.dialog_importPluginUrl);
         builder.setView(v);
 
-        builder.setPositiveButton("确定", (dialog2, which1) -> {
-            String name = edt.getEditText().getText().toString();
+        builder.setPositiveButton("确定", (dialog, which) -> {
+            String name = edt.getText().toString();
             if (TextUtils.isEmpty(name)) {
                 toast("文件名不可为空");
             } else {
@@ -88,8 +89,7 @@ public class DICEditActivity extends AppCompatActivity {
             }
         });
 
-        builder.setNegativeButton("取消", (dialog, which) -> {
-        });
+        builder.setNegativeButton("取消", (dialog, which) -> {});
         builder.show();
     }
 
