@@ -135,6 +135,7 @@ public class DICFragment extends Fragment implements View.OnClickListener, Swipe
                                                 throw new RuntimeException(e);
                                             }
                                         });
+                                        builder.setNegativeButton("取消", (dialog2, which2) -> {});
                                         builder.show();
                                     } catch (Exception e) {
                                         e.printStackTrace();

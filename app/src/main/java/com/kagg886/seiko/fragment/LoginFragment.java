@@ -163,6 +163,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Swi
             }
             adapter.notifyDataSetChanged();
         });
+        builder.setNegativeButton("取消", (dialog, which) -> {});
         return builder.create();
     }
 

@@ -223,6 +223,7 @@ public class PluginFragment extends Fragment implements View.OnClickListener, Sw
             }
             downloadPlugin(url);
         });
+        builder.setNegativeButton("取消", (dialog, which) -> {});
         return builder.create();
     }
 
