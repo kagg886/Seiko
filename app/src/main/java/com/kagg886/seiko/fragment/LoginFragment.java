@@ -82,8 +82,8 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Swi
         Spinner spinner = view.findViewById(R.id.dialog_protocol);
         spinner.setAdapter(new ArrayAdapter<>(avt, android.R.layout.simple_list_item_1, protocols));
 
-        TextInputLayout keyEdit = view.findViewById(R.id.dialog_editKey);
-        TextInputLayout valueEdit = view.findViewById(R.id.dialog_editValue);
+        EditText keyEdit = view.findViewById(R.id.dialog_editKey);
+        EditText valueEdit = view.findViewById(R.id.dialog_editValue);
 
         CheckBox useQrScan = view.findViewById(R.id.dialog_useQRScan);
         useQrScan.setOnCheckedChangeListener((buttonView, isChecked) -> {
@@ -98,9 +98,9 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Swi
         });
 
         if (isEdit) {
-            keyEdit.getEditText().setText(account.optString("uin"));
-            keyEdit.getEditText().setEnabled(false);
-            valueEdit.getEditText().setText(account.optString("pass"));
+            keyEdit.setText(account.optString("uin"));
+            keyEdit.setEnabled(false);
+            valueEdit.setText(account.optString("pass"));
             int i = 0;
             while (!account.optString("platform", protocols[0]).equals(protocols[i])) {
                 i++;
@@ -112,8 +112,8 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Swi
             }
         }
         builder.setPositiveButton("确定", (dialog, which) -> {
-            String key = keyEdit.getEditText().getText().toString();
-            String value = valueEdit.getEditText().getText().toString();
+            String key = keyEdit.getText().toString();
+            String value = valueEdit.getText().toString();
             boolean useQRLogin = useQrScan.isChecked();
 
             if (TextUtils.isEmpty(key) || (TextUtils.isEmpty(value) && !useQRLogin)) {

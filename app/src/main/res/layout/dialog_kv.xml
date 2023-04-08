@@ -1,48 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout
-        android:gravity="left|top"
-        android:theme="@style/Theme.AppCompat" xmlns:app="http://schemas.android.com/apk/res-auto"
+<androidx.constraintlayout.widget.ConstraintLayout
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="match_parent" android:layout_height="match_parent" android:orientation="vertical">
-
-    <com.google.android.material.textfield.TextInputLayout
-            app:hintEnabled="true"
-            android:id="@+id/dialog_editKey"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-        <EditText
-                style="@style/EditText"
-                android:layout_width="match_parent"
-                android:hint="请输入账号"
-                android:layout_height="wrap_content"/>
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <CheckBox
-            android:text="使用扫码登录"
-            android:textColor="@color/black"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" android:id="@+id/dialog_useQRScan"/>
-
-    <com.google.android.material.textfield.TextInputLayout
-            app:hintEnabled="true"
-            android:id="@+id/dialog_editValue"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-        <EditText
-                style="@style/EditText"
-                android:hint="请输入密码"
-                android:inputType="textPassword"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
-    </com.google.android.material.textfield.TextInputLayout>
-    <TextView
-            android:textColor="@color/purple_200"
-            android:text="点按下方文字选择登录协议"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-    <Spinner
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="20dp">
+    <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/dialog_protocol"/>
-</LinearLayout>
+            android:id="@+id/dialog_editKey"
+            android:inputType="number"
+            android:hint="请输入账号"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent" android:minHeight="48dp"/>
+    <EditText
+            android:id="@+id/dialog_editValue"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:inputType="textPassword"
+            android:hint="请输入密码"
+            android:selectAllOnFocus="true"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/dialog_useQRScan"
+            app:layout_constraintTop_toTopOf="@id/dialog_useQRScan"
+            app:layout_constraintBottom_toBottomOf="@id/dialog_useQRScan"
+            android:minHeight="48dp"/>
+    <CheckBox
+            android:id="@+id/dialog_useQRScan"
+            android:text="使用扫码登录"
+            android:textColor="@color/black"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintTop_toBottomOf="@id/dialog_editKey"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+    <TextView
+            android:id="@+id/dialog_protocol_text"
+            android:text="登录协议"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            app:layout_constraintTop_toTopOf="@id/dialog_protocol"
+            app:layout_constraintBottom_toBottomOf="@id/dialog_protocol"
+            app:layout_constraintStart_toStartOf="parent"/>
+    <Spinner
+            android:id="@+id/dialog_protocol"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:minHeight="48dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintTop_toBottomOf="@id/dialog_editValue"
+            app:layout_constraintStart_toEndOf="@id/dialog_protocol_text"
+            app:layout_constraintEnd_toEndOf="parent"/>
+</androidx.constraintlayout.widget.ConstraintLayout>
