@@ -3,7 +3,6 @@ package com.kagg886.seiko.bot;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -23,7 +22,6 @@ import com.kagg886.seiko.activity.CaptchaActivity;
 import com.kagg886.seiko.activity.MainActivity;
 import com.kagg886.seiko.activity.SMSActivity;
 import com.kagg886.seiko.event.SnackBroadCast;
-import com.kagg886.seiko.util.IOUtil;
 import com.kagg886.seiko.util.ShareUtil;
 import kotlin.Unit;
 import kotlin.coroutines.Continuation;
@@ -31,7 +29,6 @@ import kotlin.coroutines.CoroutineContext;
 import kotlin.coroutines.EmptyCoroutineContext;
 import net.mamoe.mirai.Bot;
 import net.mamoe.mirai.auth.QRCodeLoginListener;
-import net.mamoe.mirai.network.LoginFailedException;
 import net.mamoe.mirai.network.RetryLaterException;
 import net.mamoe.mirai.network.UnsupportedQRCodeCaptchaException;
 import net.mamoe.mirai.network.UnsupportedSliderCaptchaException;
@@ -42,10 +39,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.UUID;
 
 /**

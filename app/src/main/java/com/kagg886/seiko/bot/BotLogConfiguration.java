@@ -6,13 +6,9 @@ import com.kagg886.seiko.SeikoApplication;
 import com.kagg886.seiko.activity.MainActivity;
 import com.kagg886.seiko.util.DeviceInfoBuilder;
 import com.kagg886.seiko.util.IOUtil;
-import kotlin.jvm.functions.Function1;
 import kotlinx.serialization.json.Json;
-import kotlinx.serialization.modules.SerializersModule;
-import net.mamoe.mirai.Bot;
 import net.mamoe.mirai.utils.BotConfiguration;
 import net.mamoe.mirai.utils.DeviceInfo;
-import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.IOException;

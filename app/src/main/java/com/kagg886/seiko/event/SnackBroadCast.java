@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.view.View;
 import android.widget.TextView;
-
 import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
 import com.kagg886.seiko.SeikoApplication;

@@ -1,16 +1,11 @@
 package com.kagg886.seiko.adapter;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
-import android.content.Context;
-import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import androidx.appcompat.widget.SwitchCompat;
 import com.kagg886.seiko.R;
 import com.kagg886.seiko.SeikoApplication;
@@ -20,11 +15,8 @@ import com.kagg886.seiko.dic.entity.DictionaryFile;
 import com.kagg886.seiko.dic.model.DICParseResult;
 import com.kagg886.seiko.event.DialogBroadCast;
 import com.kagg886.seiko.event.SnackBroadCast;
-
 import com.kagg886.seiko.util.IOUtil;
 import org.json.JSONObject;
-
-import java.io.IOException;
 
 /**
  * @projectName: Seiko

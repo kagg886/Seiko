@@ -12,10 +12,8 @@ import com.kagg886.seiko.event.DialogBroadCast;
 import com.kagg886.seiko.event.SnackBroadCast;
 import com.kagg886.seiko.plugin.SeikoDescription;
 import com.kagg886.seiko.plugin.api.SeikoPlugin;
-import com.kagg886.seiko.util.IOUtil;
 import net.mamoe.mirai.Bot;
 import net.mamoe.mirai.event.EventChannel;
-import net.mamoe.mirai.event.GlobalEventChannel;
 import net.mamoe.mirai.event.events.*;
 import org.json.JSONObject;
 

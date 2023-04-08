@@ -12,7 +12,6 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.textfield.TextInputLayout;
 import com.kagg886.seiko.R;
 import com.kagg886.seiko.activity.MainActivity;
 import com.kagg886.seiko.adapter.BotAdapter;

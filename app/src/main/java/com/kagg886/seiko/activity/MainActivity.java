@@ -3,7 +3,6 @@ package com.kagg886.seiko.activity;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.LinearLayout;
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultLauncher;
@@ -28,7 +27,6 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.ArrayList;
-import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
