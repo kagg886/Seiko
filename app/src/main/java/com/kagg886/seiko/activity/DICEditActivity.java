@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -28,7 +29,7 @@ import io.github.rosemoe.sora.widget.CodeEditor;
 
 public class DICEditActivity extends AppCompatActivity {
     private CodeEditor code;
-    private AppCompatButton saveCodeBtn;
+    private Button saveCodeBtn;
     private TextView filenameView;
 
     private Boolean existFile = false;
@@ -75,9 +76,8 @@ public class DICEditActivity extends AppCompatActivity {
     private void askFilename(Consumer<String> stringConsumer) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(R.string.input_dic_name);
-        builder.setCancelable(false);
-        View v = LayoutInflater.from(this).inflate(R.layout.dialog_import_plugin, null);
-        EditText edt = v.findViewById(R.id.dialog_importPluginUrl);
+        View v = LayoutInflater.from(this).inflate(R.layout.ask_dic_name, null);
+        EditText edt = v.findViewById(R.id.dialog_dicName);
         builder.setView(v);
 
         builder.setPositiveButton("确定", (dialog, which) -> {

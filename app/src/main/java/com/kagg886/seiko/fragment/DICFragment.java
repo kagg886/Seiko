@@ -7,6 +7,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ListView;
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultLauncher;
@@ -118,13 +119,13 @@ public class DICFragment extends Fragment implements View.OnClickListener, Swipe
                                 avt.runOnUiThread(() -> {
                                     try {
                                         AlertDialog.Builder builder = new AlertDialog.Builder(avt);
-                                        builder.setCancelable(false);
-                                        View v = LayoutInflater.from(avt).inflate(R.layout.dialog_import_plugin, null);
-                                        TextInputLayout edt = v.findViewById(R.id.dialog_importPluginUrl);
-                                        edt.setHint("为导入的词库命名(随机命名则为空)");
+                                        builder.setTitle("为导入的词库命名(随机命名则为空)");
+                                        View v = LayoutInflater.from(avt).inflate(R.layout.ask_dic_name, null);
+                                        EditText edt = v.findViewById(R.id.dialog_dicName);
                                         builder.setView(v);
                                         builder.setPositiveButton("确定", (dialog2, which1) -> {
-                                            String txt = (TextUtils.isEmpty(edt.getEditText().getText().toString()) ? UUID.randomUUID().toString().replace("-", "").substring(0, 8) : edt.getEditText().getText().toString()) + GlobalConstant.dicFileExt;
+                                            String txt = edt.getText().toString();
+                                            txt = (TextUtils.isEmpty(txt) ? UUID.randomUUID().toString().replace("-", "").substring(0, 8) : txt) + GlobalConstant.dicFileExt;
                                             try {
                                                 String s = IOUtil.loadStringFromStream(avt.getContentResolver().openInputStream(result.getData().getData()));
                                                 IOUtil.writeStringToFile(avt.getExternalFilesDir("dic").toPath().resolve(txt).toFile().getAbsolutePath(), s);

@@ -11,6 +11,7 @@ import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ListView;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -209,12 +210,13 @@ public class PluginFragment extends Fragment implements View.OnClickListener, Sw
     }
 
     public AlertDialog networkImportPluginDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(((MainActivity) getActivity()));
-        View view = LayoutInflater.from(((MainActivity) getActivity())).inflate(R.layout.dialog_import_plugin, null);
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setTitle(R.string.get_plugin_download_url);
+        View view = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_import_plugin, null);
+        EditText edt = view.findViewById(R.id.dialog_importPluginUrl);
         builder.setView(view);
         builder.setPositiveButton("确定", (dialog, which) -> {
-            TextInputLayout importPluginUrl = view.findViewById(R.id.dialog_importPluginUrl);
-            String url = importPluginUrl.getEditText().getText().toString();
+            String url = edt.getText().toString();
             if (url.trim().length() == 0 || !(url.startsWith("http://") || url.startsWith("https://"))) {
                 SnackBroadCast.sendBroadCast("请正确填写链接");
                 return;
