@@ -1,7 +1,6 @@
 package com.kagg886.seiko.fragment;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -18,7 +17,6 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.textfield.TextInputLayout;
 import com.kagg886.seiko.R;
 import com.kagg886.seiko.activity.DICEditActivity;
 import com.kagg886.seiko.activity.MainActivity;
@@ -27,17 +25,11 @@ import com.kagg886.seiko.constant.GlobalConstant;
 import com.kagg886.seiko.dic.DICList;
 import com.kagg886.seiko.dic.entity.DictionaryFile;
 import com.kagg886.seiko.event.SnackBroadCast;
-import com.kagg886.seiko.service.BotRunnerService;
 import com.kagg886.seiko.util.IOUtil;
 import com.kagg886.seiko.util.ShareUtil;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.Optional;
 import java.util.UUID;
 
 /**

@@ -8,24 +8,18 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.AppCompatButton;
-
 import com.google.android.material.snackbar.Snackbar;
-import com.google.android.material.textfield.TextInputLayout;
 import com.kagg886.seiko.R;
 import com.kagg886.seiko.adapter.DICAdapter;
 import com.kagg886.seiko.constant.GlobalConstant;
 import com.kagg886.seiko.util.IOUtil;
+import io.github.rosemoe.sora.widget.CodeEditor;
 
 import java.io.IOException;
 import java.util.function.Consumer;
-import io.github.rosemoe.sora.widget.CodeEditor;
 
 public class DICEditActivity extends AppCompatActivity {
     private CodeEditor code;
