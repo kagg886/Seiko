@@ -34,6 +34,33 @@ public abstract class FileControl extends Function.UnInterruptedFunction {
      * @package: com.kagg886.seiko.dic.entity.func.uninterrupted
      * @className: ReadFile
      * @author: kagg886
+     * @description: $删 文件(夹)路径$
+     * @date: 2023/4/8 11:31
+     * @version: 1.0
+     */
+    public static class DelFile extends Function.UnInterruptedFunction implements ArgumentLimiter {
+
+        public DelFile(int line, String code) {
+            super(line, code);
+        }
+
+        @Override
+        protected void run(AbsRuntime<?> runtime, List<Object> args) {
+            File f = DictionaryEnvironment.getInstance().getDicData().resolve(args.get(1).toString()).toFile();
+            IOUtil.delFile(f);
+        }
+
+        @Override
+        public int getArgumentLength() {
+            return 1;
+        }
+    }
+
+    /**
+     * @projectName: Seiko
+     * @package: com.kagg886.seiko.dic.entity.func.uninterrupted
+     * @className: ReadFile
+     * @author: kagg886
      * @description: $写文件 文件内容 文件路径$
      * @date: 2023/4/7 17:56
      * @version: 1.0

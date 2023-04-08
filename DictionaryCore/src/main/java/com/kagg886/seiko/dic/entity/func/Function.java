@@ -37,6 +37,7 @@ public abstract class Function extends DictionaryCode {
             //与文件有关
             {"读", "FileControl$Read"},
             {"写", "FileControl$Write"},
+            {"删","FileControl$DelFile"},
             {"读文件","FileControl$ReadFile"},
             {"写文件","FileControl$WriteFile"},
 
