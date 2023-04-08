@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
-        android:orientation="vertical"
+        xmlns:app="http://schemas.android.com/apk/res-auto" android:orientation="vertical"
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -14,15 +14,21 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:minHeight="?actionBarSize"
-                android:paddingStart="16sp"
+                android:paddingTop="10dp"
+                android:paddingStart="16dp"
+                android:paddingEnd="8dp"
                 android:text="@string/app_name"
+                android:textColor="@color/white"
                 android:textAppearance="@style/TextAppearance.Widget.AppCompat.Toolbar.Title"/>
 
         <com.google.android.material.tabs.TabLayout
                 android:id="@+id/activity_main_view_tab_layout"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:background="@color/purple_200"
+                android:textColor="@color/white"
+                app:tabIndicatorColor="@color/white" app:tabTextColor="@color/white"
+                app:tabTextAppearance="@style/TextAppearance.AppCompat.Display2"/>
     </com.google.android.material.appbar.AppBarLayout>
 
 
