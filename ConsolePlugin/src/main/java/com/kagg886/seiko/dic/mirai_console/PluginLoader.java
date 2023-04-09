@@ -4,6 +4,7 @@ import com.kagg886.seiko.dic.DICList;
 import com.kagg886.seiko.dic.DictionaryEnvironment;
 import com.kagg886.seiko.dic.bridge.DictionaryListener;
 import com.kagg886.seiko.dic.entity.DictionaryFile;
+import com.kagg886.seiko.dic.model.DICParseResult;
 import com.kagg886.seiko.dic.session.impl.FriendMessageRuntime;
 import com.kagg886.seiko.dic.session.impl.GroupMemberRuntime;
 import com.kagg886.seiko.dic.session.impl.GroupMessageRuntime;
@@ -65,9 +66,10 @@ public class PluginLoader extends JavaPlugin implements DictionaryListener {
 
         GlobalEventChannel.INSTANCE.parentScope(INSTANCE).subscribeAlways(GroupMemberEvent.class, event -> {
             if (SeikoPluginConfig.INSTANCE.getAlwaysRefreshOnceMessageGetting()) {
-                boolean success = DICList.getInstance().refresh().success;
-                if(!success) {
+                DICParseResult res = DICList.getInstance().refresh();
+                if(!res.success) {
                     PluginLoader.INSTANCE.getLogger().warning("插件解析中存在问题！请检查无法被启用的插件");
+                    res.err.forEach(event.getBot().getLogger()::warning);
                 }
             }
             JSONObject dicConfigUnit;

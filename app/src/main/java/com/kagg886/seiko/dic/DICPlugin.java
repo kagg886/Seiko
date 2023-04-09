@@ -39,8 +39,10 @@ public class DICPlugin extends SeikoPlugin implements DictionaryListener {
         channel.subscribeAlways(GroupMemberEvent.class, event -> {
             if (SeikoApplication.globalConfig.getBoolean("alwaysRefreshOnceMessageGetting", false)) {
                 DICParseResult result = DICList.getInstance().refresh();
-                if(!result.success) {
-                    SnackBroadCast.sendBroadCast("伪代码解析中存在问题！请检查无法被启用的伪代码，出现的问题：" + result.err);
+                if (!result.success) {
+                    event.getBot().getLogger().warning("伪代码解析中存在问题！请检查无法被启用的伪代码");
+                    result.err.forEach(event.getBot().getLogger()::warning);
+                    //SnackBroadCast.sendBroadCast("伪代码解析中存在问题！请检查无法被启用的伪代码，出现的问题：" + result.err);
                 }
             }
             JSONObject dicConfigUnit;
@@ -82,7 +84,7 @@ public class DICPlugin extends SeikoPlugin implements DictionaryListener {
         channel.subscribeAlways(GroupMessageEvent.class, groupMessageEvent -> {
             if (SeikoApplication.globalConfig.getBoolean("alwaysRefreshOnceMessageGetting", false)) {
                 DICParseResult result = DICList.getInstance().refresh();
-                if(!result.success) {
+                if (!result.success) {
                     SnackBroadCast.sendBroadCast("伪代码解析中存在问题！请检查无法被启用的伪代码，出现的问题：" + result.err);
                 }
             }
@@ -99,7 +101,7 @@ public class DICPlugin extends SeikoPlugin implements DictionaryListener {
         channel.subscribeAlways(FriendMessageEvent.class, friendMessageEvent -> {
             if (SeikoApplication.globalConfig.getBoolean("alwaysRefreshOnceMessageGetting", false)) {
                 DICParseResult result = DICList.getInstance().refresh();
-                if(!result.success) {
+                if (!result.success) {
                     SnackBroadCast.sendBroadCast("伪代码解析中存在问题！请检查无法被启用的伪代码，出现的问题：" + result.err);
                 }
             }

@@ -3,11 +3,7 @@ package com.kagg886.seiko.dic.exception;
 import com.kagg886.seiko.dic.entity.DictionaryFile;
 import com.kagg886.seiko.dic.session.AbsRuntime;
 
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Stack;
-import java.util.stream.Collectors;
+import java.util.*;
 
 /**
  * @projectName: Seiko
@@ -31,28 +27,49 @@ public class DictionaryOnRunningException extends RuntimeException {
         this.msg = msg;
     }
 
-    private static String mapToString(HashMap<String, Object> obj) {
-        return mapToString(obj,0,new StringBuilder());
+    public static String mapToString(HashMap<String, Object> obj) {
+        return mapToString(obj, 0, new StringBuilder());
     }
 
-    private static String mapToString(HashMap<String, Object> obj,int deep,StringBuilder builder) {
-        for (Map.Entry<String,Object> entry : obj.entrySet()) {
-            builder.append("\n");
-            builder.append("  ".repeat(Math.max(0, deep)));
-            builder.append(entry.getKey());
-            builder.append("---");
-            Object value = entry.getValue();
-            if (value == null) {
-                builder.append("null");
-            } else if (value instanceof HashMap<?,?>) {
-                builder.append("{");
-                builder.append(mapToString((HashMap<String, Object>) value,deep+1,builder));
-                builder.append("}");
-            } else {
-                builder.append(value);
+    private static String mapToString(Object objs, int deep, StringBuilder builder) {
+        builder.append("\n");
+        if (objs instanceof HashMap<?, ?>) {
+            HashMap<String, Object> obj = ((HashMap<String, Object>) objs);
+            for (Map.Entry<String, Object> entry : obj.entrySet()) {
+                builder.append("  ".repeat(Math.max(0, deep)));
+                builder.append(entry.getKey());
+                builder.append("---");
+                Object value = entry.getValue();
+                mapToString0(deep, builder, value);
+            }
+        } else if (objs instanceof List<?>) {
+            List<Object> obj = (List<Object>) objs;
+            for (Object value : obj) {
+                builder.append("  ".repeat(Math.max(0, deep)));
+                mapToString0(deep, builder, value);
             }
         }
-        return builder.substring(1);
+        return builder.substring(1, builder.length() - 1);
+    }
+
+    private static void mapToString0(int deep, StringBuilder builder, Object value) {
+        if (value == null) {
+            builder.append("null");
+        } else if (value instanceof HashMap<?, ?>) {
+            builder.append("{");
+            mapToString(value, deep + 1, builder);
+            builder.append("  ".repeat(Math.max(0, deep)));
+            builder.append("}");
+        } else if (value instanceof List<?>) {
+            builder.append("[");
+            mapToString(value, deep + 1, builder);
+            builder.append("  ".repeat(Math.max(0, deep)));
+            builder.append("]");
+        } else {
+            builder.append(value);
+            builder.append(",");
+        }
+        builder.append("\n");
     }
 
     public static String stackToString(Stack<String> stack) {

@@ -13,7 +13,6 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.material.snackbar.Snackbar;
 import com.kagg886.seiko.R;
-import com.kagg886.seiko.adapter.DICAdapter;
 import com.kagg886.seiko.constant.GlobalConstant;
 import com.kagg886.seiko.util.IOUtil;
 import io.github.rosemoe.sora.widget.CodeEditor;
@@ -29,8 +28,6 @@ public class DICEditActivity extends AppCompatActivity {
     private Boolean existFile = false;
 
     private String filename = null;
-
-    private static DICAdapter adapter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -51,13 +48,16 @@ public class DICEditActivity extends AppCompatActivity {
     private void init() throws IOException {
         saveCodeBtn.setActivated(false);
         existFile = getIntent().getBooleanExtra("exist_file", false);
-        if (existFile)
+        if (existFile) {
             saveCodeBtn.setText("修改");
-        else
+        } else {
+            code.setText(IOUtil.loadStringFromStream(getAssets().open("dic_template.txt")));
             saveCodeBtn.setText("创建");
+        }
         filename = getIntent().getStringExtra("filename");
         if (filename == null) {
             filenameView.setText(R.string.code_file_name_init);
+
         } else {
             filenameView.setText(filename);
             // 从文件读取出来
