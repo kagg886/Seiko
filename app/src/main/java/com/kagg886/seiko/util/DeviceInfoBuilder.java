@@ -1,10 +1,6 @@
 package com.kagg886.seiko.util;
 
-import androidx.annotation.NonNull;
-import net.mamoe.mirai.LowLevelApiAccessor;
-import net.mamoe.mirai.Mirai;
 import net.mamoe.mirai.utils.DeviceInfo;
-import org.jetbrains.annotations.NotNull;
 import org.json.JSONObject;
 
 import java.lang.reflect.Field;

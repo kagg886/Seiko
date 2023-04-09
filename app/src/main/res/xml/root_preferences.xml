@@ -4,48 +4,44 @@
 
 
     <PreferenceCategory
-            android:title="自动删除">
+            android:title="@string/settings_auto_delete">
 
         <SwitchPreference
                 android:defaultValue="true"
-                android:title="自动删除登录失败的设备信息文件" android:key="badDeviceAutoDel"/>
+                android:title="@string/settings_auto_delete_bad_device_info_title" android:key="badDeviceAutoDel"/>
 
         <SwitchPreference
                 android:defaultValue="true"
-                android:title="自动删除加载失败的插件" android:key="badPluginAutoDel"/>
+                android:title="@string/settings_auto_delete_bad_plugin_title" android:key="badPluginAutoDel"/>
 
         <SwitchPreference
                 android:defaultValue="false"
-                android:title="收到消息时自动重载伪代码" android:key="alwaysRefreshOnceMessageGetting"/>
+                android:title="@string/settings_auto_reload_dic_on_message_title" android:key="alwaysRefreshOnceMessageGetting"/>
     </PreferenceCategory>
 
-    <PreferenceCategory app:title="日志">
+    <PreferenceCategory app:title="@string/settings_log">
         <SwitchPreference
                 android:defaultValue="false"
-                android:title="合并bot日志到一个文件夹" android:key="mergeAllLogs"/>
-        <EditTextPreference app:title="设置日志页面最大记录数" app:key="maxLogNum"/>
+                android:title="@string/settings_merge_all_title" android:key="mergeAllLogs"/>
+        <EditTextPreference app:title="@string/settings_max_num_title" app:key="maxLogNum"/>
     </PreferenceCategory>
 
-    <PreferenceCategory app:title="程序信息">
+    <PreferenceCategory app:title="@string/settings_info">
         <DropDownPreference
-                app:key="SeikoInfo"
-                app:title="0"
-                app:summary="1"/>
+                app:key="SeikoInfo"/>
 
         <DropDownPreference
                 app:key="MiraiInfo"
-                app:title="内嵌Mirai版本"
-                app:summary="1"/>
+                app:title="@string/settings_mirai_title"/>
 
 
         <DropDownPreference
                 app:key="buildTime"
-                app:title="0"
-                app:summary="1"/>
+                app:title="@string/settings_build_time_title"/>
 
         <DropDownPreference
                 app:key="goGithub"
-                app:title="查看仓库"
-                app:summary="前往Seiko的Github仓库。获取最新版本Seiko，审阅Seiko源码并提出建议"/>
+                app:title="@string/settings_github_title"
+                app:summary="@string/settings_github_summary"/>
     </PreferenceCategory>
 </PreferenceScreen>

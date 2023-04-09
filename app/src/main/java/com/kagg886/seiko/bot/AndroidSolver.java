@@ -3,7 +3,6 @@ package com.kagg886.seiko.bot;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -18,12 +17,13 @@ import android.widget.Button;
 import android.widget.ImageView;
 import androidx.activity.result.ActivityResult;
 import androidx.annotation.NonNull;
+import androidx.annotation.StringRes;
 import com.kagg886.seiko.R;
+import com.kagg886.seiko.SeikoApplication;
 import com.kagg886.seiko.activity.CaptchaActivity;
 import com.kagg886.seiko.activity.MainActivity;
 import com.kagg886.seiko.activity.SMSActivity;
 import com.kagg886.seiko.event.SnackBroadCast;
-import com.kagg886.seiko.util.IOUtil;
 import com.kagg886.seiko.util.ShareUtil;
 import kotlin.Unit;
 import kotlin.coroutines.Continuation;
@@ -31,7 +31,6 @@ import kotlin.coroutines.CoroutineContext;
 import kotlin.coroutines.EmptyCoroutineContext;
 import net.mamoe.mirai.Bot;
 import net.mamoe.mirai.auth.QRCodeLoginListener;
-import net.mamoe.mirai.network.LoginFailedException;
 import net.mamoe.mirai.network.RetryLaterException;
 import net.mamoe.mirai.network.UnsupportedQRCodeCaptchaException;
 import net.mamoe.mirai.network.UnsupportedSliderCaptchaException;
@@ -42,10 +41,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.UUID;
 
 /**
@@ -102,7 +99,7 @@ public class AndroidSolver extends LoginSolver implements QRCodeLoginListener, V
                             dialogController.sendEmptyMessage(0);
                             break;
                         case WAITING_FOR_CONFIRM:
-                            SnackBroadCast.sendBroadCast("扫码成功，等待客户端确认");
+                            SnackBroadCast.sendBroadCast(R.string.qrscan_wait_for_confirm);
                             break;
                         case CONFIRMED:
                             bitmap.recycle();
@@ -127,7 +124,7 @@ public class AndroidSolver extends LoginSolver implements QRCodeLoginListener, V
     public void onFetchQRCode(@NotNull Bot bot, @NotNull byte[] bytes) {
         this.bitmap = BitmapFactory.decodeByteArray(bytes,0,bytes.length);
         AlertDialog.Builder builder = new AlertDialog.Builder(avt);
-        builder.setTitle("扫码登录:" + bot.getId());
+        builder.setTitle(text(R.string.qrscan_title, bot.getId()));
 
         View i = LayoutInflater.from(avt).inflate(R.layout.dialog_qrlogin,null);
 
@@ -150,9 +147,9 @@ public class AndroidSolver extends LoginSolver implements QRCodeLoginListener, V
         QRCodeLoginListener.super.onIntervalLoop();
         switch (cancelType) {
             case 1:
-                throw new UnsupportedQRCodeCaptchaException("扫码登录已被用户取消");
+                throw new UnsupportedQRCodeCaptchaException(text(R.string.qrscan_cancelled));
             case 2:
-                throw new UnsupportedQRCodeCaptchaException("超时，自动取消扫码");
+                throw new UnsupportedQRCodeCaptchaException(text(R.string.qrscan_timeout));
 
         }
 //        if (cancelType != 0) {
@@ -200,7 +197,7 @@ public class AndroidSolver extends LoginSolver implements QRCodeLoginListener, V
             if (result.getResultCode() == SMSActivity.RESULT_RETRY) {
                 onSolveDeviceVerification(bot,requests,$completion);
             }
-            throw new UnsupportedOperationException("用户已取消设备SMS验证");
+            throw new UnsupportedOperationException(text(R.string.sms_cancelled));
         }
         return requests.getSms().solved(result.getData().getStringExtra("code"));
     }
@@ -225,7 +222,7 @@ public class AndroidSolver extends LoginSolver implements QRCodeLoginListener, V
         avt.verifyCall.launch(i);
         ActivityResult result = avt.getResult();
         if (result.getResultCode() != Activity.RESULT_OK) {
-            throw new UnsupportedSliderCaptchaException("滑块验证被用户取消");
+            throw new UnsupportedSliderCaptchaException(text(R.string.slide_cancelled));
         }
         return result.getData().getStringExtra("ticket");
     }
@@ -239,7 +236,7 @@ public class AndroidSolver extends LoginSolver implements QRCodeLoginListener, V
                 try {
                     bitmap.compress(Bitmap.CompressFormat.PNG,90, Files.newOutputStream(f.toPath()));
                 } catch (IOException e) {
-                    SnackBroadCast.sendBroadCast("保存图片失败:" + e.getMessage());
+                    SnackBroadCast.sendBroadCast(text(R.string.qrscan_share_fail, e.getMessage()));
                 }
                 ShareUtil.quickShare(avt,f,"image/*");
                 break;
@@ -249,5 +246,8 @@ public class AndroidSolver extends LoginSolver implements QRCodeLoginListener, V
                 dialog.cancel();
                 break;
         }
+    }
+    private String text(@StringRes int s, Object... args) {
+        return String.format(SeikoApplication.getSeikoApplicationContext().getText(s).toString(), args);
     }
 }

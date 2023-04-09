@@ -9,6 +9,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.StringRes;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -63,7 +64,7 @@ public class LogActivity extends AppCompatActivity implements View.OnClickListen
             if (offlineLogFile.exists()) {
                 file = offlineLogFile;
             } else {
-                Toast.makeText(this, "今日未产生Bot日志", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, R.string.log_empty, Toast.LENGTH_LONG).show();
                 finish();
                 return;
             }
@@ -94,7 +95,7 @@ public class LogActivity extends AppCompatActivity implements View.OnClickListen
         writeCall.launch(intent);
     }
 
-    public void snack(String text) {
+    public void snack(@StringRes int text) {
         Snackbar.make(log, text, BaseTransientBottomBar.LENGTH_LONG).show();
     }
 
@@ -106,7 +107,7 @@ public class LogActivity extends AppCompatActivity implements View.OnClickListen
             try {
                 File p = new File(getExternalFilesDir("bots") + "/" + nowBot + "/log");
                 if (!p.isDirectory()) {
-                    snack("并没有日志，不需要导出");
+                    snack(R.string.log_export_empty);
                     return;
                 }
                 OutputStream stream = getContentResolver().openOutputStream(result.getData().getData());
@@ -117,10 +118,10 @@ public class LogActivity extends AppCompatActivity implements View.OnClickListen
                 }
                 output.close();
                 stream.close();
-                snack("导出成功!");
+                snack(R.string.log_export_success);
             } catch (Exception e) {
                 Log.w("DEBUG", e);
-                snack("导出失败!");
+                snack(R.string.log_export_fail);
             }
         });
     }

@@ -19,11 +19,11 @@
             android:id="@+id/dialog_qrlogin_src"/>
 
     <Button
-            android:text="取消"
+            android:text="@string/cancel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" android:id="@+id/dialog_qrlogin_cancel"/>
     <Button
-            android:text="发送到..."
+            android:text="@string/share_to"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" android:id="@+id/dialog_qrlogin_share"/>
 </LinearLayout>

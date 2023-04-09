@@ -5,7 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.view.View;
 import android.widget.TextView;
-
+import androidx.annotation.StringRes;
 import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
 import com.kagg886.seiko.SeikoApplication;
@@ -28,6 +28,9 @@ public class SnackBroadCast extends BroadcastReceiver {
         this.rootView = avt;
     }
 
+    public static void sendBroadCast(@StringRes int message) {
+        sendBroadCast(SeikoApplication.getSeikoApplicationContext().getText(message).toString());
+    }
     public static void sendBroadCast(String message) {
         Intent broadcast = new Intent(TAG);
         broadcast.putExtra("msg", message);

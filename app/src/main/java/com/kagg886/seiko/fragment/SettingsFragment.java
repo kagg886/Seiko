@@ -1,18 +1,18 @@
 package com.kagg886.seiko.fragment;
 
 import android.annotation.SuppressLint;
-import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.os.Bundle;
 import android.text.InputType;
 import androidx.annotation.NonNull;
+import androidx.annotation.StringRes;
 import androidx.preference.EditTextPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import com.kagg886.seiko.BuildConfig;
 import com.kagg886.seiko.R;
+import com.kagg886.seiko.SeikoApplication;
 import com.kagg886.seiko.event.SnackBroadCast;
 import com.kagg886.seiko.util.ShareUtil;
 import com.kagg886.seiko.util.TextUtils;
@@ -32,11 +32,10 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Prefer
         } catch (PackageManager.NameNotFoundException e) {
             throw new RuntimeException(e);
         }
-        s.setTitle("当前版本:" + p.versionName + "(" + BuildConfig.COMMIT_HASH + ")");
-        s.setSummary("版本号:" + p.getLongVersionCode());
+        s.setTitle(text(R.string.settings_version_title, p.versionName, BuildConfig.COMMIT_HASH));
+        s.setSummary(text(R.string.settings_version_summary, p.getLongVersionCode()));
 
         s = findPreference("buildTime");
-        s.setTitle("构建日期");
         s.setSummary(BuildConfig.BUILD_TIME);
 
         s = findPreference("MiraiInfo");
@@ -45,7 +44,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Prefer
         EditTextPreference sp = findPreference("maxLogNum");
         sp.setOnBindEditTextListener(editText -> editText.setInputType(InputType.TYPE_CLASS_NUMBER));
         sp.setOnPreferenceChangeListener(this);
-        sp.setSummary(String.format("当前设置的值为:%s", sp.getSharedPreferences().getString("maxLogNum", "40")));
+        sp.setSummary(String.format("当前设置的值为: %s", sp.getSharedPreferences().getString("maxLogNum", "40")));
 
         s = findPreference("goGithub");
         s.setOnPreferenceClickListener(this);
@@ -91,5 +90,8 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Prefer
         }
 
         return false;
+    }
+    private String text(@StringRes int s, Object... args) {
+        return String.format(SeikoApplication.getSeikoApplicationContext().getText(s).toString(), args);
     }
 }

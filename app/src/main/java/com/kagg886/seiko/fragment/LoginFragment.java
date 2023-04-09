@@ -12,7 +12,6 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.textfield.TextInputLayout;
 import com.kagg886.seiko.R;
 import com.kagg886.seiko.activity.MainActivity;
 import com.kagg886.seiko.adapter.BotAdapter;
@@ -72,18 +71,18 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Swi
     public static AlertDialog editDialog(MainActivity avt, BaseAdapter adapter, boolean isEdit, JSONObject account) {
         AlertDialog.Builder builder = new AlertDialog.Builder(avt);
         if (isEdit) {
-            builder.setTitle("编辑账号");
+            builder.setTitle(R.string.login_title_edit);
         } else {
-            builder.setTitle("添加账号");
+            builder.setTitle(R.string.login_title_create);
         }
-        View view = LayoutInflater.from(avt).inflate(R.layout.dialog_kv, null);
+        View view = LayoutInflater.from(avt).inflate(R.layout.dialog_login, null);
         builder.setView(view);
 
         Spinner spinner = view.findViewById(R.id.dialog_protocol);
         spinner.setAdapter(new ArrayAdapter<>(avt, android.R.layout.simple_list_item_1, protocols));
 
-        TextInputLayout keyEdit = view.findViewById(R.id.dialog_editKey);
-        TextInputLayout valueEdit = view.findViewById(R.id.dialog_editValue);
+        EditText keyEdit = view.findViewById(R.id.dialog_editKey);
+        EditText valueEdit = view.findViewById(R.id.dialog_editValue);
 
         CheckBox useQrScan = view.findViewById(R.id.dialog_useQRScan);
         useQrScan.setOnCheckedChangeListener((buttonView, isChecked) -> {
@@ -98,9 +97,9 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Swi
         });
 
         if (isEdit) {
-            keyEdit.getEditText().setText(account.optString("uin"));
-            keyEdit.getEditText().setEnabled(false);
-            valueEdit.getEditText().setText(account.optString("pass"));
+            keyEdit.setText(account.optString("uin"));
+            keyEdit.setEnabled(false);
+            valueEdit.setText(account.optString("pass"));
             int i = 0;
             while (!account.optString("platform", protocols[0]).equals(protocols[i])) {
                 i++;
@@ -111,9 +110,9 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Swi
                 valueEdit.setVisibility(View.GONE);
             }
         }
-        builder.setPositiveButton("确定", (dialog, which) -> {
-            String key = keyEdit.getEditText().getText().toString();
-            String value = valueEdit.getEditText().getText().toString();
+        builder.setPositiveButton(R.string.ok, (dialog, which) -> {
+            String key = keyEdit.getText().toString();
+            String value = valueEdit.getText().toString();
             boolean useQRLogin = useQrScan.isChecked();
 
             if (TextUtils.isEmpty(key) || (TextUtils.isEmpty(value) && !useQRLogin)) {
@@ -123,14 +122,14 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Swi
             try {
                 qq = Long.parseLong(key);
             } catch (Exception e) {
-                SnackBroadCast.sendBroadCast("请输入合法的qq号!");
+                SnackBroadCast.sendBroadCast(R.string.login_qq_not_vaild);
                 return;
             }
 
             JSONArrayStorage botList = JSONArrayStorage.obtain(avt.getExternalFilesDir("config").getAbsolutePath() + "/botList.json");
 
             if (Bot.getInstanceOrNull(qq) != null && !isEdit) { //只有新增对话框中才需要检查新填写的qq和已存在列表是否相同
-                SnackBroadCast.sendBroadCast("请勿输入已存在的QQ");
+                SnackBroadCast.sendBroadCast(R.string.login_qq_exist);
                 return;
             }
 
@@ -140,7 +139,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Swi
                         botList.remove(i); //找到了就删掉!
                         break;
                     } else {
-                        SnackBroadCast.sendBroadCast("请勿输入已存在的QQ");
+                        SnackBroadCast.sendBroadCast(R.string.login_qq_exist);
                         return;
                     }
                 }
@@ -157,12 +156,13 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Swi
             botList.put(account);
             botList.save();
             if (isEdit) {
-                SnackBroadCast.sendBroadCast("修改成功!");
+                SnackBroadCast.sendBroadCast(R.string.login_edit_success);
             } else {
-                SnackBroadCast.sendBroadCast("添加成功!");
+                SnackBroadCast.sendBroadCast(R.string.login_create_success);
             }
             adapter.notifyDataSetChanged();
         });
+        builder.setNegativeButton(R.string.cancel, (dialog, which) -> {});
         return builder.create();
     }
 

@@ -11,17 +11,15 @@ import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ListView;
-
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
-import androidx.core.net.UriKt;
+import androidx.annotation.StringRes;
 import androidx.fragment.app.Fragment;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.textfield.TextInputLayout;
 import com.kagg886.seiko.R;
 import com.kagg886.seiko.SeikoApplication;
 import com.kagg886.seiko.activity.MainActivity;
@@ -30,25 +28,16 @@ import com.kagg886.seiko.event.SnackBroadCast;
 import com.kagg886.seiko.plugin.api.SeikoPlugin;
 import com.kagg886.seiko.service.BotRunnerService;
 import com.kagg886.seiko.util.IOUtil;
-
+import okhttp3.*;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
-import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Optional;
 import java.util.UUID;
-
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
 
 
 public class PluginFragment extends Fragment implements View.OnClickListener, SwipeRefreshLayout.OnRefreshListener {
@@ -74,7 +63,7 @@ public class PluginFragment extends Fragment implements View.OnClickListener, Sw
                     });
                 } catch (Exception e) {
                     e.printStackTrace();
-                    SnackBroadCast.sendBroadCast("导入失败");
+                    SnackBroadCast.sendBroadCast(R.string.plugin_list_import_fail);
                 }
             });
         });
@@ -88,11 +77,11 @@ public class PluginFragment extends Fragment implements View.OnClickListener, Sw
                     PluginFragment.this.dialog.show();
                     break;
                 case 0:
-                    SnackBroadCast.sendBroadCast("下载完成");
+                    SnackBroadCast.sendBroadCast(R.string.plugin_list_download_success);
                     PluginFragment.this.dialog.dismiss();
                     break;
                 case 1:
-                    SnackBroadCast.sendBroadCast("发生异常:" + ((Throwable) msg.getData().getSerializable("exception")).getMessage());
+                    SnackBroadCast.sendBroadCast(text(R.string.plugin_list_exception, ((Throwable) msg.getData().getSerializable("exception")).getMessage()));
                     PluginFragment.this.dialog.dismiss();
                     break;
             }
@@ -102,9 +91,9 @@ public class PluginFragment extends Fragment implements View.OnClickListener, Sw
     @Override
     public void onClick(View v) {
         AlertDialog dialog = new AlertDialog.Builder(getActivity())
-                .setTitle("您要...")
+                .setTitle(R.string.plugin_title)
                 .setItems(
-                    new String[]{"从本地导入", "从网络导入"}, (dialog1, which) -> {
+                    new String[]{text(R.string.plugin_action_import_local), text(R.string.plugin_action_import_url)}, (dialog1, which) -> {
                         if (which == 0)
                             localImportPlugin();
                         else if (which == 1)
@@ -116,9 +105,9 @@ public class PluginFragment extends Fragment implements View.OnClickListener, Sw
 
     public void downloadPlugin(String url) {
         PluginFragment.this.dialog = new AlertDialog.Builder(getActivity())
-                .setTitle("下载中...")
+                .setTitle(R.string.plugin_list_download_title)
                 .setCancelable(false)
-                .setMessage("请稍等片刻...")
+                .setMessage(R.string.plugin_list_download_message)
                 .create();
         mHandler.sendEmptyMessage(2);
 
@@ -181,20 +170,17 @@ public class PluginFragment extends Fragment implements View.OnClickListener, Sw
         listView.setOnItemClickListener((parent, view, position, id) -> {
             androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(((MainActivity) getActivity()));
             SeikoPlugin desc = BotRunnerService.INSTANCE.getSeikoPluginList().get(position);
-            builder.setTitle("操作:" + desc.getDescription().getName());
-            builder.setItems(new String[]{"删除插件"}, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    if (which == 0) {
-                        if (desc.getFile() == null) {
-                            SnackBroadCast.sendBroadCast("内置插件不可删除");
-                            return;
-                        }
-                        desc.getFile().delete();
-                        BotRunnerService.INSTANCE.getSeikoPluginList().remove(desc);
-                        adapter.notifyDataSetChanged();
-                        SnackBroadCast.sendBroadCast("删除成功!");
+            builder.setTitle(text(R.string.plugin_list_title, desc.getDescription().getName()));
+            builder.setItems(new String[]{text(R.string.plugin_list_action_delete)}, (dialog, which) -> {
+                if (which == 0) {
+                    if (desc.getFile() == null) {
+                        SnackBroadCast.sendBroadCast(R.string.plugin_list_action_delete_fail);
+                        return;
                     }
+                    desc.getFile().delete();
+                    BotRunnerService.INSTANCE.getSeikoPluginList().remove(desc);
+                    adapter.notifyDataSetChanged();
+                    SnackBroadCast.sendBroadCast(R.string.plugin_list_action_delete_success);
                 }
             });
             builder.create().show();
@@ -209,18 +195,20 @@ public class PluginFragment extends Fragment implements View.OnClickListener, Sw
     }
 
     public AlertDialog networkImportPluginDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(((MainActivity) getActivity()));
-        View view = LayoutInflater.from(((MainActivity) getActivity())).inflate(R.layout.dialog_import_plugin, null);
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setTitle(R.string.plugin_import_url_title);
+        View view = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_import_plugin, null);
+        EditText edt = view.findViewById(R.id.dialog_importPluginUrl);
         builder.setView(view);
-        builder.setPositiveButton("确定", (dialog, which) -> {
-            TextInputLayout importPluginUrl = view.findViewById(R.id.dialog_importPluginUrl);
-            String url = importPluginUrl.getEditText().getText().toString();
+        builder.setPositiveButton(R.string.ok, (dialog, which) -> {
+            String url = edt.getText().toString();
             if (url.trim().length() == 0 || !(url.startsWith("http://") || url.startsWith("https://"))) {
-                SnackBroadCast.sendBroadCast("请正确填写链接");
+                SnackBroadCast.sendBroadCast(R.string.plugin_import_url_not_vaild);
                 return;
             }
             downloadPlugin(url);
         });
+        builder.setNegativeButton(R.string.cancel, (dialog, which) -> {});
         return builder.create();
     }
 
@@ -235,7 +223,7 @@ public class PluginFragment extends Fragment implements View.OnClickListener, Sw
         intent.addCategory(Intent.CATEGORY_OPENABLE);
 
 
-        getFileLauncher.launch(Intent.createChooser(intent, "选择导入的插件"));
+        getFileLauncher.launch(Intent.createChooser(intent, text(R.string.plugin_import_local_title)));
     }
 
     @Override
@@ -249,5 +237,8 @@ public class PluginFragment extends Fragment implements View.OnClickListener, Sw
         BotRunnerService.INSTANCE.getSeikoPluginList().refresh();
         adapter.notifyDataSetChanged();
         layout.setRefreshing(false);
+    }
+    private String text(@StringRes int s, Object... args) {
+        return String.format(SeikoApplication.getSeikoApplicationContext().getText(s).toString(), args);
     }
 }

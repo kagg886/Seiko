@@ -1,16 +1,12 @@
 package com.kagg886.seiko.adapter;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
-import android.content.Context;
-import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
-import android.widget.Toast;
-
+import androidx.annotation.StringRes;
 import androidx.appcompat.widget.SwitchCompat;
 import com.kagg886.seiko.R;
 import com.kagg886.seiko.SeikoApplication;
@@ -20,11 +16,8 @@ import com.kagg886.seiko.dic.entity.DictionaryFile;
 import com.kagg886.seiko.dic.model.DICParseResult;
 import com.kagg886.seiko.event.DialogBroadCast;
 import com.kagg886.seiko.event.SnackBroadCast;
-
 import com.kagg886.seiko.util.IOUtil;
 import org.json.JSONObject;
-
-import java.io.IOException;
 
 /**
  * @projectName: Seiko
@@ -93,7 +86,7 @@ public class DICAdapter extends BaseAdapter {
                 try {
                     dictionaryFile.parseDICCodeFile();
                 } catch (Exception e) {
-                    DialogBroadCast.sendBroadCast("解析'" + dictionaryFile.getName() + "'时遇到问题!", IOUtil.getException(e));
+                    DialogBroadCast.sendBroadCast(text(R.string.dic_load_error, dictionaryFile.getName()), IOUtil.getException(e));
                     sw.setChecked(false);
                     // 结束函数
                     return;
@@ -117,8 +110,11 @@ public class DICAdapter extends BaseAdapter {
     public void notifyDataSetChanged() {
         DICParseResult result = DICList.getInstance().refresh();
         if(!result.success) {
-            SnackBroadCast.sendBroadCast("伪代码解析中存在问题！\n请单击关闭的伪代码条目开关以获取问题信息，单击文字以进行编辑");
+            SnackBroadCast.sendBroadCast(text(R.string.dic_error));
         }
         super.notifyDataSetChanged();
+    }
+    private String text(@StringRes int s, Object... args) {
+        return String.format(SeikoApplication.getSeikoApplicationContext().getText(s).toString(), args);
     }
 }
