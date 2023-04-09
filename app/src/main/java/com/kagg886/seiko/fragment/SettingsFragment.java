@@ -30,8 +30,8 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Prefer
         } catch (PackageManager.NameNotFoundException e) {
             throw new RuntimeException(e);
         }
-        s.setTitle("当前版本:" + p.versionName + "(" + BuildConfig.COMMIT_HASH + ")");
-        s.setSummary("版本号:" + p.getLongVersionCode());
+        s.setTitle("当前版本: " + p.versionName + " (" + BuildConfig.COMMIT_HASH + ")");
+        s.setSummary("版本号: " + p.getLongVersionCode());
 
         s = findPreference("buildTime");
         s.setTitle("构建日期");
@@ -43,7 +43,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Prefer
         EditTextPreference sp = findPreference("maxLogNum");
         sp.setOnBindEditTextListener(editText -> editText.setInputType(InputType.TYPE_CLASS_NUMBER));
         sp.setOnPreferenceChangeListener(this);
-        sp.setSummary(String.format("当前设置的值为:%s", sp.getSharedPreferences().getString("maxLogNum", "40")));
+        sp.setSummary(String.format("当前设置的值为: %s", sp.getSharedPreferences().getString("maxLogNum", "40")));
 
         s = findPreference("goGithub");
         s.setOnPreferenceClickListener(this);
