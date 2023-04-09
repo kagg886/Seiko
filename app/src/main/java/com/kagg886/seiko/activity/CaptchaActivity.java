@@ -66,7 +66,7 @@ public class CaptchaActivity extends AppCompatActivity implements View.OnClickLi
         FloatingActionButton button = findViewById(R.id.activity_captcha_debug);
         button.setOnClickListener(this);
 
-        Toast.makeText(this, "若滑块验证后白屏请点击右下角浮动按钮~", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, R.string.slide_toast, Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -79,9 +79,9 @@ public class CaptchaActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     public void onClick(View v) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("滑块验证调试窗口");
+        builder.setTitle(R.string.slide_debug_title);
         StringBuilder builder1 = new StringBuilder();
-        builder1.append("此对话框里的内容为WebView请求的所有url。若滑块完成后白屏，请复制此对话框的内容并在Seiko的github仓库下提交issue");
+        builder1.append(getText(R.string.slide_debug_description));
 
         for (WebResourceRequest request : historyRequests) {
             builder1.append("\n------\n").append("(").append(request.getMethod()).append(")").append(request.getUrl().toString());

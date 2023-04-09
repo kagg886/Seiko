@@ -13,11 +13,13 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.StringRes;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.kagg886.seiko.R;
+import com.kagg886.seiko.SeikoApplication;
 import com.kagg886.seiko.activity.DICEditActivity;
 import com.kagg886.seiko.activity.MainActivity;
 import com.kagg886.seiko.adapter.DICAdapter;
@@ -66,8 +68,8 @@ public class DICFragment extends Fragment implements View.OnClickListener, Swipe
         listView.setOnItemClickListener((parent, view, position, id) -> {
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
             DictionaryFile file = DICList.getInstance().get(position);
-            builder.setTitle("操作:" + file.getName());
-            builder.setItems(new String[]{"编辑伪代码", "删除伪代码"}, (dialog, which) -> {
+            builder.setTitle(text(R.string.dic_edit_title, file.getName()));
+            builder.setItems(new String[] { text(R.string.dic_edit_action_edit), text(R.string.dic_edit_action_delete)}, (dialog, which) -> {
                 switch (which) {
                     case 0:
                         openDICCodeEditor(true, file.getName());
@@ -75,7 +77,7 @@ public class DICFragment extends Fragment implements View.OnClickListener, Swipe
                     case 1:
                         file.getFile().delete();
                         adapter.notifyDataSetChanged();
-                        SnackBroadCast.sendBroadCast("删除成功!");
+                        SnackBroadCast.sendBroadCast(R.string.dic_edit_action_delete_success);
                         break;
                 }
             });
@@ -91,7 +93,8 @@ public class DICFragment extends Fragment implements View.OnClickListener, Swipe
     @Override
     public void onClick(View view) {
         AlertDialog dialog = new AlertDialog.Builder(requireContext())
-                .setTitle("您要...").setItems(new String[]{"新建伪代码", "导入伪代码","查看在线教程(可能需要翻墙)","查看在线教程(无需翻墙)"}, (dialog1, which) -> {
+                .setTitle(R.string.dic_title)
+                .setItems(new String[] {text(R.string.dic_action_create), text(R.string.dic_action_import), text(R.string.dic_action_github), text(R.string.dic_action_gitee)}, (dialog1, which) -> {
                     switch (which) {
                         case 0:
                             // 新建伪代码 / 打开编辑器
@@ -111,27 +114,27 @@ public class DICFragment extends Fragment implements View.OnClickListener, Swipe
                                 avt.runOnUiThread(() -> {
                                     try {
                                         AlertDialog.Builder builder = new AlertDialog.Builder(avt);
-                                        builder.setTitle("为导入的词库命名(随机命名则为空)");
+                                        builder.setTitle(R.string.dic_action_import_name);
                                         View v = LayoutInflater.from(avt).inflate(R.layout.ask_dic_name, null);
                                         EditText edt = v.findViewById(R.id.dialog_dicName);
                                         builder.setView(v);
-                                        builder.setPositiveButton("确定", (dialog2, which1) -> {
+                                        builder.setPositiveButton(R.string.ok, (dialog2, which1) -> {
                                             String txt = edt.getText().toString();
                                             txt = (TextUtils.isEmpty(txt) ? UUID.randomUUID().toString().replace("-", "").substring(0, 8) : txt) + GlobalConstant.dicFileExt;
                                             try {
                                                 String s = IOUtil.loadStringFromStream(avt.getContentResolver().openInputStream(result.getData().getData()));
                                                 IOUtil.writeStringToFile(avt.getExternalFilesDir("dic").toPath().resolve(txt).toFile().getAbsolutePath(), s);
-                                                SnackBroadCast.sendBroadCast("导入成功!");
+                                                SnackBroadCast.sendBroadCast(R.string.dic_action_import_success);
                                                 adapter.notifyDataSetChanged();
                                             } catch (IOException e) {
                                                 throw new RuntimeException(e);
                                             }
                                         });
-                                        builder.setNegativeButton("取消", (dialog2, which2) -> {});
+                                        builder.setNegativeButton(R.string.cancel, (dialog2, which2) -> {});
                                         builder.show();
                                     } catch (Exception e) {
                                         e.printStackTrace();
-                                        SnackBroadCast.sendBroadCast("导入失败!");
+                                        SnackBroadCast.sendBroadCast(R.string.dic_action_import_fail);
                                     }
                                 });
                             }).start();
@@ -160,5 +163,8 @@ public class DICFragment extends Fragment implements View.OnClickListener, Swipe
     public void onRefresh() {
         adapter.notifyDataSetChanged();
         layout.setRefreshing(false);
+    }
+    private String text(@StringRes int s, Object... args) {
+        return String.format(SeikoApplication.getSeikoApplicationContext().getText(s).toString(), args);
     }
 }

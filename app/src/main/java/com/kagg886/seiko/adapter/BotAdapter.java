@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import androidx.annotation.StringRes;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.SwitchCompat;
 import com.kagg886.seiko.R;
@@ -76,7 +77,7 @@ public class BotAdapter extends BaseAdapter {
         SwitchCompat sw = v.findViewById(R.id.adapter_dicitem_status);
         JSONObject target = botList.optJSONObject(position);
 
-        nick.setText(target.optString("nick", "未登录"));
+        nick.setText(target.optString("nick", text(R.string.bot_list_not_login)));
         qq.setText(String.valueOf(target.optLong("uin")));
 
         IOUtil.asyncHttp(Jsoup.connect("https://q1.qlogo.cn/g?b=qq&nk=" + qq.getText().toString() + "&s=640"), new IOUtil.Response() {
@@ -106,19 +107,13 @@ public class BotAdapter extends BaseAdapter {
                     Bot.getInstance(target.optLong("uin")).close();
                 } catch (NoSuchElementException e) {
                     //TODO 抓bug用，解决了就删除
-                    StringBuilder builder = new StringBuilder();
-                    builder.append("程序发现Mirai内建Bot存储库并没有这个bot号:" + target.optLong("uin"));
-                    builder.append("\nMirai内建Bot存储库列表:" + Bot.getInstances());
-
                     List<Long> nativeBots = new ArrayList<>();
                     for (int i = 0; i < botList.length(); i++) {
                         nativeBots.add(botList.optJSONObject(i).optLong("uin"));
                     }
 
-                    builder.append("\nSeiko内部维护的Bot列表:" + nativeBots);
-                    builder.append("\n若您遇到了这个弹窗，证明在几天之前有人触发了这个bug并且闪退。请前往Seiko的仓库提issue并截图此页面。");
-
-                    DialogBroadCast.sendBroadCast("小小的警告", builder.toString());
+                    DialogBroadCast.sendBroadCast(text(R.string.bot_list_no_such_bot_title),
+                            text(R.string.bot_list_no_such_bot, target.optLong("uin"), Bot.getInstances(), nativeBots));
                 }
                 //SnackBroadCast.sendBroadCast(avt,target.optLong("uin") + "已下线");
             }
@@ -129,12 +124,12 @@ public class BotAdapter extends BaseAdapter {
             String uin = String.valueOf(object.optLong("uin"));
             AlertDialog.Builder builder = new AlertDialog.Builder(avt);
             builder.setTitle(uin);
-            builder.setItems(new String[]{"导出登录信息", "登录配置", "查看日志", "删除BOT"}, (dialog, which) -> {
+            builder.setItems(new String[] { text(R.string.bot_list_action_export), text(R.string.bot_list_action_edit), text(R.string.bot_list_action_log), text(R.string.bot_list_action_delete)}, (dialog, which) -> {
                 switch (which) {
                     case 0:
                         File p = new File(avt.getExternalFilesDir("bots") + "/" + uin);
                         if (!new File(p.getAbsolutePath(),"cache").exists()) {
-                            SnackBroadCast.sendBroadCast("从未登陆过，无法获取到登录信息");
+                            SnackBroadCast.sendBroadCast(R.string.bot_list_action_export_never_login);
                             return;
                         }
                         File config = new File(p, "loginTemplate.yml");
@@ -158,13 +153,13 @@ public class BotAdapter extends BaseAdapter {
                             IOUtil.zipFile(p, zipFile);
                         } catch (IOException e) {
                             Log.w("BotAdapter", e);
-                            SnackBroadCast.sendBroadCast("导出信息失败...");
+                            SnackBroadCast.sendBroadCast(R.string.bot_list_action_export_fail);
                         }
                         ShareUtil.quickShare(avt, zipFile, "*/*");
                         break;
                     case 1:
                         if (Bot.getInstanceOrNull(object.optLong("uin")) != null) {
-                            SnackBroadCast.sendBroadCast("请下线BOT然后再执行此操作!");
+                            SnackBroadCast.sendBroadCast(R.string.bot_list_action_edit_online);
                             return;
                         }
                         LoginFragment.editDialog(avt, this, true, object).show();
@@ -176,18 +171,22 @@ public class BotAdapter extends BaseAdapter {
                         break;
                     case 3:
                         if (Bot.getInstanceOrNull(object.optLong("uin")) != null) {
-                            SnackBroadCast.sendBroadCast("请下线BOT然后再执行此操作!");
+                            SnackBroadCast.sendBroadCast(R.string.bot_list_action_delete_online);
                             return;
                         }
                         botList.remove(position);
                         botList.save();
                         notifyDataSetChanged();
-                        SnackBroadCast.sendBroadCast("删除完毕");
+                        SnackBroadCast.sendBroadCast(R.string.bot_list_action_delete_success);
                         break;
                 }
             });
             builder.create().show();
         });
         return v;
+    }
+
+    private String text(@StringRes int s, Object... args) {
+        return String.format(avt.getText(s).toString(), args);
     }
 }

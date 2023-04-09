@@ -23,6 +23,6 @@
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="16dp"
             app:srcCompat="@android:drawable/ic_input_add"
-            android:contentDescription="Add bot account"/>
+            android:contentDescription="@string/fragment_login_add_bot_account"/>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -7,8 +7,10 @@ import android.widget.LinearLayout;
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.StringRes;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 import com.google.android.material.tabs.TabLayout;
 import com.kagg886.seiko.R;
@@ -27,6 +29,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -84,11 +87,12 @@ public class MainActivity extends AppCompatActivity {
 
         //检测崩溃报告
         File f = getExternalFilesDir("crash");
-        if (f.listFiles().length != 0) {
+        int crashFileCount = f.listFiles().length;
+        if (crashFileCount > 0) {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle("发现了" + f.listFiles().length + "个崩溃文件");
-            builder.setMessage("请在下方选择你的操作");
-            builder.setPositiveButton("打包并分享", (dialog, which) -> {
+            builder.setTitle(String.format(getText(R.string.crash_found).toString(), crashFileCount));
+            builder.setMessage(R.string.crash_action);
+            builder.setPositiveButton(R.string.crash_action_share, (dialog, which) -> {
                 File crashFile = getExternalFilesDir("tmp").toPath().resolve("crash.zip").toFile();
                 if (crashFile.exists()) {
                     crashFile.delete();
@@ -108,9 +112,9 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
 
-            builder.setNegativeButton("全部删除", (dialog, which) -> {
+            builder.setNegativeButton(R.string.crash_action_delete_all, (dialog, which) -> {
                 IOUtil.delFile(f);
-                SnackBroadCast.sendBroadCast("已全部删除!");
+                SnackBroadCast.sendBroadCast(R.string.crash_action_deleted);
             });
             builder.create().show();
         }
@@ -140,13 +144,16 @@ public class MainActivity extends AppCompatActivity {
 
         //填充列表
         ArrayList<ModuleAdapter.Structure> fragments = new ArrayList<>();
-        fragments.add(new ModuleAdapter.Structure("BOT列表", new LoginFragment()));
-        fragments.add(new ModuleAdapter.Structure("插件", new PluginFragment()));
-        fragments.add(new ModuleAdapter.Structure("伪代码", new DICFragment()));
-        fragments.add(new ModuleAdapter.Structure("设置", new SettingsFragment()));
+        addFragment(fragments, R.string.tab_bot_list, new LoginFragment());
+        addFragment(fragments, R.string.tab_plugin_list, new PluginFragment());
+        addFragment(fragments, R.string.tab_dic_list, new DICFragment());
+        addFragment(fragments, R.string.tab_settings, new SettingsFragment());
 
         adapter.setViews(fragments);
         pager.setAdapter(adapter);
         layout.setupWithViewPager(pager);
+    }
+    private void addFragment(List<ModuleAdapter.Structure> fragments, @StringRes int str, Fragment fragment) {
+        fragments.add(new ModuleAdapter.Structure(getText(str).toString(), fragment));
     }
 }

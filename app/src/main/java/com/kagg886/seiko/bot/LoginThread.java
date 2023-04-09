@@ -7,8 +7,10 @@ import android.os.Looper;
 import android.os.Message;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
+import androidx.annotation.StringRes;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.SwitchCompat;
+import com.kagg886.seiko.R;
 import com.kagg886.seiko.SeikoApplication;
 import com.kagg886.seiko.event.DialogBroadCast;
 import com.kagg886.seiko.event.SnackBroadCast;
@@ -18,6 +20,7 @@ import com.kagg886.seiko.util.IOUtil;
 import com.kagg886.seiko.util.storage.JSONArrayStorage;
 import net.mamoe.mirai.Bot;
 import net.mamoe.mirai.BotFactory;
+import net.mamoe.mirai.auth.BotAuthorization;
 import net.mamoe.mirai.network.LoginFailedException;
 import net.mamoe.mirai.utils.BotConfiguration;
 import org.json.JSONObject;
@@ -49,7 +52,7 @@ public class LoginThread extends Thread {
                     dialog.show();
                     break;
                 case 0:
-                    SnackBroadCast.sendBroadCast("Bot:" + bot.getId() + "登录成功");
+                    SnackBroadCast.sendBroadCast(text(R.string.login_success, bot.getId()));
                     nick.setText(bot.getNick());
                     dialog.dismiss();
                     break;
@@ -84,8 +87,8 @@ public class LoginThread extends Thread {
                             }
                         }
                     }
-                    DialogBroadCast.sendBroadCast("登录失败", throwable.getMessage() == null ? "bot登陆时发现未知异常" : throwable.getMessage() + "\n完整信息请查看bot日志");
-                    bot.getLogger().error("在Bot登录时发现异常:", throwable);
+                    DialogBroadCast.sendBroadCast(text(R.string.login_fail), throwable.getMessage() == null ? text(R.string.login_fail_reason_unknown) : text(R.string.login_fail_reason, throwable.getMessage()));
+                    bot.getLogger().error("在Bot登录时发现异常: ", throwable);
                     sw.setChecked(false);
                     dialog.dismiss();
                     break;
@@ -102,12 +105,16 @@ public class LoginThread extends Thread {
         String pass = botConfig.optString("pass");
         BotConfiguration.MiraiProtocol protocol = BotConfiguration.MiraiProtocol.valueOf(botConfig.optString("platform", "ANDROID_PHONE"));
 
-        dialog = new AlertDialog.Builder(SeikoApplication.getCurrentActivity()).setTitle("登录中...(" + uin + ")").setCancelable(false).setMessage("请稍等片刻...").create();
+        dialog = new AlertDialog.Builder(SeikoApplication.getCurrentActivity())
+                .setTitle(text(R.string.login_process, uin))
+                .setCancelable(false)
+                .setMessage(R.string.login_process_message)
+                .create();
         BotLogConfiguration configuration = new BotLogConfiguration(uin);
         configuration.setProtocol(protocol);
 
         if (botConfig.optBoolean("useQRLogin")) {
-            bot = BotFactory.INSTANCE.newBot(uin, (botAuthSession, botAuthInfo, continuation) -> botAuthSession.authByQRCode(continuation),configuration);
+            bot = BotFactory.INSTANCE.newBot(uin, BotAuthorization.byQRCode(), configuration);
         } else {
             bot = BotFactory.INSTANCE.newBot(uin, pass, configuration);
         }
@@ -133,13 +140,13 @@ public class LoginThread extends Thread {
                 try {
                     plugin.onBotGoLine(bot.getId());
                 } catch (Throwable e) {
-                    bot.getLogger().error("加载插件:" + plugin.getDescription().getName() + "(" + plugin.getDescription().getId() + ")发生错误!", e);
-                    SnackBroadCast.sendBroadCast("初始化:" + plugin.getDescription().getName() + "时发生错误,请前往bot日志查看。");
+                    bot.getLogger().error("加载插件: " + plugin.getDescription().getName() + " (" + plugin.getDescription().getId() + ") 发生错误!", e);
+                    SnackBroadCast.sendBroadCast("初始化: " + plugin.getDescription().getName() + " 时发生错误, 请前往bot日志查看。");
                 }
                 BotRunnerService.INSTANCE.getLastLoad().put(plugin.getDescription().getId(), bot.getId());
             }
             bot.join();
-            SnackBroadCast.sendBroadCast("用户操作，BOT主动下线");
+            SnackBroadCast.sendBroadCast(R.string.login_logout);
         } catch (Throwable e) {
             Message m = new Message();
             m.what = 1;
@@ -148,5 +155,8 @@ public class LoginThread extends Thread {
             m.setData(b);
             dialogController.sendMessage(m);
         }
+    }
+    private String text(@StringRes int s, Object... args) {
+        return String.format(SeikoApplication.getSeikoApplicationContext().getText(s).toString(), args);
     }
 }

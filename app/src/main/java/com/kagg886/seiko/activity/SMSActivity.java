@@ -30,11 +30,11 @@ public class SMSActivity extends AppCompatActivity {
         verify = findViewById(R.id.activity_sms_verify);
         Intent data = getIntent();
 
-        text.setText(String.format("我们已向[%s %s]发送了一条验证短信\n请在下方输入框内输入验证码后点击提交",data.getStringExtra("country"), data.getStringExtra("phone")));
+        text.setText(String.format(getText(R.string.sms_tips).toString(), data.getStringExtra("country"), data.getStringExtra("phone")));
 
         submit.setOnClickListener(v -> {
             if (TextUtils.isEmpty(verify.getText().toString())) {
-                Snackbar.make(getWindow().getDecorView(), "验证码不得为空", BaseTransientBottomBar.LENGTH_LONG).show();
+                Snackbar.make(getWindow().getDecorView(), R.string.sms_code_empty, BaseTransientBottomBar.LENGTH_LONG).show();
                 return;
             }
             Intent o = new Intent();
@@ -45,7 +45,8 @@ public class SMSActivity extends AppCompatActivity {
 
         retry.setOnClickListener(v -> {
             if (System.currentTimeMillis() - sendTime < 60000) {
-                Snackbar.make(getWindow().getDecorView(), "请" + (60 - (System.currentTimeMillis() - sendTime) / 1000) + "秒后重试", Snackbar.LENGTH_LONG).show();
+                long time = 60 - (System.currentTimeMillis() - sendTime) / 1000;
+                Snackbar.make(getWindow().getDecorView(), String.format(getText(R.string.sms_retry).toString(), time), Snackbar.LENGTH_LONG).show();
                 return;
             }
             setResult(RESULT_RETRY, new Intent());

@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
+import androidx.annotation.StringRes;
 import androidx.appcompat.widget.SwitchCompat;
 import com.kagg886.seiko.R;
 import com.kagg886.seiko.SeikoApplication;
@@ -85,7 +86,7 @@ public class DICAdapter extends BaseAdapter {
                 try {
                     dictionaryFile.parseDICCodeFile();
                 } catch (Exception e) {
-                    DialogBroadCast.sendBroadCast("解析'" + dictionaryFile.getName() + "'时遇到问题!", IOUtil.getException(e));
+                    DialogBroadCast.sendBroadCast(text(R.string.dic_load_error, dictionaryFile.getName()), IOUtil.getException(e));
                     sw.setChecked(false);
                     // 结束函数
                     return;
@@ -109,8 +110,11 @@ public class DICAdapter extends BaseAdapter {
     public void notifyDataSetChanged() {
         DICParseResult result = DICList.getInstance().refresh();
         if(!result.success) {
-            SnackBroadCast.sendBroadCast("伪代码解析中存在问题！\n请单击关闭的伪代码条目开关以获取问题信息，单击文字以进行编辑");
+            SnackBroadCast.sendBroadCast(text(R.string.dic_error));
         }
         super.notifyDataSetChanged();
+    }
+    private String text(@StringRes int s, Object... args) {
+        return String.format(SeikoApplication.getSeikoApplicationContext().getText(s).toString(), args);
     }
 }

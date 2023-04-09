@@ -26,5 +26,5 @@
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="16dp"
             app:srcCompat="@android:drawable/ic_input_add"
-            android:contentDescription="Add plugin"/>
+            android:contentDescription="@string/fragment_plugin_add_plugin"/>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

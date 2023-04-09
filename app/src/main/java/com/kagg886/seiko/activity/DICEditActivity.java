@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import androidx.annotation.Nullable;
+import androidx.annotation.StringRes;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.material.snackbar.Snackbar;
@@ -49,10 +50,10 @@ public class DICEditActivity extends AppCompatActivity {
         saveCodeBtn.setActivated(false);
         existFile = getIntent().getBooleanExtra("exist_file", false);
         if (existFile) {
-            saveCodeBtn.setText("修改");
+            saveCodeBtn.setText(R.string.dic_edit_save_edit);
         } else {
             code.setText(IOUtil.loadStringFromStream(getAssets().open("dic_template.txt")));
-            saveCodeBtn.setText("创建");
+            saveCodeBtn.setText(R.string.dic_edit_save_create);
         }
         filename = getIntent().getStringExtra("filename");
         if (filename == null) {
@@ -69,25 +70,25 @@ public class DICEditActivity extends AppCompatActivity {
 
     private void askFilename(Consumer<String> stringConsumer) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(R.string.input_dic_name);
+        builder.setTitle(R.string.dic_edit_input_name);
         View v = LayoutInflater.from(this).inflate(R.layout.ask_dic_name, null);
         EditText edt = v.findViewById(R.id.dialog_dicName);
         builder.setView(v);
 
-        builder.setPositiveButton("确定", (dialog, which) -> {
+        builder.setPositiveButton(R.string.ok, (dialog, which) -> {
             String name = edt.getText().toString();
             if (TextUtils.isEmpty(name)) {
-                toast("文件名不可为空");
+                toast(R.string.dic_edit_input_not_empty);
             } else {
                 stringConsumer.accept(name);
             }
         });
 
-        builder.setNegativeButton("取消", (dialog, which) -> {});
+        builder.setNegativeButton(R.string.cancel, (dialog, which) -> {});
         builder.show();
     }
 
-    private void toast(String msg) {
+    private void toast(@StringRes int msg) {
         Snackbar.make(findViewById(R.id.activity_dic_edit), msg, Snackbar.LENGTH_SHORT).show();
     }
 
@@ -97,9 +98,9 @@ public class DICEditActivity extends AppCompatActivity {
             if (existFile) {
                 try {
                     writeContentToFile(code.getText().toString(), filename);
-                    toast("保存成功!");
+                    toast(R.string.dic_edit_save_success);
                 } catch (IOException e) {
-                    toast("保存失败!");
+                    toast(R.string.dic_edit_save_fail);
                     throw new RuntimeException(e);
                 }
             } else {
@@ -107,7 +108,7 @@ public class DICEditActivity extends AppCompatActivity {
                     try {
                         createDIC(filename);
                     } catch (IOException e) {
-                        toast("创建失败!");
+                        toast(R.string.dic_edit_create_fail);
                         throw new RuntimeException(e);
                     }
                 });
@@ -121,10 +122,10 @@ public class DICEditActivity extends AppCompatActivity {
         // 校验是否有同名文件
         boolean dicExist = this.getExternalFilesDir("dic").toPath().resolve(filename).toFile().exists();
         if (dicExist)
-            toast("已存在同名文件!");
+            toast(R.string.dic_edit_create_exist);
         else {
             writeContentToFile(code.getText().toString(), filename);
-            toast("新建成功!");
+            toast(R.string.dic_edit_create_success);
             this.finish();
         }
     }

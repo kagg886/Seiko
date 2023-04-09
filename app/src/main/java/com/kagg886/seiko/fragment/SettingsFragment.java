@@ -6,11 +6,13 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.text.InputType;
 import androidx.annotation.NonNull;
+import androidx.annotation.StringRes;
 import androidx.preference.EditTextPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import com.kagg886.seiko.BuildConfig;
 import com.kagg886.seiko.R;
+import com.kagg886.seiko.SeikoApplication;
 import com.kagg886.seiko.event.SnackBroadCast;
 import com.kagg886.seiko.util.ShareUtil;
 import com.kagg886.seiko.util.TextUtils;
@@ -30,11 +32,10 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Prefer
         } catch (PackageManager.NameNotFoundException e) {
             throw new RuntimeException(e);
         }
-        s.setTitle("当前版本: " + p.versionName + " (" + BuildConfig.COMMIT_HASH + ")");
-        s.setSummary("版本号: " + p.getLongVersionCode());
+        s.setTitle(text(R.string.settings_version_title, p.versionName, BuildConfig.COMMIT_HASH));
+        s.setSummary(text(R.string.settings_version_summary, p.getLongVersionCode()));
 
         s = findPreference("buildTime");
-        s.setTitle("构建日期");
         s.setSummary(BuildConfig.BUILD_TIME);
 
         s = findPreference("MiraiInfo");
@@ -89,5 +90,8 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Prefer
         }
 
         return false;
+    }
+    private String text(@StringRes int s, Object... args) {
+        return String.format(SeikoApplication.getSeikoApplicationContext().getText(s).toString(), args);
     }
 }
