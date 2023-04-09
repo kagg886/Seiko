@@ -32,6 +32,7 @@ public class TransferDicMethod extends Function.UnInterruptedFunction {
                     runtime.getRuntimeObject().put(args.get(2).toString(), String.valueOf(i));
                 }
                 dicRun.invoke(dicMethod);
+                i = Integer.parseInt(runtime.getRuntimeObject().get(args.get(2).toString()).toString()); //保证User可以修改变量
             }
         } else {
             dicRun.invoke(dicMethod);

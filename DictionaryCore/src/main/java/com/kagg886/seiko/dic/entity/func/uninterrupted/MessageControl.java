@@ -5,8 +5,8 @@ import com.kagg886.seiko.dic.exception.DictionaryOnRunningException;
 import com.kagg886.seiko.dic.session.AbsRuntime;
 import net.mamoe.mirai.Bot;
 import net.mamoe.mirai.contact.Contact;
-import net.mamoe.mirai.message.data.At;
-import net.mamoe.mirai.message.data.AtAll;
+import net.mamoe.mirai.event.events.MessageEvent;
+import net.mamoe.mirai.message.data.*;
 import net.mamoe.mirai.utils.ExternalResource;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
@@ -26,6 +26,80 @@ import java.util.List;
  * @version: 1.0
  */
 public abstract class MessageControl extends Function.UnInterruptedFunction {
+
+    /**
+     * @projectName: Seiko
+     * @package: com.kagg886.seiko.dic.entity.func.uninterrupted
+     * @className: addAt
+     * @author: kagg886
+     * @description: $设置回复 %上下文% 待回复文字$
+     * @date: 2023/4/9 19:17
+     * @version: 1.0
+     */
+    public static class Reply extends Function.InterruptedFunction implements ArgumentLimiter {
+
+        public Reply(int line, String code) {
+            super(line, code);
+        }
+
+        @Override
+        public void run(AbsRuntime<?> runtime, List<Object> args) {
+            MessageEvent event = (MessageEvent) args.get(0);
+
+            MessageSource source1;
+            if (args.size() == 2) {
+                OnlineMessageSource source = event.getSource();
+                MessageSourceKind kind;
+                if (source instanceof OnlineMessageSource.Incoming.FromGroup) {
+                    kind = MessageSourceKind.GROUP;
+                } else if (source instanceof OnlineMessageSource.Incoming.FromFriend){
+                    kind = MessageSourceKind.FRIEND;
+                } else {
+                    throw new DictionaryOnRunningException("不支持的类型:" + source.getClass().getName());
+                }
+
+                MessageSourceBuilder clone = new MessageSourceBuilder();
+                clone.setIds(source.getIds());
+                clone.setTime(source.getTime());
+                clone.setFromId(source.getFromId());
+                clone.setTargetId(source.getTargetId());
+                clone.setInternalIds(source.getInternalIds());
+                clone.messages(new PlainText(args.get(1).toString()));
+                source1 = clone.build(event.getBot().getId(), kind);
+            } else {
+                source1 = event.getSource();
+            }
+            QuoteReply quoteReply = new QuoteReply(source1);
+            runtime.getMessageCache().append(quoteReply);
+        }
+
+        @Override
+        public int getArgumentLength() {
+            return 2;
+        }
+    }
+
+    /**
+     * @projectName: Seiko
+     * @package: com.kagg886.seiko.dic.entity.func.uninterrupted
+     * @className: addAt
+     * @author: kagg886
+     * @description: $撤回 %上下文%$
+     * @date: 2023/4/9 19:11
+     * @version: 1.0
+     */
+    public static class Recall extends Function.InterruptedFunction {
+
+        public Recall(int line, String code) {
+            super(line, code);
+        }
+
+        @Override
+        public void run(AbsRuntime<?> runtime, List<Object> args) {
+            MessageEvent event = (MessageEvent) args.get(0);
+            MessageSource.recall(event.getMessage());
+        }
+    }
 
     /**
      * @projectName: Seiko
