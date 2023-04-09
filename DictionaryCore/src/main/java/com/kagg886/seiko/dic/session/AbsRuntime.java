@@ -27,8 +27,8 @@ import java.util.regex.Matcher;
  * @date: 2023/1/12 21:21
  * @version: 1.0
  */
-public abstract class AbsRuntime<T> {
-    protected final T event; //此次执行伪代码所需要的事件
+public abstract class AbsRuntime<EVENT> {
+    protected final EVENT event; //此次执行伪代码所需要的事件
     protected Contact contact; //联系人对象，暴露出来是为了往其他群主动发消息用
     protected DictionaryFile file; //被执行的伪代码指令集
     protected HashMap<String, Object> context; //此次伪代码执行过程中存取的变量
@@ -41,7 +41,7 @@ public abstract class AbsRuntime<T> {
      * @description 构造函数
      * @date 2023/01/19 19:53
      */
-    public AbsRuntime(DictionaryFile file, T event) {
+    public AbsRuntime(DictionaryFile file, EVENT event) {
         this.file = file;
         this.event = event;
         context = new HashMap<>();
@@ -54,7 +54,7 @@ public abstract class AbsRuntime<T> {
         context.put("时间戳", System.currentTimeMillis());
     }
 
-    protected abstract Contact initContact(T t); //初始化联系人对象
+    protected abstract Contact initContact(EVENT EVENT); //初始化联系人对象
 
     public Stack<String> getExceptionStacks() {
         return exceptionStacks;
@@ -198,12 +198,11 @@ public abstract class AbsRuntime<T> {
                 sendSwitch = false;
             }
 
-            if (dic instanceof Expression.If) {
+            if (dic instanceof Expression.If iff) {
 //                if (getMessageCache().size() != 0) {
 //                    clearMessageCache();
 //                    sendSwitch = true;
 //                }
-                Expression.If iff = (Expression.If) dic;
                 if (!iff.calc(this)) {
                     isJumpCode = true;
                     continue;

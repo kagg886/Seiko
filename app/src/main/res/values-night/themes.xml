@@ -2,7 +2,7 @@
     <!-- Base application theme. -->
     <style name="Theme.Seiko" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/purple_200</item>
+        <item name="colorPrimary">@color/cardview_dark_background</item>
         <item name="colorPrimaryVariant">@color/purple_700</item>
         <item name="colorOnPrimary">@color/black</item>
         <item name="windowActionBar">false</item>
@@ -12,11 +12,15 @@
         <item name="colorSecondaryVariant">@color/teal_200</item>
         <item name="colorOnSecondary">@color/black</item>
         <!-- Status bar color. -->
-        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimary</item>
+        <item name="android:statusBarColor">?attr/colorPrimary</item>
         <!-- Customize your theme here. -->
     </style>
 
     <style name="EditText">
         <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="background">
+        <item name="android:background">@color/black</item>
     </style>
 </resources>

@@ -29,10 +29,9 @@
             app:layout_constraintTop_toTopOf="@id/adapter_botitem_imgView"
             app:layout_constraintBottom_toBottomOf="@id/adapter_botitem_imgView">
         <TextView
-                style="@style/TextAppearance.AppCompat.Large"
+                style="@style/EditText"
                 android:text="BotNick"
                 android:textSize="30sp"
-                android:textColor="@color/black"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/adapter_botitem_botqqnick"

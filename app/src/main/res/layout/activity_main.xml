@@ -25,7 +25,7 @@
                 android:id="@+id/activity_main_view_tab_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/purple_200"
+                style="@style/background"
                 android:textColor="@color/white"
                 app:tabIndicatorColor="@color/white" app:tabTextColor="@color/white"
                 app:tabTextAppearance="@style/TextAppearance.AppCompat.Display2"/>
