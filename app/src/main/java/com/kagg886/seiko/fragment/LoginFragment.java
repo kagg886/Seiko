@@ -75,7 +75,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Swi
         } else {
             builder.setTitle("添加账号");
         }
-        View view = LayoutInflater.from(avt).inflate(R.layout.dialog_kv, null);
+        View view = LayoutInflater.from(avt).inflate(R.layout.dialog_login, null);
         builder.setView(view);
 
         Spinner spinner = view.findViewById(R.id.dialog_protocol);
