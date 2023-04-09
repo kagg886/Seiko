@@ -1,0 +1,8 @@
+#Seiko词库
+#词库信息头1
+#词库信息头2
+
+[群]测试
+//当一个人在群里发 '测试' 时，机器人会输出下面的文本
+Hello,World!\n
+This is a SeikoDIC demo\n
