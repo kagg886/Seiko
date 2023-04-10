@@ -1,4 +1,4 @@
-package com.kagg886.seiko.dic.entity.func.uninterrupted;
+package com.kagg886.seiko.dic.entity.func.impl;
 
 import com.kagg886.seiko.dic.util.DictionaryUtil;
 import com.kagg886.seiko.dic.entity.func.Function;

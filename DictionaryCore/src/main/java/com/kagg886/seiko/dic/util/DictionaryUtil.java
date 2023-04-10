@@ -3,6 +3,7 @@ package com.kagg886.seiko.dic.util;
 import com.kagg886.seiko.dic.exception.DictionaryOnRunningException;
 import com.kagg886.seiko.dic.session.AbsRuntime;
 import net.mamoe.mirai.Bot;
+import net.mamoe.mirai.contact.Group;
 import net.mamoe.mirai.contact.NormalMember;
 import net.mamoe.mirai.event.events.GroupMessageEvent;
 import net.objecthunter.exp4j.ExpressionBuilder;
@@ -28,6 +29,24 @@ public class DictionaryUtil {
     private static final int CHAIN_VARIABLE_PREFIX_OFFSET = CHAIN_VARIABLE_PREFIX.length();
 
     private static final String CHAIN_VARIABLE_SUFFIX = "}";
+
+    public static Group getGroupByObjectList(AbsRuntime<?> runtime,List<Object> args, int start) {
+        long groupId, botAccount;
+
+        Object obj = args.get(start); //群号或上下文
+        if (obj instanceof GroupMessageEvent) {
+            groupId = ((GroupMessageEvent) obj).getGroup().getId();
+            botAccount = ((GroupMessageEvent) obj).getBot().getId();
+        } else {
+            groupId = Long.parseLong(obj.toString());
+            if (args.size() >= start+2) {
+                botAccount = Long.parseLong(args.get(start+1).toString());
+            } else {
+                botAccount = Long.parseLong(runtime.getRuntimeObject().get("BOT").toString());
+            }
+        }
+        return Objects.requireNonNull(Bot.findInstance(botAccount)).getGroup(groupId);
+    }
 
     /*
      * @param runtime:

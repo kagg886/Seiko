@@ -1,7 +1,8 @@
-package com.kagg886.seiko.dic.entity.func.uninterrupted;
+package com.kagg886.seiko.dic.entity.func.impl;
 
 import com.kagg886.seiko.dic.entity.func.Function;
 import com.kagg886.seiko.dic.session.AbsRuntime;
+import com.kagg886.seiko.dic.util.DictionaryUtil;
 import net.mamoe.mirai.Bot;
 import net.mamoe.mirai.contact.ContactList;
 import net.mamoe.mirai.contact.Friend;
@@ -115,18 +116,9 @@ public abstract class BotControl extends Function.UnInterruptedFunction {
 
         @Override
         protected void run(AbsRuntime<?> runtime, List<Object> args) {
-            long botId, groupId;
-            Object obj = args.get(1); //可能是上下文或群号
-            if (obj instanceof GroupAwareMessageEvent) {
-                botId = ((GroupAwareMessageEvent) obj).getBot().getId();
-                groupId = ((GroupAwareMessageEvent) obj).getGroup().getId();
-            } else {
-                groupId = Long.parseLong(obj.toString());
-                botId = Long.parseLong(args.get(2).toString());
-            }
-            Group k = Bot.findInstance(botId).getGroup(groupId);
-
-            HashMap<String, Object> hashMap = getGroupCollectionByGroup(k);
+            HashMap<String, Object> hashMap = getGroupCollectionByGroup(
+                    DictionaryUtil.getGroupByObjectList(runtime,args,1)
+            );
             runtime.getRuntimeObject().put(args.get(0).toString(), hashMap);
         }
     }

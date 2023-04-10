@@ -4,7 +4,7 @@ plugins {
     id 'org.jetbrains.kotlin.jvm'
     id 'org.jetbrains.kotlin.plugin.serialization' version '1.8.0'
 
-    id 'net.mamoe.mirai-console' version "2.13.4"
+    id 'net.mamoe.mirai-console' version "2.15.0-M1"
 }
 
 group 'com.kagg886.seiko.dic.mirai_console'

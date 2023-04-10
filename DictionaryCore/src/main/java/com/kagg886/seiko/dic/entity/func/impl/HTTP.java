@@ -1,4 +1,4 @@
-package com.kagg886.seiko.dic.entity.func.interrupted;
+package com.kagg886.seiko.dic.entity.func.impl;
 
 import com.kagg886.seiko.dic.entity.func.Function;
 import com.kagg886.seiko.dic.exception.DictionaryOnRunningException;

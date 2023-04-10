@@ -16,25 +16,21 @@ import java.util.List;
  * @version: 1.0
  */
 public abstract class Function extends DictionaryCode {
-    private static final String[][] interruptedFunctionNames = { //阻断方法列表，后面的是Class名
-            {"延时", "Delay"},
-            {"语音", "Ptt"},
-            {"访问", "HTTP"},
-
-            {"设置接收者", "MessageControl$setSender"},
-    };
-    private static final String[][] uninterruptedFunctionNames = { //阻断方法列表，后面的是Class名
-
+    private static final String[][] dicFunctions = { //阻断方法列表，后面的是Class名
             //杂项方法
             {"JAVA方法运行", "JavaMethodInvoke"},
             {"随机数", "Random"},
             {"调用", "TransferDicMethod"},
+            {"延时", "Delay"},
+            {"访问", "HTTP"},
 
             //与消息有关
             {"图片", "MessageControl$addImage"},
             {"艾特", "MessageControl$addAt"},
             {"撤回","MessageControl$Recall"},
             {"设置回复","MessageControl$Reply"},
+            {"设置接收者", "MessageControl$setSender"},
+            {"语音", "Ptt"},
 
             //与文件有关
             {"读", "FileControl$Read"},
@@ -52,17 +48,22 @@ public abstract class Function extends DictionaryCode {
             {"踢", "MemberControl$Kick"},
             {"管理员", "MemberControl$ModifyAdmin"},
 
+            //与群对象有关
+            {"退群","GroupControl$Exit"},
+            {"获取群公告","GroupControl$GetGroupAnnouncement"},
+            {"","GroupControl$"},
+            {"","GroupControl$"},
+            {"","GroupControl$"},
+            {"","GroupControl$"},
+            {"","GroupControl$"},
+            {"","GroupControl$"},
+            {"","GroupControl$"},
+
             //与bot有关
             {"群列表", "BotControl$getGroups"},
             {"获取群", "BotControl$getGroup"},
             {"好友列表", "BotControl$getFriends"},
             {"获取好友", "BotControl$getFriend"},
-//            {"","BotControl$"},
-//            {"","BotControl$"},
-//            {"","BotControl$"},
-//            {"","BotControl$"},
-//            {"","BotControl$"},
-//            {"","BotControl$"},
 
             //与日期有关
             {"转时间", "DateParser$StampToDate"},
@@ -123,26 +124,15 @@ public abstract class Function extends DictionaryCode {
      * @date 2023/01/28 21:37
      */
     public static Function parseFunction(String dicLine, int line) throws Throwable { //一定是$xxxx a b c$
-        for (String[] p : interruptedFunctionNames) {
-            int spaceIndex = dicLine.indexOf(" ");
-            if (spaceIndex == -1) {
-                spaceIndex = dicLine.length();
-            }
-            String command = dicLine.substring(1, spaceIndex);
-            if (command.equals(p[0])) {
-                Class<?> func = Class.forName("com.kagg886.seiko.dic.entity.func.interrupted." + p[1]);
-                return (Function) func.getConstructor(int.class, String.class).newInstance(line, dicLine);
-            }
-        }
 
-        for (String[] p : uninterruptedFunctionNames) {
+        for (String[] p : dicFunctions) {
             int spaceIndex = dicLine.indexOf(" ");
             if (spaceIndex == -1) {
                 spaceIndex = dicLine.length();
             }
             String command = dicLine.substring(1, spaceIndex);
             if (command.equals(p[0])) {
-                Class<?> func = Class.forName("com.kagg886.seiko.dic.entity.func.uninterrupted." + p[1]);
+                Class<?> func = Class.forName("com.kagg886.seiko.dic.entity.func.impl." + p[1]);
                 return (Function) func.getConstructor(int.class, String.class).newInstance(line, dicLine);
             }
         }

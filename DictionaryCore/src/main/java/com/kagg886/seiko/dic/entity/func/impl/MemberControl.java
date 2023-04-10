@@ -1,9 +1,11 @@
-package com.kagg886.seiko.dic.entity.func.uninterrupted;
+package com.kagg886.seiko.dic.entity.func.impl;
 
 import com.kagg886.seiko.dic.entity.func.Function;
 import com.kagg886.seiko.dic.exception.DictionaryOnRunningException;
 import com.kagg886.seiko.dic.session.AbsRuntime;
+import com.kagg886.seiko.dic.util.DictionaryUtil;
 import net.mamoe.mirai.Bot;
+import net.mamoe.mirai.contact.Group;
 import net.mamoe.mirai.contact.NormalMember;
 import net.mamoe.mirai.event.events.GroupMessageEvent;
 
@@ -192,22 +194,9 @@ public abstract class MemberControl extends Function.UnInterruptedFunction {
         @Override
         protected void run(AbsRuntime<?> runtime, List<Object> args) {
             String putVar = args.get(0).toString();
-            long groupId, botAccount;
 
-            Object obj = args.get(1); //群号或上下文
-            if (obj instanceof GroupMessageEvent) {
-                groupId = ((GroupMessageEvent) obj).getGroup().getId();
-                botAccount = ((GroupMessageEvent) obj).getBot().getId();
-            } else {
-                groupId = Long.parseLong(obj.toString());
-                if (args.size() >= 3) {
-                    botAccount = Long.parseLong(args.get(2).toString());
-                } else {
-                    botAccount = Long.parseLong(runtime.getRuntimeObject().get("BOT").toString());
-                }
-            }
             ArrayList<HashMap<String, Object>> lists = new ArrayList<>();
-            for (NormalMember i : Bot.findInstance(botAccount).getGroup(groupId).getMembers()) {
+            for (NormalMember i : DictionaryUtil.getGroupByObjectList(runtime,args,1).getMembers()) {
                 lists.add(spawnMemberInfo(i));
             }
             runtime.getRuntimeObject().put(putVar, lists);

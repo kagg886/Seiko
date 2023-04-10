@@ -1,9 +1,10 @@
-package com.kagg886.seiko.dic.entity.func.uninterrupted;
+package com.kagg886.seiko.dic.entity.func.impl;
 
 import com.kagg886.seiko.dic.entity.func.Function;
 import com.kagg886.seiko.dic.exception.DictionaryOnRunningException;
 import com.kagg886.seiko.dic.session.AbsRuntime;
 import org.json.*;
+import org.json.HTTP;
 
 import java.util.HashMap;
 import java.util.Map;
