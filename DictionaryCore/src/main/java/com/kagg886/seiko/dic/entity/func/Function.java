@@ -51,13 +51,13 @@ public abstract class Function extends DictionaryCode {
             //与群对象有关
             {"退群","GroupControl$Exit"},
             {"获取群公告","GroupControl$GetGroupAnnouncement"},
-            {"","GroupControl$"},
-            {"","GroupControl$"},
-            {"","GroupControl$"},
-            {"","GroupControl$"},
-            {"","GroupControl$"},
-            {"","GroupControl$"},
-            {"","GroupControl$"},
+            {"删除群公告","GroupControl$DelGroupAnnouncement"},
+            {"发布群公告","GroupControl$PublishGroupAnnouncement"},
+//            {"","GroupControl$"},
+//            {"","GroupControl$"},
+//            {"","GroupControl$"},
+//            {"","GroupControl$"},
+//            {"","GroupControl$"},
 
             //与bot有关
             {"群列表", "BotControl$getGroups"},
