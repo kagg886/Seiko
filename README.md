@@ -23,13 +23,25 @@ Seiko 还提供了一个**伪代码引擎**以供光速建立一个自动回复�
 ## 三.编写插件
 
 1. 新建 Android 工程
-2. 引入 PluginAPI 模块
-3. 新建包，在包内新建一个类 A，实现 SeikoPlugin 接口
-4. 在 onBotGoLine(long qq) 中实现你的代码，使用 `Bot.findInstance(long qq)` 获取新登录的 Bot。
-5. 打包成 apk 文件，挪入 `/sdcard/Android/data/com.kagg886.seiko/files/plugin`
-6. 启动 Seiko，前往插件列表查看是否有你所安装的插件
 
-> 不推荐使用 GlobalEventChannel。
+2. 引入 PluginAPI 模块
+
+3. 任取一包，在其中新建类 `B`，实现 `SeikoPlugin` 接口
+
+4. 在 `onBotGoLine(long qq) `中实现你的代码，使用 `Bot.findInstance(long qq)` 获取新登录的 Bot。
+
+	对bot的操作请参阅mirai文档
+
+5. 在`resources\META-INF\services`下新建文件`com.kagg886.seiko.plugin.api.SeikoPlugin`
+
+	将`B`的 **全限定类名**粘贴于此，保存
+
+6. 打包成 apk 文件，挪入 `/sdcard/Android/data/com.kagg886.seiko/files/plugin`内
+
+7. 启动 Seiko，前往插件列表查看是否有你所安装的插件
+
+> 1. 不推荐使用 GlobalEventChannel。
+> 2. 在onBotGoline(long qq)中调用Bot.close()可能会有难以置信的bug，请勿尝试
 
 # 四.插件示例
 
