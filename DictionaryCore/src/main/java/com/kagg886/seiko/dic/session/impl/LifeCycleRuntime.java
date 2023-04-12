@@ -7,6 +7,7 @@ import net.mamoe.mirai.Bot;
 import net.mamoe.mirai.Mirai;
 import net.mamoe.mirai.contact.Contact;
 import net.mamoe.mirai.event.events.BotPassiveEvent;
+import net.mamoe.mirai.message.data.MessageChainBuilder;
 import net.mamoe.mirai.utils.MiraiLogger;
 
 import java.util.Objects;
@@ -52,10 +53,11 @@ public class LifeCycleRuntime extends AbsRuntime<DictionaryFile> {
     @Override
     public void clearMessage() {
         for (Bot b : Bot.getInstances()) {
-            b.getLogger().info(getMessageCache().build().contentToString());
+            b.getLogger().info(String.format("[%s]:%s",event.getName(),getMessageCache().build().contentToString()));
             if (!DictionaryEnvironment.getInstance().isShowLogOnAllBots()) {
                 break;
             }
         }
+        context.put("缓冲区", new MessageChainBuilder());
     }
 }

@@ -6,6 +6,7 @@ import com.kagg886.seiko.dic.entity.DictionaryCode;
 import com.kagg886.seiko.dic.entity.DictionaryCommandMatcher;
 import com.kagg886.seiko.dic.entity.DictionaryFile;
 import com.kagg886.seiko.dic.model.DICParseResult;
+import com.kagg886.seiko.dic.session.impl.LifeCycleRuntime;
 import com.kagg886.seiko.util.IOUtil;
 import com.kagg886.seiko.util.storage.JSONObjectStorage;
 import net.mamoe.mirai.console.command.CommandContext;
@@ -13,7 +14,6 @@ import net.mamoe.mirai.console.command.ConsoleCommandSender;
 import net.mamoe.mirai.console.command.java.JCompositeCommand;
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -87,6 +87,31 @@ public class CommandInstance extends JCompositeCommand {
         PluginLoader.INSTANCE.getLogger().info("找不到伪代码文件!");
     }
 
+    @SubCommand("destroy")
+    public void destroy(CommandContext context, String fileName) {
+        if (!(context.getSender() instanceof ConsoleCommandSender)) {
+            return;
+        }
+        DictionaryFile wantToDestroy = null;
+        for (DictionaryFile file : DICList.getInstance()) {
+            if (file.getName().equals(fileName)) {
+                wantToDestroy = file;
+                break;
+            }
+        }
+        if (wantToDestroy == null) {
+            PluginLoader.INSTANCE.getLogger().info("找不到伪代码文件!");
+            return;
+        }
+        if (wantToDestroy.getFile().delete()) {
+            PluginLoader.INSTANCE.getLogger().info("删除:'" + fileName + "'成功");
+            wantToDestroy.notifyLifeCycle(LifeCycleRuntime.LifeCycle.DESTROY);
+            DICList.getInstance().remove(wantToDestroy);
+            return;
+        }
+        PluginLoader.INSTANCE.getLogger().info("删除:'" + fileName + "'失败");
+    }
+
     @SubCommand("list") //dic list
     public void list(CommandContext context) {
         if (!(context.getSender() instanceof ConsoleCommandSender)) {
@@ -118,7 +143,7 @@ public class CommandInstance extends JCompositeCommand {
             return;
         }
         DICParseResult result = DICList.getInstance().refresh();
-        if(!result.success) {
+        if (!result.success) {
             for (Throwable e : result.err) {
                 PluginLoader.INSTANCE.getLogger().error(IOUtil.getException(e));
             }
