@@ -9,7 +9,10 @@ import net.mamoe.mirai.event.events.GroupMessageEvent;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -23,17 +26,20 @@ import java.util.regex.Pattern;
  * @version: 1.0
  */
 public class DictionaryCommandMatcher {
-    private static final String[][] domainQuote = { //允许的事件类型
-            {"群", GroupMessageEvent.class.getName()},
-            {"好友", FriendMessageEvent.class.getName()},
-            {"函数", AbsRuntime.class.getName()}, //这个触发事件是由runTime调用
-            {"群事件", GroupMemberEvent.class.getName()},
-            {"生命周期",DictionaryFile.class.getName()}
-    };
-    private final Pattern pattern;
-    private final String source;
-    private final int line;
-    private final String[] eventClassNames;
+
+    private static final HashMap<String,Class<?>[]> domainQuoteNew; //记录了所有的合法标签
+    private final Pattern pattern;//匹配字符串
+    private final String source; //源表达式
+    private final int line;//行数
+    private final List<Class<?>> eventClass = new ArrayList<>(); //根据事件类型注册的Class
+
+    static {
+        domainQuoteNew = new HashMap<>();
+        domainQuoteNew.put("群", new Class[]{GroupMessageEvent.class});
+        domainQuoteNew.put("好友", new Class[]{FriendMessageEvent.class});
+        domainQuoteNew.put("函数", new Class[]{AbsRuntime.class, DictionaryFile.class});
+        domainQuoteNew.put("群事件", new Class[]{GroupMemberEvent.class});
+    }
 
     public DictionaryCommandMatcher(String commandRegex, int line, File dicFile) {
         this.source = commandRegex;
@@ -42,14 +48,14 @@ public class DictionaryCommandMatcher {
         if (p == -1 || commandRegex.lastIndexOf("[", p) == -1) {
             throw new DictionaryOnLoadException("方法没有标记事件类型:(" + dicFile.getAbsolutePath() + ":" + line + ")");
         }
-        eventClassNames = commandRegex.substring(1, p).split("\\|");
+        String[] eventClassNames = commandRegex.substring(1, p).split("\\|");
         pattern = Pattern.compile(commandRegex.substring(p + 1));
 
         int matches = 0;
-        for (int i = 0; i < eventClassNames.length; i++) {
-            for (String[] a : domainQuote) {
-                if (eventClassNames[i].equals(a[0])) {
-                    eventClassNames[i] = a[1];
+        for (String eventClassName : eventClassNames) {
+            for (Map.Entry<String, Class<?>[]> ent : domainQuoteNew.entrySet()) {
+                if (eventClassName.equals(ent.getKey())) {
+                    eventClass.addAll(List.of(ent.getValue()));
                     matches++;
                     break;
                 }
@@ -85,18 +91,18 @@ public class DictionaryCommandMatcher {
     }
 
     public boolean matchesDomain(Object o) {
-        for (String className : eventClassNames) {
-            Class clazz = o.getClass();
+        for (Class<?> a : eventClass) {
+            Class<?> clazz = o.getClass();
             do {
-                if (clazz.getName().equals(className)) {
+                if (clazz == a) {
                     return true;
                 }
-                for (Class interfaces : clazz.getInterfaces()) {
-                    if (interfaces.getName().equals(className)) {
+                for (Class<?> interfaces : clazz.getInterfaces()) { //爬接口
+                    if (interfaces == a) {
                         return true;
                     }
                 }
-            } while ((clazz = clazz.getSuperclass()) != Object.class);
+            } while ((clazz = clazz.getSuperclass()) != Object.class); //爬父类
         }
 
         return false;
