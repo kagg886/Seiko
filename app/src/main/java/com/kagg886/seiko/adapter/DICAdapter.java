@@ -14,6 +14,7 @@ import com.kagg886.seiko.dic.DICList;
 import com.kagg886.seiko.dic.DictionaryEnvironment;
 import com.kagg886.seiko.dic.entity.DictionaryFile;
 import com.kagg886.seiko.dic.model.DICParseResult;
+import com.kagg886.seiko.dic.session.impl.LifeCycleRuntime;
 import com.kagg886.seiko.event.DialogBroadCast;
 import com.kagg886.seiko.event.SnackBroadCast;
 import com.kagg886.seiko.util.IOUtil;
@@ -96,6 +97,9 @@ public class DICAdapter extends BaseAdapter {
 
             try {
                 tmp.put("enabled", isChecked);
+                if (!isChecked) {
+                    l.get(i).notifyLifeCycle(LifeCycleRuntime.LifeCycle.DESTROY);
+                }
                 DictionaryEnvironment.getInstance().getDicConfig().put(dicName, tmp);
                 DictionaryEnvironment.getInstance().getDicConfig().save();
             } catch (Throwable e) {

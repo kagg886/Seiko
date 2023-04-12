@@ -27,8 +27,18 @@ public class DictionaryEnvironment {
 
     private DictionaryListener dictionaryListener; //DIC刷新监听器
 
+    private boolean isShowLogOnAllBots = false; //'日志'函数将Logger信息写入到所有bot中
+
     private DictionaryEnvironment() {
 
+    }
+
+    public boolean isShowLogOnAllBots() {
+        return isShowLogOnAllBots;
+    }
+
+    public void setShowLogOnAllBots(boolean showLogOnAllBots) {
+        isShowLogOnAllBots = showLogOnAllBots;
     }
 
     public static DictionaryEnvironment getInstance() {

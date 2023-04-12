@@ -5,6 +5,7 @@ import com.kagg886.seiko.dic.entity.func.Function;
 import com.kagg886.seiko.dic.entity.impl.Expression;
 import com.kagg886.seiko.dic.entity.impl.PlainText;
 import com.kagg886.seiko.dic.exception.DictionaryOnLoadException;
+import com.kagg886.seiko.dic.session.impl.LifeCycleRuntime;
 import com.kagg886.seiko.util.ArrayIterator;
 import com.kagg886.seiko.util.IOUtil;
 import com.kagg886.seiko.util.TextUtils;
@@ -13,7 +14,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 /**
  * @projectName: Seiko
@@ -43,6 +43,8 @@ public class DictionaryFile {
 
     private final HashMap<String,Object> settings = new HashMap<>(); //伪代码的#号设置
 
+    private LifeCycleRuntime cycle;
+
     private final char[] illegalChar = {
             '％',
             160,
@@ -51,10 +53,14 @@ public class DictionaryFile {
 
     public DictionaryFile(File dicFile) {
         this.dicFile = dicFile;
+        cycle = new LifeCycleRuntime(this);
     }
 
     // 清除变量
     private void clear() {
+        if (commands.size() != 0) {
+            notifyLifeCycle(LifeCycleRuntime.LifeCycle.DESTROY);
+        }
         commands.clear();
         settings.clear();
     }
@@ -181,6 +187,12 @@ public class DictionaryFile {
         if (iterator.getLen() == lines.length) {
             commands.put(new DictionaryCommandMatcher(commandRegex, commandLine, dicFile), dictionaryCodes);
         }
+
+        notifyLifeCycle(LifeCycleRuntime.LifeCycle.INIT);
+    }
+
+    public void notifyLifeCycle(LifeCycleRuntime.LifeCycle str) {
+        cycle.invoke(str.getTips());
     }
 
     public File getFile() {

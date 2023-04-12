@@ -2,12 +2,14 @@ package com.kagg886.seiko.dic.entity;
 
 import com.kagg886.seiko.dic.exception.DictionaryOnLoadException;
 import com.kagg886.seiko.dic.session.AbsRuntime;
+import net.mamoe.mirai.Bot;
 import net.mamoe.mirai.event.events.FriendMessageEvent;
 import net.mamoe.mirai.event.events.GroupMemberEvent;
 import net.mamoe.mirai.event.events.GroupMessageEvent;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -25,7 +27,8 @@ public class DictionaryCommandMatcher {
             {"群", GroupMessageEvent.class.getName()},
             {"好友", FriendMessageEvent.class.getName()},
             {"函数", AbsRuntime.class.getName()}, //这个触发事件是由runTime调用
-            {"群事件", GroupMemberEvent.class.getName()}
+            {"群事件", GroupMemberEvent.class.getName()},
+            {"生命周期",DictionaryFile.class.getName()}
     };
     private final Pattern pattern;
     private final String source;

@@ -45,6 +45,9 @@ public class CaptchaActivity extends AppCompatActivity implements View.OnClickLi
             @Nullable
             @Override
             public WebResourceResponse shouldInterceptRequest(WebView view, WebResourceRequest request) {
+                if (historyRequests == null) {
+                    return super.shouldInterceptRequest(view,request);
+                }
                 historyRequests.add(request);
                 if (request.getUrl().getPath().equals("/onVerifyCAPTCHA")) {
                     try {

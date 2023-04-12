@@ -19,7 +19,6 @@ import java.util.UUID;
 
 public class MockBotTest {
     public static void main(String[] args) throws IOException {
-        initDictionaryEnvironment();
         MockBotFactory.initialize();
         MockBot mockBot = MockBotFactory.Companion.newMockBotBuilder().id(1693256674).create();
         MockGroup group = mockBot.addGroup(786442984,"机器人测群");
@@ -37,6 +36,7 @@ public class MockBotTest {
                 runtime.invoke(event.getMessage().contentToString());
             }
         });
+        initDictionaryEnvironment();
         Scanner scanner = new Scanner(System.in);
 
         for (String s = scanner.nextLine();;s = scanner.nextLine()) {

@@ -123,6 +123,10 @@ public class DICPlugin extends SeikoPlugin implements DictionaryListener {
         DictionaryEnvironment.getInstance().setErrorListener(this);
         DictionaryEnvironment.getInstance().setDicConfigPoint(context.getExternalFilesDir("config").toPath().resolve("dicList.json").toFile().getAbsolutePath());
         DictionaryEnvironment.getInstance().setDicData(context.getExternalFilesDir("dicData").toPath());
+
+        if (SeikoApplication.globalConfig.getBoolean("mergeAllLogs",false)) {
+            DictionaryEnvironment.getInstance().setShowLogOnAllBots(false);
+        }
     }
 
     @Override

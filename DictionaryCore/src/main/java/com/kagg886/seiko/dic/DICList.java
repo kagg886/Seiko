@@ -3,6 +3,7 @@ package com.kagg886.seiko.dic;
 import com.kagg886.seiko.dic.entity.DictionaryFile;
 import com.kagg886.seiko.dic.model.DICParseResult;
 
+import com.kagg886.seiko.dic.session.impl.LifeCycleRuntime;
 import org.json.JSONObject;
 
 import java.io.File;

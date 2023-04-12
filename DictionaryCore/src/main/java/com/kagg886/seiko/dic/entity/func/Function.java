@@ -23,6 +23,7 @@ public abstract class Function extends DictionaryCode {
             {"调用", "TransferDicMethod"},
             {"延时", "Delay"},
             {"访问", "HTTP"},
+            {"日志","Logcat"},
 
             //与消息有关
             {"图片", "MessageControl$addImage"},
