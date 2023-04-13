@@ -3,16 +3,21 @@ package com.kagg886.seiko.activity;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.widget.LinearLayout;
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
 import androidx.annotation.StringRes;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 import com.google.android.material.tabs.TabLayout;
+import com.kagg886.seiko.BuildConfig;
 import com.kagg886.seiko.R;
 import com.kagg886.seiko.adapter.ModuleAdapter;
 import com.kagg886.seiko.event.DialogBroadCast;
@@ -24,6 +29,9 @@ import com.kagg886.seiko.fragment.SettingsFragment;
 import com.kagg886.seiko.service.BotRunnerService;
 import com.kagg886.seiko.util.IOUtil;
 import com.kagg886.seiko.util.ShareUtil;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.jsoup.Jsoup;
 
 import java.io.File;
 import java.io.IOException;
@@ -139,6 +147,7 @@ public class MainActivity extends AppCompatActivity {
         //启动Seiko托管服务，它是整个程序运行的关键
         Intent a = new Intent(this, BotRunnerService.class);
         if (BotRunnerService.INSTANCE == null) {
+            checkUpdate();
             startForegroundService(a);
         }
 
@@ -153,7 +162,59 @@ public class MainActivity extends AppCompatActivity {
         pager.setAdapter(adapter);
         layout.setupWithViewPager(pager);
     }
+
     private void addFragment(List<ModuleAdapter.Structure> fragments, @StringRes int str, Fragment fragment) {
         fragments.add(new ModuleAdapter.Structure(getText(str).toString(), fragment));
     }
+
+    private void checkUpdate() {
+        new Thread(() -> {
+            try {
+                JSONObject object = new JSONObject(
+                        Jsoup.connect("https://api.github.com/repos/kagg886/Seiko/releases/latest")
+                                .ignoreContentType(true)
+                                .timeout(10000)
+                                .execute().body());
+                String newVer = object.optString("tag_name");
+                if (!BuildConfig.VERSION_NAME.equals(newVer)) {
+                    Message message = new Message();
+                    message.what = 0;
+                    message.getData().putString("update", object.toString());
+                    checkHandler.sendMessage(message);
+                }
+            } catch (Exception e) {
+                SnackBroadCast.sendBroadCast(R.string.update_failed);
+            }
+        }).start();
+    }
+
+    private Handler checkHandler = new Handler(Looper.getMainLooper()) {
+        @Override
+        public void handleMessage(@NonNull Message msg) {
+            switch (msg.what) {
+                case 0:
+                    JSONObject data;
+                    try {
+                        data = new JSONObject(msg.getData().getString("update"));
+                    } catch (JSONException e) {
+                        throw new RuntimeException(e);
+                    }
+                    AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                    String body = data.optString("body");
+                    String title = data.optString("tag_name");
+                    builder.setTitle(title);
+                    builder.setMessage(body.substring(0, Math.min(body.length()-1, 500)) + (body.length()-1 > 500 ? "..." : ""));
+                    builder.setPositiveButton("通过Github打开",(dialog,which) -> {
+                        ShareUtil.openUrlByBrowser(data.optString("html_url"));
+                    });
+                    builder.setNegativeButton("通过Gitee打开",(dialog, which) -> {
+                        ShareUtil.openUrlByBrowser("https://gitee.com/kagg886/Seiko/releases/tag/" + title);
+                    });
+                    builder.create().show();
+                    break;
+                case 1:
+                    break;
+            }
+        }
+    };
 }
