@@ -19,6 +19,7 @@ import androidx.viewpager.widget.ViewPager;
 import com.google.android.material.tabs.TabLayout;
 import com.kagg886.seiko.BuildConfig;
 import com.kagg886.seiko.R;
+import com.kagg886.seiko.SeikoApplication;
 import com.kagg886.seiko.adapter.ModuleAdapter;
 import com.kagg886.seiko.event.DialogBroadCast;
 import com.kagg886.seiko.event.SnackBroadCast;
@@ -168,6 +169,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void checkUpdate() {
+        if (!SeikoApplication.globalConfig.getBoolean("checkUpdateOnceStart",true)) {
+            return;
+        }
         new Thread(() -> {
             try {
                 JSONObject object = new JSONObject(
@@ -176,9 +180,8 @@ public class MainActivity extends AppCompatActivity {
                                 .timeout(10000)
                                 .execute().body());
                 String newVer = object.optString("tag_name");
-                if (!BuildConfig.VERSION_NAME.equals(newVer)) {
+                if (!("V" + BuildConfig.VERSION_NAME).equals(newVer)) {
                     Message message = new Message();
-                    message.what = 0;
                     message.getData().putString("update", object.toString());
                     checkHandler.sendMessage(message);
                 }
@@ -191,30 +194,24 @@ public class MainActivity extends AppCompatActivity {
     private Handler checkHandler = new Handler(Looper.getMainLooper()) {
         @Override
         public void handleMessage(@NonNull Message msg) {
-            switch (msg.what) {
-                case 0:
-                    JSONObject data;
-                    try {
-                        data = new JSONObject(msg.getData().getString("update"));
-                    } catch (JSONException e) {
-                        throw new RuntimeException(e);
-                    }
-                    AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-                    String body = data.optString("body");
-                    String title = data.optString("tag_name");
-                    builder.setTitle(title);
-                    builder.setMessage(body.substring(0, Math.min(body.length()-1, 500)) + (body.length()-1 > 500 ? "..." : ""));
-                    builder.setPositiveButton("通过Github打开",(dialog,which) -> {
-                        ShareUtil.openUrlByBrowser(data.optString("html_url"));
-                    });
-                    builder.setNegativeButton("通过Gitee打开",(dialog, which) -> {
-                        ShareUtil.openUrlByBrowser("https://gitee.com/kagg886/Seiko/releases/tag/" + title);
-                    });
-                    builder.create().show();
-                    break;
-                case 1:
-                    break;
+            JSONObject data;
+            try {
+                data = new JSONObject(msg.getData().getString("update"));
+            } catch (JSONException e) {
+                throw new RuntimeException(e);
             }
+            AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+            String body = data.optString("body");
+            String title = data.optString("tag_name");
+            builder.setTitle(("V" + BuildConfig.VERSION_NAME) + "->" + title);
+            builder.setMessage(body.substring(0, Math.min(body.length()-1, 500)) + (body.length()-1 > 500 ? "..." : ""));
+            builder.setPositiveButton("通过Github打开",(dialog,which) -> {
+                ShareUtil.openUrlByBrowser(data.optString("html_url"));
+            });
+            builder.setNegativeButton("通过Gitee打开",(dialog, which) -> {
+                ShareUtil.openUrlByBrowser("https://gitee.com/kagg886/Seiko/releases/tag/" + title);
+            });
+            builder.create().show();
         }
     };
 }

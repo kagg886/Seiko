@@ -119,4 +119,5 @@
     <string name="settings_github_title">查看仓库</string>
     <string name="settings_github_summary">前往 Seiko 的 Github 仓库。获取最新版本 Seiko，审阅 Seiko 源码并提出建议</string>
     <string name="update_failed">更新检测失败...</string>
+    <string name="settings_check_update_once_start">启动时检测更新</string>
 </resources>

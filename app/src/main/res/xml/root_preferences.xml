@@ -27,6 +27,10 @@
     </PreferenceCategory>
 
     <PreferenceCategory app:title="@string/settings_info">
+        <SwitchPreference
+                android:defaultValue="true"
+                android:title="@string/settings_check_update_once_start" android:key="checkUpdateOnceStart"/>
+
         <DropDownPreference
                 app:key="SeikoInfo"/>
 
