@@ -34,7 +34,7 @@ public class PluginLoader extends JavaPlugin implements DictionaryListener {
     public static final PluginLoader INSTANCE = new PluginLoader();
 
     private PluginLoader() {
-        super(new JvmPluginDescriptionBuilder("com.kagg886.seiko.dic.mirai_console", "0.0.7-APPEND-1")
+        super(new JvmPluginDescriptionBuilder("com.kagg886.seiko.dic.mirai_console", "0.0.8")
                 .name("Seiko Dictionary Plugin")
                 .info("可以在PC上运行伪代码的插件\n项目地址:https://github.com/kagg886/Seiko")
                 .author("kagg886 and All Seiko Contributors")

@@ -16,7 +16,7 @@ android {
         minSdk 28
         targetSdk 32
         versionCode 15
-        versionName "0.1.1-APPEND-1"
+        versionName "0.1.2"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         buildConfigField "String", "BUILD_TIME", getDate()
         buildConfigField "String", "MIRAI_VERSION", "\"" + gradle.mirai_version + "\""

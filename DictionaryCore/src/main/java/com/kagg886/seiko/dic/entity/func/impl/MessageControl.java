@@ -88,7 +88,7 @@ public abstract class MessageControl extends Function.UnInterruptedFunction {
      * @date: 2023/4/9 19:11
      * @version: 1.0
      */
-    public static class Recall extends Function.InterruptedFunction {
+    public static class Recall extends Function.UnInterruptedFunction {
 
         public Recall(int line, String code) {
             super(line, code);
