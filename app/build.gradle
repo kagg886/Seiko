@@ -15,7 +15,7 @@ android {
         applicationId "com.kagg886.seiko"
         minSdk 28
         targetSdk 32
-        versionCode 15
+        versionCode 16
         versionName "0.1.2"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         buildConfigField "String", "BUILD_TIME", getDate()
