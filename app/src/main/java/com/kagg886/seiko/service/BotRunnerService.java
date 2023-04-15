@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.*;
+import android.util.Log;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -19,6 +20,7 @@ import com.kagg886.seiko.event.SnackBroadCast;
 import com.kagg886.seiko.plugin.PluginList;
 import org.json.JSONObject;
 
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.UUID;
 import java.util.concurrent.Executors;
@@ -129,5 +131,39 @@ public class BotRunnerService extends Service {
                 .setSmallIcon(R.drawable.ic_launcher).setOngoing(true).setLargeIcon(icon);
         builder.setContentIntent(pIntent);
         return builder.build();
+    }
+
+    private PowerManager.WakeLock mWakeLock;
+    /**
+     * 同步方法   得到休眠锁
+     *
+     * @param context
+     * @return
+     */
+    synchronized private void getLock(Context context) {
+        if (mWakeLock == null) {
+            PowerManager mgr = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
+            mWakeLock = mgr.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, BotRunnerService.class.getName());
+            mWakeLock.setReferenceCounted(true);
+            Calendar c = Calendar.getInstance();
+            c.setTimeInMillis((System.currentTimeMillis()));
+            int hour = c.get(Calendar.HOUR_OF_DAY);
+            if (hour == 23 || hour <= 6) {
+                mWakeLock.acquire(5000);
+            } else {
+                mWakeLock.acquire(300000);
+            }
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if(mWakeLock!=null){
+            if(mWakeLock.isHeld()) {
+                mWakeLock.release();
+            }
+            mWakeLock=null;
+        }
     }
 }

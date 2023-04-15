@@ -1,30 +1,11 @@
 #Seiko词库
-#主人:485184047
+#词库信息头1
+#词库信息头2
 
 [群]测试
-ok!
+//当一个人在群里发'测试'时,机器人会输出下
+Hello,World!\n
+This is a SeikoDIC demo\n
 
-[函数]初始化
-初始化完成，欢迎使用SeikoDIC!
-
-[函数]被销毁
-Opps...
-
-
-[群]gpt(.*)
-//头部
-$集合创建 HEADER$
-$集合赋值 HEADER Authorization Bearer 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$
-//请求体
-$集合创建 DATA$
-$集合赋值 DATA model gpt-3.5-turbo$
-$集合赋值 DATA prompt %括号1%$
-$集合转 DATA DATA$
-//创建请求包体
-$集合创建 POSTING$
-$集合赋值 POSTING 请求方式 POST$
-$集合赋值 POSTING 网址 https://api.openai.com/v1$
-$集合赋值 POSTING 头集合 %HEADER%$
-$集合赋值 POSTING 参数 %DATA%$
-$访问 A %POSTING%$
-%A%
+[好友]测试
+发送测试信息
