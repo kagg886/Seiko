@@ -21,6 +21,7 @@ public abstract class Function extends DictionaryCode {
             {"JAVA方法运行", "JavaMethodInvoke"},
             {"随机数", "Random"},
             {"调用", "TransferDicMethod"},
+            {"异步调用", "TransferDicMethod$Async_Call"},
             {"延时", "Delay"},
             {"访问", "HTTP"},
             {"日志","Logcat"},

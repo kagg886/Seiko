@@ -16,6 +16,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Stack;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadPoolExecutor;
 import java.util.regex.Matcher;
 
 /**
@@ -150,7 +152,7 @@ public abstract class AbsRuntime<EVENT> {
      * @description 内部invoke函数。将在这里完成对dic最终的解析
      * @date 2023/01/19 19:55
      */
-    private void invoke(ArrayList<DictionaryCode> code) {
+    protected void invoke(ArrayList<DictionaryCode> code) {
         boolean sendSwitch = !(code.get(0) instanceof PlainText); //若第一行为PlainText返回false。为Function返回true
         boolean isJumpCode = false; //是否跳过解析，配合如果表达式使用
 

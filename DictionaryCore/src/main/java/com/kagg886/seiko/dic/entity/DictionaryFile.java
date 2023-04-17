@@ -14,6 +14,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadPoolExecutor;
 
 /**
  * @projectName: Seiko
@@ -45,6 +47,8 @@ public class DictionaryFile {
 
     private LifeCycleRuntime cycle;
 
+    private ThreadPoolExecutor executor;
+
     private final char[] illegalChar = {
             '％',
             160,
@@ -63,6 +67,10 @@ public class DictionaryFile {
         }
         commands.clear();
         settings.clear();
+    }
+
+    public ThreadPoolExecutor getExecutor() {
+        return executor;
     }
 
     public HashMap<String, Object> getSettings() {
@@ -193,6 +201,15 @@ public class DictionaryFile {
 
     public void notifyLifeCycle(LifeCycleRuntime.LifeCycle str) {
         cycle.invoke(str.getTips());
+
+        if (str == LifeCycleRuntime.LifeCycle.INIT) {
+            executor = (ThreadPoolExecutor) Executors.newCachedThreadPool();
+        }
+
+        if (str == LifeCycleRuntime.LifeCycle.DESTROY) {
+            executor.shutdown();
+            executor = null;
+        }
     }
 
     public File getFile() {
