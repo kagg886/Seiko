@@ -29,8 +29,8 @@ public abstract class Expression extends DictionaryCode {
         }
 
         public <T> boolean calc(AbsRuntime<T> runtime) {
-            String p = DictionaryUtil.cleanVariableCode(express, runtime);
-            return DictionaryUtil.evalBooleanExpression(p);
+            //String p = DictionaryUtil.cleanVariableCode(express, runtime);
+            return DictionaryUtil.evalBooleanExpression(express,runtime);
         }
     }
 
