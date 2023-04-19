@@ -24,5 +24,8 @@ include ':BotMock'
 include ':ConsolePlugin'
 
 gradle.ext.mirai_version = "2.15.0-M1"
+gradle.ext.app_version = "0.1.2"
+gradle.ext.app_version_code = 16
+gradle.ext.dic_version = "0.0.8"
 
 
