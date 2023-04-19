@@ -1,5 +1,6 @@
 package com.kagg886.seiko.dic.util;
 
+import com.kagg886.seiko.dic.entity.DictionaryFile;
 import com.kagg886.seiko.dic.exception.DictionaryOnRunningException;
 import com.kagg886.seiko.dic.session.AbsRuntime;
 import net.mamoe.mirai.Bot;
@@ -226,7 +227,7 @@ public class DictionaryUtil {
      * @description 评估布尔表达式
      * @date 2023/01/28 21:33
      */
-    public static boolean evalBooleanExpression(String str) {
+    public static boolean evalBooleanExpression(String str,AbsRuntime<?> runtime) {
         if (str == null || str.equals("")) {
             throw new NullPointerException("表达式为空");
         }
@@ -243,54 +244,54 @@ public class DictionaryUtil {
         if (str.contains(")")) {
             int lIndex = str.lastIndexOf("(");
             int rIndex = str.indexOf(")", lIndex);
-            boolean p = evalBooleanExpression(str.substring(lIndex + 1, rIndex));
-            return evalBooleanExpression(str.replace("(" + str.substring(lIndex + 1, rIndex) + ")", Boolean.toString(p)));
+            boolean p = evalBooleanExpression(str.substring(lIndex + 1, rIndex),runtime);
+            return evalBooleanExpression(str.replace("(" + str.substring(lIndex + 1, rIndex) + ")", Boolean.toString(p)),runtime);
         }
 
         if (str.contains("||")) {
             int idx = str.indexOf("||");
-            return evalBooleanExpression(str.substring(0, idx)) || evalBooleanExpression(str.substring(idx + 2));
+            return evalBooleanExpression(str.substring(0, idx),runtime) || evalBooleanExpression(str.substring(idx + 2),runtime);
         }
 
         if (str.contains("&&")) {
             int idx = str.indexOf("&&");
-            return evalBooleanExpression(str.substring(0, idx)) && evalBooleanExpression(str.substring(idx + 2));
+            return evalBooleanExpression(str.substring(0, idx),runtime) && evalBooleanExpression(str.substring(idx + 2),runtime);
         }
 
         if (str.contains("==")) {
             int idx = str.indexOf("==");
             try {
-                return Objects.equals(mathExpressionCalc(str.substring(0, idx)), mathExpressionCalc(str.substring(idx + 2)));
+                return Objects.equals(mathExpressionCalc(DictionaryUtil.cleanVariableCode(str.substring(0, idx),runtime)), mathExpressionCalc(DictionaryUtil.cleanVariableCode(str.substring(idx + 2),runtime)));
             } catch (Exception e) {
                 // 代表等式左边或右边是字符串，按照字符串进行匹配
-                return str.substring(0, idx).equals(str.substring(idx + 2));
+                return DictionaryUtil.cleanVariableCode(str.substring(0, idx),runtime).equals(DictionaryUtil.cleanVariableCode(str.substring(idx + 2),runtime));
             }
         }
 
         if (str.contains("!=")) {
             int idx = str.indexOf("!=");
             try {
-                return !Objects.equals(mathExpressionCalc(str.substring(0, idx)), mathExpressionCalc(str.substring(idx + 2)));
+                return !Objects.equals(mathExpressionCalc(DictionaryUtil.cleanVariableCode(str.substring(0, idx),runtime)), mathExpressionCalc(DictionaryUtil.cleanVariableCode(str.substring(idx + 2),runtime)));
             } catch (Exception e) {
-                return !str.substring(0, idx).equals(str.substring(idx + 2));
+                return !DictionaryUtil.cleanVariableCode(str.substring(0, idx),runtime).equals(DictionaryUtil.cleanVariableCode(str.substring(idx + 2),runtime));
             }
         }
         if (str.contains(">=")) {
             int idx = str.indexOf(">=");
-            return mathExpressionCalc(str.substring(0, idx)) >= mathExpressionCalc(str.substring(idx + 2));
+            return mathExpressionCalc(DictionaryUtil.cleanVariableCode(str.substring(0, idx),runtime)) >= mathExpressionCalc(DictionaryUtil.cleanVariableCode(str.substring(idx + 2),runtime));
         }
         if (str.contains("<=")) {
             int idx = str.indexOf("<=");
-            return mathExpressionCalc(str.substring(0, idx)) <= mathExpressionCalc(str.substring(idx + 2));
+            return mathExpressionCalc(DictionaryUtil.cleanVariableCode(str.substring(0, idx),runtime)) <= mathExpressionCalc(DictionaryUtil.cleanVariableCode(str.substring(idx + 2),runtime));
 
         }
         if (str.contains(">")) {
             int idx = str.indexOf(">");
-            return mathExpressionCalc(str.substring(0, idx)) > mathExpressionCalc(str.substring(idx + 1));
+            return mathExpressionCalc(DictionaryUtil.cleanVariableCode(str.substring(0, idx),runtime)) > mathExpressionCalc(DictionaryUtil.cleanVariableCode(str.substring(idx + 2),runtime));
         }
         if (str.contains("<")) {
             int idx = str.indexOf("<");
-            return mathExpressionCalc(str.substring(0, idx)) < mathExpressionCalc(str.substring(idx + 1));
+            return mathExpressionCalc(DictionaryUtil.cleanVariableCode(str.substring(0, idx),runtime)) < mathExpressionCalc(DictionaryUtil.cleanVariableCode(str.substring(idx + 2),runtime));
 
         }
         throw new DictionaryOnRunningException("计算表达式出错!" + str);
