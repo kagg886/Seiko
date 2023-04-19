@@ -1,14 +1,27 @@
+buildscript {
+    ext {
+        mirai_version = gradle.ext.mirai_version
+    }
+}
+
+
 plugins {
     id 'java'
 
     id 'org.jetbrains.kotlin.jvm'
     id 'org.jetbrains.kotlin.plugin.serialization' version '1.8.0'
 
-    id 'net.mamoe.mirai-console' version "2.15.0-M1"
+    id'net.mamoe.mirai-console' version "${mirai_version}"
+
+    id 'com.github.gmazzo.buildconfig'
 }
 
 group 'com.kagg886.seiko.dic.mirai_console'
-version '0.0.8'
+version "${gradle.ext.dic_version}"
+
+buildConfig {
+    buildConfigField('String', 'VERSION', "\"${mirai_version}\"")
+}
 
 dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
