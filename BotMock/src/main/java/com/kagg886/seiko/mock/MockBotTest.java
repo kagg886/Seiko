@@ -21,6 +21,7 @@ public class MockBotTest {
     public static void main(String[] args) throws IOException {
         MockBotFactory.initialize();
         MockBot mockBot = MockBotFactory.Companion.newMockBotBuilder().id(1693256674).create();
+        MockBot mockBot1 = MockBotFactory.Companion.newMockBotBuilder().id(485184047).create();
         MockGroup group = mockBot.addGroup(786442984,"机器人测群");
         MockMember a = group.addMember(485184047,"猫娘");
         NormalMember b = group.addMember(2513485573L,"狐狸娘");
@@ -30,7 +31,7 @@ public class MockBotTest {
         group.changeOwner(b);
         mockBot.login();
         mockBot.getEventChannel().subscribeAlways(GroupMessageEvent.class, event -> {
-            //DICList.getInstance().refresh();
+            DICList.getInstance().refresh();
             for (DictionaryFile file : DICList.getInstance()) {
                 GroupMessageRuntime runtime = new GroupMessageRuntime(file,event);
                 runtime.invoke(event.getMessage().contentToString());

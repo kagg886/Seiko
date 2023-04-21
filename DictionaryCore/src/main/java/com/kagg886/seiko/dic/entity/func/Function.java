@@ -62,6 +62,7 @@ public abstract class Function extends DictionaryCode {
 //            {"","GroupControl$"},
 
             //与bot有关
+            {"BOT列表","BotControl$getBot"},
             {"群列表", "BotControl$getGroups"},
             {"获取群", "BotControl$getGroup"},
             {"好友列表", "BotControl$getFriends"},
