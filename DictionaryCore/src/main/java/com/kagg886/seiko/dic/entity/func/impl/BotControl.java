@@ -9,13 +9,13 @@ import net.mamoe.mirai.contact.Friend;
 import net.mamoe.mirai.contact.Group;
 import net.mamoe.mirai.contact.GroupSettings;
 import net.mamoe.mirai.event.events.BotPassiveEvent;
-import net.mamoe.mirai.event.events.FriendMessageEvent;
-import net.mamoe.mirai.event.events.GroupAwareMessageEvent;
 import net.mamoe.mirai.event.events.UserMessageEvent;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * @projectName: Seiko
@@ -30,6 +30,32 @@ public abstract class BotControl extends Function.UnInterruptedFunction {
 
     public BotControl(int line, String code) {
         super(line, code);
+    }
+
+    /**
+     * @projectName: Seiko
+     * @package: com.kagg886.seiko.dic.entity.func.uninterrupted
+     * @className: BotControl
+     * @author: kagg886
+     * @description: $BOT列表 存入变量$
+     * @date: 2023/4/21 9:05
+     * @version: 1.0
+     */
+    public static class getBot extends Function.UnInterruptedFunction {
+
+        public getBot(int line, String code) {
+            super(line, code);
+        }
+
+        @Override
+        protected void run(AbsRuntime<?> runtime, List<Object> args) {
+            String put = args.get(0).toString();
+            List<Long> bots = Bot.getInstances().stream()
+                    .filter(Bot::isOnline)
+                    .map(Bot::getId)
+                    .collect(Collectors.toList());
+            runtime.getRuntimeObject().put(put,bots);
+        }
     }
 
     /**
