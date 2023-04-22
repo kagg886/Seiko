@@ -18,6 +18,7 @@ import java.util.Map;
 import java.util.Stack;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadPoolExecutor;
+import java.util.function.Supplier;
 import java.util.regex.Matcher;
 
 /**
@@ -35,6 +36,10 @@ public abstract class AbsRuntime<EVENT> {
     protected DictionaryFile file; //被执行的伪代码指令集
     protected HashMap<String, Object> context; //此次伪代码执行过程中存取的变量
     protected Stack<String> exceptionStacks; //词库调用栈，每次*执行完一条命令*就会存储一条信息到栈中。
+
+    protected Supplier<FunctionRuntime> exceptionCaller; //异常捕捉器
+
+    protected String exceptionCaller_name; //异常捕捉器调用的方法
 
     /*
      * @param file: 需要执行的dicFile
@@ -74,6 +79,11 @@ public abstract class AbsRuntime<EVENT> {
         this.contact = contact;
     }
 
+    public void setExceptionCaller(Supplier<FunctionRuntime> exceptionCaller,String name) {
+        this.exceptionCaller = exceptionCaller;
+        this.exceptionCaller_name = name;
+    }
+
     public MessageChainBuilder getMessageCache() {
         return (MessageChainBuilder) context.get("缓冲区");
     }
@@ -98,6 +108,26 @@ public abstract class AbsRuntime<EVENT> {
      * @date 2023/01/19 19:54
      */
     public void invoke(String command) {
+        try {
+            invoke0(command);
+        } catch (Throwable e) {
+            if (exceptionCaller == null) {
+                throw e;
+            }
+            FunctionRuntime runtime = exceptionCaller.get();
+
+            if (e instanceof DictionaryOnRunningException) {
+                runtime.getRuntimeObject().put("错误信息",((DictionaryOnRunningException) e).getMsg());
+            } else {
+                runtime.getRuntimeObject().put("错误信息",e.getMessage());
+            }
+            runtime.getRuntimeObject().put("错误名",e.getClass().getName());
+
+            runtime.invoke(exceptionCaller_name);
+        }
+    }
+
+    private void invoke0(String command) {
         for (Map.Entry<DictionaryCommandMatcher, ArrayList<DictionaryCode>> entry : file.getCommands().entrySet()) {
             DictionaryCommandMatcher matcher = entry.getKey();
             ArrayList<DictionaryCode> code = entry.getValue();

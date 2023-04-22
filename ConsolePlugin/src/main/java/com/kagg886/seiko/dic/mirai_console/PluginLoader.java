@@ -8,6 +8,7 @@ import com.kagg886.seiko.dic.model.DICParseResult;
 import com.kagg886.seiko.dic.session.impl.FriendMessageRuntime;
 import com.kagg886.seiko.dic.session.impl.GroupMemberRuntime;
 import com.kagg886.seiko.dic.session.impl.GroupMessageRuntime;
+import com.kagg___.seiko.dic.mirai_console.ConsolePlugin.BuildConfig;
 import net.mamoe.mirai.console.command.CommandManager;
 import net.mamoe.mirai.console.extension.PluginComponentStorage;
 import net.mamoe.mirai.console.plugin.jvm.JavaPlugin;
@@ -34,7 +35,7 @@ public class PluginLoader extends JavaPlugin implements DictionaryListener {
     public static final PluginLoader INSTANCE = new PluginLoader();
 
     private PluginLoader() {
-        super(new JvmPluginDescriptionBuilder("com.kagg886.seiko.dic.mirai_console", "0.0.8")
+        super(new JvmPluginDescriptionBuilder("com.kagg886.seiko.dic.mirai_console", BuildConfig.VERSION)
                 .name("Seiko Dictionary Plugin")
                 .info("可以在PC上运行伪代码的插件\n项目地址:https://github.com/kagg886/Seiko")
                 .author("kagg886 and All Seiko Contributors")
