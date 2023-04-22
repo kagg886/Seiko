@@ -2,6 +2,21 @@
 #词库信息头1
 #词库信息头2
 
-[群]bot测试
-$BOT列表 A$
-%A%
+[群]test2
+$集合导入 K {"A":1,"B":2,"C":{"A":1,"B":2,"C":[1,2,3,4,5]}}$
+{K}\n
+A的个数{K::len}\n
+A的键列表{K::kArr}\n
+A的值列表{K::vArr}\n
+A的键长度{K::kArr::len}\n
+A中C的长度{K.C::len}\n
+键列表取值测试:{K::kArr(2)}
+值列表取值测试:{K::vArr(2)::kArr}
+
+[群]test0
+$集合导入 col {"num":1,"str":"2","bool":true,"col":{"a":"a","b":10,"c":true},"ary":[1,2,3,"4",true,{"a":"A"}]}$
+$变量赋值 A {col.num}$
+$变量赋值 B {col.ary(2)}$
+$变量赋值 D a$
+$变量赋值 C {col.ary(5).%D%}$
+%A%-%B%-%C%-%D%
