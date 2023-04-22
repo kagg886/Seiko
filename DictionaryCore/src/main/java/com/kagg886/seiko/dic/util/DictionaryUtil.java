@@ -1,6 +1,5 @@
 package com.kagg886.seiko.dic.util;
 
-import com.kagg886.seiko.dic.entity.DictionaryFile;
 import com.kagg886.seiko.dic.exception.DictionaryOnRunningException;
 import com.kagg886.seiko.dic.session.AbsRuntime;
 import net.mamoe.mirai.Bot;
@@ -31,7 +30,7 @@ public class DictionaryUtil {
 
     private static final String CHAIN_VARIABLE_SUFFIX = "}";
 
-    public static Group getGroupByObjectList(AbsRuntime<?> runtime,List<Object> args, int start) {
+    public static Group getGroupByObjectList(AbsRuntime<?> runtime, List<Object> args, int start) {
         long groupId, botAccount;
 
         Object obj = args.get(start); //群号或上下文
@@ -40,8 +39,8 @@ public class DictionaryUtil {
             botAccount = ((GroupMessageEvent) obj).getBot().getId();
         } else {
             groupId = Long.parseLong(obj.toString());
-            if (args.size() >= start+2) {
-                botAccount = Long.parseLong(args.get(start+1).toString());
+            if (args.size() >= start + 2) {
+                botAccount = Long.parseLong(args.get(start + 1).toString());
             } else {
                 botAccount = Long.parseLong(runtime.getRuntimeObject().get("BOT").toString());
             }
@@ -86,6 +85,62 @@ public class DictionaryUtil {
         return Bot.findInstance(botId).getGroup(groupId).get(qq);
     }
 
+    ////链式表达式求值的核心函数，对每个单元进行求值
+    private static Object chainExpressionCalc0(Object point, String str) {
+        Object rtn;
+        if (str.contains("::")) { //伪元素用伪元素专用的获取方式
+            String[] suffix = str.split("::");
+            rtn = chainExpressionCalc0(point, suffix[0]);
+            for (int i = 1; i < suffix.length; i++) {
+                //伪元素解析
+                if (suffix[i].equals("len")) {
+                    if (rtn instanceof HashMap<?, ?>) {
+                        point = ((HashMap<?, ?>) rtn).size();
+                        break;
+                    }
+                    if (rtn instanceof List<?>) {
+                        point = ((List<?>) rtn).size();
+                        break;
+                    }
+                }
+
+                if (suffix[i].startsWith("kArr")) {
+                    point = new ArrayList<>(((HashMap<?, ?>) rtn).keySet());
+                    //考虑kArr(0)的情况，此时值应该是kArr里的一个元素。vArr同理
+                    if (suffix[i].contains("(") && suffix[i].contains(")")) {
+                        String arrayIndex = suffix[i].substring(suffix[i].indexOf("(") + 1, suffix[i].length() - 1);
+                        List<?> list = (List<?>) point;
+                        int idx = Integer.parseInt(arrayIndex);
+                        point = idx < list.size() ? list.get(idx) : null;
+                    }
+                }
+
+                if (suffix[i].startsWith("vArr")) {
+                    point = new ArrayList<>(((HashMap<?, ?>) rtn).values());
+                    if (suffix[i].contains("(") && suffix[i].contains(")")) {
+                        String arrayIndex = suffix[i].substring(suffix[i].indexOf("(") + 1, suffix[i].length() - 1);
+                        List<?> list = (List<?>) point;
+                        int idx = Integer.parseInt(arrayIndex);
+                        point = idx < list.size() ? list.get(idx) : null;
+                    }
+                }
+            }
+            rtn = point;
+        } else { //单元素解析，传统代码
+            if (str.contains("(") && str.contains(")")) { //按数组处理
+                String arrayIndex = str.substring(str.indexOf("(") + 1, str.length() - 1);
+                String arrayName = str.replace("(" + arrayIndex + ")", "");
+
+                List<?> list = ((List<?>) ((HashMap<?, ?>) point).get(arrayName));
+                int idx = Integer.parseInt(arrayIndex);
+                rtn = idx < list.size() ? list.get(idx) : null;
+            } else {
+                rtn = ((HashMap<?, ?>) point).getOrDefault(str, null);
+            }
+        }
+        return rtn;
+    }
+
     /*
      * @param runtime: 词库运行时
      * @param arg: 词库表达式
@@ -95,25 +150,20 @@ public class DictionaryUtil {
      * @date 2023/03/14 22:19
      */
     public static Object chainExpressionCalc(AbsRuntime<?> runtime, String arg) {
-        String[] exps = cleanVariableCode(arg, runtime).split("\\.");
         //针对{a[0].%A%}这种情况。要先脱去最外层大括号，然后再执行内层内容。这样可以保证最外层不会被整体替换成字符串。
         //解析后real为a[0].b，可以放心解析
-        Object point = runtime.getRuntimeObject();
+        return chainExpressionCalc1(runtime.getRuntimeObject(), cleanVariableCode(arg, runtime));
+    }
+
+    //链式表达式求值的核心函数，此处负责根据英文句号分块求值
+    private static Object chainExpressionCalc1(Object point, String arg) {
+        String[] exps = arg.split("\\.");
         int checkCount = 0; //使用checkCount判断根变量是否为null。是则直接抛出异常
         for (String str : exps) {
             if (point == null) { //上一个已经为null了，直接抛异常
                 throw new IllegalArgumentException("找不到键:" + exps[Arrays.binarySearch(exps, str) - 1]);
             }
-            if (str.contains("(") && str.contains(")")) { //按数组处理
-                String arrayIndex = str.substring(str.indexOf("(") + 1, str.length() - 1);
-                String arrayName = str.replace("(" + arrayIndex + ")", "");
-
-                List<?> list = ((List<?>) ((HashMap<?, ?>) point).get(arrayName));
-                int idx = Integer.parseInt(arrayIndex);
-                point = idx < list.size() ? list.get(idx) : null;
-            } else {
-                point = ((HashMap<?, ?>) point).getOrDefault(str, null);
-            }
+            point = chainExpressionCalc0(point, str);
             checkCount++;
         }
         if (point == null) {
@@ -227,7 +277,7 @@ public class DictionaryUtil {
      * @description 评估布尔表达式
      * @date 2023/01/28 21:33
      */
-    public static boolean evalBooleanExpression(String str,AbsRuntime<?> runtime) {
+    public static boolean evalBooleanExpression(String str, AbsRuntime<?> runtime) {
         if (str == null || str.equals("")) {
             throw new NullPointerException("表达式为空");
         }
@@ -244,54 +294,54 @@ public class DictionaryUtil {
         if (str.contains(")")) {
             int lIndex = str.lastIndexOf("(");
             int rIndex = str.indexOf(")", lIndex);
-            boolean p = evalBooleanExpression(str.substring(lIndex + 1, rIndex),runtime);
-            return evalBooleanExpression(str.replace("(" + str.substring(lIndex + 1, rIndex) + ")", Boolean.toString(p)),runtime);
+            boolean p = evalBooleanExpression(str.substring(lIndex + 1, rIndex), runtime);
+            return evalBooleanExpression(str.replace("(" + str.substring(lIndex + 1, rIndex) + ")", Boolean.toString(p)), runtime);
         }
 
         if (str.contains("||")) {
             int idx = str.indexOf("||");
-            return evalBooleanExpression(str.substring(0, idx),runtime) || evalBooleanExpression(str.substring(idx + 2),runtime);
+            return evalBooleanExpression(str.substring(0, idx), runtime) || evalBooleanExpression(str.substring(idx + 2), runtime);
         }
 
         if (str.contains("&&")) {
             int idx = str.indexOf("&&");
-            return evalBooleanExpression(str.substring(0, idx),runtime) && evalBooleanExpression(str.substring(idx + 2),runtime);
+            return evalBooleanExpression(str.substring(0, idx), runtime) && evalBooleanExpression(str.substring(idx + 2), runtime);
         }
 
         if (str.contains("==")) {
             int idx = str.indexOf("==");
             try {
-                return Objects.equals(mathExpressionCalc(DictionaryUtil.cleanVariableCode(str.substring(0, idx),runtime)), mathExpressionCalc(DictionaryUtil.cleanVariableCode(str.substring(idx + 2),runtime)));
+                return Objects.equals(mathExpressionCalc(DictionaryUtil.cleanVariableCode(str.substring(0, idx), runtime)), mathExpressionCalc(DictionaryUtil.cleanVariableCode(str.substring(idx + 2), runtime)));
             } catch (Exception e) {
                 // 代表等式左边或右边是字符串，按照字符串进行匹配
-                return DictionaryUtil.cleanVariableCode(str.substring(0, idx),runtime).equals(DictionaryUtil.cleanVariableCode(str.substring(idx + 2),runtime));
+                return DictionaryUtil.cleanVariableCode(str.substring(0, idx), runtime).equals(DictionaryUtil.cleanVariableCode(str.substring(idx + 2), runtime));
             }
         }
 
         if (str.contains("!=")) {
             int idx = str.indexOf("!=");
             try {
-                return !Objects.equals(mathExpressionCalc(DictionaryUtil.cleanVariableCode(str.substring(0, idx),runtime)), mathExpressionCalc(DictionaryUtil.cleanVariableCode(str.substring(idx + 2),runtime)));
+                return !Objects.equals(mathExpressionCalc(DictionaryUtil.cleanVariableCode(str.substring(0, idx), runtime)), mathExpressionCalc(DictionaryUtil.cleanVariableCode(str.substring(idx + 2), runtime)));
             } catch (Exception e) {
-                return !DictionaryUtil.cleanVariableCode(str.substring(0, idx),runtime).equals(DictionaryUtil.cleanVariableCode(str.substring(idx + 2),runtime));
+                return !DictionaryUtil.cleanVariableCode(str.substring(0, idx), runtime).equals(DictionaryUtil.cleanVariableCode(str.substring(idx + 2), runtime));
             }
         }
         if (str.contains(">=")) {
             int idx = str.indexOf(">=");
-            return mathExpressionCalc(DictionaryUtil.cleanVariableCode(str.substring(0, idx),runtime)) >= mathExpressionCalc(DictionaryUtil.cleanVariableCode(str.substring(idx + 2),runtime));
+            return mathExpressionCalc(DictionaryUtil.cleanVariableCode(str.substring(0, idx), runtime)) >= mathExpressionCalc(DictionaryUtil.cleanVariableCode(str.substring(idx + 2), runtime));
         }
         if (str.contains("<=")) {
             int idx = str.indexOf("<=");
-            return mathExpressionCalc(DictionaryUtil.cleanVariableCode(str.substring(0, idx),runtime)) <= mathExpressionCalc(DictionaryUtil.cleanVariableCode(str.substring(idx + 2),runtime));
+            return mathExpressionCalc(DictionaryUtil.cleanVariableCode(str.substring(0, idx), runtime)) <= mathExpressionCalc(DictionaryUtil.cleanVariableCode(str.substring(idx + 2), runtime));
 
         }
         if (str.contains(">")) {
             int idx = str.indexOf(">");
-            return mathExpressionCalc(DictionaryUtil.cleanVariableCode(str.substring(0, idx),runtime)) > mathExpressionCalc(DictionaryUtil.cleanVariableCode(str.substring(idx + 2),runtime));
+            return mathExpressionCalc(DictionaryUtil.cleanVariableCode(str.substring(0, idx), runtime)) > mathExpressionCalc(DictionaryUtil.cleanVariableCode(str.substring(idx + 2), runtime));
         }
         if (str.contains("<")) {
             int idx = str.indexOf("<");
-            return mathExpressionCalc(DictionaryUtil.cleanVariableCode(str.substring(0, idx),runtime)) < mathExpressionCalc(DictionaryUtil.cleanVariableCode(str.substring(idx + 2),runtime));
+            return mathExpressionCalc(DictionaryUtil.cleanVariableCode(str.substring(0, idx), runtime)) < mathExpressionCalc(DictionaryUtil.cleanVariableCode(str.substring(idx + 2), runtime));
 
         }
         throw new DictionaryOnRunningException("计算表达式出错!" + str);
