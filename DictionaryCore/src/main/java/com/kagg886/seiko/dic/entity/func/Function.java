@@ -24,8 +24,7 @@ public abstract class Function extends DictionaryCode {
             {"异步调用", "TransferDicMethod$Async_Call"},
             {"延时", "Delay"},
             {"访问", "HTTP"},
-            {"日志","DebugTool$Logcat"},
-            {"设置捕错函数","DebugTool$CatchFunction"},
+            {"日志","Logcat"},
 
             //与消息有关
             {"图片", "MessageControl$addImage"},
@@ -52,7 +51,6 @@ public abstract class Function extends DictionaryCode {
             {"管理员", "MemberControl$ModifyAdmin"},
 
             //与群对象有关
-            {"全员禁言","GroupControl$MuteAll"},
             {"退群","GroupControl$Exit"},
             {"获取群公告","GroupControl$GetGroupAnnouncement"},
             {"删除群公告","GroupControl$DelGroupAnnouncement"},
