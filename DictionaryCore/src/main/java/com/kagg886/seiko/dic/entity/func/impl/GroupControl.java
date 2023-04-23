@@ -4,6 +4,7 @@ import com.kagg886.seiko.dic.entity.func.Function;
 import com.kagg886.seiko.dic.exception.DictionaryOnRunningException;
 import com.kagg886.seiko.dic.session.AbsRuntime;
 import com.kagg886.seiko.dic.util.DictionaryUtil;
+import com.kagg886.seiko.util.IOUtil;
 import net.mamoe.mirai.contact.Group;
 import net.mamoe.mirai.contact.announcement.*;
 import net.mamoe.mirai.utils.ExternalResource;
@@ -24,33 +25,6 @@ import java.util.List;
  * @version: 1.0
  */
 public abstract class GroupControl extends Function {
-
-    /**
-     * @projectName: Seiko
-     * @package: com.kagg886.seiko.dic.entity.func.impl
-     * @className: GroupControl
-     * @author: kagg886
-     * @description: $全员禁言 开/关 群号 bot账号(可选)$ 或 $全员禁言 开/关 %上下文%$
-     * @date: 2023/4/10 20:36
-     * @version: 1.0
-     */
-    public static class MuteAll extends Function.InterruptedFunction {
-
-        @Override
-        protected void run(AbsRuntime<?> runtime, List<Object> args) {
-            boolean state = switch (args.get(0).toString()) {
-                case "真" -> true;
-                case "假" -> false;
-                default -> throw new DictionaryOnRunningException("未知Type:" + args.get(0));
-            };
-
-            Group group = DictionaryUtil.getGroupByObjectList(runtime,args,1);
-            group.getSettings().setMuteAll(state);
-        }
-        public MuteAll(int line, String code) {
-            super(line, code);
-        }
-    }
 
     /**
      * @projectName: Seiko
