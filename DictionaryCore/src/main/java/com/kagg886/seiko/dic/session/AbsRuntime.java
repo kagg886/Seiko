@@ -86,6 +86,10 @@ public abstract class AbsRuntime<EVENT> {
         context.put("缓冲区", new MessageChainBuilder());
     }
 
+    public EVENT getEvent() {
+        return event;
+    }
+
     public HashMap<String, Object> getRuntimeObject() {
         return context;
     }

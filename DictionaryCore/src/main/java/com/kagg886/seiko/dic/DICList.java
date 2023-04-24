@@ -37,6 +37,9 @@ public class DICList extends ArrayList<DictionaryFile> {
         clear();
         DICParseResult dicParseResult = new DICParseResult();
         for (File p : Objects.requireNonNull(DictionaryEnvironment.getInstance().getDicRoot().listFiles())) {
+            if (p.isDirectory()) {
+                continue;
+            }
             DictionaryFile dictionaryFile = new DictionaryFile(p);
 
             // 放在这里可能不合适，每次刷新都要判断，暂时没有好的地方塞，这里目的是初始化jsonObject

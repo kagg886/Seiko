@@ -43,9 +43,11 @@ public class DictionaryFile {
         }
     };
 
+    private final LifeCycleRuntime cycle;
     private final HashMap<String,Object> settings = new HashMap<>(); //伪代码的#号设置
 
-    private LifeCycleRuntime cycle;
+    private final HashMap<String,DictionaryFile> subFile = new HashMap<>();
+
 
     private ThreadPoolExecutor executor;
 
@@ -57,6 +59,9 @@ public class DictionaryFile {
 
     public DictionaryFile(File dicFile) {
         this.dicFile = dicFile;
+        if (!dicFile.exists() || dicFile.isDirectory()) {
+            throw new DictionaryOnLoadException(dicFile.getName() + "不存在");
+        }
         cycle = new LifeCycleRuntime(this);
     }
 
@@ -214,6 +219,10 @@ public class DictionaryFile {
 
     public File getFile() {
         return dicFile;
+    }
+
+    public HashMap<String, DictionaryFile> getSubFile() {
+        return subFile;
     }
 
     public HashMap<DictionaryCommandMatcher, ArrayList<DictionaryCode>> getCommands() {

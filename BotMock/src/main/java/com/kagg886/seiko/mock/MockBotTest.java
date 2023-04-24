@@ -52,6 +52,7 @@ public class MockBotTest {
         DictionaryEnvironment.getInstance().setDicConfigPoint("BotMock/mock/dicConfig.json");
         DictionaryEnvironment.getInstance().setErrorListener((p, message) -> System.out.println(p.getName() + "---" + message));
 
+        //如果使用mock会打印两次日志，属于正常现象
         DICParseResult result = DICList.getInstance().refresh();
         if (!result.success) {
             for (Throwable e : result.err) {
