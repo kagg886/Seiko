@@ -1,5 +1,7 @@
 # Seiko
-
+---
+[![Releases](https://img.shields.io/github/downloads/kagg886/Seiko/total?label=Download&logo=github)](https://github.com/kagg886/Seiko/releases)
+---
 ## 一.简介
 
 Seiko 是 Mirai 的又一个 Android 端实现。有关 Mirai，请参阅 [Mirai 的 Github 仓库](https://github.com/mamoe/mirai)
