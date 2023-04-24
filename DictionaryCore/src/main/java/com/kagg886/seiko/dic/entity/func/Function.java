@@ -26,6 +26,11 @@ public abstract class Function extends DictionaryCode {
             {"访问", "HTTP"},
             {"日志","Logcat"},
 
+
+            {"装载", "ModuleUtil$Add"},
+            {"卸载", "ModuleUtil$Delete"},
+            {"子文件调用", "ModuleUtil$Caller"},
+
             //与消息有关
             {"图片", "MessageControl$addImage"},
             {"艾特", "MessageControl$addAt"},

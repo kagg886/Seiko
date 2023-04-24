@@ -3,6 +3,7 @@ package com.kagg886.seiko.dic.session.impl;
 import com.kagg886.seiko.dic.DictionaryEnvironment;
 import com.kagg886.seiko.dic.entity.DictionaryFile;
 import com.kagg886.seiko.dic.session.AbsRuntime;
+import com.kagg886.seiko.util.TextUtils;
 import net.mamoe.mirai.Bot;
 import net.mamoe.mirai.Mirai;
 import net.mamoe.mirai.contact.Contact;
@@ -52,8 +53,12 @@ public class LifeCycleRuntime extends AbsRuntime<DictionaryFile> {
 
     @Override
     public void clearMessage() {
+        String str = getMessageCache().build().contentToString();
+        if (TextUtils.isEmpty(str)) {
+            return;
+        }
         for (Bot b : Bot.getInstances()) {
-            b.getLogger().info(String.format("[%s]:%s",event.getName(),getMessageCache().build().contentToString()));
+            b.getLogger().info(String.format("[%s]:%s",event.getName(),str));
             if (!DictionaryEnvironment.getInstance().isShowLogOnAllBots()) {
                 break;
             }
