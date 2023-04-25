@@ -94,6 +94,10 @@ public abstract class AbsRuntime<EVENT> {
         return context;
     }
 
+    public Class<?> getProxyClass() {
+        return event.getClass();
+    }
+
     /*
      * @param command: 指令
      * @return void
@@ -105,7 +109,7 @@ public abstract class AbsRuntime<EVENT> {
         for (Map.Entry<DictionaryCommandMatcher, ArrayList<DictionaryCode>> entry : file.getCommands().entrySet()) {
             DictionaryCommandMatcher matcher = entry.getKey();
             ArrayList<DictionaryCode> code = entry.getValue();
-            if (!matcher.matchesDomain(event)) { //匹配指令触发的环境和当前环境是否相符
+            if (!matcher.matchesDomain(this)) { //匹配指令触发的环境和当前环境是否相符
                 continue;
             }
             if (matcher.matchesCommand(command)) { //正则匹配

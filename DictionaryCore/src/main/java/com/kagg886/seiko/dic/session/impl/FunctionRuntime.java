@@ -18,9 +18,21 @@ import java.util.HashMap;
  */
 public class FunctionRuntime extends AbsRuntime<AbsRuntime<?>> {
 
+    private Class<?> proxyClass = super.getProxyClass();
+
     public FunctionRuntime(DictionaryFile file, AbsRuntime<?> event) {
         super(file, event);
         this.exceptionStacks = event.getExceptionStacks(); //继承原调用栈
+    }
+
+    @Override
+    public Class<?> getProxyClass() {
+        return proxyClass;
+    }
+
+
+    public void setProxyClass(Class<?> proxyClass) {
+        this.proxyClass = proxyClass;
     }
 
     @Override
