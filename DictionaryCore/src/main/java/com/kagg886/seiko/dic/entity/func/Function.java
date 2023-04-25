@@ -75,6 +75,8 @@ public abstract class Function extends DictionaryCode {
 
             //与日期有关
             {"转时间", "DateParser$StampToDate"},
+            {"时间格式化", "DateParser$StampToDateNew"},
+            {"设置时间格式","DateParser$StampSet"},
             {"转时间戳", "DateParser$DateToStamp"},
 
             //与字符串有关

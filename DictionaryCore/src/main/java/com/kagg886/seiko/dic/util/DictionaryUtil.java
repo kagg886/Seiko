@@ -309,10 +309,12 @@ public class DictionaryUtil {
             return evalBooleanExpression(str.substring(0, idx), runtime) && evalBooleanExpression(str.substring(idx + 2), runtime);
         }
 
+        Function<String,Double> varCalc = (deal) -> mathExpressionCalc(DictionaryUtil.cleanVariableCode(deal, runtime));
+
         if (str.contains("==")) {
             int idx = str.indexOf("==");
             try {
-                return Objects.equals(mathExpressionCalc(DictionaryUtil.cleanVariableCode(str.substring(0, idx), runtime)), mathExpressionCalc(DictionaryUtil.cleanVariableCode(str.substring(idx + 2), runtime)));
+                return Objects.equals(varCalc.apply(str.substring(0, idx)), varCalc.apply(str.substring(idx + 2)));
             } catch (Exception e) {
                 // 代表等式左边或右边是字符串，按照字符串进行匹配
                 return DictionaryUtil.cleanVariableCode(str.substring(0, idx), runtime).equals(DictionaryUtil.cleanVariableCode(str.substring(idx + 2), runtime));
@@ -322,13 +324,12 @@ public class DictionaryUtil {
         if (str.contains("!=")) {
             int idx = str.indexOf("!=");
             try {
-                return !Objects.equals(mathExpressionCalc(DictionaryUtil.cleanVariableCode(str.substring(0, idx), runtime)), mathExpressionCalc(DictionaryUtil.cleanVariableCode(str.substring(idx + 2), runtime)));
+                return !Objects.equals(varCalc.apply(str.substring(0, idx)), varCalc.apply(str.substring(idx + 2)));
             } catch (Exception e) {
                 return !DictionaryUtil.cleanVariableCode(str.substring(0, idx), runtime).equals(DictionaryUtil.cleanVariableCode(str.substring(idx + 2), runtime));
             }
         }
 
-        Function<String,Double> varCalc = (deal) -> mathExpressionCalc(DictionaryUtil.cleanVariableCode(deal, runtime));
 
         if (str.contains(">=")) {
             int idx = str.indexOf(">=");
