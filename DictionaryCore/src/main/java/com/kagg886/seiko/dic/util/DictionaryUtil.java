@@ -10,6 +10,7 @@ import net.objecthunter.exp4j.ExpressionBuilder;
 
 import java.math.BigDecimal;
 import java.util.*;
+import java.util.function.Function;
 
 /**
  * @projectName: Seiko
@@ -326,22 +327,25 @@ public class DictionaryUtil {
                 return !DictionaryUtil.cleanVariableCode(str.substring(0, idx), runtime).equals(DictionaryUtil.cleanVariableCode(str.substring(idx + 2), runtime));
             }
         }
+
+        Function<String,Double> varCalc = (deal) -> mathExpressionCalc(DictionaryUtil.cleanVariableCode(deal, runtime));
+
         if (str.contains(">=")) {
             int idx = str.indexOf(">=");
-            return mathExpressionCalc(DictionaryUtil.cleanVariableCode(str.substring(0, idx), runtime)) >= mathExpressionCalc(DictionaryUtil.cleanVariableCode(str.substring(idx + 2), runtime));
+            return varCalc.apply(str.substring(0, idx)) >= varCalc.apply(str.substring(idx + 2));
         }
         if (str.contains("<=")) {
             int idx = str.indexOf("<=");
-            return mathExpressionCalc(DictionaryUtil.cleanVariableCode(str.substring(0, idx), runtime)) <= mathExpressionCalc(DictionaryUtil.cleanVariableCode(str.substring(idx + 2), runtime));
+            return varCalc.apply(str.substring(0, idx)) <= varCalc.apply(str.substring(idx + 2));
 
         }
         if (str.contains(">")) {
             int idx = str.indexOf(">");
-            return mathExpressionCalc(DictionaryUtil.cleanVariableCode(str.substring(0, idx), runtime)) > mathExpressionCalc(DictionaryUtil.cleanVariableCode(str.substring(idx + 2), runtime));
+            return varCalc.apply(str.substring(0, idx)) > varCalc.apply(str.substring(idx + 1));
         }
         if (str.contains("<")) {
             int idx = str.indexOf("<");
-            return mathExpressionCalc(DictionaryUtil.cleanVariableCode(str.substring(0, idx), runtime)) < mathExpressionCalc(DictionaryUtil.cleanVariableCode(str.substring(idx + 2), runtime));
+            return varCalc.apply(str.substring(0, idx)) >= varCalc.apply(str.substring(idx + 1));
 
         }
         throw new DictionaryOnRunningException("计算表达式出错!" + str);
