@@ -1,5 +1,6 @@
 package com.kagg886.seiko.dic.entity.func.impl;
 
+import com.kagg886.seiko.dic.DictionaryEnvironment;
 import com.kagg886.seiko.dic.entity.DictionaryFile;
 import com.kagg886.seiko.dic.entity.func.Function;
 import com.kagg886.seiko.dic.exception.DictionaryOnRunningException;
@@ -7,6 +8,7 @@ import com.kagg886.seiko.dic.session.AbsRuntime;
 import com.kagg886.seiko.dic.session.impl.FunctionRuntime;
 import com.kagg886.seiko.dic.session.impl.LifeCycleRuntime;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
@@ -27,7 +29,7 @@ public abstract class ModuleUtil extends Function.UnInterruptedFunction {
      * @package: com.kagg886.seiko.dic.entity.func.impl
      * @className: ModuleUtil
      * @author: kagg886
-     * @description: $子文件调用 伪代码文件名 伪代码方法$
+     * @description: $子文件调用 模块名 模拟发送的信息 继承上下文?(真/假)$
      * @date: 2023/4/23 21:33
      * @version: 1.0
      */
@@ -44,6 +46,11 @@ public abstract class ModuleUtil extends Function.UnInterruptedFunction {
             String method = args.get(1).toString();
 
             FunctionRuntime runtime1 = new FunctionRuntime(f, runtime);
+
+            if (args.size() >= 3) {
+                runtime1.setProxyClass(runtime.getProxyClass());
+            }
+
             runtime1.invoke(method);
 
         }
@@ -54,7 +61,7 @@ public abstract class ModuleUtil extends Function.UnInterruptedFunction {
      * @package: com.kagg886.seiko.dic.entity.func.impl
      * @className: ModuleUtil
      * @author: kagg886
-     * @description: $卸载 伪代码文件名$
+     * @description: $卸载 模块名$
      * @date: 2023/4/23 21:33
      * @version: 1.0
      */
@@ -81,7 +88,7 @@ public abstract class ModuleUtil extends Function.UnInterruptedFunction {
      * @package: com.kagg886.seiko.dic.entity.func.impl
      * @className: ModuleUtil
      * @author: kagg886
-     * @description: $装载 伪代码文件名$
+     * @description: $装载 伪代码文件 模块名(可选)$
      * @date: 2023/4/23 21:20
      * @version: 1.0
      */
@@ -94,17 +101,23 @@ public abstract class ModuleUtil extends Function.UnInterruptedFunction {
 
         @Override
         protected void run(AbsRuntime<?> runtime, List<Object> args) {
-            Path base = runtime.getFile().getFile().getParentFile().toPath();
+            File base = DictionaryEnvironment.getInstance().getDicData().toFile();
             String name = args.get(0).toString();
-            DictionaryFile file = new DictionaryFile(base.resolve(runtime.getFile().getName().split("\\.")[0] + "_sub").resolve(name).toFile());
+            DictionaryFile file = new DictionaryFile(new File(base.getAbsolutePath() + "/" + name));
             try {
                 file.parseDICCodeFile();
             } catch (IOException e) {
-                throw new DictionaryOnRunningException(e);
+                throw new DictionaryOnRunningException("DIC解析失败:",e);
             }
             file.notifyLifeCycle(LifeCycleRuntime.LifeCycle.INIT);
+
+            String alias = file.getName();
+
+            if (args.size() >= 2) {
+                alias = args.get(1).toString();
+            }
             runtime.getFile().getSubFile()
-                    .put(file.getName(), file);
+                    .put(alias, file);
         }
     }
 

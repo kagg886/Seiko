@@ -90,9 +90,9 @@ public class DictionaryCommandMatcher {
         return pattern;
     }
 
-    public boolean matchesDomain(Object o) {
+    public boolean matchesDomain(AbsRuntime<?> o) {
         for (Class<?> a : eventClass) {
-            Class<?> clazz = o.getClass();
+            Class<?> clazz = o.getProxyClass();
             do {
                 if (clazz == a) {
                     return true;
