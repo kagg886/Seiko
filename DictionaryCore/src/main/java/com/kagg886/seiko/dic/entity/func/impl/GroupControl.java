@@ -4,9 +4,10 @@ import com.kagg886.seiko.dic.entity.func.Function;
 import com.kagg886.seiko.dic.exception.DictionaryOnRunningException;
 import com.kagg886.seiko.dic.session.AbsRuntime;
 import com.kagg886.seiko.dic.util.DictionaryUtil;
-import com.kagg886.seiko.util.IOUtil;
+import com.kagg886.seiko.util.TextUtils;
 import net.mamoe.mirai.contact.Group;
 import net.mamoe.mirai.contact.announcement.*;
+import net.mamoe.mirai.event.events.MemberJoinRequestEvent;
 import net.mamoe.mirai.utils.ExternalResource;
 import org.jsoup.Jsoup;
 
@@ -25,6 +26,37 @@ import java.util.List;
  * @version: 1.0
  */
 public abstract class GroupControl extends Function {
+
+    /**
+     * @projectName: Seiko
+     * @package: com.kagg886.seiko.dic.entity.func.impl
+     * @className: GroupControl
+     * @author: kagg886
+     * @description: $进群申请处理 %上下文% 同意/拒绝 拒绝的理由(可选)$
+     * @date: 2023/4/26 20:49
+     * @version: 1.0
+     */
+    public static class DealMemberJoin extends Function.InterruptedFunction {
+
+
+        @Override
+        protected void run(AbsRuntime<?> runtime, List<Object> args) {
+            MemberJoinRequestEvent event = (MemberJoinRequestEvent) args.get(0);
+            boolean status = args.get(1).toString().equals("同意");
+            if (status) {
+                event.accept();
+            } else {
+                if (TextUtils.isEmpty(args.get(2).toString())) {
+                    event.reject();
+                    return;
+                }
+                event.reject(false,args.get(2).toString());
+            }
+        }
+        public DealMemberJoin(int line, String code) {
+            super(line, code);
+        }
+    }
 
     /**
      * @projectName: Seiko

@@ -22,10 +22,10 @@ include ':Tools'
 include ':DictionaryCore'
 include ':BotMock'
 include ':ConsolePlugin'
+include ':DICEventReg'
 
 gradle.ext.mirai_version = "2.15.0-M1"
 gradle.ext.app_version = "0.1.3"
 gradle.ext.app_version_code = 17
 gradle.ext.dic_version = "0.0.9"
-
 

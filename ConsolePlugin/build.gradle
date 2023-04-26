@@ -29,6 +29,8 @@ dependencies {
 
     implementation project(path: ':DictionaryCore', configuration: 'default')
     implementation project(path: ':Tools', configuration: 'default');
+
+    implementation project(path: ':DICEventReg', configuration: 'default');
 }
 
 test {

@@ -60,6 +60,7 @@ public abstract class Function extends DictionaryCode {
             {"获取群公告","GroupControl$GetGroupAnnouncement"},
             {"删除群公告","GroupControl$DelGroupAnnouncement"},
             {"发布群公告","GroupControl$PublishGroupAnnouncement"},
+            {"进群申请处理","GroupControl$DealMemberJoin"},
 //            {"","GroupControl$"},
 //            {"","GroupControl$"},
 //            {"","GroupControl$"},

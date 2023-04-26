@@ -6,6 +6,7 @@ import net.mamoe.mirai.Bot;
 import net.mamoe.mirai.event.events.FriendMessageEvent;
 import net.mamoe.mirai.event.events.GroupMemberEvent;
 import net.mamoe.mirai.event.events.GroupMessageEvent;
+import net.mamoe.mirai.event.events.MemberJoinRequestEvent;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
@@ -38,7 +39,7 @@ public class DictionaryCommandMatcher {
         domainQuoteNew.put("群", new Class[]{GroupMessageEvent.class});
         domainQuoteNew.put("好友", new Class[]{FriendMessageEvent.class});
         domainQuoteNew.put("函数", new Class[]{AbsRuntime.class, DictionaryFile.class});
-        domainQuoteNew.put("群事件", new Class[]{GroupMemberEvent.class});
+        domainQuoteNew.put("群事件", new Class[]{GroupMemberEvent.class, MemberJoinRequestEvent.class});
     }
 
     public DictionaryCommandMatcher(String commandRegex, int line, File dicFile) {
