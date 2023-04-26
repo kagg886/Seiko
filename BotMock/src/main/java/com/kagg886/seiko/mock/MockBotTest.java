@@ -2,6 +2,7 @@ package com.kagg886.seiko.mock;
 
 import com.kagg886.seiko.dic.DICList;
 import com.kagg886.seiko.dic.DictionaryEnvironment;
+import com.kagg886.seiko.dic.DictionaryReg;
 import com.kagg886.seiko.dic.entity.DictionaryFile;
 import com.kagg886.seiko.dic.model.DICParseResult;
 import com.kagg886.seiko.dic.session.impl.GroupMessageRuntime;
@@ -28,20 +29,20 @@ public class MockBotTest {
         for (int i = 100000; i < 120000; i++) {
             group.addMember(i, UUID.randomUUID().toString());
         }
-        group.changeOwner(b);
+        group.changeOwner(group.getBotAsMember());
         mockBot.login();
-        mockBot.getEventChannel().subscribeAlways(GroupMessageEvent.class, event -> {
-            DICList.getInstance().refresh();
-            for (DictionaryFile file : DICList.getInstance()) {
-                GroupMessageRuntime runtime = new GroupMessageRuntime(file,event);
-                runtime.invoke(event.getMessage().contentToString());
-            }
-        });
+
+
+        DictionaryReg.reg(mockBot.getEventChannel(),true,((logger, result) -> {
+            result.err.forEach(logger::error);
+        }));
+
         initDictionaryEnvironment();
         Scanner scanner = new Scanner(System.in);
 
         for (String s = scanner.nextLine();;s = scanner.nextLine()) {
-            a.says(s);
+            group.broadcastNewMemberJoinRequestEvent(123456,"猫娘",s,0);
+            //a.says(s);
         }
     }
 

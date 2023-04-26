@@ -15,6 +15,7 @@ dependencies {
 
     implementation project(':DictionaryCore')
     implementation project(':Tools')
+    implementation project(':DICEventReg')
 
     implementation("net.mamoe:mirai-core-mock:$gradle.mirai_version")
 

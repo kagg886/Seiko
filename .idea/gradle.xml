@@ -4,9 +4,6 @@
   <component name="GradleSettings">
     <option name="linkedExternalProjectsSettings">
       <GradleProjectSettings>
-        <option name="delegatedBuild" value="true" />
-        <option name="testRunner" value="GRADLE" />
-        <option name="distributionType" value="DEFAULT_WRAPPED" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
         <option name="gradleJvm" value="corretto-16" />
         <option name="modules">
@@ -14,6 +11,7 @@
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/BotMock" />
             <option value="$PROJECT_DIR$/ConsolePlugin" />
+            <option value="$PROJECT_DIR$/DICEventReg" />
             <option value="$PROJECT_DIR$/DictionaryCore" />
             <option value="$PROJECT_DIR$/PluginAPI" />
             <option value="$PROJECT_DIR$/PluginDemo" />
