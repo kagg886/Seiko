@@ -116,27 +116,27 @@ public abstract class CollectionControl extends Function.UnInterruptedFunction {
             try {
                 runtime.getRuntimeObject().put(varName, new JSONObject(val).toMap());
                 return;
-            } catch (Exception e) {
+            } catch (Exception ignored) {
             }
             //XML.toJSONObject遇到array会置空
             try {
                 runtime.getRuntimeObject().put(varName, new JSONArray(val).toList());
                 return;
-            } catch (Exception e) {
+            } catch (Exception ignored) {
             }
             try {
                 runtime.getRuntimeObject().put(varName, XML.toJSONObject(val).toMap());
                 return;
-            } catch (Exception e) {
+            } catch (Exception ignored) {
             }
             try {
                 runtime.getRuntimeObject().put(varName, HTTP.toJSONObject(val).toMap());
                 return;
-            } catch (Exception e) {
+            } catch (Exception ignored) {
             }
             try {
                 runtime.getRuntimeObject().put(varName, Cookie.toJSONObject(val).toMap());
-            } catch (Exception e) {
+            } catch (Exception ignored) {
             }
 
             throw new DictionaryOnRunningException(val + "不是集合!");
