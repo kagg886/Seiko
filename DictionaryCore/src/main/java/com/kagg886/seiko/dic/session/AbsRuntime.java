@@ -1,5 +1,6 @@
 package com.kagg886.seiko.dic.session;
 
+import com.kagg886.seiko.dic.entity.impl.FastAssignment;
 import com.kagg886.seiko.dic.util.DictionaryUtil;
 import com.kagg886.seiko.dic.entity.DictionaryCode;
 import com.kagg886.seiko.dic.entity.DictionaryCommandMatcher;
@@ -206,6 +207,10 @@ public abstract class AbsRuntime<EVENT> {
             if (dic instanceof PlainText) {
                 getMessageCache().append(new net.mamoe.mirai.message.data.PlainText(DictionaryUtil.cleanVariableCode(dic.getCode(), this)));
                 sendSwitch = false;
+            }
+
+            if (dic instanceof FastAssignment) {
+                ((FastAssignment) dic).addInRuntimeObject(this);
             }
 
             if (dic instanceof Expression.If iff) {

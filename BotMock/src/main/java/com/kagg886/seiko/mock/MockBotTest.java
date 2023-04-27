@@ -41,8 +41,8 @@ public class MockBotTest {
         Scanner scanner = new Scanner(System.in);
 
         for (String s = scanner.nextLine();;s = scanner.nextLine()) {
-            group.broadcastNewMemberJoinRequestEvent(123456,"猫娘",s,0);
-            //a.says(s);
+            //group.broadcastNewMemberJoinRequestEvent(123456,"猫娘",s,0);
+            a.says(s);
         }
     }
 

@@ -3,6 +3,7 @@ package com.kagg886.seiko.dic.entity;
 import com.kagg886.seiko.dic.DictionaryEnvironment;
 import com.kagg886.seiko.dic.entity.func.Function;
 import com.kagg886.seiko.dic.entity.impl.Expression;
+import com.kagg886.seiko.dic.entity.impl.FastAssignment;
 import com.kagg886.seiko.dic.entity.impl.PlainText;
 import com.kagg886.seiko.dic.exception.DictionaryOnLoadException;
 import com.kagg886.seiko.dic.session.impl.LifeCycleRuntime;
@@ -44,9 +45,9 @@ public class DictionaryFile {
     };
 
     private final LifeCycleRuntime cycle;
-    private final HashMap<String,Object> settings = new HashMap<>(); //伪代码的#号设置
+    private final HashMap<String, Object> settings = new HashMap<>(); //伪代码的#号设置
 
-    private final HashMap<String,DictionaryFile> subFile = new HashMap<>();
+    private final HashMap<String, DictionaryFile> subFile = new HashMap<>();
 
 
     private ThreadPoolExecutor executor;
@@ -118,7 +119,7 @@ public class DictionaryFile {
             if (!initConfig || !initConfigSuccess) { //跳过解析#的条件:在遇到#后遇到空行
                 if (comm.startsWith("#")) {
                     initConfig = true;
-                    settings.put(String.valueOf(headerLine++),comm.substring(1));
+                    settings.put(String.valueOf(headerLine++), comm.substring(1));
                     continue;
                 }
                 if (TextUtils.isEmpty(comm)) {
@@ -135,7 +136,7 @@ public class DictionaryFile {
             for (char a : illegalChar) {
                 int idx;
                 if ((idx = comm.indexOf(a)) != -1) {
-                    DictionaryEnvironment.getInstance().getErrorListener().onWarn(dicFile, "第" + iterator.getLen() + "行的第" + (idx+1) + "个字符是非ASCII字符。\n在某些设备上人的肉眼无法准确辨别，可能会导致伪代码变量无法正确解析");
+                    DictionaryEnvironment.getInstance().getErrorListener().onWarn(dicFile, "第" + iterator.getLen() + "行的第" + (idx + 1) + "个字符是非ASCII字符。\n在某些设备上人的肉眼无法准确辨别，可能会导致伪代码变量无法正确解析");
                 }
             }
 //            if (comm.contains("％")) { //我帮你排错... 我居然分不清这两个符号。2023/2/18
@@ -177,7 +178,7 @@ public class DictionaryFile {
                 try {
                     Function func = Function.parseFunction(comm, iterator.getLen());
                     if (func instanceof Function.Deprecated) {
-                        DictionaryEnvironment.getInstance().getErrorListener().onWarn(this.getFile(),"发现过时函数:" + func.getCode() + "\n" + ((Function.Deprecated) func).getAdvice());
+                        DictionaryEnvironment.getInstance().getErrorListener().onWarn(this.getFile(), "发现过时函数:" + func.getCode() + "\n" + ((Function.Deprecated) func).getAdvice());
                     }
                     dictionaryCodes.add(func);
                 } catch (Throwable e) {
@@ -189,6 +190,8 @@ public class DictionaryFile {
                 dictionaryCodes.add(new Expression.Else(iterator.getLen(), comm));
             } else if (comm.equals("返回")) {
                 dictionaryCodes.add(new Expression.Return(iterator.getLen(), comm));
+            } else if (comm.contains("<-") && !comm.contains("\\<-")) {
+                dictionaryCodes.add(new FastAssignment(iterator.getLen(),comm));
             } else {
                 dictionaryCodes.add(new PlainText(iterator.getLen(), comm));
             }
