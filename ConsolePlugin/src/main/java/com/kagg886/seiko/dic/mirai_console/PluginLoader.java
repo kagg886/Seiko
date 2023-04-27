@@ -1,26 +1,17 @@
 package com.kagg886.seiko.dic.mirai_console;
 
-import com.kagg886.seiko.dic.DICList;
 import com.kagg886.seiko.dic.DictionaryEnvironment;
 import com.kagg886.seiko.dic.DictionaryReg;
 import com.kagg886.seiko.dic.bridge.DictionaryListener;
-import com.kagg886.seiko.dic.entity.DictionaryFile;
-import com.kagg886.seiko.dic.model.DICParseResult;
-import com.kagg886.seiko.dic.session.impl.FriendMessageRuntime;
-import com.kagg886.seiko.dic.session.impl.GroupMessageRuntime;
 import net.mamoe.mirai.console.command.CommandManager;
 import net.mamoe.mirai.console.extension.PluginComponentStorage;
 import net.mamoe.mirai.console.plugin.jvm.JavaPlugin;
 import net.mamoe.mirai.console.plugin.jvm.JvmPluginDescriptionBuilder;
 import net.mamoe.mirai.event.EventChannel;
 import net.mamoe.mirai.event.GlobalEventChannel;
-import net.mamoe.mirai.event.events.FriendMessageEvent;
-import net.mamoe.mirai.event.events.GroupMessageEvent;
 import org.jetbrains.annotations.NotNull;
-import org.json.JSONObject;
 
 import java.io.File;
-import java.util.function.Consumer;
 
 /**
  * @projectName: Seiko

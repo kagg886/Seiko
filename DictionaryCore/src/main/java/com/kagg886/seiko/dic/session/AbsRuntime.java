@@ -213,11 +213,12 @@ public abstract class AbsRuntime<EVENT> {
                 ((FastAssignment) dic).addInRuntimeObject(this);
             }
 
-            if (dic instanceof Expression.If iff) {
+            if (dic instanceof Expression.If) {
 //                if (getMessageCache().size() != 0) {
 //                    clearMessageCache();
 //                    sendSwitch = true;
 //                }
+                Expression.If iff = (Expression.If) dic;
                 if (!iff.calc(this)) {
                     isJumpCode = true;
                     continue;

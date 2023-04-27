@@ -30,19 +30,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 public class DictionaryFile {
     private static final boolean STRICT_MODE = false;
     private final File dicFile;
-    private final HashMap<DictionaryCommandMatcher, ArrayList<DictionaryCode>> commands = new HashMap<>() {
-        @Override
-        public ArrayList<DictionaryCode> put(DictionaryCommandMatcher key, ArrayList<DictionaryCode> value) {
-            if (STRICT_MODE) {
-                for (DictionaryCommandMatcher d : keySet()) {
-                    if (key.equals(d)) {
-                        throw new DictionaryOnLoadException(dicFile.getName() + "含有冲突指令:" + key.getLine() + "-" + d.getLine());
-                    }
-                }
-            }
-            return super.put(key, value);
-        }
-    };
+    private final HashMap<DictionaryCommandMatcher, ArrayList<DictionaryCode>> commands = new HashMap<>();
 
     private final LifeCycleRuntime cycle;
     private final HashMap<String, Object> settings = new HashMap<>(); //伪代码的#号设置
