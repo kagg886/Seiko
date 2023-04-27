@@ -1,11 +1,15 @@
 package com.kagg886.seiko.dic.entity.func.impl;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.kagg886.seiko.dic.entity.func.Function;
 import com.kagg886.seiko.dic.session.AbsRuntime;
-import org.json.JSONArray;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * @projectName: Seiko
@@ -202,7 +206,8 @@ public abstract class StringUtil extends Function.UnInterruptedFunction {
             if (args.size() == 3) {
                 putVarName = args.get(2).toString();
             }
-            runtime.getRuntimeObject().put(putVarName, new JSONArray(dx.split(split)).toList());
+
+            runtime.getRuntimeObject().put(putVarName, new ArrayList<>(Stream.of(dx.split(split)).collect(Collectors.toList())));
         }
     }
 

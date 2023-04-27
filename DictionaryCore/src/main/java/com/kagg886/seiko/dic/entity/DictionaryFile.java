@@ -215,6 +215,9 @@ public class DictionaryFile {
         }
 
         if (str == LifeCycleRuntime.LifeCycle.DESTROY) {
+            if (executor == null) {
+                return;
+            }
             executor.shutdown();
             executor = null;
         }

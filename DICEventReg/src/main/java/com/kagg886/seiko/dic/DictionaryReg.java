@@ -1,5 +1,6 @@
 package com.kagg886.seiko.dic;
 
+import com.alibaba.fastjson.JSONObject;
 import com.kagg886.seiko.dic.entity.DictionaryFile;
 import com.kagg886.seiko.dic.model.DICParseResult;
 import com.kagg886.seiko.dic.session.impl.FriendMessageRuntime;
@@ -9,7 +10,6 @@ import com.kagg886.seiko.dic.session.impl.MemberJoinRequestRuntime;
 import net.mamoe.mirai.event.EventChannel;
 import net.mamoe.mirai.event.events.*;
 import net.mamoe.mirai.utils.MiraiLogger;
-import org.json.JSONObject;
 
 /**
  * @projectName: Seiko
@@ -33,11 +33,16 @@ public class DictionaryReg {
             }
             JSONObject dicConfigUnit;
             for (DictionaryFile dic : DICList.getInstance()) {
-                dicConfigUnit = DictionaryEnvironment.getInstance().getDicConfig().optJSONObject(dic.getName(), new JSONObject());
-                if (dicConfigUnit.optBoolean("enabled", true)) {
-                    GroupMessageRuntime runtime = new GroupMessageRuntime(dic, event);
-                    runtime.invoke(event.getMessage().contentToString());
+                dicConfigUnit = DictionaryEnvironment.getInstance().getDicConfig().getJSONObject(dic.getName());
+                Boolean bo = dicConfigUnit.getBoolean("enabled");
+                if (bo == null) {
+                    bo = true;
                 }
+                if (!bo) {
+                    return;
+                }
+                GroupMessageRuntime runtime = new GroupMessageRuntime(dic, event);
+                runtime.invoke(event.getMessage().contentToString());
             }
         });
 
@@ -51,11 +56,16 @@ public class DictionaryReg {
             }
             JSONObject dicConfigUnit;
             for (DictionaryFile dic : DICList.getInstance()) {
-                dicConfigUnit = DictionaryEnvironment.getInstance().getDicConfig().optJSONObject(dic.getName());
-                if (dicConfigUnit == null || dicConfigUnit.optBoolean("enabled", true)) {
-                    FriendMessageRuntime runtime = new FriendMessageRuntime(dic, event);
-                    runtime.invoke(event.getMessage().contentToString());
+                dicConfigUnit = DictionaryEnvironment.getInstance().getDicConfig().getJSONObject(dic.getName());
+                Boolean bo = dicConfigUnit.getBoolean("enabled");
+                if (bo == null) {
+                    bo = true;
                 }
+                if (!bo) {
+                    return;
+                }
+                FriendMessageRuntime runtime = new FriendMessageRuntime(dic, event);
+                runtime.invoke(event.getMessage().contentToString());
             }
 
 
@@ -71,34 +81,39 @@ public class DictionaryReg {
             }
             JSONObject dicConfigUnit;
             for (DictionaryFile dic : DICList.getInstance()) {
-                dicConfigUnit = DictionaryEnvironment.getInstance().getDicConfig().optJSONObject(dic.getName(), new JSONObject());
-                if (dicConfigUnit.optBoolean("enabled", true)) {
-                    GroupMemberRuntime runtime = new GroupMemberRuntime(dic, event);
-                    if (event instanceof MemberLeaveEvent.Kick) {
-                        runtime.getRuntimeObject().put("操作人", ((MemberLeaveEvent.Kick) event).getOperator().getId());
-                        runtime.invoke("成员被踢");
-                        return;
-                    }
-                    if (event instanceof MemberLeaveEvent.Quit) {
-                        runtime.invoke("成员主动退群");
-                        return;
-                    }
+                dicConfigUnit = DictionaryEnvironment.getInstance().getDicConfig().getJSONObject(dic.getName());
+                Boolean bo = dicConfigUnit.getBoolean("enabled");
+                if (bo == null) {
+                    bo = true;
+                }
+                if (!bo) {
+                    return;
+                }
+                GroupMemberRuntime runtime = new GroupMemberRuntime(dic, event);
+                if (event instanceof MemberLeaveEvent.Kick) {
+                    runtime.getRuntimeObject().put("操作人", ((MemberLeaveEvent.Kick) event).getOperator().getId());
+                    runtime.invoke("成员被踢");
+                    return;
+                }
+                if (event instanceof MemberLeaveEvent.Quit) {
+                    runtime.invoke("成员主动退群");
+                    return;
+                }
 
-                    if (event instanceof MemberJoinEvent.Invite) {
-                        runtime.getRuntimeObject().put("邀请人", ((MemberJoinEvent.Invite) event).getInvitor().getId());
-                        runtime.invoke("成员邀请入群");
-                        return;
-                    }
+                if (event instanceof MemberJoinEvent.Invite) {
+                    runtime.getRuntimeObject().put("邀请人", ((MemberJoinEvent.Invite) event).getInvitor().getId());
+                    runtime.invoke("成员邀请入群");
+                    return;
+                }
 
-                    if (event instanceof MemberJoinEvent.Active) {
-                        runtime.invoke("成员主动入群");
-                        return;
-                    }
+                if (event instanceof MemberJoinEvent.Active) {
+                    runtime.invoke("成员主动入群");
+                    return;
+                }
 
-                    if (event instanceof MemberJoinEvent.Retrieve) {
-                        runtime.invoke("群主恢复解散群");
-                        return;
-                    }
+                if (event instanceof MemberJoinEvent.Retrieve) {
+                    runtime.invoke("群主恢复解散群");
+                    return;
                 }
             }
         });
@@ -113,11 +128,17 @@ public class DictionaryReg {
             }
             JSONObject dicConfigUnit;
             for (DictionaryFile dic : DICList.getInstance()) {
-                dicConfigUnit = DictionaryEnvironment.getInstance().getDicConfig().optJSONObject(dic.getName(), new JSONObject());
-                if (dicConfigUnit.optBoolean("enabled", true)) {
-                    MemberJoinRequestRuntime runtime = new MemberJoinRequestRuntime(dic, event);
-                    runtime.invoke("申请入群");
+                dicConfigUnit = DictionaryEnvironment.getInstance().getDicConfig().getJSONObject(dic.getName());
+                Boolean bo = dicConfigUnit.getBoolean("enabled");
+                if (bo == null) {
+                    bo = true;
                 }
+                if (!bo) {
+                    return;
+                }
+                MemberJoinRequestRuntime runtime = new MemberJoinRequestRuntime(dic, event);
+                runtime.invoke("申请入群");
+
             }
         });
     }

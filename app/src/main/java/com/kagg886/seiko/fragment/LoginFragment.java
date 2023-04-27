@@ -11,6 +11,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+import com.alibaba.fastjson.JSONObject;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.kagg886.seiko.R;
 import com.kagg886.seiko.activity.MainActivity;
@@ -18,8 +19,6 @@ import com.kagg886.seiko.adapter.BotAdapter;
 import com.kagg886.seiko.event.SnackBroadCast;
 import com.kagg886.seiko.util.storage.JSONArrayStorage;
 import net.mamoe.mirai.Bot;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 /**
  * @projectName: Seiko
@@ -97,15 +96,19 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Swi
         });
 
         if (isEdit) {
-            keyEdit.setText(account.optString("uin"));
+            keyEdit.setText(account.getString("uin"));
             keyEdit.setEnabled(false);
-            valueEdit.setText(account.optString("pass"));
+            valueEdit.setText(account.getString("pass"));
             int i = 0;
-            while (!account.optString("platform", protocols[0]).equals(protocols[i])) {
+            String protocol = account.getString("platform");
+            if (protocol == null) {
+                protocol = protocols[0];
+            }
+            while (!protocol.equals(protocols[i])) {
                 i++;
             }
             spinner.setSelection(i);
-            useQrScan.setChecked(account.optBoolean("useQRLogin"));
+            useQrScan.setChecked(account.getBoolean("useQRLogin"));
             if (useQrScan.isChecked()) {
                 valueEdit.setVisibility(View.GONE);
             }
@@ -133,8 +136,8 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Swi
                 return;
             }
 
-            for (int i = 0; i < botList.length(); i++) {
-                if (botList.optJSONObject(i).optLong("uin") == qq) {
+            for (int i = 0; i < botList.size(); i++) {
+                if (botList.getJSONObject(i).getLong("uin") == qq) {
                     if (isEdit) {
                         botList.remove(i); //找到了就删掉!
                         break;
@@ -145,15 +148,11 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Swi
                 }
             }
 
-            try {
-                account.put("uin", qq);
-                account.put("pass", value);
-                account.put("useQRLogin",useQRLogin);
-                account.put("platform", protocols[spinner.getSelectedItemPosition()]);
-            } catch (JSONException e) {
-                throw new RuntimeException(e);
-            }
-            botList.put(account);
+            account.put("uin", qq);
+            account.put("pass", value);
+            account.put("useQRLogin", useQRLogin);
+            account.put("platform", protocols[spinner.getSelectedItemPosition()]);
+            botList.add(account);
             botList.save();
             if (isEdit) {
                 SnackBroadCast.sendBroadCast(R.string.login_edit_success);
@@ -162,7 +161,8 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Swi
             }
             adapter.notifyDataSetChanged();
         });
-        builder.setNegativeButton(R.string.cancel, (dialog, which) -> {});
+        builder.setNegativeButton(R.string.cancel, (dialog, which) -> {
+        });
         return builder.create();
     }
 

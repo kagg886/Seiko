@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.StringRes;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.SwitchCompat;
+import com.alibaba.fastjson.JSONObject;
 import com.kagg886.seiko.R;
 import com.kagg886.seiko.SeikoApplication;
 import com.kagg886.seiko.event.DialogBroadCast;
@@ -23,7 +24,6 @@ import net.mamoe.mirai.BotFactory;
 import net.mamoe.mirai.auth.BotAuthorization;
 import net.mamoe.mirai.network.LoginFailedException;
 import net.mamoe.mirai.utils.BotConfiguration;
-import org.json.JSONObject;
 
 import java.io.File;
 import java.nio.file.Paths;
@@ -101,9 +101,14 @@ public class LoginThread extends Thread {
         this.nick = nick;
         this.sw = sw;
 
-        long uin = botConfig.optLong("uin");
-        String pass = botConfig.optString("pass");
-        BotConfiguration.MiraiProtocol protocol = BotConfiguration.MiraiProtocol.valueOf(botConfig.optString("platform", "ANDROID_PHONE"));
+        long uin = botConfig.getLong("uin");
+        String pass = botConfig.getString("pass");
+
+        String platform = botConfig.getString("platform");
+        if (platform == null) {
+            platform = "ANDROID_PHONE";
+        }
+        BotConfiguration.MiraiProtocol protocol = BotConfiguration.MiraiProtocol.valueOf(platform);
 
         dialog = new AlertDialog.Builder(SeikoApplication.getCurrentActivity())
                 .setTitle(text(R.string.login_process, uin))
@@ -113,7 +118,7 @@ public class LoginThread extends Thread {
         BotLogConfiguration configuration = new BotLogConfiguration(uin);
         configuration.setProtocol(protocol);
 
-        if (botConfig.optBoolean("useQRLogin")) {
+        if (botConfig.getBoolean("useQRLogin")) {
             bot = BotFactory.INSTANCE.newBot(uin, BotAuthorization.byQRCode(), configuration);
         } else {
             bot = BotFactory.INSTANCE.newBot(uin, pass, configuration);
@@ -128,9 +133,9 @@ public class LoginThread extends Thread {
             bot.login();
             dialogController.sendEmptyMessage(0);
             JSONArrayStorage s = JSONArrayStorage.obtain(SeikoApplication.getSeikoApplicationContext().getExternalFilesDir("config").getAbsolutePath() + "/botList.json");
-            for (int i = 0; i < s.length(); i++) {
-                JSONObject b = s.optJSONObject(i);
-                if (b.optLong("uin") == bot.getId()) {
+            for (int i = 0; i < s.size(); i++) {
+                JSONObject b = s.getJSONObject(i);
+                if (b.getLong("uin") == bot.getId()) {
                     b.put("nick", bot.getNick());
                     break;
                 }

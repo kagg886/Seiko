@@ -8,6 +8,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 import androidx.annotation.StringRes;
 import androidx.appcompat.widget.SwitchCompat;
+import com.alibaba.fastjson.JSONObject;
 import com.kagg886.seiko.R;
 import com.kagg886.seiko.SeikoApplication;
 import com.kagg886.seiko.dic.DICList;
@@ -18,7 +19,6 @@ import com.kagg886.seiko.dic.session.impl.LifeCycleRuntime;
 import com.kagg886.seiko.event.DialogBroadCast;
 import com.kagg886.seiko.event.SnackBroadCast;
 import com.kagg886.seiko.util.IOUtil;
-import org.json.JSONObject;
 
 /**
  * @projectName: Seiko
@@ -59,13 +59,17 @@ public class DICAdapter extends BaseAdapter {
         DICList l = DICList.getInstance();
         tx.setText(l.get(i).getName());
 
-        final JSONObject a = DictionaryEnvironment.getInstance().getDicConfig().optJSONObject(l.get(i).getName());
+        final JSONObject a = DictionaryEnvironment.getInstance().getDicConfig().getJSONObject(l.get(i).getName());
 
         // 这里的判空其实不是很必要了， 留着增强健壮性
         if (a == null) {
             sw.setChecked(false);
         } else {
-            sw.setChecked(a.optBoolean("enabled",true));
+            Boolean boo = a.getBoolean("enabled");
+            if (boo == null) {
+                boo = true;
+            }
+            sw.setChecked(boo);
         }
 
         sw.setOnCheckedChangeListener((compoundButton, isChecked) -> {

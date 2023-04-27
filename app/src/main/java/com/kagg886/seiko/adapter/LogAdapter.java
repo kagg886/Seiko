@@ -54,7 +54,12 @@ public class LogAdapter extends BaseAdapter {
                             if (buf[0] == SPLIT_STR) {
                                 if (isCollected) { //遇到配对的符号了，切割然后合成大字符串
                                     Bundle b = new Bundle();
-                                    b.putString("str", builder.substring(3));
+                                    try {
+                                        b.putString("str", builder.substring(3));
+                                    } catch (Exception e) {
+                                        //二进制乱码文件兼容
+                                        continue;
+                                    }
                                     Message msg = new Message();
                                     msg.setData(b);
                                     mHandler.sendMessage(msg);
