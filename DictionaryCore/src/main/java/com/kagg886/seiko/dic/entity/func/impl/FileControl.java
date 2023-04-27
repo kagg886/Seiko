@@ -1,12 +1,13 @@
 package com.kagg886.seiko.dic.entity.func.impl;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.kagg886.seiko.dic.DictionaryEnvironment;
 import com.kagg886.seiko.dic.entity.func.Function;
 import com.kagg886.seiko.dic.exception.DictionaryOnRunningException;
 import com.kagg886.seiko.dic.session.AbsRuntime;
 import com.kagg886.seiko.util.IOUtil;
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -215,10 +216,8 @@ public abstract class FileControl extends Function.UnInterruptedFunction {
             String key = args.get(1).toString();
             Object obj = args.get(2);
             String val;
-            if (obj instanceof HashMap<?, ?>) {
-                val = new JSONObject(obj).toString();
-            } else if (obj instanceof ArrayList<?>) {
-                val = new JSONArray(obj).toString();
+            if (obj instanceof HashMap<?, ?> || obj instanceof ArrayList<?>) {
+                val = JSON.toJSONString(obj);
             } else {
                 val = obj.toString();
             }

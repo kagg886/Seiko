@@ -1,5 +1,6 @@
 package com.kagg886.seiko.dic.mirai_console;
 
+import com.alibaba.fastjson.JSONObject;
 import com.kagg886.seiko.dic.DICList;
 import com.kagg886.seiko.dic.DictionaryEnvironment;
 import com.kagg886.seiko.dic.entity.DictionaryCode;
@@ -12,7 +13,6 @@ import com.kagg886.seiko.util.storage.JSONObjectStorage;
 import net.mamoe.mirai.console.command.CommandContext;
 import net.mamoe.mirai.console.command.ConsoleCommandSender;
 import net.mamoe.mirai.console.command.java.JCompositeCommand;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -51,9 +51,12 @@ public class CommandInstance extends JCompositeCommand {
                     }
                 }
                 JSONObjectStorage storage = DictionaryEnvironment.getInstance().getDicConfig();
-                JSONObject config = storage.optJSONObject(fileName, new JSONObject());
-                boolean st = !config.optBoolean("enabled", true);
-                config.put("enabled", st);
+                JSONObject config = storage.getJSONObject(fileName);
+                Boolean st = config.getBoolean("enabled");
+                if (st == null) {
+                    st = true;
+                }
+                config.put("enabled", !st);
                 storage.put(fileName, config);
                 storage.save();
                 PluginLoader.INSTANCE.getLogger().info("已将" + fileName + "的状态设置为:" + st);
@@ -130,8 +133,8 @@ public class CommandInstance extends JCompositeCommand {
             builder.append("---");
             builder.append(DictionaryEnvironment.getInstance()
                     .getDicConfig()
-                    .optJSONObject(file.getName(), new JSONObject())
-                    .optBoolean("enabled", true));
+                    .getJSONObject(file.getName())
+                    .getBoolean("enabled"));
         }
         builder.append("\n--------打印结束--------");
         PluginLoader.INSTANCE.getLogger().info(builder.toString());

@@ -10,9 +10,12 @@ dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
 
-    implementation 'org.json:json:20220924'
+    //implementation 'org.json:json:20220924'
     implementation 'org.jsoup:jsoup:1.15.3'
     implementation 'net.objecthunter:exp4j:0.4.8'
+
+    implementation 'com.alibaba:fastjson:1.2.83'
+
     implementation project(':Tools')
 
     compileOnly("net.mamoe:mirai-core-api-jvm:$gradle.mirai_version")

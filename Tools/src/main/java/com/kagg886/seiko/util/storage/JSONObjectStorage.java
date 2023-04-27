@@ -1,30 +1,17 @@
 package com.kagg886.seiko.util.storage;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONException;
+import com.alibaba.fastjson.JSONObject;
 import com.kagg886.seiko.util.IOUtil;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.IOException;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class JSONObjectStorage extends JSONObject {
 
 	private static final ConcurrentHashMap<String,JSONObjectStorage> storagesCache = new ConcurrentHashMap<>(); //缓存池，减少从硬盘的读操作
-
-	public String indexKey(int a) {
-		Iterator<String> b = keys();
-		int k = 0;
-		while (b.hasNext()) {
-			String rtn = b.next();
-			if (k == a) {
-				return rtn;
-			}
-			k++;
-		}
-		return null;
-	}
 
 	public static void destroy(String workdir) {
 		for (Map.Entry<String,JSONObjectStorage> entry : storagesCache.entrySet()) {
@@ -33,6 +20,7 @@ public class JSONObjectStorage extends JSONObject {
 			}
 		}
 	}
+
 	public static JSONObjectStorage obtain(String relativeDir) {
 		if (storagesCache.containsKey(relativeDir)) {
 			return storagesCache.get(relativeDir);
@@ -46,11 +34,11 @@ public class JSONObjectStorage extends JSONObject {
 		storagesCache.put(relativeDir,s);
 		return s;
 	}
-	
+
 	private final String workdir;
-	
+
 	private JSONObjectStorage(String relativeDir) throws Exception {
-		super(getJSON(relativeDir));
+		super(JSON.parseObject(getJSON(relativeDir)));
 		this.workdir = relativeDir;
 	}
 
@@ -79,7 +67,7 @@ public class JSONObjectStorage extends JSONObject {
 		}
     }
 
-    public JSONObject put(String name, String value) {
+    public Object put(String name, String value) {
         try {
             return super.put(name, value);
         } catch (JSONException e) {

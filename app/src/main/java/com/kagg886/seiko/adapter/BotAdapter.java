@@ -13,6 +13,7 @@ import android.widget.TextView;
 import androidx.annotation.StringRes;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.SwitchCompat;
+import com.alibaba.fastjson.JSONObject;
 import com.kagg886.seiko.R;
 import com.kagg886.seiko.activity.LogActivity;
 import com.kagg886.seiko.activity.MainActivity;
@@ -24,7 +25,6 @@ import com.kagg886.seiko.util.IOUtil;
 import com.kagg886.seiko.util.ShareUtil;
 import com.kagg886.seiko.util.storage.JSONArrayStorage;
 import net.mamoe.mirai.Bot;
-import org.json.JSONObject;
 import org.jsoup.Jsoup;
 
 import java.io.File;
@@ -54,12 +54,12 @@ public class BotAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return botList.length();
+        return botList.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return botList.opt(position);
+        return botList.get(position);
     }
 
     @Override
@@ -75,10 +75,11 @@ public class BotAdapter extends BaseAdapter {
         TextView nick = v.findViewById(R.id.adapter_botitem_botqqnick);
         TextView qq = v.findViewById(R.id.adapter_botitem_botqqid);
         SwitchCompat sw = v.findViewById(R.id.adapter_dicitem_status);
-        JSONObject target = botList.optJSONObject(position);
+        JSONObject target = botList.getJSONObject(position);
 
-        nick.setText(target.optString("nick", text(R.string.bot_list_not_login)));
-        qq.setText(String.valueOf(target.optLong("uin")));
+        String str = target.getString("nick");
+        nick.setText(str == null ? text(R.string.bot_list_not_login) : str);
+        qq.setText(String.valueOf(target.getLong("uin")));
 
         IOUtil.asyncHttp(Jsoup.connect("https://q1.qlogo.cn/g?b=qq&nk=" + qq.getText().toString() + "&s=640"), new IOUtil.Response() {
             @Override
@@ -92,8 +93,8 @@ public class BotAdapter extends BaseAdapter {
             }
         });
 
-        if (Bot.getInstanceOrNull(target.optLong("uin")) != null) { //若BOT实例存在则检测BOT是否在线
-            sw.setChecked(Bot.getInstanceOrNull(target.optLong("uin")).isOnline());
+        if (Bot.getInstanceOrNull(target.getLong("uin")) != null) { //若BOT实例存在则检测BOT是否在线
+            sw.setChecked(Bot.getInstanceOrNull(target.getLong("uin")).isOnline());
         }
 
         sw.setOnCheckedChangeListener((buttonView, isChecked) -> {
@@ -104,24 +105,24 @@ public class BotAdapter extends BaseAdapter {
                 BotRunnerService.INSTANCE.login(target, nick, sw);
             } else {
                 try {
-                    Bot.getInstance(target.optLong("uin")).close();
+                    Bot.getInstance(target.getLong("uin")).close();
                 } catch (NoSuchElementException e) {
                     //TODO 抓bug用，解决了就删除
                     List<Long> nativeBots = new ArrayList<>();
-                    for (int i = 0; i < botList.length(); i++) {
-                        nativeBots.add(botList.optJSONObject(i).optLong("uin"));
+                    for (int i = 0; i < botList.size(); i++) {
+                        nativeBots.add(botList.getJSONObject(i).getLong("uin"));
                     }
 
                     DialogBroadCast.sendBroadCast(text(R.string.bot_list_no_such_bot_title),
-                            text(R.string.bot_list_no_such_bot, target.optLong("uin"), Bot.getInstances(), nativeBots));
+                            text(R.string.bot_list_no_such_bot, target.getLong("uin"), Bot.getInstances(), nativeBots));
                 }
-                //SnackBroadCast.sendBroadCast(avt,target.optLong("uin") + "已下线");
+                //SnackBroadCast.sendBroadCast(avt,target.getLong("uin") + "已下线");
             }
         });
 
         v.setOnClickListener(v1 -> {
-            JSONObject object = botList.optJSONObject(position);
-            String uin = String.valueOf(object.optLong("uin"));
+            JSONObject object = botList.getJSONObject(position);
+            String uin = String.valueOf(object.getLong("uin"));
             AlertDialog.Builder builder = new AlertDialog.Builder(avt);
             builder.setTitle(uin);
             builder.setItems(new String[] { text(R.string.bot_list_action_export), text(R.string.bot_list_action_edit), text(R.string.bot_list_action_log), text(R.string.bot_list_action_delete)}, (dialog, which) -> {
@@ -140,8 +141,8 @@ public class BotAdapter extends BaseAdapter {
                             config.createNewFile();
                             String template = String.format(IOUtil.loadStringFromStream(avt.getAssets().open("loginTemplate.yml")),
                                     uin,
-                                    object.optString("pass"),
-                                    object.optString("platform"));
+                                    object.getString("pass"),
+                                    object.getString("platform"));
                             IOUtil.writeStringToFile(config.getAbsolutePath(),template);
                         } catch (IOException e) {
                             throw new RuntimeException(e);
@@ -158,7 +159,7 @@ public class BotAdapter extends BaseAdapter {
                         ShareUtil.quickShare(avt, zipFile, "*/*");
                         break;
                     case 1:
-                        if (Bot.getInstanceOrNull(object.optLong("uin")) != null) {
+                        if (Bot.getInstanceOrNull(object.getLong("uin")) != null) {
                             SnackBroadCast.sendBroadCast(R.string.bot_list_action_edit_online);
                             return;
                         }
@@ -170,7 +171,7 @@ public class BotAdapter extends BaseAdapter {
                         avt.startActivity(i);
                         break;
                     case 3:
-                        if (Bot.getInstanceOrNull(object.optLong("uin")) != null) {
+                        if (Bot.getInstanceOrNull(object.getLong("uin")) != null) {
                             SnackBroadCast.sendBroadCast(R.string.bot_list_action_delete_online);
                             return;
                         }

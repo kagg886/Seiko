@@ -1,9 +1,11 @@
 package com.kagg886.seiko.dic.entity.impl;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.kagg886.seiko.dic.entity.DictionaryCode;
 import com.kagg886.seiko.dic.session.AbsRuntime;
 import com.kagg886.seiko.dic.util.DictionaryUtil;
-import org.json.*;
 
 import java.util.Map;
 
@@ -35,26 +37,12 @@ public class FastAssignment extends DictionaryCode {
 
     public void addInRuntimeObject(AbsRuntime<?> runtime) {
         String val = DictionaryUtil.cleanVariableCode(valueRef,runtime);
-        try {
-            runtime.getRuntimeObject().put(varName, new JSONObject(val).toMap());
-            return;
-        } catch (Exception e) {
-        }
-        //XML.toJSONObject遇到array会置空
-        try {
-            runtime.getRuntimeObject().put(varName, new JSONArray(val).toList());
-            return;
-        } catch (Exception ignored) {
-        }
 
         try {
-            Map<?,?> map = XML.toJSONObject(val).toMap();
-            if (map.size() == 0) {
-                throw new Exception();
-            }
-            runtime.getRuntimeObject().put(varName, map);
+            runtime.getRuntimeObject().put(varName,JSON.parseObject(val));
             return;
         } catch (Exception ignored) {
+
         }
 
         runtime.getRuntimeObject().put(varName, val);

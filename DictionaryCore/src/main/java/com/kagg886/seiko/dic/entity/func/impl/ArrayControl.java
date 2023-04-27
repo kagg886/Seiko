@@ -1,9 +1,10 @@
 package com.kagg886.seiko.dic.entity.func.impl;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.kagg886.seiko.dic.entity.func.Function;
 import com.kagg886.seiko.dic.exception.DictionaryOnRunningException;
 import com.kagg886.seiko.dic.session.AbsRuntime;
-import org.json.JSONArray;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -187,7 +188,7 @@ public abstract class ArrayControl extends Function.UnInterruptedFunction implem
         protected void run(AbsRuntime<?> runtime, List<Object> args) {
             String putVar = args.get(0).toString();
             String json = args.get(1).toString();
-            runtime.getRuntimeObject().put(putVar, new JSONArray(json).toList());
+            runtime.getRuntimeObject().put(putVar, JSON.parseObject(json, ArrayList.class));
         }
     }
 

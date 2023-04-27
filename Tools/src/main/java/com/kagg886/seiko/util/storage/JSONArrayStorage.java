@@ -10,8 +10,9 @@ package com.kagg886.seiko.util.storage;
  * @version: 1.0
  */
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.kagg886.seiko.util.IOUtil;
-import org.json.JSONArray;
 
 import java.io.IOException;
 import java.util.concurrent.ConcurrentHashMap;
@@ -36,7 +37,7 @@ public class JSONArrayStorage extends JSONArray {
     }
 
     private JSONArrayStorage(String relativeDir) throws Exception {
-        super(getJSON(relativeDir));
+        super(JSON.parseArray(getJSON(relativeDir)));
         this.workdir = relativeDir;
     }
 

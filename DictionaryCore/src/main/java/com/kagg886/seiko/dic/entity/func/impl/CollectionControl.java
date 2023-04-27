@@ -1,14 +1,14 @@
 package com.kagg886.seiko.dic.entity.func.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.kagg886.seiko.dic.entity.func.Function;
 import com.kagg886.seiko.dic.exception.DictionaryOnRunningException;
 import com.kagg886.seiko.dic.session.AbsRuntime;
-import org.json.*;
-import org.json.HTTP;
 
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @projectName: Seiko
@@ -48,7 +48,7 @@ public abstract class CollectionControl extends Function.UnInterruptedFunction {
                 o = runtime.getRuntimeObject().get(o.toString());
             }
             String key = args.get(2).toString();
-            if (o instanceof Map<?,?>) {
+            if (o instanceof Map<?, ?>) {
                 runtime.getRuntimeObject().put(putVar, ((Map<?, ?>) o).get(key));
             } else if (o instanceof List<?>) {
                 runtime.getRuntimeObject().put(putVar, ((List<?>) o).get(Integer.parseInt(key)));
@@ -113,29 +113,16 @@ public abstract class CollectionControl extends Function.UnInterruptedFunction {
         protected void run(AbsRuntime<?> runtime, List<Object> args) {
             String varName = args.get(0).toString();
             String val = args.get(1).toString();
+
             try {
-                runtime.getRuntimeObject().put(varName, new JSONObject(val).toMap());
+                runtime.getRuntimeObject().put(varName, JSON.parseObject(val, HashMap.class));
                 return;
             } catch (Exception ignored) {
             }
             //XML.toJSONObject遇到array会置空
             try {
-                runtime.getRuntimeObject().put(varName, new JSONArray(val).toList());
+                runtime.getRuntimeObject().put(varName, JSON.parseObject(val, ArrayList.class));
                 return;
-            } catch (Exception ignored) {
-            }
-            try {
-                runtime.getRuntimeObject().put(varName, XML.toJSONObject(val).toMap());
-                return;
-            } catch (Exception ignored) {
-            }
-            try {
-                runtime.getRuntimeObject().put(varName, HTTP.toJSONObject(val).toMap());
-                return;
-            } catch (Exception ignored) {
-            }
-            try {
-                runtime.getRuntimeObject().put(varName, Cookie.toJSONObject(val).toMap());
             } catch (Exception ignored) {
             }
 
@@ -169,10 +156,8 @@ public abstract class CollectionControl extends Function.UnInterruptedFunction {
                 o = runtime.getRuntimeObject().get(o.toString());
             }
             String varName = args.get(1).toString();
-            if (o instanceof Map<?,?>) {
-                runtime.getRuntimeObject().put(varName, new JSONObject(o).toString());
-            } else if (o instanceof List<?>) {
-                runtime.getRuntimeObject().put(varName,new JSONArray(o).toString());
+            if (o instanceof Map<?, ?> || o instanceof List<?>) {
+                runtime.getRuntimeObject().put(varName, JSON.toJSONString(o));
             } else {
                 throw new DictionaryOnRunningException("参数不是集合!");
             }
@@ -201,9 +186,9 @@ public abstract class CollectionControl extends Function.UnInterruptedFunction {
             }
             String varName = args.get(1).toString();
             String input = args.get(2).toString();
-            if (o instanceof Map<?,?>) {
+            if (o instanceof Map<?, ?>) {
                 runtime.getRuntimeObject().put(input, ((Map<?, ?>) o).containsKey(varName));
-            } else if (o instanceof List<?>){
+            } else if (o instanceof List<?>) {
                 runtime.getRuntimeObject().put(input, ((List<?>) o).size() > Integer.parseInt(varName));
             } else {
                 throw new DictionaryOnRunningException("参数不是集合!");
@@ -233,7 +218,7 @@ public abstract class CollectionControl extends Function.UnInterruptedFunction {
             }
             String varName = args.get(1).toString();
 
-            if (o instanceof Map<?,?>) {
+            if (o instanceof Map<?, ?>) {
                 ((Map<?, ?>) o).remove(varName);
             } else if (o instanceof List<?>) {
                 ((List<?>) o).remove(Integer.parseInt(varName));
@@ -265,10 +250,10 @@ public abstract class CollectionControl extends Function.UnInterruptedFunction {
             }
             String varName = args.get(1).toString();
             Object value = args.get(2);
-            if (o instanceof Map<?,?>) {
-                ((Map<String,Object>) o).put(varName, value);
+            if (o instanceof Map<?, ?>) {
+                ((Map<String, Object>) o).put(varName, value);
             } else if (o instanceof List<?>) {
-                ((List<Object>) o).add(Integer.parseInt(varName),value);
+                ((List<Object>) o).add(Integer.parseInt(varName), value);
             } else {
                 throw new DictionaryOnRunningException("参数不是集合!");
             }

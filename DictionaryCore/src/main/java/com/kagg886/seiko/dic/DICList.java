@@ -1,13 +1,10 @@
 package com.kagg886.seiko.dic;
 
+import com.alibaba.fastjson.JSONObject;
 import com.kagg886.seiko.dic.entity.DictionaryFile;
 import com.kagg886.seiko.dic.model.DICParseResult;
 
-import com.kagg886.seiko.dic.session.impl.LifeCycleRuntime;
-import org.json.JSONObject;
-
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -43,7 +40,7 @@ public class DICList extends ArrayList<DictionaryFile> {
             DictionaryFile dictionaryFile = new DictionaryFile(p);
 
             // 放在这里可能不合适，每次刷新都要判断，暂时没有好的地方塞，这里目的是初始化jsonObject
-            JSONObject jsonObject = DictionaryEnvironment.getInstance().getDicConfig().optJSONObject(dictionaryFile.getName());
+            JSONObject jsonObject = DictionaryEnvironment.getInstance().getDicConfig().getJSONObject(dictionaryFile.getName());
             if(jsonObject == null) {
                 jsonObject = new JSONObject();
             }

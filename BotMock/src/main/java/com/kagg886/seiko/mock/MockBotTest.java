@@ -1,5 +1,7 @@
 package com.kagg886.seiko.mock;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.kagg886.seiko.dic.DICList;
 import com.kagg886.seiko.dic.DictionaryEnvironment;
 import com.kagg886.seiko.dic.DictionaryReg;
@@ -15,11 +17,13 @@ import net.mamoe.mirai.mock.contact.MockMember;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Scanner;
-import java.util.UUID;
+import java.util.*;
 
 public class MockBotTest {
     public static void main(String[] args) throws IOException {
+//
+//        List<Integer> a = List.of(1,2,3,4,5);
+//        System.out.println(JSON.toJSONString(a));
         MockBotFactory.initialize();
         MockBot mockBot = MockBotFactory.Companion.newMockBotBuilder().id(1693256674).create();
         MockBot mockBot1 = MockBotFactory.Companion.newMockBotBuilder().id(485184047).create();
