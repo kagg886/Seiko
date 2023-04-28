@@ -32,18 +32,18 @@ public class HTTP extends Function.InterruptedFunction {
         String putVar = args.get(0).toString();
         Connection.Method me;
         String url;
-        HashMap<String,?> header;
+        Map<String,?> header;
         Object vars;
         boolean simpleResult;
 
-        if (args.get(1) instanceof HashMap<?,?>) {
+        if (args.get(1) instanceof Map<?,?>) {
             //$访问 结果存入变量 请求方式 网址 %头集合%(可以使用null占位) 参数集合/参数体
             //传入的是集合对象，按照集合对象进行解析;
-            HashMap<?,?> tmp = (HashMap<?, ?>) args.get(1);
+            Map<?,?> tmp = (HashMap<?, ?>) args.get(1);
             me = Connection.Method.valueOf(tmp.get("请求方式").toString());
             url = tmp.get("网址").toString();
 
-            header = tmp.containsKey("头集合") ? (HashMap<String, ?>) tmp.get("头集合") : null;
+            header = tmp.containsKey("头集合") ? (Map<String, ?>) tmp.get("头集合") : null;
             vars = tmp.get("参数");
             if (tmp.containsKey("简易信息")) {
                 simpleResult = Boolean.parseBoolean(tmp.get("简易信息").toString());
@@ -54,7 +54,7 @@ public class HTTP extends Function.InterruptedFunction {
             me = Connection.Method.valueOf(args.get(1).toString());
             url = args.get(2).toString();
             //$访问 结果存入变量 请求方式 网址 %头集合%(可以使用null占位) 参数集合/参数体$
-            header = args.size() >=  4 ? (args.get(3).equals("null") ? null : (HashMap<String, ?>) args.get(3)) : null;
+            header = args.size() >=  4 ? (args.get(3).equals("null") ? null : (Map<String, ?>) args.get(3)) : null;
             vars = args.size() >= 5 ? args.get(4) : null;
             simpleResult = true;
         }
@@ -72,8 +72,8 @@ public class HTTP extends Function.InterruptedFunction {
         if (vars != null) {
             if (vars instanceof String) {
                 conn.requestBody(vars.toString());
-            } else if (vars instanceof HashMap<?,?>){
-                HashMap<?,?> tmp = (HashMap<?, ?>) vars;
+            } else if (vars instanceof Map<?,?>){
+                Map<?,?> tmp = (Map<?, ?>) vars;
                 for (Map.Entry<?,?> entry : tmp.entrySet()) {
                     conn.data(entry.getKey().toString(),entry.getValue().toString());
                 }
@@ -101,7 +101,7 @@ public class HTTP extends Function.InterruptedFunction {
 //            if (unknown instanceof String) {
 //                unknown = runtime.getRuntimeObject().get(unknown.toString());
 //            }
-//            HashMap<String, ?> headers_origin = (HashMap<String, ?>) unknown;
+//            HashMap<String, ?> headers_origin = (Map<String, ?>) unknown;
 //
 //            for (Map.Entry<String, ?> entry : headers_origin.entrySet()) {
 //                conn.header(entry.getKey(), entry.getValue().toString());
@@ -114,7 +114,7 @@ public class HTTP extends Function.InterruptedFunction {
 //                conn.requestBody(paramUnknown.toString());
 //            }
 //            if (paramUnknown instanceof HashMap<?, ?>) {
-//                HashMap<String, ?> headers_origin = (HashMap<String, ?>) paramUnknown;
+//                HashMap<String, ?> headers_origin = (Map<String, ?>) paramUnknown;
 //                for (Map.Entry<String, ?> entry : headers_origin.entrySet()) {
 //                    conn.data(entry.getKey(), entry.getValue().toString());
 //                }

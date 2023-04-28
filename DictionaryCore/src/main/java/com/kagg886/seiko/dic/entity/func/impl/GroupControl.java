@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @projectName: Seiko
@@ -86,7 +87,7 @@ public abstract class GroupControl extends Function {
                 已确认人数=0
             }
             */
-            HashMap<String,Object> map = (HashMap<String, Object>) args.get(0);
+            Map<String,Object> map = (Map<String, Object>) args.get(0);
             Group group = DictionaryUtil.getGroupByObjectList(runtime,args,1);
 
 
@@ -97,7 +98,7 @@ public abstract class GroupControl extends Function {
             if (!map.containsKey("属性")) {
                 announcement = OfflineAnnouncement.create(map.get("内容").toString());
             } else {
-                HashMap<String,Object> settings = (HashMap<String, Object>) map.get("属性");
+                Map<String,Object> settings = (Map<String, Object>) map.get("属性");
                 AnnouncementParametersBuilder builder = new AnnouncementParametersBuilder();
                 builder.isPinned(Boolean.parseBoolean(settings.getOrDefault("置顶","false").toString()));
                 builder.sendToNewMember(Boolean.parseBoolean(settings.getOrDefault("发送给新成员","false").toString()));
@@ -141,8 +142,8 @@ public abstract class GroupControl extends Function {
         @Override
         protected void run(AbsRuntime<?> runtime, List<Object> args) {
             Object a = args.get(0);
-            if (a instanceof HashMap<?,?>) {
-                ((OnlineAnnouncement) ((HashMap<?, ?>) a).get("源对象")).delete();
+            if (a instanceof Map<?,?>) {
+                ((OnlineAnnouncement) ((Map<?, ?>) a).get("源对象")).delete();
             } else if (a instanceof OnlineAnnouncement){
                 ((OnlineAnnouncement) a).delete();
             }

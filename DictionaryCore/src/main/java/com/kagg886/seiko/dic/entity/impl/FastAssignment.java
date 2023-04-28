@@ -7,6 +7,7 @@ import com.kagg886.seiko.dic.entity.DictionaryCode;
 import com.kagg886.seiko.dic.session.AbsRuntime;
 import com.kagg886.seiko.dic.util.DictionaryUtil;
 
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -39,7 +40,7 @@ public class FastAssignment extends DictionaryCode {
         String val = DictionaryUtil.cleanVariableCode(valueRef,runtime);
 
         try {
-            runtime.getRuntimeObject().put(varName,JSON.parseObject(val));
+            runtime.getRuntimeObject().put(varName,JSON.parseObject(val, HashMap.class));
             return;
         } catch (Exception ignored) {
 

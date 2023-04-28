@@ -2,6 +2,7 @@ package com.kagg886.seiko.mock;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.TypeReference;
 import com.kagg886.seiko.dic.DICList;
 import com.kagg886.seiko.dic.DictionaryEnvironment;
 import com.kagg886.seiko.dic.DictionaryReg;
@@ -21,7 +22,6 @@ import java.util.*;
 
 public class MockBotTest {
     public static void main(String[] args) throws IOException {
-//
 //        List<Integer> a = List.of(1,2,3,4,5);
 //        System.out.println(JSON.toJSONString(a));
         MockBotFactory.initialize();

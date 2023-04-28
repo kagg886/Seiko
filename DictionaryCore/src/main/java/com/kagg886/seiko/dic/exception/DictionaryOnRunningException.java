@@ -27,14 +27,14 @@ public class DictionaryOnRunningException extends RuntimeException {
         this.msg = msg;
     }
 
-    public static String mapToString(HashMap<String, Object> obj) {
+    public static String mapToString(Map<String, Object> obj) {
         return mapToString(obj, 0, new StringBuilder());
     }
 
     private static String mapToString(Object objs, int deep, StringBuilder builder) {
         builder.append("\n");
         if (objs instanceof HashMap<?, ?>) {
-            HashMap<String, Object> obj = ((HashMap<String, Object>) objs);
+            Map<String, Object> obj = ((Map<String, Object>) objs);
             for (Map.Entry<String, Object> entry : obj.entrySet()) {
                 builder.append("  ".repeat(Math.max(0, deep)));
                 builder.append(entry.getKey());
