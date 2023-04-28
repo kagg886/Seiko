@@ -65,10 +65,10 @@ public class DictionaryUtil {
             qq = ((GroupMessageEvent) obj).getSender().getId();
             groupId = ((GroupMessageEvent) obj).getGroup().getId();
             botId = ((GroupMessageEvent) obj).getBot().getId();
-        } else if (obj instanceof HashMap<?, ?>) {
-            qq = Long.parseLong(((HashMap<?, ?>) obj).get("QQ").toString());
-            groupId = Long.parseLong(((HashMap<?, ?>) obj).get("所属群").toString());
-            botId = Long.parseLong(((HashMap<?, ?>) obj).get("所属BOT").toString());
+        } else if (obj instanceof Map<?, ?>) {
+            qq = Long.parseLong(((Map<?, ?>) obj).get("QQ").toString());
+            groupId = Long.parseLong(((Map<?, ?>) obj).get("所属群").toString());
+            botId = Long.parseLong(((Map<?, ?>) obj).get("所属BOT").toString());
         } else {
             qq = Long.parseLong(obj.toString());
             if (args.size() >= start + 2) {
@@ -95,8 +95,8 @@ public class DictionaryUtil {
             for (int i = 1; i < suffix.length; i++) {
                 //伪元素解析
                 if (suffix[i].equals("len")) {
-                    if (rtn instanceof HashMap<?, ?>) {
-                        point = ((HashMap<?, ?>) rtn).size();
+                    if (rtn instanceof Map<?, ?>) {
+                        point = ((Map<?, ?>) rtn).size();
                         break;
                     }
                     if (rtn instanceof List<?>) {
@@ -106,7 +106,7 @@ public class DictionaryUtil {
                 }
 
                 if (suffix[i].startsWith("kArr")) {
-                    point = new ArrayList<>(((HashMap<?, ?>) rtn).keySet());
+                    point = new ArrayList<>(((Map<?, ?>) rtn).keySet());
                     //考虑kArr(0)的情况，此时值应该是kArr里的一个元素。vArr同理
                     if (suffix[i].contains("(") && suffix[i].contains(")")) {
                         String arrayIndex = suffix[i].substring(suffix[i].indexOf("(") + 1, suffix[i].length() - 1);
@@ -117,7 +117,7 @@ public class DictionaryUtil {
                 }
 
                 if (suffix[i].startsWith("vArr")) {
-                    point = new ArrayList<>(((HashMap<?, ?>) rtn).values());
+                    point = new ArrayList<>(((Map<?, ?>) rtn).values());
                     if (suffix[i].contains("(") && suffix[i].contains(")")) {
                         String arrayIndex = suffix[i].substring(suffix[i].indexOf("(") + 1, suffix[i].length() - 1);
                         List<?> list = (List<?>) point;
@@ -132,11 +132,11 @@ public class DictionaryUtil {
                 String arrayIndex = str.substring(str.indexOf("(") + 1, str.length() - 1);
                 String arrayName = str.replace("(" + arrayIndex + ")", "");
 
-                List<?> list = ((List<?>) ((HashMap<?, ?>) point).get(arrayName));
+                List<?> list = ((List<?>) ((Map<?, ?>) point).get(arrayName));
                 int idx = Integer.parseInt(arrayIndex);
                 rtn = idx < list.size() ? list.get(idx) : null;
             } else {
-                rtn = ((HashMap<?, ?>) point).getOrDefault(str, null);
+                rtn = ((Map<?, ?>) point).getOrDefault(str, null);
             }
         }
         return rtn;

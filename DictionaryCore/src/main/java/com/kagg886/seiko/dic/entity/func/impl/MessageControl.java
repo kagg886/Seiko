@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @projectName: Seiko
@@ -118,8 +119,8 @@ public abstract class MessageControl extends Function.UnInterruptedFunction {
 
         @Override
         public void run(AbsRuntime<?> runtime, List<Object> args) {
-            if (args.get(0) instanceof HashMap<?, ?>) {
-                HashMap<?, ?> map = (HashMap<?, ?>) args.get(0);
+            if (args.get(0) instanceof Map<?, ?>) {
+                Map<?, ?> map = (Map<?, ?>) args.get(0);
                 Object type = map.getOrDefault("类型", null);
                 Contact contact;
 

@@ -33,7 +33,7 @@ public class DictionaryOnRunningException extends RuntimeException {
 
     private static String mapToString(Object objs, int deep, StringBuilder builder) {
         builder.append("\n");
-        if (objs instanceof HashMap<?, ?>) {
+        if (objs instanceof Map<?, ?>) {
             Map<String, Object> obj = ((Map<String, Object>) objs);
             for (Map.Entry<String, Object> entry : obj.entrySet()) {
                 builder.append("  ".repeat(Math.max(0, deep)));
@@ -55,7 +55,7 @@ public class DictionaryOnRunningException extends RuntimeException {
     private static void mapToString0(int deep, StringBuilder builder, Object value) {
         if (value == null) {
             builder.append("null");
-        } else if (value instanceof HashMap<?, ?>) {
+        } else if (value instanceof Map<?, ?>) {
             builder.append("{");
             mapToString(value, deep + 1, builder);
             builder.append("  ".repeat(Math.max(0, deep)));

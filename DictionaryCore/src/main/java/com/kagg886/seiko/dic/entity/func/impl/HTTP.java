@@ -39,7 +39,7 @@ public class HTTP extends Function.InterruptedFunction {
         if (args.get(1) instanceof Map<?,?>) {
             //$访问 结果存入变量 请求方式 网址 %头集合%(可以使用null占位) 参数集合/参数体
             //传入的是集合对象，按照集合对象进行解析;
-            Map<?,?> tmp = (HashMap<?, ?>) args.get(1);
+            Map<?,?> tmp = (Map<?, ?>) args.get(1);
             me = Connection.Method.valueOf(tmp.get("请求方式").toString());
             url = tmp.get("网址").toString();
 
@@ -113,7 +113,7 @@ public class HTTP extends Function.InterruptedFunction {
 //            if (paramUnknown instanceof String) {
 //                conn.requestBody(paramUnknown.toString());
 //            }
-//            if (paramUnknown instanceof HashMap<?, ?>) {
+//            if (paramUnknown instanceof Map<?, ?>) {
 //                HashMap<String, ?> headers_origin = (Map<String, ?>) paramUnknown;
 //                for (Map.Entry<String, ?> entry : headers_origin.entrySet()) {
 //                    conn.data(entry.getKey(), entry.getValue().toString());

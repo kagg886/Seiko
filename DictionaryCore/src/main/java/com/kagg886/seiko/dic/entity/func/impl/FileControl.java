@@ -10,10 +10,7 @@ import com.kagg886.seiko.dic.session.AbsRuntime;
 import com.kagg886.seiko.util.IOUtil;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Properties;
+import java.util.*;
 
 /**
  * @projectName: Seiko
@@ -216,7 +213,7 @@ public abstract class FileControl extends Function.UnInterruptedFunction {
             String key = args.get(1).toString();
             Object obj = args.get(2);
             String val;
-            if (obj instanceof HashMap<?, ?> || obj instanceof ArrayList<?>) {
+            if (obj instanceof Map<?, ?> || obj instanceof ArrayList<?>) {
                 val = JSON.toJSONString(obj);
             } else {
                 val = obj.toString();
