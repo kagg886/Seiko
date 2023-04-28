@@ -59,7 +59,7 @@ public class CommandInstance extends JCompositeCommand {
                 config.put("enabled", !st);
                 storage.put(fileName, config);
                 storage.save();
-                PluginLoader.INSTANCE.getLogger().info("已将" + fileName + "的状态设置为:" + st);
+                PluginLoader.INSTANCE.getLogger().info("已将" + fileName + "的状态设置为:" + !st);
                 return;
             }
         }
@@ -125,16 +125,21 @@ public class CommandInstance extends JCompositeCommand {
         builder.append(DICList.getInstance().size());
         builder.append("项伪代码文件,下面是详细信息:");
         builder.append("\n文件名---指令数---状态");
+
         for (DictionaryFile file : DICList.getInstance()) {
+            Boolean status = DictionaryEnvironment.getInstance()
+                    .getDicConfig()
+                    .getJSONObject(file.getName())
+                    .getBoolean("enabled");
+            if (status == null) {
+                status = true;
+            }
             builder.append("\n");
             builder.append(file.getName());
             builder.append("---");
             builder.append(file.getCommands().size());
             builder.append("---");
-            builder.append(DictionaryEnvironment.getInstance()
-                    .getDicConfig()
-                    .getJSONObject(file.getName())
-                    .getBoolean("enabled"));
+            builder.append(status);
         }
         builder.append("\n--------打印结束--------");
         PluginLoader.INSTANCE.getLogger().info(builder.toString());
