@@ -53,6 +53,7 @@ public class LoginThread extends Thread {
                     break;
                 case 0:
                     SnackBroadCast.sendBroadCast(text(R.string.login_success, bot.getId()));
+                    sw.setChecked(true);
                     nick.setText(bot.getNick());
                     dialog.dismiss();
                     break;

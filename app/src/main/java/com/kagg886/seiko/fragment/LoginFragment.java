@@ -20,6 +20,8 @@ import com.kagg886.seiko.event.SnackBroadCast;
 import com.kagg886.seiko.util.storage.JSONArrayStorage;
 import net.mamoe.mirai.Bot;
 
+import java.util.Objects;
+
 /**
  * @projectName: Seiko
  * @package: com.kagg886.seiko.fragment.module
@@ -137,7 +139,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Swi
             }
 
             for (int i = 0; i < botList.size(); i++) {
-                if (botList.getJSONObject(i).getLong("uin") == qq) {
+                if (Objects.equals(botList.getJSONObject(i).getLong("uin"), qq)) {
                     if (isEdit) {
                         botList.remove(i); //找到了就删掉!
                         break;
