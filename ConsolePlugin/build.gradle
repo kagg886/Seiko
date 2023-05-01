@@ -1,6 +1,7 @@
 buildscript {
     ext {
         mirai_version = gradle.ext.mirai_version
+        dic_version = gradle.ext.dic_version
     }
 }
 
@@ -20,7 +21,8 @@ group 'com.kagg886.seiko.dic.mirai_console'
 version "${gradle.ext.dic_version}"
 
 buildConfig {
-    buildConfigField('String', 'VERSION', "\"${mirai_version}\"")
+    buildConfigField('String', 'MIRAI_VERSION', "\"${mirai_version}\"")
+    buildConfigField('String', 'DIC_VERSION', "\"${dic_version}\"")
 }
 
 dependencies {
