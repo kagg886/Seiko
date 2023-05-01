@@ -1,10 +1,12 @@
 package com.kagg886.seiko.dic.mirai_console;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.kagg886.seiko.dic.DictionaryEnvironment;
 import com.kagg886.seiko.dic.DictionaryReg;
 import com.kagg886.seiko.dic.bridge.DictionaryListener;
+import com.kagg886.seiko.util.IgnoreSSL;
 import com.kagg___.seiko.dic.mirai_console.ConsolePlugin.BuildConfig;
 import net.mamoe.mirai.console.command.CommandManager;
 import net.mamoe.mirai.console.extension.PluginComponentStorage;
@@ -41,6 +43,7 @@ public class PluginLoader extends JavaPlugin implements DictionaryListener {
 
     @Override
     public void onLoad(@NotNull PluginComponentStorage api) {
+        IgnoreSSL.init();
         super.onLoad(api);
         File tmp = getConfigFolderPath().resolve("dic").toFile();
         if (!tmp.exists()) {
@@ -62,11 +65,17 @@ public class PluginLoader extends JavaPlugin implements DictionaryListener {
                                 .ignoreContentType(true)
                                 .timeout(10000)
                                 .execute().body());
-                String newVer = object.getString("tag_name");
-                if (!("V" + BuildConfig.DIC_VERSION).equals(newVer)) {
+                String newVer = object.getJSONArray("assets")
+                        .stream()
+                        .map(ary -> ((JSONObject) ary).getString("browser_download_url"))
+                        .filter((str) -> str.contains("ConsolePlugin"))
+                        .findFirst().get().split("-")[1];
+                if (!newVer.startsWith(BuildConfig.DIC_VERSION)) {
                     getLogger().info(String.format("发现更新:%s->%s",BuildConfig.DIC_VERSION,newVer));
                     getLogger().info(object.getString("body"));
                     getLogger().info("下载地址:" + object.getString("html_url"));
+                } else {
+                    getLogger().info("当前为最新版本!");
                 }
             } catch (Exception e) {
                 getLogger().error("更新检测失败!");
