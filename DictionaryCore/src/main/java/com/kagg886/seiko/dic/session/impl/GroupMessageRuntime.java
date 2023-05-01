@@ -5,10 +5,7 @@ import com.kagg886.seiko.dic.session.AbsRuntime;
 import com.kagg886.seiko.util.TextUtils;
 import net.mamoe.mirai.contact.Contact;
 import net.mamoe.mirai.event.events.GroupMessageEvent;
-import net.mamoe.mirai.message.data.At;
-import net.mamoe.mirai.message.data.Image;
-import net.mamoe.mirai.message.data.OnlineAudio;
-import net.mamoe.mirai.message.data.SingleMessage;
+import net.mamoe.mirai.message.data.*;
 
 import java.util.stream.Collectors;
 
@@ -67,6 +64,9 @@ public class GroupMessageRuntime extends AbsRuntime<GroupMessageEvent> {
             context.put("语音秒数", s.getLength());
         }
 
+        event.getMessage().stream().filter(QuoteReply.class::isInstance).forEach((v) -> {
+            context.put("回复者",((QuoteReply) v).getSource().getFromId());
+        });
     }
 
     @Override
