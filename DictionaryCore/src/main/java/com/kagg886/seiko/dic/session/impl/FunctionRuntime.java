@@ -23,6 +23,8 @@ public class FunctionRuntime extends AbsRuntime<AbsRuntime<?>> {
     public FunctionRuntime(DictionaryFile file, AbsRuntime<?> event) {
         super(file, event);
         this.exceptionStacks = event.getExceptionStacks(); //继承原调用栈
+        this.exceptionCaller = event.getExceptionCaller();
+        this.exceptionCaller_name = event.getExceptionCaller_name();
     }
 
     @Override

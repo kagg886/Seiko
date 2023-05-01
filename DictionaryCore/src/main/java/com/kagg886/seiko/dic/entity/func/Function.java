@@ -24,7 +24,9 @@ public abstract class Function extends DictionaryCode {
             {"异步调用", "TransferDicMethod$Async_Call"},
             {"延时", "Delay"},
             {"访问", "HTTP"},
-            {"日志","Logcat"},
+            {"日志","DebugTool$Logcat"},
+            {"设置捕错函数","DebugTool$CatchFunction"},
+
 
 
             {"装载", "ModuleUtil$Add"},

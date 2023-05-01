@@ -5,15 +5,8 @@ import com.kagg886.seiko.dic.entity.DictionaryFile;
 import com.kagg886.seiko.dic.session.AbsRuntime;
 import com.kagg886.seiko.util.TextUtils;
 import net.mamoe.mirai.Bot;
-import net.mamoe.mirai.Mirai;
 import net.mamoe.mirai.contact.Contact;
-import net.mamoe.mirai.event.events.BotPassiveEvent;
 import net.mamoe.mirai.message.data.MessageChainBuilder;
-import net.mamoe.mirai.utils.MiraiLogger;
-
-import java.util.Objects;
-
-import static com.kagg886.seiko.dic.entity.func.impl.Logcat.callLogger;
 
 /**
  * @projectName: Seiko

@@ -22,7 +22,7 @@ public class DictionaryOnRunningException extends RuntimeException {
         super(String.format("词库运行出错!\n文件:%s\n原因:%s\n词库栈:%s\n变量集:%s\nJava栈",
                 file.getFile().getAbsolutePath(),
                 msg, stackToString(stack),
-                mapToString(runtime.getRuntimeObject())));
+                mapToString(runtime.getRuntimeObject())),cause);
         setStackTrace(cause.getStackTrace());
         this.msg = msg;
     }
