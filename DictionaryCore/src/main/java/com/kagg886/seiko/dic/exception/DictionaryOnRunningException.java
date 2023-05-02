@@ -2,6 +2,7 @@ package com.kagg886.seiko.dic.exception;
 
 import com.kagg886.seiko.dic.entity.DictionaryFile;
 import com.kagg886.seiko.dic.session.AbsRuntime;
+import com.kagg886.seiko.util.TextUtils;
 
 import java.util.*;
 
@@ -36,7 +37,7 @@ public class DictionaryOnRunningException extends RuntimeException {
         if (objs instanceof Map<?, ?>) {
             Map<String, Object> obj = ((Map<String, Object>) objs);
             for (Map.Entry<String, Object> entry : obj.entrySet()) {
-                builder.append("  ".repeat(Math.max(0, deep)));
+                builder.append(TextUtils.repeat("  ",Math.max(0, deep)));
                 builder.append(entry.getKey());
                 builder.append("---");
                 Object value = entry.getValue();
@@ -45,7 +46,7 @@ public class DictionaryOnRunningException extends RuntimeException {
         } else if (objs instanceof List<?>) {
             List<Object> obj = (List<Object>) objs;
             for (Object value : obj) {
-                builder.append("  ".repeat(Math.max(0, deep)));
+                builder.append(TextUtils.repeat("  ",Math.max(0, deep)));
                 mapToString0(deep, builder, value);
             }
         }
@@ -58,12 +59,12 @@ public class DictionaryOnRunningException extends RuntimeException {
         } else if (value instanceof Map<?, ?>) {
             builder.append("{");
             mapToString(value, deep + 1, builder);
-            builder.append("  ".repeat(Math.max(0, deep)));
+            builder.append(TextUtils.repeat("  ",Math.max(0, deep)));
             builder.append("}");
         } else if (value instanceof List<?>) {
             builder.append("[");
             mapToString(value, deep + 1, builder);
-            builder.append("  ".repeat(Math.max(0, deep)));
+            builder.append(TextUtils.repeat("  ",Math.max(0, deep)));
             builder.append("]");
         } else {
             builder.append(value);

@@ -1,5 +1,7 @@
 package com.kagg886.seiko.util;
 
+import java.util.Arrays;
+
 /**
  * @projectName: Seiko
  * @package: com.kagg886.seiko.util
@@ -12,5 +14,16 @@ package com.kagg886.seiko.util;
 public class TextUtils {
     public static boolean isEmpty(String s) {
         return s == null || s.length() == 0;
+    }
+
+    public static String repeat(String value,int count) {
+        if (count == 1) {
+            return value;
+        }
+        StringBuilder builder = new StringBuilder();
+        for (int i = 0; i < count; i++) {
+            builder.append(value);
+        }
+        return builder.toString();
     }
 }
