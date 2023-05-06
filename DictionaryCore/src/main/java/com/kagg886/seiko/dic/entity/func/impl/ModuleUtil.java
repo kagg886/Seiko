@@ -109,8 +109,6 @@ public abstract class ModuleUtil extends Function.UnInterruptedFunction {
             } catch (IOException e) {
                 throw new DictionaryOnRunningException("DIC解析失败:",e);
             }
-            file.notifyLifeCycle(LifeCycleRuntime.LifeCycle.INIT);
-
             String alias = file.getName();
 
             if (args.size() >= 2) {

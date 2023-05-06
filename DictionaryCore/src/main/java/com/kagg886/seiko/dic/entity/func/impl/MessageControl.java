@@ -1,5 +1,6 @@
 package com.kagg886.seiko.dic.entity.func.impl;
 
+import com.kagg886.seiko.dic.DictionaryEnvironment;
 import com.kagg886.seiko.dic.entity.func.Function;
 import com.kagg886.seiko.dic.exception.DictionaryOnRunningException;
 import com.kagg886.seiko.dic.session.AbsRuntime;
@@ -8,12 +9,12 @@ import net.mamoe.mirai.contact.Contact;
 import net.mamoe.mirai.event.events.MessageEvent;
 import net.mamoe.mirai.message.data.*;
 import net.mamoe.mirai.utils.ExternalResource;
-import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.HashMap;
+import java.nio.file.Files;
 import java.util.List;
 import java.util.Map;
 
@@ -53,7 +54,7 @@ public abstract class MessageControl extends Function.UnInterruptedFunction {
                 MessageSourceKind kind;
                 if (source instanceof OnlineMessageSource.Incoming.FromGroup) {
                     kind = MessageSourceKind.GROUP;
-                } else if (source instanceof OnlineMessageSource.Incoming.FromFriend){
+                } else if (source instanceof OnlineMessageSource.Incoming.FromFriend) {
                     kind = MessageSourceKind.FRIEND;
                 } else {
                     throw new DictionaryOnRunningException("不支持的类型:" + source.getClass().getName());
@@ -186,12 +187,22 @@ public abstract class MessageControl extends Function.UnInterruptedFunction {
 
         @Override
         public void run(AbsRuntime<?> runtime, List<Object> args) {
-            Connection conn = Jsoup.connect(args.get(0).toString()).ignoreContentType(true);
-            try (InputStream s = conn.execute().bodyStream()) {
+            String url = args.get(0).toString();
+            try (InputStream s = Jsoup.connect(url).ignoreContentType(true).execute().bodyStream()) {
                 runtime.getMessageCache().append(ExternalResource.uploadAsImage(s, runtime.getContact()));
-            } catch (IOException e) {
-                throw new DictionaryOnRunningException("上传图片失败!:" + args.get(0) + "在" + runtime.getFile().getFile().getAbsolutePath() + ":" + getLine(), e);
+            } catch (Exception ignored) {
+                try (InputStream s = Files.newInputStream(new File(DictionaryEnvironment.getInstance().getDicData().toFile().getAbsolutePath() + "/" + url).toPath())) {
+                    runtime.getMessageCache().append(ExternalResource.uploadAsImage(s, runtime.getContact()));
+                } catch (IOException e) {
+                    throw new DictionaryOnRunningException("上传图片失败!:" + args.get(0) + "在" + runtime.getFile().getFile().getAbsolutePath() + ":" + getLine(), e);
+                }
             }
+//            Connection conn = Jsoup.connect(args.get(0).toString()).ignoreContentType(true);
+//            try (InputStream s = conn.execute().bodyStream()) {
+//                runtime.getMessageCache().append(ExternalResource.uploadAsImage(s, runtime.getContact()));
+//            } catch (IOException e) {
+//                throw new DictionaryOnRunningException("上传图片失败!:" + args.get(0) + "在" + runtime.getFile().getFile().getAbsolutePath() + ":" + getLine(), e);
+//            }
         }
     }
 

@@ -24,16 +24,46 @@ public class Random extends Function.UnInterruptedFunction {
 
     @Override
     protected void run(AbsRuntime<?> runtime, List<Object> args) {
-        int a, b;
-        String put;
-        put = args.get(0).toString();
-        a = Integer.parseInt(args.get(1).toString());
+        Integer a = null, b = null;
+        String put = args.get(0).toString();
+
+        //写A，B是[A,B)范围内随机整数
+        //只写A是[0,A)范围内随机整数
+        //什么都不写是[0,1)范围内的随机小数
+        try {
+            a = Integer.parseInt(args.get(1).toString());
+        } catch (Exception ignored) {
+
+        }
+
         try {
             b = Integer.parseInt(args.get(2).toString());
-        } catch (NullPointerException e) {
-            b = a;
-            a = 0;
+        } catch (Exception ignored) {
+            if (a != null) {
+                b = a;
+                a = 0;
+            }
         }
-        runtime.getRuntimeObject().put(put, random.nextInt(b) + a);
+
+        if (a == null) {
+            String format = "%f";
+            try {
+                format = args.get(1).toString();
+            } catch (Exception ignored) {}
+            runtime.getRuntimeObject().put(put,String.format(format,random.nextDouble()));
+            return;
+        }
+        runtime.getRuntimeObject().put(put,random.nextInt(b-a) + a);
+
+//        String put;
+//        put = args.get(0).toString();
+//        a = Integer.parseInt(args.get(1).toString());
+//        try {
+//            b = Integer.parseInt(args.get(2).toString());
+//        } catch (NullPointerException e) {
+//            b = a;
+//            a = 0;
+//        }
+//        runtime.getRuntimeObject().put(put, random.nextInt(b) + a);
     }
 }

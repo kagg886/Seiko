@@ -10,12 +10,10 @@ import net.mamoe.mirai.event.events.MemberJoinRequestEvent;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 /**
  * @projectName: Seiko
@@ -56,7 +54,8 @@ public class DictionaryCommandMatcher {
         for (String eventClassName : eventClassNames) {
             for (Map.Entry<String, Class<?>[]> ent : domainQuoteNew.entrySet()) {
                 if (eventClassName.equals(ent.getKey())) {
-                    eventClass.addAll(List.of(ent.getValue()));
+                    //eventClass.addAll(List.of(ent.getValue()));
+                    eventClass.addAll(Arrays.stream(ent.getValue()).collect(Collectors.toList()));
                     matches++;
                     break;
                 }
