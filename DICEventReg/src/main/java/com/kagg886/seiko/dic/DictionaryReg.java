@@ -79,6 +79,7 @@ public class DictionaryReg {
                     return;
                 }
             }
+
             JSONObject dicConfigUnit;
             for (DictionaryFile dic : DICList.getInstance()) {
                 dicConfigUnit = DictionaryEnvironment.getInstance().getDicConfig().getJSONObject(dic.getName());
@@ -90,6 +91,15 @@ public class DictionaryReg {
                     return;
                 }
                 GroupMemberRuntime runtime = new GroupMemberRuntime(dic, event);
+                if (event instanceof MemberPermissionChangeEvent) {
+                    runtime.getRuntimeObject().put("原权限",((MemberPermissionChangeEvent) event).getOrigin().toString());
+                    runtime.getRuntimeObject().put("原权限代码",((MemberPermissionChangeEvent) event).getOrigin().getLevel());
+                    runtime.getRuntimeObject().put("现权限",((MemberPermissionChangeEvent) event).getNew().toString());
+                    runtime.getRuntimeObject().put("现权限代码",((MemberPermissionChangeEvent) event).getNew().getLevel());
+                    runtime.invoke("成员权限改变");
+                    return;
+                }
+
                 if (event instanceof MemberLeaveEvent.Kick) {
                     runtime.getRuntimeObject().put("操作人", ((MemberLeaveEvent.Kick) event).getOperator().getId());
                     runtime.invoke("成员被踢");
