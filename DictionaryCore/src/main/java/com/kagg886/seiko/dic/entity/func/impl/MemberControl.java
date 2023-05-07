@@ -217,6 +217,7 @@ public abstract class MemberControl extends Function.UnInterruptedFunction {
         memberInfo.put("加群时间戳", i.getJoinTimestamp());
         memberInfo.put("禁言剩余",i.getMuteTimeRemaining());
         memberInfo.put("最近发言时间戳", i.getLastSpeakTimestamp());
+        memberInfo.put("活跃等级",i.getActive().getTemperature());
         return memberInfo;
     }
 
