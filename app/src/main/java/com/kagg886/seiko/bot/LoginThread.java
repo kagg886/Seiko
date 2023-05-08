@@ -38,11 +38,15 @@ import java.nio.file.Paths;
  * @version: 1.0
  */
 public class LoginThread extends Thread {
+    private final JSONObject botConfig;
+
     private final Bot bot;
+
     private final SwitchCompat sw;
     private final TextView nick;
 
     private final AlertDialog dialog;
+
 
     private final Handler dialogController = new Handler(Looper.getMainLooper()) { //Dialog控制的Handler
         @Override
@@ -70,7 +74,7 @@ public class LoginThread extends Thread {
                             }
                         }
                     }
-                    if (SeikoApplication.globalConfig.getBoolean("badDeviceAutoDel",true)) {
+                    if (SeikoApplication.globalConfig.getBoolean("badDeviceAutoDel", true)) {
                         if (throwable instanceof LoginFailedException) {
                             if (((LoginFailedException) throwable).getKillBot()) {
                                 //重置设备信息
@@ -88,7 +92,25 @@ public class LoginThread extends Thread {
                             }
                         }
                     }
-                    DialogBroadCast.sendBroadCast(text(R.string.login_fail), throwable.getMessage() == null ? text(R.string.login_fail_reason_unknown) : text(R.string.login_fail_reason, throwable.getMessage()));
+                    String error = throwable.getMessage() == null ? text(R.string.login_fail_reason_unknown) : text(R.string.login_fail_reason, throwable.getMessage());
+                    //TODO Mirai生命周期问题，使用此代码不断尝试登录，待问题解决后会删掉此代码
+                    if (error.startsWith("Consuming") ||
+                            error.startsWith("ProducerReady") ||
+                            error.startsWith("CreatingProducer")) {
+                        bot.getLogger().debug("登录时发现Mirai生命周期异常，正在尝试重新调用登录命令...");
+                        //重新设置Bot
+                        run();
+                        return;
+                    }
+
+                    if (error.startsWith("Bot is already closed and cannot relogin")) {
+                        bot.getLogger().debug("登录时发现线程持有Bot过期，正在尝试重新创建线程...");
+                        //重新设置Bot
+                        BotRunnerService.INSTANCE.login(botConfig, nick,sw);
+                        dialog.dismiss();
+                        return;
+                    }
+                    DialogBroadCast.sendBroadCast(text(R.string.login_fail), error);
                     bot.getLogger().error("在Bot登录时发现异常: ", throwable);
                     sw.setChecked(false);
                     dialog.dismiss();
@@ -101,6 +123,7 @@ public class LoginThread extends Thread {
     public LoginThread(JSONObject botConfig, SwitchCompat sw, TextView nick) {
         this.nick = nick;
         this.sw = sw;
+        this.botConfig = botConfig;
 
         long uin = botConfig.getLong("uin");
         String pass = botConfig.getString("pass");
@@ -109,6 +132,7 @@ public class LoginThread extends Thread {
         if (platform == null) {
             platform = "ANDROID_PHONE";
         }
+
         BotConfiguration.MiraiProtocol protocol = BotConfiguration.MiraiProtocol.valueOf(platform);
 
         dialog = new AlertDialog.Builder(SeikoApplication.getCurrentActivity())
@@ -122,7 +146,7 @@ public class LoginThread extends Thread {
         if (botConfig.getBoolean("useQRLogin")) {
             bot = BotFactory.INSTANCE.newBot(uin, BotAuthorization.byQRCode(), configuration);
         } else {
-            bot = BotFactory.INSTANCE.newBot(uin, pass, configuration);
+            bot = BotFactory.INSTANCE.newBot(uin, BotAuthorization.byPassword(pass), configuration);
         }
     }
 
@@ -162,6 +186,7 @@ public class LoginThread extends Thread {
             dialogController.sendMessage(m);
         }
     }
+
     private String text(@StringRes int s, Object... args) {
         return String.format(SeikoApplication.getSeikoApplicationContext().getText(s).toString(), args);
     }
