@@ -8,12 +8,12 @@
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
 
     <application
-            android:name=".SeikoApplication"
+            android:name="com.kagg886.seiko.SeikoApplication"
             android:allowBackup="true"
             android:dataExtractionRules="@xml/data_extraction_rules"
             android:fullBackupContent="@xml/backup_rules"
             android:icon="@drawable/ic_launcher"
-            android:label="@string/app_name"
+            android:label="${APP_NAME}"
             android:supportsRtl="true"
             android:theme="@style/Theme.Seiko"
             android:usesCleartextTraffic="true"
@@ -55,7 +55,7 @@
 
         <provider
                 android:name="androidx.core.content.FileProvider"
-                android:authorities="com.kagg886.seiko.fileprovider"
+                android:authorities="${applicationId}.fileprovider"
                 android:exported="false"
                 android:grantUriPermissions="true">
             <meta-data

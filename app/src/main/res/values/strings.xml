@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">Seiko</string>
+    <string name="app_name_debug">Seiko_Debug</string>
     <string name="crash_found">发现了 %s 个崩溃文件</string>
     <string name="crash_action">请在下方选择你的操作</string>
     <string name="crash_action_share">打包并分享</string>

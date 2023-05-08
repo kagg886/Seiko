@@ -19,6 +19,8 @@ import com.kagg886.seiko.util.TextUtils;
 import net.mamoe.mirai.Bot;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Objects;
+
 public class SettingsFragment extends PreferenceFragmentCompat implements Preference.OnPreferenceClickListener, Preference.OnPreferenceChangeListener {
     @SuppressLint("DefaultLocale")
     @Override
@@ -28,7 +30,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Prefer
         Preference s = findPreference("SeikoInfo");
         PackageInfo p = null;
         try {
-            p = getContext().getPackageManager().getPackageInfo("com.kagg886.seiko", 0);
+            p = requireContext().getPackageManager().getPackageInfo(getContext().getPackageName(), 0);
         } catch (PackageManager.NameNotFoundException e) {
             throw new RuntimeException(e);
         }

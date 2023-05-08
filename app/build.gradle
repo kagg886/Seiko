@@ -30,6 +30,19 @@ android {
             zipAlignEnabled true    // 已启用压缩
             //shrinkResources true    // 缩减资源
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+
+            manifestPlaceholders = [
+                    APP_NAME: "@string/app_name",
+            ]
+
+        }
+
+        debug {
+            applicationIdSuffix ".debug"
+
+            manifestPlaceholders = [
+                    APP_NAME: "@string/app_name_debug",
+            ]
         }
 
 //        debug {
