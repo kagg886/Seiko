@@ -27,7 +27,7 @@ include ':ConsolePlugin'
 include ':DICEventReg'
 
 gradle.ext.mirai_version = "2.15.0-dev-81"
-gradle.ext.app_version = "0.1.5"
-gradle.ext.app_version_code = 19
-gradle.ext.dic_version = "0.1.1"
+gradle.ext.app_version = "0.1.6"
+gradle.ext.app_version_code = 20
+gradle.ext.dic_version = "0.1.2"
 
