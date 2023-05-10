@@ -43,8 +43,11 @@ public class PluginLoader extends JavaPlugin implements DictionaryListener {
 
     @Override
     public void onLoad(@NotNull PluginComponentStorage api) {
+        //首先忽略掉ssl证书错误
         IgnoreSSL.init();
         super.onLoad(api);
+
+        //开始初始化dic环境
         File tmp = getConfigFolderPath().resolve("dic").toFile();
         if (!tmp.exists()) {
             tmp.mkdirs();
@@ -58,6 +61,7 @@ public class PluginLoader extends JavaPlugin implements DictionaryListener {
         DictionaryEnvironment.getInstance().setDicConfigPoint(getConfigFolderPath().resolve("dicList.json").toFile().getAbsolutePath());
         DictionaryEnvironment.getInstance().setDicData(tmp.toPath());
 
+        //检查更新
         new Thread(() -> {
             try {
                 JSONObject object = JSON.parseObject(
@@ -88,6 +92,7 @@ public class PluginLoader extends JavaPlugin implements DictionaryListener {
     @Override
     public void onEnable() {
         reloadPluginConfig(SeikoPluginConfig.INSTANCE);
+        //注册指令集
         CommandManager.INSTANCE.registerCommand(CommandInstance.INSTANCE, false);
 
         EventChannel<?> channel = GlobalEventChannel.INSTANCE.parentScope(INSTANCE);

@@ -50,7 +50,6 @@ public abstract class SeikoPlugin {
      * @return void
      * @author kagg886
      * @description 插件被卸载时(用户手动删除)时调用
-     * TODO 将来此方法可能会变成abstract
      * @date 2023/03/06 17:31
      */
     public void onUnLoad() {

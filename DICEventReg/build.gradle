@@ -15,8 +15,7 @@ dependencies {
     implementation project(':DictionaryCore')
     implementation project(':Tools')
 
-
-    implementation("net.mamoe:mirai-core-mock:$gradle.mirai_version")
+    compileOnly("net.mamoe:mirai-core-api-jvm:$gradle.mirai_version")
 }
 
 test {

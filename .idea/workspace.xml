@@ -1,20 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AndroidLayouts">
+    <shared>
+      <config />
+    </shared>
+  </component>
   <component name="AutoImportSettings">
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
     <list default="true" id="50deb0ec-ac2b-4bb3-81a3-6580c4990f99" name="更改" comment="build: 🛠️ 修复构建">
-      <change afterPath="$PROJECT_DIR$/DICEventReg/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/kotlinc.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/uiDesigner.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/settings.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/settings.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BotMock/src/main/java/com/kagg886/seiko/mock/UtilsTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/BotMock/src/main/java/com/kagg886/seiko/mock/UtilsTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ConsolePlugin/src/main/java/com/kagg886/seiko/dic/mirai_console/PluginLoader.java" beforeDir="false" afterPath="$PROJECT_DIR$/ConsolePlugin/src/main/java/com/kagg886/seiko/dic/mirai_console/PluginLoader.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DICEventReg/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/DICEventReg/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DictionaryCore/src/main/java/com/kagg886/seiko/dic/DICList.java" beforeDir="false" afterPath="$PROJECT_DIR$/DictionaryCore/src/main/java/com/kagg886/seiko/dic/DICList.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PluginAPI/src/main/java/com/kagg886/seiko/plugin/api/SeikoPlugin.java" beforeDir="false" afterPath="$PROJECT_DIR$/PluginAPI/src/main/java/com/kagg886/seiko/plugin/api/SeikoPlugin.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -64,28 +67,28 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.go.formatter.settings.were.checked": "true",
-    "RunOnceActivity.go.migrated.go.modules.settings": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "git-widget-placeholder": "master",
-    "go.import.settings.migrated": "true",
-    "jdk.selected.JAVA_MODULE": "jbr-17",
-    "last_opened_file_path": "D:/IDEAProjects/Seiko/DICEventReg",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "project.structure.last.edited": "模块",
-    "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.29425287",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.go.formatter.settings.were.checked&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.go.migrated.go.modules.settings&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;dev&quot;,
+    &quot;go.import.settings.migrated&quot;: &quot;true&quot;,
+    &quot;jdk.selected.JAVA_MODULE&quot;: &quot;jbr-17&quot;,
+    &quot;last_opened_file_path&quot;: &quot;D:/IDEAProjects/Seiko/DICEventReg&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;模块&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.29425287&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RunManager" selected="Android 应用.app">
     <configuration name="IDEAProjects.Seiko.PluginDemo" type="AndroidRunConfigurationType" factoryName="Android App">
       <module name="IDEAProjects.Seiko.PluginDemo.main" />
@@ -252,6 +255,7 @@
       <workItem from="1683641320335" duration="832000" />
       <workItem from="1683642164638" duration="29000" />
       <workItem from="1683642205670" duration="430000" />
+      <workItem from="1683676745471" duration="1811000" />
     </task>
     <servers />
   </component>

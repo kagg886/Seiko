@@ -22,7 +22,7 @@ public class DICList extends ArrayList<DictionaryFile> {
     private static final DICList DIC_LIST = new DICList();;
 
 
-    public DICList() {
+    private DICList() {
         refresh();
     }
 
