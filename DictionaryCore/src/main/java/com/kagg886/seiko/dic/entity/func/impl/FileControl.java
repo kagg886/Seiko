@@ -44,7 +44,7 @@ public abstract class FileControl extends Function.UnInterruptedFunction {
 
         @Override
         protected void run(AbsRuntime<?> runtime, List<Object> args) {
-            File f = DictionaryEnvironment.getInstance().getDicData().resolve(args.get(1).toString()).toFile();
+            File f = DictionaryEnvironment.getInstance().getDicData().resolve(args.get(0).toString()).toFile();
             IOUtil.delFile(f);
         }
 

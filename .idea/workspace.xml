@@ -9,15 +9,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="50deb0ec-ac2b-4bb3-81a3-6580c4990f99" name="更改" comment="build: 🛠️ 修复构建">
-      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+    <list default="true" id="50deb0ec-ac2b-4bb3-81a3-6580c4990f99" name="更改" comment="style: 📝 写了几个注释">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BotMock/src/main/java/com/kagg886/seiko/mock/UtilsTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/BotMock/src/main/java/com/kagg886/seiko/mock/UtilsTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ConsolePlugin/src/main/java/com/kagg886/seiko/dic/mirai_console/PluginLoader.java" beforeDir="false" afterPath="$PROJECT_DIR$/ConsolePlugin/src/main/java/com/kagg886/seiko/dic/mirai_console/PluginLoader.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DICEventReg/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/DICEventReg/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DictionaryCore/src/main/java/com/kagg886/seiko/dic/DICList.java" beforeDir="false" afterPath="$PROJECT_DIR$/DictionaryCore/src/main/java/com/kagg886/seiko/dic/DICList.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PluginAPI/src/main/java/com/kagg886/seiko/plugin/api/SeikoPlugin.java" beforeDir="false" afterPath="$PROJECT_DIR$/PluginAPI/src/main/java/com/kagg886/seiko/plugin/api/SeikoPlugin.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BotMock/mock/dic/dic.txt" beforeDir="false" afterPath="$PROJECT_DIR$/BotMock/mock/dic/dic.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DictionaryCore/src/main/java/com/kagg886/seiko/dic/entity/func/impl/FileControl.java" beforeDir="false" afterPath="$PROJECT_DIR$/DictionaryCore/src/main/java/com/kagg886/seiko/dic/entity/func/impl/FileControl.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -86,80 +81,11 @@
     &quot;project.structure.last.edited&quot;: &quot;模块&quot;,
     &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
     &quot;project.structure.side.proportion&quot;: &quot;0.29425287&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;reference.settings.ide.settings.new.ui&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
-  <component name="RunManager" selected="Android 应用.app">
-    <configuration name="IDEAProjects.Seiko.PluginDemo" type="AndroidRunConfigurationType" factoryName="Android App">
-      <module name="IDEAProjects.Seiko.PluginDemo.main" />
-      <option name="DEPLOY" value="true" />
-      <option name="DEPLOY_APK_FROM_BUNDLE" value="false" />
-      <option name="DEPLOY_AS_INSTANT" value="false" />
-      <option name="ARTIFACT_NAME" value="" />
-      <option name="PM_INSTALL_OPTIONS" value="" />
-      <option name="ALL_USERS" value="false" />
-      <option name="ALWAYS_INSTALL_WITH_PM" value="false" />
-      <option name="CLEAR_APP_STORAGE" value="false" />
-      <option name="DYNAMIC_FEATURES_DISABLED_LIST" value="" />
-      <option name="ACTIVITY_EXTRA_FLAGS" value="" />
-      <option name="MODE" value="do_nothing" />
-      <option name="CLEAR_LOGCAT" value="false" />
-      <option name="SHOW_LOGCAT_AUTOMATICALLY" value="false" />
-      <option name="INSPECTION_WITHOUT_ACTIVITY_RESTART" value="false" />
-      <option name="TARGET_SELECTION_MODE" value="DEVICE_AND_SNAPSHOT_COMBO_BOX" />
-      <option name="DEBUGGER_TYPE" value="Java" />
-      <Java />
-      <Profilers>
-        <option name="ADVANCED_PROFILING_ENABLED" value="false" />
-        <option name="STARTUP_PROFILING_ENABLED" value="false" />
-        <option name="STARTUP_CPU_PROFILING_ENABLED" value="false" />
-        <option name="STARTUP_CPU_PROFILING_CONFIGURATION_NAME" value="Java/Kotlin Method Sample (legacy)" />
-        <option name="STARTUP_NATIVE_MEMORY_PROFILING_ENABLED" value="false" />
-        <option name="NATIVE_MEMORY_SAMPLE_RATE_BYTES" value="2048" />
-      </Profilers>
-      <option name="DEEP_LINK" value="" />
-      <option name="ACTIVITY_CLASS" value="" />
-      <option name="SEARCH_ACTIVITY_IN_GLOBAL_SCOPE" value="false" />
-      <option name="SKIP_ACTIVITY_VALIDATION" value="false" />
-      <method v="2">
-        <option name="Android.Gradle.BeforeRunTask" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="IDEAProjects.Seiko.app" type="AndroidRunConfigurationType" factoryName="Android App">
-      <module name="IDEAProjects.Seiko.app.main" />
-      <option name="DEPLOY" value="true" />
-      <option name="DEPLOY_APK_FROM_BUNDLE" value="false" />
-      <option name="DEPLOY_AS_INSTANT" value="false" />
-      <option name="ARTIFACT_NAME" value="" />
-      <option name="PM_INSTALL_OPTIONS" value="" />
-      <option name="ALL_USERS" value="false" />
-      <option name="ALWAYS_INSTALL_WITH_PM" value="false" />
-      <option name="CLEAR_APP_STORAGE" value="false" />
-      <option name="DYNAMIC_FEATURES_DISABLED_LIST" value="" />
-      <option name="ACTIVITY_EXTRA_FLAGS" value="" />
-      <option name="MODE" value="default_activity" />
-      <option name="CLEAR_LOGCAT" value="false" />
-      <option name="SHOW_LOGCAT_AUTOMATICALLY" value="false" />
-      <option name="INSPECTION_WITHOUT_ACTIVITY_RESTART" value="false" />
-      <option name="TARGET_SELECTION_MODE" value="DEVICE_AND_SNAPSHOT_COMBO_BOX" />
-      <option name="DEBUGGER_TYPE" value="Java" />
-      <Java />
-      <Profilers>
-        <option name="ADVANCED_PROFILING_ENABLED" value="false" />
-        <option name="STARTUP_PROFILING_ENABLED" value="false" />
-        <option name="STARTUP_CPU_PROFILING_ENABLED" value="false" />
-        <option name="STARTUP_CPU_PROFILING_CONFIGURATION_NAME" value="Java/Kotlin Method Sample (legacy)" />
-        <option name="STARTUP_NATIVE_MEMORY_PROFILING_ENABLED" value="false" />
-        <option name="NATIVE_MEMORY_SAMPLE_RATE_BYTES" value="2048" />
-      </Profilers>
-      <option name="DEEP_LINK" value="" />
-      <option name="ACTIVITY_CLASS" value="" />
-      <option name="SEARCH_ACTIVITY_IN_GLOBAL_SCOPE" value="false" />
-      <option name="SKIP_ACTIVITY_VALIDATION" value="false" />
-      <method v="2">
-        <option name="Android.Gradle.BeforeRunTask" enabled="true" />
-      </method>
-    </configuration>
+  <component name="RunManager" selected="Gradle.Seiko:ConsolePlugin [buildPlugin]">
     <configuration name="PluginDemo" type="AndroidRunConfigurationType" factoryName="Android App">
       <module name="Seiko.PluginDemo.main" />
       <option name="DEPLOY" value="true" />
@@ -230,6 +156,41 @@
         <option name="Android.Gradle.BeforeRunTask" enabled="true" />
       </method>
     </configuration>
+    <configuration name="MockBotTest" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.kagg886.seiko.mock.MockBotTest" />
+      <module name="Seiko.BotMock.main" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.kagg886.seiko.mock.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Seiko:ConsolePlugin [buildPlugin]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$/ConsolePlugin" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="buildPlugin" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <ForceTestExec>false</ForceTestExec>
+      <method v="2" />
+    </configuration>
     <configuration default="true" type="JetRunConfigurationType">
       <module name="Seiko.PluginAPI" />
       <method v="2">
@@ -243,6 +204,18 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <list>
+      <item itemvalue="Android 应用.app" />
+      <item itemvalue="Android 应用.PluginDemo" />
+      <item itemvalue="Gradle.Seiko:ConsolePlugin [buildPlugin]" />
+      <item itemvalue="应用程序.MockBotTest" />
+    </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Gradle.Seiko:ConsolePlugin [buildPlugin]" />
+        <item itemvalue="应用程序.MockBotTest" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="应用程序级" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -255,8 +228,22 @@
       <workItem from="1683641320335" duration="832000" />
       <workItem from="1683642164638" duration="29000" />
       <workItem from="1683642205670" duration="430000" />
-      <workItem from="1683676745471" duration="1811000" />
+      <workItem from="1683676745471" duration="1941000" />
+      <workItem from="1683708306798" duration="109000" />
+      <workItem from="1683708483497" duration="9000" />
+      <workItem from="1683991721882" duration="319000" />
+      <workItem from="1684022536001" duration="87000" />
+      <workItem from="1684022636299" duration="17000" />
+      <workItem from="1684283596214" duration="725000" />
     </task>
+    <task id="LOCAL-00001" summary="style: 📝 写了几个注释">
+      <created>1683678818902</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1683678818902</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -275,9 +262,21 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="build: ️ 修复构建" />
-    <option name="LAST_COMMIT_MESSAGE" value="build: ️ 修复构建" />
+    <MESSAGE value="style:  写了几个注释" />
+    <option name="LAST_COMMIT_MESSAGE" value="style:  写了几个注释" />
   </component>
   <component name="VgoProject">
     <settings-migrated>true</settings-migrated>
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/DictionaryCore/src/main/java/com/kagg886/seiko/dic/entity/func/impl/FileControl.java</url>
+          <line>220</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>
