@@ -9,10 +9,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="50deb0ec-ac2b-4bb3-81a3-6580c4990f99" name="更改" comment="style: 📝 写了几个注释">
+    <list default="true" id="50deb0ec-ac2b-4bb3-81a3-6580c4990f99" name="更改" comment="fix: 🐛 修复 '删' 函数出现的无法删除的bug">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/BotMock/mock/dic/dic.txt" beforeDir="false" afterPath="$PROJECT_DIR$/BotMock/mock/dic/dic.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DictionaryCore/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/DictionaryCore/README.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/DictionaryCore/src/main/java/com/kagg886/seiko/dic/entity/func/impl/FileControl.java" beforeDir="false" afterPath="$PROJECT_DIR$/DictionaryCore/src/main/java/com/kagg886/seiko/dic/entity/func/impl/FileControl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DictionaryCore/src/main/java/com/kagg886/seiko/dic/entity/func/impl/TransferDicMethod.java" beforeDir="false" afterPath="$PROJECT_DIR$/DictionaryCore/src/main/java/com/kagg886/seiko/dic/entity/func/impl/TransferDicMethod.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DictionaryCore/src/main/java/com/kagg886/seiko/dic/entity/impl/FastAssignment.java" beforeDir="false" afterPath="$PROJECT_DIR$/DictionaryCore/src/main/java/com/kagg886/seiko/dic/entity/impl/FastAssignment.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -28,6 +31,9 @@
   <component name="ExternalProjectsManager">
     <system id="GRADLE">
       <state>
+        <task path="$PROJECT_DIR$/ConsolePlugin">
+          <activation />
+        </task>
         <projects_view>
           <tree_state>
             <expand>
@@ -38,7 +44,20 @@
               <path>
                 <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
                 <item name="Seiko" type="f1a62948:ProjectNode" />
-                <item name="BotMock" type="2d1252cf:ModuleNode" />
+                <item name="ConsolePlugin" type="2d1252cf:ModuleNode" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="Seiko" type="f1a62948:ProjectNode" />
+                <item name="ConsolePlugin" type="2d1252cf:ModuleNode" />
+                <item name="Tasks" type="e4a08cd1:TasksNode" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="Seiko" type="f1a62948:ProjectNode" />
+                <item name="ConsolePlugin" type="2d1252cf:ModuleNode" />
+                <item name="Tasks" type="e4a08cd1:TasksNode" />
+                <item name="mirai" type="c8890929:TasksNode$1" />
               </path>
             </expand>
             <select />
@@ -54,7 +73,7 @@
     <option name="stateVersion" value="1" />
   </component>
   <component name="ProblemsViewState">
-    <option name="selectedTabId" value="ProjectErrors" />
+    <option name="selectedTabId" value="CurrentFile" />
   </component>
   <component name="ProjectId" id="2PYkHwgCfL9PUK8of1NiuSVmXUw" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
@@ -85,7 +104,7 @@
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
-  <component name="RunManager" selected="Gradle.Seiko:ConsolePlugin [buildPlugin]">
+  <component name="RunManager" selected="应用程序.MockBotTest">
     <configuration name="PluginDemo" type="AndroidRunConfigurationType" factoryName="Android App">
       <module name="Seiko.PluginDemo.main" />
       <option name="DEPLOY" value="true" />
@@ -234,7 +253,8 @@
       <workItem from="1683991721882" duration="319000" />
       <workItem from="1684022536001" duration="87000" />
       <workItem from="1684022636299" duration="17000" />
-      <workItem from="1684283596214" duration="725000" />
+      <workItem from="1684283596214" duration="961000" />
+      <workItem from="1684296961211" duration="1610000" />
     </task>
     <task id="LOCAL-00001" summary="style: 📝 写了几个注释">
       <created>1683678818902</created>
@@ -243,7 +263,14 @@
       <option name="project" value="LOCAL" />
       <updated>1683678818902</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="fix: 🐛 修复 '删' 函数出现的无法删除的bug">
+      <created>1684284447499</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1684284447499</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -263,20 +290,10 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="build: ️ 修复构建" />
     <MESSAGE value="style:  写了几个注释" />
-    <option name="LAST_COMMIT_MESSAGE" value="style:  写了几个注释" />
+    <MESSAGE value="fix:  修复 '删' 函数出现的无法删除的bug" />
+    <option name="LAST_COMMIT_MESSAGE" value="fix:  修复 '删' 函数出现的无法删除的bug" />
   </component>
   <component name="VgoProject">
     <settings-migrated>true</settings-migrated>
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/DictionaryCore/src/main/java/com/kagg886/seiko/dic/entity/func/impl/FileControl.java</url>
-          <line>220</line>
-          <option name="timeStamp" value="1" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
   </component>
 </project>

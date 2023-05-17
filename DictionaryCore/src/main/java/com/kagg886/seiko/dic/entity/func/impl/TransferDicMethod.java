@@ -45,8 +45,8 @@ public class TransferDicMethod extends Function.UnInterruptedFunction {
                 dicRun.invoke(args.get(0).toString());
             });
             thread.setName(UUID.randomUUID().toString());
-            if (args.size() >= 3) {
-                runtime.getRuntimeObject().put(args.get(2).toString(), thread.getName());
+            if (args.size() >= 2) {
+                runtime.getRuntimeObject().put(args.get(1).toString(), thread.getName());
             }
             runtime.getFile().getExecutor().execute(thread);
         }

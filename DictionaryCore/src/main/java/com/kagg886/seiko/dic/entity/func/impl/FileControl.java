@@ -171,7 +171,7 @@ public abstract class FileControl extends Function.UnInterruptedFunction {
      * @date: 2023/1/19 19:29
      * @version: 1.0
      */
-    public static class Write extends Function.UnInterruptedFunction {
+    public static class Write extends Function.UnInterruptedFunction implements ArgumentLimiter {
 
         public Write(int line, String code) {
             super(line, code);
@@ -219,6 +219,11 @@ public abstract class FileControl extends Function.UnInterruptedFunction {
                 val = obj.toString();
             }
             xx(storage, key, val);
+        }
+
+        @Override
+        public int getArgumentLength() {
+            return 3;
         }
     }
 
