@@ -40,11 +40,9 @@ public class FastAssignment extends DictionaryCode {
     }
 
     public void addInRuntimeObject(AbsRuntime<?> runtime) {
-        String val = DictionaryUtil.cleanVariableCode(valueRef,runtime);
-
-        if (val.startsWith("$") && val.endsWith("$")) { //方法返回值注入模式
+        if (valueRef.startsWith("$") && valueRef.endsWith("$")) { //方法返回值注入模式
             try {
-                Function method = Function.parseFunction(val,getLine());
+                Function method = Function.parseFunction(valueRef,getLine());
                 method.invoke(runtime);
                 Object rtn = runtime.getRuntimeObject().get("RTN");
                 runtime.getRuntimeObject().put(varName,rtn);
@@ -57,12 +55,11 @@ public class FastAssignment extends DictionaryCode {
 
         //纯文本赋值模式
         try {
-            runtime.getRuntimeObject().put(varName,JSON.parseObject(val, HashMap.class));
+            runtime.getRuntimeObject().put(varName,JSON.parseObject(valueRef));
             return;
         } catch (Exception ignored) {
 
         }
-
-        runtime.getRuntimeObject().put(varName, val);
+        runtime.getRuntimeObject().put(varName, valueRef);
     }
 }

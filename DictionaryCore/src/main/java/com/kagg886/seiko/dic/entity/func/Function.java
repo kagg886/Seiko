@@ -69,6 +69,9 @@ public abstract class Function extends DictionaryCode {
 //            {"","GroupControl$"},
 //            {"","GroupControl$"},
 
+            //与群文件有关
+            {"群文件", "GroupFileControl$GetFile"},
+
             //与bot有关
             {"BOT列表","BotControl$getBot"},
             {"群列表", "BotControl$getGroups"},
@@ -157,7 +160,11 @@ public abstract class Function extends DictionaryCode {
         if (this instanceof ArgumentLimiter) {
             limit = ((ArgumentLimiter) this).getArgumentLength();
         }
-        run(runtime, DictionaryUtil.variableToObject(argCode.split(" ", limit), runtime));
+        invoke(runtime, DictionaryUtil.variableToObject(argCode.split(" ", limit), runtime));
+    }
+
+    public void invoke(AbsRuntime<?> runtime,List<Object> args) {
+        run(runtime,args);
     }
 
     protected abstract void run(AbsRuntime<?> runtime, List<Object> args);
