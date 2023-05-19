@@ -9,13 +9,15 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="50deb0ec-ac2b-4bb3-81a3-6580c4990f99" name="更改" comment="fix: 🐛 修复 '删' 函数出现的无法删除的bug">
+    <list default="true" id="50deb0ec-ac2b-4bb3-81a3-6580c4990f99" name="更改" comment="fix: 🐛 现在 '写' 函数可以写入含空格字符串了&#10;feat: ✨ 新增 '方法返回值协定' 功能">
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BotMock/mock/dic/dic.txt" beforeDir="false" afterPath="$PROJECT_DIR$/BotMock/mock/dic/dic.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DictionaryCore/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/DictionaryCore/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DictionaryCore/src/main/java/com/kagg886/seiko/dic/entity/func/impl/FileControl.java" beforeDir="false" afterPath="$PROJECT_DIR$/DictionaryCore/src/main/java/com/kagg886/seiko/dic/entity/func/impl/FileControl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DictionaryCore/src/main/java/com/kagg886/seiko/dic/entity/func/impl/TransferDicMethod.java" beforeDir="false" afterPath="$PROJECT_DIR$/DictionaryCore/src/main/java/com/kagg886/seiko/dic/entity/func/impl/TransferDicMethod.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DictionaryCore/src/main/java/com/kagg886/seiko/dic/entity/impl/FastAssignment.java" beforeDir="false" afterPath="$PROJECT_DIR$/DictionaryCore/src/main/java/com/kagg886/seiko/dic/entity/impl/FastAssignment.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BotMock/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/BotMock/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BotMock/mock/dic/dic.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/BotMock/src/main/java/com/kagg886/seiko/mock/UtilsTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/BotMock/src/main/java/com/kagg886/seiko/mock/UtilsTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DICEventReg/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/DICEventReg/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DictionaryCore/src/main/java/com/kagg886/seiko/dic/entity/DictionaryFile.java" beforeDir="false" afterPath="$PROJECT_DIR$/DictionaryCore/src/main/java/com/kagg886/seiko/dic/entity/DictionaryFile.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/settings.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/settings.gradle" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -32,6 +34,12 @@
     <system id="GRADLE">
       <state>
         <task path="$PROJECT_DIR$/ConsolePlugin">
+          <activation />
+        </task>
+        <task path="$PROJECT_DIR$/app">
+          <activation />
+        </task>
+        <task path="$PROJECT_DIR$">
           <activation />
         </task>
         <projects_view>
@@ -188,6 +196,41 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="UtilsTest" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.kagg886.seiko.mock.UtilsTest" />
+      <module name="Seiko.BotMock.main" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.kagg886.seiko.mock.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Seiko [clean]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="clean" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <ForceTestExec>false</ForceTestExec>
+      <method v="2" />
+    </configuration>
     <configuration name="Seiko:ConsolePlugin [buildPlugin]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -200,6 +243,28 @@
         <option name="taskNames">
           <list>
             <option value="buildPlugin" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <ForceTestExec>false</ForceTestExec>
+      <method v="2" />
+    </configuration>
+    <configuration name="Seiko:ConsolePlugin [runConsole]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$/ConsolePlugin" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="runConsole" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -226,12 +291,18 @@
     <list>
       <item itemvalue="Android 应用.app" />
       <item itemvalue="Android 应用.PluginDemo" />
+      <item itemvalue="Gradle.Seiko [clean]" />
+      <item itemvalue="Gradle.Seiko:ConsolePlugin [runConsole]" />
       <item itemvalue="Gradle.Seiko:ConsolePlugin [buildPlugin]" />
+      <item itemvalue="应用程序.UtilsTest" />
       <item itemvalue="应用程序.MockBotTest" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="应用程序.UtilsTest" />
         <item itemvalue="Gradle.Seiko:ConsolePlugin [buildPlugin]" />
+        <item itemvalue="Gradle.Seiko:ConsolePlugin [runConsole]" />
+        <item itemvalue="Gradle.Seiko [clean]" />
         <item itemvalue="应用程序.MockBotTest" />
       </list>
     </recent_temporary>
@@ -254,7 +325,9 @@
       <workItem from="1684022536001" duration="87000" />
       <workItem from="1684022636299" duration="17000" />
       <workItem from="1684283596214" duration="961000" />
-      <workItem from="1684296961211" duration="1610000" />
+      <workItem from="1684296961211" duration="1720000" />
+      <workItem from="1684394171644" duration="1623000" />
+      <workItem from="1684460611243" duration="3157000" />
     </task>
     <task id="LOCAL-00001" summary="style: 📝 写了几个注释">
       <created>1683678818902</created>
@@ -270,7 +343,14 @@
       <option name="project" value="LOCAL" />
       <updated>1684284447499</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="fix: 🐛 现在 '写' 函数可以写入含空格字符串了&#10;feat: ✨ 新增 '方法返回值协定' 功能">
+      <created>1684298669899</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1684298669899</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -291,7 +371,8 @@
     <MESSAGE value="build: ️ 修复构建" />
     <MESSAGE value="style:  写了几个注释" />
     <MESSAGE value="fix:  修复 '删' 函数出现的无法删除的bug" />
-    <option name="LAST_COMMIT_MESSAGE" value="fix:  修复 '删' 函数出现的无法删除的bug" />
+    <MESSAGE value="fix:  现在 '写' 函数可以写入含空格字符串了&#10;feat: ✨ 新增 '方法返回值协定' 功能" />
+    <option name="LAST_COMMIT_MESSAGE" value="fix:  现在 '写' 函数可以写入含空格字符串了&#10;feat: ✨ 新增 '方法返回值协定' 功能" />
   </component>
   <component name="VgoProject">
     <settings-migrated>true</settings-migrated>

@@ -13,6 +13,7 @@ import com.kagg886.seiko.util.TextUtils;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.concurrent.Executors;
@@ -28,18 +29,23 @@ import java.util.concurrent.ThreadPoolExecutor;
  * @version: 1.0
  */
 public class DictionaryFile {
-    private static final boolean STRICT_MODE = false;
+    //代表dic文件路径
     private final File dicFile;
+
+    //dic注册的指令集
     private final HashMap<DictionaryCommandMatcher, ArrayList<DictionaryCode>> commands = new HashMap<>();
 
+    //生命周期运行时
     private final LifeCycleRuntime cycle;
     private final HashMap<String, Object> settings = new HashMap<>(); //伪代码的#号设置
 
+    //注册的动态词库
     private final HashMap<String, DictionaryFile> subFile = new HashMap<>();
 
-
+    //托管线程池
     private ThreadPoolExecutor executor;
 
+    //非法字符，通常用于判断容易被混淆的seiko伪代码关键字(如'%'的全半角)
     private final char[] illegalChar = {
             '％',
             160,
@@ -114,7 +120,9 @@ public class DictionaryFile {
                     initConfigSuccess = true;
                     //在此处判断这是不是能正确解析SeikoDIC，先从编码开始
                     if (!settings.containsValue("Seiko词库")) {
-                        throw new DictionaryOnLoadException("未检测到必要的标识:Seiko词库。如果你的编辑器里有'#Seiko词库'，那可能说明词库的编码出了问题，请将其以别的编码保存直到此报错消失\n出错的伪代码文件:" + this.dicFile.getAbsolutePath());
+                        throw new DictionaryOnLoadException("未检测到必要的标识:Seiko词库。如果你的编辑器里有'#Seiko词库'，那可能说明词库的编码出了问题，请将此词库保存为默认编码以解决本错误。\n" +
+                                "出错的伪代码文件:" + this.dicFile.getAbsolutePath() + "\n" +
+                                "当前系统默认编码:" + Charset.defaultCharset().displayName());
                     }
                     continue;
                 }
