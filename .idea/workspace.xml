@@ -9,13 +9,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="50deb0ec-ac2b-4bb3-81a3-6580c4990f99" name="更改" comment="fix: 🐛 dic词库因编码解析失败时会给出项目默认的编码。">
-      <change afterPath="$PROJECT_DIR$/DictionaryCore/src/main/java/com/kagg886/seiko/dic/entity/func/impl/GroupFileControl.java" afterDir="false" />
+    <list default="true" id="50deb0ec-ac2b-4bb3-81a3-6580c4990f99" name="更改" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BotMock/src/main/java/com/kagg886/seiko/mock/MockBotTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/BotMock/src/main/java/com/kagg886/seiko/mock/MockBotTest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/DictionaryCore/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/DictionaryCore/README.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/DictionaryCore/src/main/java/com/kagg886/seiko/dic/entity/func/Function.java" beforeDir="false" afterPath="$PROJECT_DIR$/DictionaryCore/src/main/java/com/kagg886/seiko/dic/entity/func/Function.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DictionaryCore/src/main/java/com/kagg886/seiko/dic/entity/impl/FastAssignment.java" beforeDir="false" afterPath="$PROJECT_DIR$/DictionaryCore/src/main/java/com/kagg886/seiko/dic/entity/impl/FastAssignment.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DictionaryCore/src/main/java/com/kagg886/seiko/dic/entity/func/impl/GroupFileControl.java" beforeDir="false" afterPath="$PROJECT_DIR$/DictionaryCore/src/main/java/com/kagg886/seiko/dic/entity/func/impl/GroupFileControl.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -97,30 +95,30 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.go.formatter.settings.were.checked": "true",
-    "RunOnceActivity.go.migrated.go.modules.settings": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "git-widget-placeholder": "dev",
-    "go.import.settings.migrated": "true",
-    "jdk.selected.JAVA_MODULE": "jbr-17",
-    "ktor.last.update.timestamp": "1684492463623",
-    "last_opened_file_path": "D:/IDEAProjects/snake",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "project.structure.last.edited": "模块",
-    "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.29425287",
-    "settings.editor.selected.configurable": "reference.settings.ide.settings.new.ui",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.go.formatter.settings.were.checked&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.go.migrated.go.modules.settings&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;dev&quot;,
+    &quot;go.import.settings.migrated&quot;: &quot;true&quot;,
+    &quot;jdk.selected.JAVA_MODULE&quot;: &quot;jbr-17&quot;,
+    &quot;ktor.last.update.timestamp&quot;: &quot;1684492463623&quot;,
+    &quot;last_opened_file_path&quot;: &quot;D:/IDEAProjects/snake&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;模块&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.29425287&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;reference.settings.ide.settings.new.ui&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RunManager" selected="应用程序.MockBotTest">
     <configuration name="PluginDemo" type="AndroidRunConfigurationType" factoryName="Android App">
       <module name="Seiko.PluginDemo.main" />
@@ -337,7 +335,9 @@
       <workItem from="1684296961211" duration="1720000" />
       <workItem from="1684394171644" duration="1623000" />
       <workItem from="1684460611243" duration="3404000" />
-      <workItem from="1684487764484" duration="4375000" />
+      <workItem from="1684487764484" duration="4724000" />
+      <workItem from="1684495049218" duration="1923000" />
+      <workItem from="1684817301688" duration="3768000" />
     </task>
     <task id="LOCAL-00001" summary="style: 📝 写了几个注释">
       <created>1683678818902</created>
@@ -367,7 +367,14 @@
       <option name="project" value="LOCAL" />
       <updated>1684470078988</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="fix: 🐛 dic词库因编码解析失败时会给出项目默认的编码。&#10;feat: ✨ 新增函数: '群文件'">
+      <created>1684494259896</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1684494259896</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -390,7 +397,8 @@
     <MESSAGE value="fix:  修复 '删' 函数出现的无法删除的bug" />
     <MESSAGE value="fix:  现在 '写' 函数可以写入含空格字符串了&#10;feat: ✨ 新增 '方法返回值协定' 功能" />
     <MESSAGE value="fix:  dic词库因编码解析失败时会给出项目默认的编码。" />
-    <option name="LAST_COMMIT_MESSAGE" value="fix:  dic词库因编码解析失败时会给出项目默认的编码。" />
+    <MESSAGE value="fix:  dic词库因编码解析失败时会给出项目默认的编码。&#10;feat: ✨ 新增函数: '群文件'" />
+    <option name="LAST_COMMIT_MESSAGE" value="fix:  dic词库因编码解析失败时会给出项目默认的编码。&#10;feat: ✨ 新增函数: '群文件'" />
   </component>
   <component name="VgoProject">
     <settings-migrated>true</settings-migrated>

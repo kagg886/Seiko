@@ -71,6 +71,7 @@ public abstract class Function extends DictionaryCode {
 
             //与群文件有关
             {"群文件", "GroupFileControl$GetFile"},
+            {"删群文件", "GroupFileControl$Delete"},
 
             //与bot有关
             {"BOT列表","BotControl$getBot"},
