@@ -292,11 +292,16 @@ public class DictionaryUtil {
             return false;
         }
 
-        if (str.contains(")")) {
-            int lIndex = str.lastIndexOf("(");
-            int rIndex = str.indexOf(")", lIndex);
-            boolean p = evalBooleanExpression(str.substring(lIndex + 1, rIndex), runtime);
-            return evalBooleanExpression(str.replace("(" + str.substring(lIndex + 1, rIndex) + ")", Boolean.toString(p)), runtime);
+        //使用增强表达式参与if计算若出现数组引用会被误识别
+        try {
+            if (str.contains(")")) {
+                int lIndex = str.lastIndexOf("(");
+                int rIndex = str.indexOf(")", lIndex);
+                boolean p = evalBooleanExpression(str.substring(lIndex + 1, rIndex), runtime);
+                return evalBooleanExpression(str.replace("(" + str.substring(lIndex + 1, rIndex) + ")", Boolean.toString(p)), runtime);
+            }
+        } catch (Exception e) {
+
         }
 
         if (str.contains("||")) {

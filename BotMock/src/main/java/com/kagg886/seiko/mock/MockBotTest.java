@@ -37,7 +37,7 @@ public class MockBotTest {
         //初始化自己
         MockMember a = group.addMember(485184047,"猫娘");
 
-        for (int i = 100000; i < 120000; i++) {
+        for (int i = 100000; i < 100100; i++) {
             group.addMember(i, UUID.randomUUID().toString());
         }
         //将自己设为群主
