@@ -1,24 +1,22 @@
 package com.kagg886.seiko.dic.session;
 
-import com.kagg886.seiko.dic.entity.impl.FastAssignment;
-import com.kagg886.seiko.dic.util.DictionaryUtil;
 import com.kagg886.seiko.dic.entity.DictionaryCode;
 import com.kagg886.seiko.dic.entity.DictionaryCommandMatcher;
 import com.kagg886.seiko.dic.entity.DictionaryFile;
 import com.kagg886.seiko.dic.entity.func.Function;
 import com.kagg886.seiko.dic.entity.impl.Expression;
+import com.kagg886.seiko.dic.entity.impl.FastAssignment;
 import com.kagg886.seiko.dic.entity.impl.PlainText;
 import com.kagg886.seiko.dic.exception.DictionaryOnRunningException;
 import com.kagg886.seiko.dic.session.impl.FunctionRuntime;
+import com.kagg886.seiko.dic.util.DictionaryUtil;
 import net.mamoe.mirai.contact.Contact;
 import net.mamoe.mirai.message.data.MessageChainBuilder;
 
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Stack;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ThreadPoolExecutor;
 import java.util.function.Supplier;
 import java.util.regex.Matcher;
 
@@ -148,9 +146,9 @@ public abstract class AbsRuntime<EVENT> {
      * @date 2023/01/19 19:54
      */
     private void invoke0(String command) {
-        for (Map.Entry<DictionaryCommandMatcher, ArrayList<DictionaryCode>> entry : file.getCommands().entrySet()) {
+        for (Map.Entry<DictionaryCommandMatcher, List<DictionaryCode>> entry : file.getCommands().entrySet()) {
             DictionaryCommandMatcher matcher = entry.getKey();
-            ArrayList<DictionaryCode> code = entry.getValue();
+            List<DictionaryCode> code = entry.getValue();
             if (!matcher.matchesDomain(this)) { //匹配指令触发的环境和当前环境是否相符
                 continue;
             }
@@ -182,7 +180,7 @@ public abstract class AbsRuntime<EVENT> {
                     groups++;
                 }
                 try {
-                    invoke(code);
+                    invoke(code,true);
                 } catch (Exception e) { //异常处理，生成调用栈信息向上抛出
                     String msg = e.getMessage();
                     if (e instanceof DictionaryOnRunningException) {
@@ -202,7 +200,7 @@ public abstract class AbsRuntime<EVENT> {
      * @description 内部invoke函数。将在这里完成对dic最终的解析
      * @date 2023/01/19 19:55
      */
-    protected void invoke(ArrayList<DictionaryCode> code) {
+    public void invoke(List<DictionaryCode> code,boolean isNoConditional) {
         boolean sendSwitch = !(code.get(0) instanceof PlainText); //若第一行为PlainText返回false。为Function返回true
         boolean isJumpCode = false; //是否跳过解析，配合如果表达式使用
 
@@ -266,7 +264,7 @@ public abstract class AbsRuntime<EVENT> {
                 }
             }
 
-            if (dic == code.get(code.size() - 1)) {
+            if (dic == code.get(code.size() - 1) && isNoConditional) {
                 clearMessage();
             }
         }

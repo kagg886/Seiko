@@ -2,6 +2,7 @@ package com.kagg886.seiko.dic.entity;
 
 import com.kagg886.seiko.dic.DictionaryEnvironment;
 import com.kagg886.seiko.dic.entity.func.Function;
+import com.kagg886.seiko.dic.entity.impl.ConditionalExpression;
 import com.kagg886.seiko.dic.entity.impl.Expression;
 import com.kagg886.seiko.dic.entity.impl.FastAssignment;
 import com.kagg886.seiko.dic.entity.impl.PlainText;
@@ -16,6 +17,7 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadPoolExecutor;
 
@@ -33,7 +35,7 @@ public class DictionaryFile {
     private final File dicFile;
 
     //dic注册的指令集
-    private final HashMap<DictionaryCommandMatcher, ArrayList<DictionaryCode>> commands = new HashMap<>();
+    private final HashMap<DictionaryCommandMatcher, List<DictionaryCode>> commands = new HashMap<>();
 
     //生命周期运行时
     private final LifeCycleRuntime cycle;
@@ -77,6 +79,12 @@ public class DictionaryFile {
         return settings;
     }
 
+    //是否启用实验性嵌套表达式解析功能。必须在parseDICCodeFile的第一阶段后调用
+    public boolean isNewDecode() {
+        return getSettings().containsValue("允许嵌套分支语句");
+    }
+
+    //开始解析
     public void parseDICCodeFile() throws IOException {
         // 先clear
         clear();
@@ -98,7 +106,7 @@ public class DictionaryFile {
 
         boolean behindLineIsEmpty = true;
         String commandRegex = null;
-        ArrayList<DictionaryCode> dictionaryCodes = new ArrayList<>();
+        List<DictionaryCode> dictionaryCodes = new ArrayList<>();
         int commandLine = 0; //指令所在的行号
         boolean initConfig = false, //遇到了'#'开头的内容返回true
                 initConfigSuccess = false; //在遇到'#'后，若遇到了空行返回true
@@ -110,6 +118,7 @@ public class DictionaryFile {
                 continue; //注释直接跳过
             }
 
+            //-------------------------解析配置文件-------------------------
             if (!initConfig || !initConfigSuccess) { //跳过解析#的条件:在遇到#后遇到空行
                 if (comm.startsWith("#")) {
                     initConfig = true;
@@ -129,6 +138,7 @@ public class DictionaryFile {
                 throw new DictionaryOnLoadException("请在伪代码文件开头通过#注册必要设置!\n出错的伪代码文件:" + this.dicFile.getAbsolutePath());
             }
 
+            //-----------------------------非法字符检验----------------------
             for (char a : illegalChar) {
                 int idx;
                 if ((idx = comm.indexOf(a)) != -1) {
@@ -170,38 +180,94 @@ public class DictionaryFile {
                 对每一行伪代码进行解析。
                 按照[函数->特殊控制字符->纯文本]解析
             */
-            if (comm.startsWith("$") && comm.endsWith("$")) { //真的会有人最后一行跟换行符(
-                try {
-                    Function func = Function.parseFunction(comm, iterator.getLen());
-                    if (func instanceof Function.Deprecated) {
-                        DictionaryEnvironment.getInstance().getErrorListener().onWarn(this.getFile(), "发现过时函数:" + func.getCode() + "\n" + ((Function.Deprecated) func).getAdvice());
-                    }
-                    dictionaryCodes.add(func);
-                } catch (Throwable e) {
-                    throw new DictionaryOnLoadException("解析伪代码方法时出错!" + "(" + iterator.getLen() + ":" + comm + ")", e);
-                }
-            } else if (comm.startsWith("如果:")) {
-                dictionaryCodes.add(new Expression.If(iterator.getLen(), comm));
-            } else if (comm.equals("如果尾")) {
-                dictionaryCodes.add(new Expression.Else(iterator.getLen(), comm));
-            } else if (comm.equals("返回")) {
-                dictionaryCodes.add(new Expression.Return(iterator.getLen(), comm));
-            } else if (comm.contains("<-") && !comm.contains("\\<-")) {
-                dictionaryCodes.add(new FastAssignment(iterator.getLen(),comm));
+            if (isNewDecode()) {
+                iterator.setLen(iterator.getLen() - 1);
+                dictionaryCodes = getAllElement(iterator, 0);
+                commands.put(new DictionaryCommandMatcher(commandRegex, commandLine, dicFile), dictionaryCodes);
+                behindLineIsEmpty = true;
             } else {
-                dictionaryCodes.add(new PlainText(iterator.getLen(), comm));
+                if (comm.startsWith("$") && comm.endsWith("$")) { //真的会有人最后一行跟换行符(
+                    try {
+                        Function func = Function.parseFunction(comm, iterator.getLen());
+                        if (func instanceof Function.Deprecated) {
+                            DictionaryEnvironment.getInstance().getErrorListener().onWarn(this.getFile(), "发现过时函数:" + func.getCode() + "\n" + ((Function.Deprecated) func).getAdvice());
+                        }
+                        dictionaryCodes.add(func);
+                    } catch (Throwable e) {
+                        throw new DictionaryOnLoadException("解析伪代码方法时出错!" + "(" + iterator.getLen() + ":" + comm + ")", e);
+                    }
+                } else if (comm.startsWith("如果:")) {
+                    dictionaryCodes.add(new Expression.If(iterator.getLen(), comm));
+                } else if (comm.equals("如果尾")) {
+                    dictionaryCodes.add(new Expression.Else(iterator.getLen(), comm));
+                } else if (comm.equals("返回")) {
+                    dictionaryCodes.add(new Expression.Return(iterator.getLen(), comm));
+                } else if (comm.contains("<-") && !comm.contains("\\<-")) {
+                    dictionaryCodes.add(new FastAssignment(iterator.getLen(), comm));
+                } else {
+                    dictionaryCodes.add(new PlainText(iterator.getLen(), comm));
+                }
             }
         }
         /*
             最后一行若不是空的话，需要强行装载一下
          */
 
-        if (iterator.getLen() == lines.length) {
+        if (iterator.getLen() == lines.length && !isNewDecode()) {
             commands.put(new DictionaryCommandMatcher(commandRegex, commandLine, dicFile), dictionaryCodes);
         }
 
         notifyLifeCycle(LifeCycleRuntime.LifeCycle.INIT);
     }
+
+    //获取一整条命令，直到遇到空行
+    private List<DictionaryCode> getAllElement(ArrayIterator<String> iterator, int deep) {
+        List<DictionaryCode> dictionaryCodes = new ArrayList<>();
+        while (iterator.hasNext()) {
+            String comm = iterator.next();
+
+            String prefix = TextUtils.repeat(" ", deep);
+            if (comm.startsWith(prefix)) { //符合深度，开始填充
+                comm = comm.replace(prefix, ""); //解空格
+                if (comm.startsWith("如果:")) {
+                    ConditionalExpression expression = new ConditionalExpression(iterator.getLen(), comm);
+                    expression.setSuccess(getAllElement(iterator, deep + 1));
+
+                    iterator.setLen(iterator.getLen() - 1); //这一步是回滚进度，因为iterator方法最坏都会向后执行一步
+                    comm = iterator.next(); //提前获取下一步指令是如果尾还是闭合标志
+                    if (comm.startsWith(prefix + "如果尾")) {
+                        expression.setFailed(getAllElement(iterator, deep + 1));
+                    }
+                    dictionaryCodes.add(expression);
+                    iterator.setLen(iterator.getLen() - 1);
+                } else {
+                    if (TextUtils.isEmpty(comm)) {
+                        return dictionaryCodes;
+                    }
+                    //解析其他地方的表达式
+                    if (comm.startsWith("$") && comm.endsWith("$")) { //真的会有人最后一行跟换行符(
+                        try {
+                            Function func = Function.parseFunction(comm, iterator.getLen());
+                            if (func instanceof Function.Deprecated) {
+                                DictionaryEnvironment.getInstance().getErrorListener().onWarn(this.getFile(), "发现过时函数:" + func.getCode() + "\n" + ((Function.Deprecated) func).getAdvice());
+                            }
+                            dictionaryCodes.add(func);
+                        } catch (Throwable e) {
+                            throw new DictionaryOnLoadException("解析伪代码方法时出错!" + "(" + iterator.getLen() + ":" + comm + ")", e);
+                        }
+                    } else if (comm.contains("<-") && !comm.contains("\\<-")) {
+                        dictionaryCodes.add(new FastAssignment(iterator.getLen(), comm));
+                    } else {
+                        dictionaryCodes.add(new PlainText(iterator.getLen(), comm));
+                    }
+                }
+            } else {
+                return dictionaryCodes;
+            }
+        }
+        return dictionaryCodes;
+    }
+
 
     public void notifyLifeCycle(LifeCycleRuntime.LifeCycle str) {
         cycle.invoke(str.getTips());
@@ -227,7 +293,7 @@ public class DictionaryFile {
         return subFile;
     }
 
-    public HashMap<DictionaryCommandMatcher, ArrayList<DictionaryCode>> getCommands() {
+    public HashMap<DictionaryCommandMatcher, List<DictionaryCode>> getCommands() {
         return commands;
     }
 

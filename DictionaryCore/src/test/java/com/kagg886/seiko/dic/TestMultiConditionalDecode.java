@@ -1,6 +1,7 @@
 package com.kagg886.seiko.dic;
 
 import com.kagg886.seiko.dic.entity.DictionaryCode;
+import com.kagg886.seiko.dic.entity.impl.ConditionalExpression;
 import com.kagg886.seiko.dic.entity.impl.PlainText;
 import com.kagg886.seiko.util.ArrayIterator;
 import com.kagg886.seiko.util.TextUtils;
@@ -37,6 +38,7 @@ public class TestMultiConditionalDecode {
                     func.add(expression);
                     root.setLen(root.getLen() - 1);
                 } else {
+                    //解析其他地方的表达式
                     func.add(new PlainText(root.getLen(), comm));
                 }
             } else {
@@ -68,5 +70,9 @@ public class TestMultiConditionalDecode {
                     " 如果尾\n" +
                     "  语句9\n" +
                     "  语句10\n" +
-                    "语句11";
+                    "语句11\n" +
+                    "\n" +
+                    "\n" +
+                    "\n" +
+                    "\n";
 }
