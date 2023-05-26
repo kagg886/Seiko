@@ -17,6 +17,9 @@ public class TextUtils {
     }
 
     public static String repeat(String value,int count) {
+        if (count == 0) {
+            return "";
+        }
         if (count == 1) {
             return value;
         }

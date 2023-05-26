@@ -9,10 +9,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="50deb0ec-ac2b-4bb3-81a3-6580c4990f99" name="更改" comment="feat: ✨ 增加 '删群文件' 函数">
+    <list default="true" id="50deb0ec-ac2b-4bb3-81a3-6580c4990f99" name="更改" comment="feat: 🔖 发布0.1.6-APPEND-1">
+      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DictionaryCore/src/test/java/com/kagg886/seiko/dic/ConditionalExpression.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DictionaryCore/src/test/java/com/kagg886/seiko/dic/TestMultiConditionalDecode.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BotMock/src/main/java/com/kagg886/seiko/mock/MockBotTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/BotMock/src/main/java/com/kagg886/seiko/mock/MockBotTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DictionaryCore/src/main/java/com/kagg886/seiko/dic/util/DictionaryUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/DictionaryCore/src/main/java/com/kagg886/seiko/dic/util/DictionaryUtil.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Tools/src/main/java/com/kagg886/seiko/util/ArrayIterator.java" beforeDir="false" afterPath="$PROJECT_DIR$/Tools/src/main/java/com/kagg886/seiko/util/ArrayIterator.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Tools/src/main/java/com/kagg886/seiko/util/TextUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/Tools/src/main/java/com/kagg886/seiko/util/TextUtils.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -100,38 +104,39 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ApkExportedModule": "Seiko.app",
-    "ExportApk.ApkPath": "D:\\IDEAProjects\\Seiko\\app",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.go.formatter.settings.were.checked": "true",
-    "RunOnceActivity.go.migrated.go.modules.settings": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "git-widget-placeholder": "dev",
-    "go.import.settings.migrated": "true",
-    "jdk.selected.JAVA_MODULE": "jbr-17",
-    "ktor.last.update.timestamp": "1684492463623",
-    "last_opened_file_path": "D:/IDEAProjects/kagg886.jks",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "project.structure.last.edited": "模块",
-    "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.29425287",
-    "settings.editor.selected.configurable": "reference.settings.ide.settings.new.ui",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ApkExportedModule&quot;: &quot;Seiko.app&quot;,
+    &quot;ExportApk.ApkPath&quot;: &quot;D:\\IDEAProjects\\Seiko\\app&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.go.formatter.settings.were.checked&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.go.migrated.go.modules.settings&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;dev&quot;,
+    &quot;go.import.settings.migrated&quot;: &quot;true&quot;,
+    &quot;jdk.selected.JAVA_MODULE&quot;: &quot;jbr-17&quot;,
+    &quot;ktor.last.update.timestamp&quot;: &quot;1684492463623&quot;,
+    &quot;last_opened_file_path&quot;: &quot;D:/IDEAProjects/kagg886.jks&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;模块&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.29425287&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;reference.settings.ide.settings.new.ui&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   },
-  "keyToStringList": {
-    "ExportApk.BuildVariants": [
-      "release"
+  &quot;keyToStringList&quot;: {
+    &quot;ExportApk.BuildVariants&quot;: [
+      &quot;release&quot;
     ]
   }
-}]]></component>
-  <component name="RunManager" selected="应用程序.MockBotTest">
+}</component>
+  <component name="RunManager" selected="Gradle.TestMultiConditionalDecode.test">
     <configuration name="PluginDemo" type="AndroidRunConfigurationType" factoryName="Android App">
       <module name="Seiko.PluginDemo.main" />
       <option name="DEPLOY" value="true" />
@@ -200,19 +205,6 @@
       <option name="SKIP_ACTIVITY_VALIDATION" value="false" />
       <method v="2">
         <option name="Android.Gradle.BeforeRunTask" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="MockBotTest" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="com.kagg886.seiko.mock.MockBotTest" />
-      <module name="Seiko.BotMock.main" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="com.kagg886.seiko.mock.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <method v="2">
-        <option name="Make" enabled="true" />
       </method>
     </configuration>
     <configuration name="UtilsTest" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
@@ -294,6 +286,30 @@
       <ForceTestExec>false</ForceTestExec>
       <method v="2" />
     </configuration>
+    <configuration name="TestMultiConditionalDecode.test" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" value="" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value=":DictionaryCore:test" />
+            <option value="--tests" />
+            <option value="&quot;com.kagg886.seiko.dic.TestMultiConditionalDecode.test&quot;" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <ForceTestExec>true</ForceTestExec>
+      <method v="2" />
+    </configuration>
     <configuration default="true" type="JetRunConfigurationType">
       <module name="Seiko.PluginAPI" />
       <method v="2">
@@ -310,19 +326,19 @@
     <list>
       <item itemvalue="Android 应用.app" />
       <item itemvalue="Android 应用.PluginDemo" />
+      <item itemvalue="Gradle.TestMultiConditionalDecode.test" />
       <item itemvalue="Gradle.Seiko [clean]" />
       <item itemvalue="Gradle.Seiko:ConsolePlugin [runConsole]" />
       <item itemvalue="Gradle.Seiko:ConsolePlugin [buildPlugin]" />
       <item itemvalue="应用程序.UtilsTest" />
-      <item itemvalue="应用程序.MockBotTest" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Gradle.TestMultiConditionalDecode.test" />
         <item itemvalue="应用程序.UtilsTest" />
         <item itemvalue="Gradle.Seiko:ConsolePlugin [buildPlugin]" />
         <item itemvalue="Gradle.Seiko:ConsolePlugin [runConsole]" />
         <item itemvalue="Gradle.Seiko [clean]" />
-        <item itemvalue="应用程序.MockBotTest" />
       </list>
     </recent_temporary>
   </component>
@@ -352,6 +368,9 @@
       <workItem from="1684817301688" duration="3884000" />
       <workItem from="1684823089014" duration="186000" />
       <workItem from="1684824914039" duration="2163000" />
+      <workItem from="1684983285574" duration="5000" />
+      <workItem from="1685087576788" duration="3071000" />
+      <workItem from="1685090662831" duration="362000" />
     </task>
     <task id="LOCAL-00001" summary="style: 📝 写了几个注释">
       <created>1683678818902</created>
@@ -433,7 +452,17 @@
           <line>253</line>
           <option name="timeStamp" value="1" />
         </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/DictionaryCore/src/test/java/com/kagg886/seiko/dic/TestMultiConditionalDecode.java</url>
+          <line>52</line>
+          <option name="timeStamp" value="3" />
+        </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
+    <watches-manager>
+      <configuration name="GradleRunConfiguration">
+        <watch expression="code.get(0)" />
+      </configuration>
+    </watches-manager>
   </component>
 </project>

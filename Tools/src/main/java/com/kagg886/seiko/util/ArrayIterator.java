@@ -37,4 +37,8 @@ public class ArrayIterator<T> implements Iterator<T> {
     public void setLen(int len) {
         this.len = len;
     }
+
+    public T before() {
+        return array[len - 1];
+    }
 }
