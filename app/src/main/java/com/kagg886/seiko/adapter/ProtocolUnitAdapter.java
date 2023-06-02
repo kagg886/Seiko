@@ -37,6 +37,7 @@ public class ProtocolUnitAdapter extends BaseAdapter {
         ProtocolInjector injector = new ProtocolInjector(protocol);
 
         for (Field f : ProtocolInjector.class.getDeclaredFields()) {
+            if (Modifier.isStatic(f.getModifiers())) continue;
             ViewBinder vb = new ViewBinder();
             f.setAccessible(true);
             vb.setTitle(f.getName());
