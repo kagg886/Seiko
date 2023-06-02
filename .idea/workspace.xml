@@ -9,8 +9,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="50deb0ec-ac2b-4bb3-81a3-6580c4990f99" name="更改" comment="feat: ✨ 新增设置项: '登录协议参数设置'">
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/values/strings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/values/strings.xml" afterDir="false" />
+    <list default="true" id="50deb0ec-ac2b-4bb3-81a3-6580c4990f99" name="更改" comment="feat: ✨ 优化登录协议设置UI">
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/kagg886/seiko/adapter/ProtocolUnitAdapter.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/kagg886/seiko/adapter/ProtocolUnitAdapter.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -385,7 +385,7 @@
       <workItem from="1684817301688" duration="3884000" />
       <workItem from="1684823089014" duration="186000" />
       <workItem from="1684824914039" duration="2163000" />
-      <workItem from="1685704294240" duration="9882000" />
+      <workItem from="1685704294240" duration="10134000" />
     </task>
     <task id="LOCAL-00001" summary="style: 📝 写了几个注释">
       <created>1683678818902</created>
@@ -436,7 +436,14 @@
       <option name="project" value="LOCAL" />
       <updated>1685714136936</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="feat: ✨ 优化登录协议设置UI">
+      <created>1685714382952</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1685714382952</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -476,7 +483,8 @@
     <MESSAGE value="fix:  dic词库因编码解析失败时会给出项目默认的编码。&#10;feat: ✨ 新增函数: '群文件'" />
     <MESSAGE value="feat: ✨ 增加 '删群文件' 函数" />
     <MESSAGE value="feat: ✨ 新增设置项: '登录协议参数设置'" />
-    <option name="LAST_COMMIT_MESSAGE" value="feat: ✨ 新增设置项: '登录协议参数设置'" />
+    <MESSAGE value="feat: ✨ 优化登录协议设置UI" />
+    <option name="LAST_COMMIT_MESSAGE" value="feat: ✨ 优化登录协议设置UI" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REARRANGE_BEFORE_PROJECT_COMMIT" value="true" />

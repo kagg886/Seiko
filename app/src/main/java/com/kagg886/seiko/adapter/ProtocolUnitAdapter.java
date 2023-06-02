@@ -106,7 +106,7 @@ public class ProtocolUnitAdapter extends BaseAdapter {
         private final View root;
 
         public ViewBinder() {
-            root = LayoutInflater.from(SeikoApplication.getSeikoApplicationContext()).inflate(R.layout.adapter_protocol_unit, null);
+            root = LayoutInflater.from(SeikoApplication.getCurrentActivity()).inflate(R.layout.adapter_protocol_unit, null);
             editText = root.findViewById(R.id.adapter_protocol_unit_value);
             textView = root.findViewById(R.id.adapter_protocol_unit_desc);
         }
