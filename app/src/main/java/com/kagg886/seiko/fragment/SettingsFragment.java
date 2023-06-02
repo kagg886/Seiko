@@ -137,7 +137,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Prefer
 
 
         protected View create() {
-            View root = LayoutInflater.from(SeikoApplication.getSeikoApplicationContext()).inflate(R.layout.activity_protocol_fix, null);
+            View root = LayoutInflater.from(SeikoApplication.getCurrentActivity()).inflate(R.layout.activity_protocol_fix, null);
 
             spinner = root.findViewById(R.id.activity_protocol_fix_select);
             listView = root.findViewById(R.id.activity_protocol_fix_layout);
