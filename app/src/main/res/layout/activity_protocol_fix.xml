@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:layout_width="match_parent"
+              android:weightSum="20"
+              android:orientation="vertical"
+              android:layout_height="match_parent">
+
+    <Spinner
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:id="@+id/activity_protocol_fix_select"/>
+
+    <ListView
+            android:id="@+id/activity_protocol_fix_layout"
+            android:layout_weight="14"
+            android:layout_width="match_parent"
+            android:layout_height="490dp">
+    </ListView>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="4">
+
+        <Button android:text="@string/ok"
+                android:layout_marginStart="30dp"
+                android:id="@+id/activity_protocol_fix_success"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+        <Button
+                android:text="@string/reset"
+                android:layout_marginEnd="30dp"
+                android:id="@+id/activity_protocol_fix_reset"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</LinearLayout>

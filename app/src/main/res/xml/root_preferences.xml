@@ -16,7 +16,8 @@
 
         <SwitchPreference
                 android:defaultValue="false"
-                android:title="@string/settings_auto_reload_dic_on_message_title" android:key="alwaysRefreshOnceMessageGetting"/>
+                android:title="@string/settings_auto_reload_dic_on_message_title"
+                android:key="alwaysRefreshOnceMessageGetting"/>
     </PreferenceCategory>
 
     <PreferenceCategory app:title="@string/settings_log">
@@ -24,6 +25,13 @@
                 android:defaultValue="false"
                 android:title="@string/settings_merge_all_title" android:key="mergeAllLogs"/>
         <EditTextPreference app:title="@string/settings_max_num_title" app:key="maxLogNum"/>
+    </PreferenceCategory>
+
+    <PreferenceCategory app:title="@string/debug">
+        <DropDownPreference
+                app:key="protocolSetting"
+                app:summary="@string/protocol_warning"
+                app:title="@string/protocolSetting"/>
     </PreferenceCategory>
 
     <PreferenceCategory app:title="@string/settings_info">

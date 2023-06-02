@@ -36,7 +36,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Swi
 
     private SwipeRefreshLayout refresh;
 
-    private static final String[] protocols = {
+    public static final String[] protocols = {
             "ANDROID_PHONE",
             "ANDROID_PAD",
             "ANDROID_WATCH",

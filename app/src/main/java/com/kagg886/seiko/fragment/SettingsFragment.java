@@ -5,21 +5,32 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.text.InputType;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.*;
 import androidx.annotation.NonNull;
 import androidx.annotation.StringRes;
+import androidx.appcompat.app.AlertDialog;
 import androidx.preference.EditTextPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
+import com.alibaba.fastjson.JSON;
 import com.kagg886.seiko.BuildConfig;
 import com.kagg886.seiko.R;
 import com.kagg886.seiko.SeikoApplication;
+import com.kagg886.seiko.adapter.ProtocolUnitAdapter;
 import com.kagg886.seiko.event.SnackBroadCast;
+import com.kagg886.seiko.util.ProtocolInjector;
 import com.kagg886.seiko.util.ShareUtil;
 import com.kagg886.seiko.util.TextUtils;
+import com.kagg886.seiko.util.storage.JSONObjectStorage;
 import net.mamoe.mirai.Bot;
+import net.mamoe.mirai.utils.BotConfiguration;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Objects;
+import java.nio.file.Paths;
+
+import static com.kagg886.seiko.fragment.LoginFragment.protocols;
 
 public class SettingsFragment extends PreferenceFragmentCompat implements Preference.OnPreferenceClickListener, Preference.OnPreferenceChangeListener {
     @SuppressLint("DefaultLocale")
@@ -28,7 +39,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Prefer
         setPreferencesFromResource(R.xml.root_preferences, rootKey);
 
         Preference s = findPreference("SeikoInfo");
-        PackageInfo p = null;
+        PackageInfo p;
         try {
             p = requireContext().getPackageManager().getPackageInfo(getContext().getPackageName(), 0);
         } catch (PackageManager.NameNotFoundException e) {
@@ -54,14 +65,24 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Prefer
         s = findPreference("mergeAllLogs");
         s.setOnPreferenceChangeListener(this);
 
+        s = findPreference("protocolSetting");
+        s.setOnPreferenceClickListener(this);
 
     }
 
     @Override
     public boolean onPreferenceClick(Preference preference) {
-        if (preference.getKey().equals("goGithub")) {
-            ShareUtil.openUrlByBrowser("https://github.com/kagg886/Seiko");
-            return true;
+
+        switch (preference.getKey()) {
+            case "goGithub":
+                ShareUtil.openUrlByBrowser("https://github.com/kagg886/Seiko");
+                break;
+
+            case "protocolSetting":
+                AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+                builder.setView(new ProtocolSettingsDialog().create());
+                builder.create().show();
+                break;
         }
         return false;
     }
@@ -93,7 +114,85 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Prefer
 
         return false;
     }
+
     private String text(@StringRes int s, Object... args) {
         return String.format(SeikoApplication.getSeikoApplicationContext().getText(s).toString(), args);
     }
+
+    /**
+     * 协议设置的活动
+     *
+     * @author kagg886
+     * @date 2023/6/2 20:12
+     **/
+    public static class ProtocolSettingsDialog implements AdapterView.OnItemSelectedListener, View.OnClickListener {
+        private Spinner spinner;
+        private ListView listView;
+
+        private Button success;
+
+        private Button reset;
+
+        private ProtocolUnitAdapter adapter;
+
+
+        protected View create() {
+            View root = LayoutInflater.from(SeikoApplication.getSeikoApplicationContext()).inflate(R.layout.activity_protocol_fix, null);
+
+            spinner = root.findViewById(R.id.activity_protocol_fix_select);
+            listView = root.findViewById(R.id.activity_protocol_fix_layout);
+            success = root.findViewById(R.id.activity_protocol_fix_success);
+            reset = root.findViewById(R.id.activity_protocol_fix_reset);
+
+            spinner.setAdapter(new ArrayAdapter<>(SeikoApplication.getSeikoApplicationContext(), android.R.layout.simple_list_item_1, protocols));
+            spinner.setOnItemSelectedListener(this);
+
+            adapter = new ProtocolUnitAdapter();
+            adapter.setCurrentProtocol(BotConfiguration.MiraiProtocol.ANDROID_PHONE);
+            listView.setAdapter(adapter);
+
+            success.setOnClickListener(this);
+            reset.setOnClickListener(this);
+            return root;
+        }
+
+        @Override
+        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+            BotConfiguration.MiraiProtocol protocol = BotConfiguration.MiraiProtocol.valueOf(protocols[position]);
+            adapter.setCurrentProtocol(protocol);
+        }
+
+        @Override
+        public void onNothingSelected(AdapterView<?> parent) {
+
+        }
+
+        @Override
+        public void onClick(View v) {
+            BotConfiguration.MiraiProtocol protocol = BotConfiguration.MiraiProtocol.valueOf((String) spinner.getSelectedItem());
+            JSONObjectStorage storage = JSONObjectStorage.obtain(Paths.get(SeikoApplication.getSeikoApplicationContext().getExternalFilesDir("config").toString(), "customProtocol.json").toFile().getAbsolutePath());
+
+            if (Bot.getInstances().size() != 0) {
+                SnackBroadCast.sendBroadCast("请下线所有bot后再操作");
+                return;
+            }
+            switch (v.getId()) {
+                case R.id.activity_protocol_fix_success:
+                    ProtocolInjector injector = adapter.pack();
+                    injector.inject(protocol);
+                    storage.put((String) spinner.getSelectedItem(), JSON.toJSONString(injector));
+                    SnackBroadCast.sendBroadCast("修改成功。");
+                    break;
+                case R.id.activity_protocol_fix_reset:
+                    ProtocolInjector.restore(protocol);
+                    storage.remove((String) spinner.getSelectedItem());
+                    SnackBroadCast.sendBroadCast("还原成功。");
+                    break;
+
+            }
+            storage.save();
+            adapter.setCurrentProtocol(protocol); //触发视图更新
+        }
+    }
+
 }
