@@ -15,7 +15,7 @@ import java.nio.charset.StandardCharsets;
  * @date: 2023/3/12 19:45
  * @version: 1.0
  */
-public class DeviceInfoBuilder {
+class DeviceInfoBuilder {
     /*
     {
     "deviceInfoVersion": 2,
