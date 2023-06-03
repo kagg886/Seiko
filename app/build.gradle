@@ -74,9 +74,9 @@ dependencies {
     implementation 'org.jsoup:jsoup:1.15.3'
     implementation 'com.squareup.okhttp3:okhttp:4.10.0'
 
-    implementation("net.mamoe:mirai-core-android:$gradle.mirai_version")
-    api("net.mamoe:mirai-core-api-android:$gradle.mirai_version")
-    implementation("net.mamoe:mirai-core-utils-android:$gradle.mirai_version")
+    implementation("net.mamoe:mirai-core:$gradle.mirai_version")
+//    api("net.mamoe:mirai-core-api-android:$gradle.mirai_version")
+//    implementation("net.mamoe:mirai-core-utils-androidRelease:$gradle.mirai_version")
 
 
     // 代码编辑器

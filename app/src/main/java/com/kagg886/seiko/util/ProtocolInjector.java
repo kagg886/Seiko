@@ -40,24 +40,32 @@ public class ProtocolInjector {
             //备份原始协议
             clone = map.clone();
 
+
             //获取协议核心构造器
             constructor = internalClass.getConstructor(
                     String.class,
                     long.class,
                     String.class,
                     String.class,
+                    String.class,
                     int.class,
                     int.class,
                     int.class,
                     String.class,
                     long.class,
                     int.class,
+                    String.class,
                     boolean.class);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
 
+
+    //    var buildVer: String,
+    //    var appKey: String,
+    private String buildVer;
+    private String appKey;
     //下面是成员代码区
     private String apkId;
     private Long id;
@@ -105,7 +113,7 @@ public class ProtocolInjector {
         String sign = collectSign(this.sign);
         ObjectUtils.requireNull(apkId, id, ver, sdkVer, miscBitMap, subSigMap, mainSigMap, sign, buildTime, ssoVersion, supportsQRLogin);
         try {
-            map.put(target, constructor.newInstance(apkId, id, ver, sdkVer, miscBitMap, subSigMap, mainSigMap, sign, buildTime, ssoVersion, supportsQRLogin));
+            map.put(target, constructor.newInstance(apkId, id, ver, buildVer, sdkVer, miscBitMap, subSigMap, mainSigMap, sign, buildTime, ssoVersion, appKey, supportsQRLogin));
         } catch (IllegalAccessException | InstantiationException | InvocationTargetException e) {
             throw new RuntimeException(e);
         }
@@ -140,6 +148,23 @@ public class ProtocolInjector {
     }
 
     //GETTER 和 SETTER
+
+    public String getBuildVer() {
+        return buildVer;
+    }
+
+    public void setBuildVer(String buildVer) {
+        this.buildVer = buildVer;
+    }
+
+    public String getAppKey() {
+        return appKey;
+    }
+
+    public void setAppKey(String appKey) {
+        this.appKey = appKey;
+    }
+
     public String getApkId() {
         return apkId;
     }
@@ -148,11 +173,11 @@ public class ProtocolInjector {
         this.apkId = apkId;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -172,27 +197,27 @@ public class ProtocolInjector {
         this.sdkVer = sdkVer;
     }
 
-    public int getMiscBitMap() {
+    public Integer getMiscBitMap() {
         return miscBitMap;
     }
 
-    public void setMiscBitMap(int miscBitMap) {
+    public void setMiscBitMap(Integer miscBitMap) {
         this.miscBitMap = miscBitMap;
     }
 
-    public int getSubSigMap() {
+    public Integer getSubSigMap() {
         return subSigMap;
     }
 
-    public void setSubSigMap(int subSigMap) {
+    public void setSubSigMap(Integer subSigMap) {
         this.subSigMap = subSigMap;
     }
 
-    public int getMainSigMap() {
+    public Integer getMainSigMap() {
         return mainSigMap;
     }
 
-    public void setMainSigMap(int mainSigMap) {
+    public void setMainSigMap(Integer mainSigMap) {
         this.mainSigMap = mainSigMap;
     }
 
@@ -204,27 +229,27 @@ public class ProtocolInjector {
         this.sign = sign;
     }
 
-    public long getBuildTime() {
+    public Long getBuildTime() {
         return buildTime;
     }
 
-    public void setBuildTime(long buildTime) {
+    public void setBuildTime(Long buildTime) {
         this.buildTime = buildTime;
     }
 
-    public int getSsoVersion() {
+    public Integer getSsoVersion() {
         return ssoVersion;
     }
 
-    public void setSsoVersion(int ssoVersion) {
+    public void setSsoVersion(Integer ssoVersion) {
         this.ssoVersion = ssoVersion;
     }
 
-    public boolean isSupportsQRLogin() {
+    public Boolean getSupportsQRLogin() {
         return supportsQRLogin;
     }
 
-    public void setSupportsQRLogin(boolean supportsQRLogin) {
+    public void setSupportsQRLogin(Boolean supportsQRLogin) {
         this.supportsQRLogin = supportsQRLogin;
     }
 }

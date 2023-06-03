@@ -9,9 +9,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="50deb0ec-ac2b-4bb3-81a3-6580c4990f99" name="更改" comment="fix: 🐛 修复协议设置页面中静态字段的产生">
+    <list default="true" id="50deb0ec-ac2b-4bb3-81a3-6580c4990f99" name="更改" comment="fix: 🐛 修复Console插件版本更新问题">
+      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ConsolePlugin/src/main/java/com/kagg886/seiko/dic/mirai_console/PluginLoader.java" beforeDir="false" afterPath="$PROJECT_DIR$/ConsolePlugin/src/main/java/com/kagg886/seiko/dic/mirai_console/PluginLoader.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PluginDemo/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/PluginDemo/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/app/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/kagg886/seiko/util/ProtocolInjector.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/kagg886/seiko/util/ProtocolInjector.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/settings.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/settings.gradle" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -72,8 +75,6 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="JUnit3 Test Class" />
-        <option value="layoutResourceFile" />
         <option value="Class" />
       </list>
     </option>
@@ -85,17 +86,7 @@
     <option name="BUILD_TARGET_KEY" value="apk" />
   </component>
   <component name="Git.Settings">
-    <option name="PREVIOUS_COMMIT_AUTHORS">
-      <list>
-        <option value="kagg886" />
-        <option value="kagg886 &lt;iveour@163.com&gt;" />
-      </list>
-    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
-    <option name="RESET_MODE" value="HARD" />
-  </component>
-  <component name="GoVcsConfiguration">
-    <option name="GO_FMT" value="false" />
   </component>
   <component name="HighlightingSettingsPerFile">
     <setting file="jar://$PROJECT_DIR$/../../.gradle/caches/modules-2/files-2.1/net.mamoe/mirai-core-api-jvm/2.15.0-dev-81/1d4640611f7c59f33d4f3af80b011e41d8fe9baa/mirai-core-api-jvm-2.15.0-dev-81-sources.jar!/commonMain/contact/file/RemoteFiles.kt" root0="SKIP_INSPECTION" />
@@ -104,7 +95,7 @@
     <option name="stateVersion" value="1" />
   </component>
   <component name="ProblemsViewState">
-    <option name="selectedTabId" value="CurrentFile" />
+    <option name="selectedTabId" value="ProjectErrors" />
   </component>
   <component name="ProjectId" id="2PYkHwgCfL9PUK8of1NiuSVmXUw" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
@@ -120,15 +111,11 @@
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.go.formatter.settings.were.checked&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.go.migrated.go.modules.settings&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
     &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary&quot;: &quot;JUnit3&quot;,
-    &quot;com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit3&quot;: &quot;junit.framework.TestCase&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;dev&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
     &quot;go.import.settings.migrated&quot;: &quot;true&quot;,
     &quot;jdk.selected.JAVA_MODULE&quot;: &quot;jbr-17&quot;,
     &quot;ktor.last.update.timestamp&quot;: &quot;1684492463623&quot;,
-    &quot;last_directory_selection&quot;: &quot;D:/IDEAProjects/Seiko/app/src/test/java&quot;,
     &quot;last_opened_file_path&quot;: &quot;D:/IDEAProjects/kagg886.jks&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
@@ -147,15 +134,7 @@
     ]
   }
 }</component>
-  <component name="RecentsManager">
-    <key name="CreateTestDialog.Recents.Supers">
-      <recent name="junit.framework.TestCase" />
-    </key>
-    <key name="CreateTestDialog.RecentsKey">
-      <recent name="com.kagg886.seiko.util" />
-    </key>
-  </component>
-  <component name="RunManager" selected="Gradle.Seiko:ConsolePlugin [runConsole]">
+  <component name="RunManager" selected="Android 应用.app">
     <configuration name="PluginDemo" type="AndroidRunConfigurationType" factoryName="Android App">
       <module name="Seiko.PluginDemo.main" />
       <option name="DEPLOY" value="true" />
@@ -226,6 +205,19 @@
         <option name="Android.Gradle.BeforeRunTask" enabled="true" />
       </method>
     </configuration>
+    <configuration name="MockBotTest" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.kagg886.seiko.mock.MockBotTest" />
+      <module name="Seiko.BotMock.main" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.kagg886.seiko.mock.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="UtilsTest" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="com.kagg886.seiko.mock.UtilsTest" />
       <module name="Seiko.BotMock.main" />
@@ -238,30 +230,6 @@
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
-    </configuration>
-    <configuration name="ProtocolInjectorTest.testInject" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
-      <ExternalSystemSettings>
-        <option name="executionName" />
-        <option name="externalProjectPath" value="$PROJECT_DIR$" />
-        <option name="externalSystemIdString" value="GRADLE" />
-        <option name="scriptParameters" value="" />
-        <option name="taskDescriptions">
-          <list />
-        </option>
-        <option name="taskNames">
-          <list>
-            <option value=":app:testDebugUnitTest" />
-            <option value="--tests" />
-            <option value="&quot;com.kagg886.seiko.util.ProtocolInjectorTest.testInject&quot;" />
-          </list>
-        </option>
-        <option name="vmOptions" />
-      </ExternalSystemSettings>
-      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
-      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
-      <DebugAllEnabled>false</DebugAllEnabled>
-      <ForceTestExec>true</ForceTestExec>
-      <method v="2" />
     </configuration>
     <configuration name="Seiko [clean]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
@@ -345,19 +313,19 @@
     <list>
       <item itemvalue="Android 应用.app" />
       <item itemvalue="Android 应用.PluginDemo" />
-      <item itemvalue="Gradle.ProtocolInjectorTest.testInject" />
       <item itemvalue="Gradle.Seiko [clean]" />
       <item itemvalue="Gradle.Seiko:ConsolePlugin [runConsole]" />
       <item itemvalue="Gradle.Seiko:ConsolePlugin [buildPlugin]" />
       <item itemvalue="应用程序.UtilsTest" />
+      <item itemvalue="应用程序.MockBotTest" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Gradle.Seiko:ConsolePlugin [runConsole]" />
-        <item itemvalue="Gradle.Seiko:ConsolePlugin [buildPlugin]" />
-        <item itemvalue="Gradle.ProtocolInjectorTest.testInject" />
         <item itemvalue="应用程序.UtilsTest" />
+        <item itemvalue="Gradle.Seiko:ConsolePlugin [buildPlugin]" />
+        <item itemvalue="Gradle.Seiko:ConsolePlugin [runConsole]" />
         <item itemvalue="Gradle.Seiko [clean]" />
+        <item itemvalue="应用程序.MockBotTest" />
       </list>
     </recent_temporary>
   </component>
@@ -387,8 +355,7 @@
       <workItem from="1684817301688" duration="3884000" />
       <workItem from="1684823089014" duration="186000" />
       <workItem from="1684824914039" duration="2163000" />
-      <workItem from="1685704294240" duration="10725000" />
-      <workItem from="1685757551862" duration="811000" />
+      <workItem from="1685766031830" duration="1499000" />
     </task>
     <task id="LOCAL-00001" summary="style: 📝 写了几个注释">
       <created>1683678818902</created>
@@ -432,35 +399,7 @@
       <option name="project" value="LOCAL" />
       <updated>1684821102540</updated>
     </task>
-    <task id="LOCAL-00007" summary="feat: ✨ 新增设置项: '登录协议参数设置'">
-      <created>1685714136935</created>
-      <option name="number" value="00007" />
-      <option name="presentableId" value="LOCAL-00007" />
-      <option name="project" value="LOCAL" />
-      <updated>1685714136936</updated>
-    </task>
-    <task id="LOCAL-00008" summary="feat: ✨ 优化登录协议设置UI">
-      <created>1685714382952</created>
-      <option name="number" value="00008" />
-      <option name="presentableId" value="LOCAL-00008" />
-      <option name="project" value="LOCAL" />
-      <updated>1685714382952</updated>
-    </task>
-    <task id="LOCAL-00009" summary="feat: ✨ 优化夜间模式下登录协议设置UI">
-      <created>1685714464661</created>
-      <option name="number" value="00009" />
-      <option name="presentableId" value="LOCAL-00009" />
-      <option name="project" value="LOCAL" />
-      <updated>1685714464661</updated>
-    </task>
-    <task id="LOCAL-00010" summary="fix: 🐛 修复协议设置页面中静态字段的产生">
-      <created>1685714640105</created>
-      <option name="number" value="00010" />
-      <option name="presentableId" value="LOCAL-00010" />
-      <option name="project" value="LOCAL" />
-      <updated>1685714640105</updated>
-    </task>
-    <option name="localTasksCounter" value="11" />
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -477,7 +416,7 @@
                   <entry key="branch">
                     <value>
                       <list>
-                        <option value="dev" />
+                        <option value="master" />
                       </list>
                     </value>
                   </entry>
@@ -490,8 +429,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
-    <option name="CHECK_CODE_CLEANUP_BEFORE_PROJECT_COMMIT_PROFILE" value="Default" />
     <MESSAGE value="build: ️ 修复构建" />
     <MESSAGE value="style:  写了几个注释" />
     <MESSAGE value="fix:  修复 '删' 函数出现的无法删除的bug" />
@@ -499,14 +436,7 @@
     <MESSAGE value="fix:  dic词库因编码解析失败时会给出项目默认的编码。" />
     <MESSAGE value="fix:  dic词库因编码解析失败时会给出项目默认的编码。&#10;feat: ✨ 新增函数: '群文件'" />
     <MESSAGE value="feat: ✨ 增加 '删群文件' 函数" />
-    <MESSAGE value="feat: ✨ 新增设置项: '登录协议参数设置'" />
-    <MESSAGE value="feat: ✨ 优化登录协议设置UI" />
-    <MESSAGE value="feat: ✨ 优化夜间模式下登录协议设置UI" />
-    <MESSAGE value="fix:  修复协议设置页面中静态字段的产生" />
-    <option name="LAST_COMMIT_MESSAGE" value="fix:  修复协议设置页面中静态字段的产生" />
-    <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
-    <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
-    <option name="REARRANGE_BEFORE_PROJECT_COMMIT" value="true" />
+    <option name="LAST_COMMIT_MESSAGE" value="feat: ✨ 增加 '删群文件' 函数" />
   </component>
   <component name="VgoProject">
     <settings-migrated>true</settings-migrated>
@@ -520,14 +450,9 @@
           <option name="timeStamp" value="1" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/app/src/test/java/com/kagg886/seiko/util/ProtocolInjectorTest.java</url>
-          <line>24</line>
+          <url>file://$PROJECT_DIR$/app/src/main/java/com/kagg886/seiko/util/ProtocolInjector.java</url>
+          <line>44</line>
           <option name="timeStamp" value="2" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/ConsolePlugin/src/main/java/com/kagg886/seiko/dic/mirai_console/PluginLoader.java</url>
-          <line>71</line>
-          <option name="timeStamp" value="3" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
