@@ -60,6 +60,6 @@ public class FastAssignment extends DictionaryCode {
         } catch (Exception ignored) {
 
         }
-        runtime.getRuntimeObject().put(varName, valueRef);
+        runtime.getRuntimeObject().put(varName, DictionaryUtil.cleanVariableCode(valueRef,runtime));
     }
 }

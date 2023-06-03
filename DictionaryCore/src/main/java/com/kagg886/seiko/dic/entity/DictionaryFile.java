@@ -2,10 +2,7 @@ package com.kagg886.seiko.dic.entity;
 
 import com.kagg886.seiko.dic.DictionaryEnvironment;
 import com.kagg886.seiko.dic.entity.func.Function;
-import com.kagg886.seiko.dic.entity.impl.ConditionalExpression;
-import com.kagg886.seiko.dic.entity.impl.Expression;
-import com.kagg886.seiko.dic.entity.impl.FastAssignment;
-import com.kagg886.seiko.dic.entity.impl.PlainText;
+import com.kagg886.seiko.dic.entity.impl.*;
 import com.kagg886.seiko.dic.exception.DictionaryOnLoadException;
 import com.kagg886.seiko.dic.session.impl.LifeCycleRuntime;
 import com.kagg886.seiko.util.ArrayIterator;
@@ -240,6 +237,11 @@ public class DictionaryFile {
                     }
                     dictionaryCodes.add(expression);
                     iterator.setLen(iterator.getLen() - 1);
+                } else if (comm.startsWith("循环:")) {
+                    WhileLoop loop = new WhileLoop(iterator.getLen(),comm);
+                    loop.setLoop(getAllElement(iterator,deep+1));
+                    dictionaryCodes.add(loop);
+                    iterator.setLen(iterator.getLen() - 1); //这一步是回滚进度，因为iterator方法最坏都会向后执行一步
                 } else {
                     if (TextUtils.isEmpty(comm)) {
                         return dictionaryCodes;
