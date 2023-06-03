@@ -1,6 +1,6 @@
 package com.kagg886.seiko.util;
 
-import java.util.Arrays;
+import java.util.regex.Pattern;
 
 /**
  * @projectName: Seiko
@@ -16,10 +16,9 @@ public class TextUtils {
         return s == null || s.length() == 0;
     }
 
-    public static String repeat(String value,int count) {
-        if (count == 0) {
-            return "";
-        }
+    private static final Pattern p = Pattern.compile("^[A-Fa-f0-9]+$");
+
+    public static String repeat(String value, int count) {
         if (count == 1) {
             return value;
         }
@@ -28,5 +27,10 @@ public class TextUtils {
             builder.append(value);
         }
         return builder.toString();
+    }
+
+    public static boolean checkHex(String a) {
+        a = a.replace(" ", "");
+        return p.matcher(a).matches();
     }
 }

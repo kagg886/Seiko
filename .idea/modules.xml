@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/DictionaryCore/Seiko.DictionaryCore.test.iml" filepath="$PROJECT_DIR$/.idea/modules/DictionaryCore/Seiko.DictionaryCore.test.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/Seiko.app.unitTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/Seiko.app.unitTest.iml" />
     </modules>
   </component>
 </project>

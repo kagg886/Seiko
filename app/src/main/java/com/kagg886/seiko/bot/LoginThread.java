@@ -22,6 +22,7 @@ import com.kagg886.seiko.util.storage.JSONArrayStorage;
 import net.mamoe.mirai.Bot;
 import net.mamoe.mirai.BotFactory;
 import net.mamoe.mirai.auth.BotAuthorization;
+import net.mamoe.mirai.network.BotAuthorizationException;
 import net.mamoe.mirai.network.LoginFailedException;
 import net.mamoe.mirai.utils.BotConfiguration;
 
@@ -63,16 +64,8 @@ public class LoginThread extends Thread {
                     break;
                 case 1:
                     Throwable throwable = ((Throwable) msg.getData().getSerializable("exception"));
-                    if (throwable.getClass().getName().equals("net.mamoe.mirai.internal.network.auth.ProducerFailureException")) {
-                        try {
-                            throwable = throwable.getSuppressed()[0];
-                        } catch (Exception ignored) {
-                            try {
-                                throwable = throwable.getCause();
-                            } catch (Exception ignored1) {
-
-                            }
-                        }
+                    if (throwable.getClass() == BotAuthorizationException.class) {
+                        throwable = throwable.getCause();
                     }
                     if (SeikoApplication.globalConfig.getBoolean("badDeviceAutoDel", true)) {
                         if (throwable instanceof LoginFailedException) {
@@ -93,15 +86,6 @@ public class LoginThread extends Thread {
                         }
                     }
                     String error = throwable.getMessage() == null ? text(R.string.login_fail_reason_unknown) : text(R.string.login_fail_reason, throwable.getMessage());
-                    //TODO Mirai生命周期问题，使用此代码不断尝试登录，待问题解决后会删掉此代码
-                    if (error.startsWith("Consuming") ||
-                            error.startsWith("ProducerReady") ||
-                            error.startsWith("CreatingProducer")) {
-                        bot.getLogger().debug("登录时发现Mirai生命周期异常，正在尝试重新调用登录命令...");
-                        //重新设置Bot
-                        run();
-                        return;
-                    }
 
                     if (error.startsWith("Bot is already closed and cannot relogin")) {
                         bot.getLogger().debug("登录时发现线程持有Bot过期，正在尝试重新创建线程...");

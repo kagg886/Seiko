@@ -12,13 +12,18 @@ import android.os.Looper;
 import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.preference.PreferenceManager;
+import com.alibaba.fastjson.JSON;
 import com.kagg886.seiko.util.IOUtil;
+import com.kagg886.seiko.util.ProtocolInjector;
+import com.kagg886.seiko.util.storage.JSONObjectStorage;
+import net.mamoe.mirai.utils.BotConfiguration;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.Map;
 
@@ -103,7 +108,7 @@ public class SeikoApplication extends Application implements Runnable, Thread.Un
     @Override
     public void onCreate() {
         super.onCreate();
-
+        customProtocolInject();
         globalConfig = PreferenceManager.getDefaultSharedPreferences(this);
         Thread.setDefaultUncaughtExceptionHandler(this);
         new Handler(Looper.getMainLooper()).post(this);
@@ -152,5 +157,17 @@ public class SeikoApplication extends Application implements Runnable, Thread.Un
     public void uncaughtException(@NonNull Thread t, @NonNull Throwable e) {
         //子线程崩溃检测
         writeCrash(e);
+    }
+
+    private void customProtocolInject() {
+        JSONObjectStorage storage = JSONObjectStorage.obtain(Paths.get(SeikoApplication.getSeikoApplicationContext().getExternalFilesDir("config").toString(), "customProtocol.json").toFile().getAbsolutePath());
+        //一定是String,String
+        for (Map.Entry<String, Object> objectEntry : storage.entrySet()) {
+            ProtocolInjector injector = JSON.parseObject(((String) objectEntry.getValue()), ProtocolInjector.class);
+            injector.inject(BotConfiguration.MiraiProtocol.valueOf(objectEntry.getKey()));
+
+            Log.i(getClass().getName(), "Protocol:{" + objectEntry.getKey() + "}injected");
+        }
+
     }
 }
