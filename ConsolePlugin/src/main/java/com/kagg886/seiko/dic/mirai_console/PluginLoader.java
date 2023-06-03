@@ -1,7 +1,6 @@
 package com.kagg886.seiko.dic.mirai_console;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.kagg886.seiko.dic.DictionaryEnvironment;
 import com.kagg886.seiko.dic.DictionaryReg;
@@ -14,7 +13,6 @@ import net.mamoe.mirai.console.plugin.jvm.JavaPlugin;
 import net.mamoe.mirai.console.plugin.jvm.JvmPluginDescriptionBuilder;
 import net.mamoe.mirai.event.EventChannel;
 import net.mamoe.mirai.event.GlobalEventChannel;
-import net.mamoe.mirai.message.data.Message;
 import org.jetbrains.annotations.NotNull;
 import org.jsoup.Jsoup;
 
@@ -70,10 +68,11 @@ public class PluginLoader extends JavaPlugin implements DictionaryListener {
                                 .timeout(10000)
                                 .execute().body());
                 String newVer = object.getJSONArray("assets")
-                        .stream()
-                        .map(ary -> ((JSONObject) ary).getString("browser_download_url"))
+                        .stream().map(ary -> ((JSONObject) ary).getString("browser_download_url"))
                         .filter((str) -> str.contains("ConsolePlugin"))
-                        .findFirst().get().split("-")[1];
+                        .findFirst()
+                        .get()
+                        .split("ConsolePlugin-")[1];
                 if (!newVer.startsWith(BuildConfig.DIC_VERSION)) {
                     getLogger().info(String.format("发现更新:%s->%s",BuildConfig.DIC_VERSION,newVer));
                     getLogger().info(object.getString("body"));
