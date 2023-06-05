@@ -182,7 +182,7 @@ public class SeikoApplication extends Application implements Runnable, Thread.Un
                         injector = new ProtocolInjector(protocol1);
                         try {
                             JSONObject newProtocol = JSON.parseObject(
-                                    Jsoup.connect("https://raw.githubusercontent.com/RomiChan/protocol-versions/master/" + protocol.toLowerCase() + ".json").execute().body()
+                                    Jsoup.connect("https://ghproxy.com/https://raw.githubusercontent.com/RomiChan/protocol-versions/master/" + protocol.toLowerCase() + ".json").execute().body()
                             );
                             injector.setApkId(newProtocol.getString("apk_id"));
                             injector.setId(newProtocol.getLong("app_id"));
@@ -195,7 +195,7 @@ public class SeikoApplication extends Application implements Runnable, Thread.Un
                             injector.setBuildTime(newProtocol.getLong("build_time"));
                             injector.setSsoVersion(newProtocol.getInteger("sso_version"));
                             injector.inject(protocol1);
-                            Log.d(getClass().getName(), "云协议:" + protocol + "云注入完成!" + newProtocol.toString());
+                            Log.d(getClass().getName(), "协议:" + protocol + "云注入完成!" + newProtocol.toString());
 
                             //apkId = json.getValue("apk_id").jsonPrimitive.content
                             //id = json.getValue("app_id").jsonPrimitive.long
@@ -225,7 +225,7 @@ public class SeikoApplication extends Application implements Runnable, Thread.Un
                             //  "protocol_type": 1
                             //}
                         } catch (IOException e) {
-                            throw new RuntimeException(e);
+                            Log.i(getClass().getName(), "协议" + protocol + "热修复失败!" + e.getMessage());
                         }
                     }
 
@@ -234,7 +234,6 @@ public class SeikoApplication extends Application implements Runnable, Thread.Un
                     for (Map.Entry<String, Object> objectEntry : storage.entrySet()) {
                         injector = JSON.parseObject(((String) objectEntry.getValue()), ProtocolInjector.class);
                         injector.inject(BotConfiguration.MiraiProtocol.valueOf(objectEntry.getKey()));
-                        Log.i(getClass().getName(), "Protocol:{" + objectEntry.getKey() + "}injected");
                     }
                 }
             }
