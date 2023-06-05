@@ -11,9 +11,9 @@
   <component name="ChangeListManager">
     <list default="true" id="50deb0ec-ac2b-4bb3-81a3-6580c4990f99" name="更改" comment="fix: 🐛 修复协议设置页面中静态字段的产生">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/kagg886/seiko/bot/BotLogConfiguration.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/kagg886/seiko/bot/BotLogConfiguration.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/kagg886/seiko/bot/LoginThread.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/kagg886/seiko/bot/LoginThread.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/kagg886/seiko/util/DeviceInfoBuilder.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/kagg886/seiko/util/DeviceInfoBuilder.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/kagg886/seiko/SeikoApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/kagg886/seiko/SeikoApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/kagg886/seiko/util/ProtocolInjector.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/kagg886/seiko/util/ProtocolInjector.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/xml/root_preferences.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/xml/root_preferences.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -76,6 +76,7 @@
         <option value="JUnit3 Test Class" />
         <option value="layoutResourceFile" />
         <option value="Class" />
+        <option value="Kotlin Class" />
       </list>
     </option>
   </component>
@@ -530,7 +531,15 @@
           <line>71</line>
           <option name="timeStamp" value="3" />
         </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/app/src/main/java/com/kagg886/seiko/adapter/ProtocolUnitAdapter.java</url>
+          <line>38</line>
+          <option name="timeStamp" value="6" />
+        </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/Seiko$DicFileTest_test.ic" NAME="DicFileTest.test 覆盖结果" MODIFIED="1685092601492" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
   </component>
 </project>

@@ -79,6 +79,10 @@ public class ProtocolInjector {
     private Integer ssoVersion;
     private Boolean supportsQRLogin;
 
+    public static EnumMap<MiraiProtocol, Object> getInternalProtocolMap() {
+        return map;
+    }
+
     //从0开始构造协议注入器
     public ProtocolInjector() {
 
