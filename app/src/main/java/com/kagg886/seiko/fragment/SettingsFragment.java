@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.*;
 import androidx.annotation.NonNull;
 import androidx.annotation.StringRes;
@@ -81,7 +82,11 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Prefer
             case "protocolSetting":
                 AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
                 builder.setView(new ProtocolSettingsDialog().create());
-                builder.create().show();
+                // 修复输入法无法弹出的bug 目前已知是AlertDialog这吊毛组件的锅 以下是修复代码
+                AlertDialog dialog = builder.create();
+                dialog.show();
+                dialog.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM);
+                dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
                 break;
         }
         return false;
