@@ -1,12 +1,16 @@
 package com.kagg886.seiko.fragment;
 
 import android.annotation.SuppressLint;
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.*;
 import androidx.annotation.NonNull;
@@ -80,11 +84,11 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Prefer
                 break;
 
             case "protocolSetting":
-                AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
-                builder.setView(new ProtocolSettingsDialog().create());
-                // 修复输入法无法弹出的bug 目前已知是AlertDialog这吊毛组件的锅 以下是修复代码
-                AlertDialog dialog = builder.create();
+                AlertDialog dialog = new AlertDialog.Builder(requireContext()).create();
+                View view = new ProtocolSettingsDialog().create();
+                dialog.setView(view);
                 dialog.show();
+                // 修复输入法无法弹出的bug 目前已知是AlertDialog这吊毛组件的锅 以下是修复代码
                 dialog.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM);
                 dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
                 break;
@@ -193,7 +197,6 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Prefer
                     storage.remove((String) spinner.getSelectedItem());
                     SnackBroadCast.sendBroadCast("还原成功。");
                     break;
-
             }
             storage.save();
             adapter.setCurrentProtocol(protocol); //触发视图更新
