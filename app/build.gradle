@@ -4,7 +4,7 @@ plugins {
 apply plugin: 'kotlin-android'
 
 android {
-    compileSdk 33
+    compileSdk 34
 
     packagingOptions { //Mirai升级2.14.0时需要添加这两项来排除，否则报错
         exclude 'META-INF/INDEX.LIST'

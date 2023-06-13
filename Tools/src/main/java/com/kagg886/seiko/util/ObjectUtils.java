@@ -12,4 +12,14 @@ public class ObjectUtils {
             }
         }
     }
+
+    public static byte[] copyInto(byte[] src, byte[] destination, int destinationOffset, int startIndex, int endIndex) {
+        System.arraycopy(src, startIndex, destination, destinationOffset, endIndex - startIndex);
+        return destination;
+    }
+
+    //public actual fun ByteArray.copyInto(destination: ByteArray, destinationOffset: Int = 0, startIndex: Int = 0, endIndex: Int = size): ByteArray {
+    //    System.arraycopy(this, startIndex, destination, destinationOffset, endIndex - startIndex)
+    //    return destination
+    //}
 }
