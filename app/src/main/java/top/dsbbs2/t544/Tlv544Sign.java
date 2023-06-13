@@ -12,6 +12,10 @@ import java.util.stream.IntStream;
 
 import static top.dsbbs2.t544.Data.*;
 
+/**
+ * @see <a href="https://github.com/lvyitian/tlv544_enc/blob/main/src/top/dsbbs2/t544/Tlv544Sign.java">TLV544算法实现</a>
+ * 本算法不代表最新版本
+ */
 public interface Tlv544Sign {
     public static byte[] signBytes(byte[] payload) {
         long curr = System.currentTimeMillis() * 1000;
