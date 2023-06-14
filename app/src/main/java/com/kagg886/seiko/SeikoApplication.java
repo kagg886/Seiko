@@ -214,6 +214,7 @@ public class SeikoApplication extends Application implements Runnable, Thread.Un
                         } catch (Exception e) {
                             Log.i(getClass().getName(), "本地" + objectEntry.getKey() + "协议注入失败,已自动清除此信息");
                             storage.remove(objectEntry.getKey());
+                            storage.save();
                         }
                     }
                 }
