@@ -22,7 +22,6 @@ import org.jsoup.Jsoup;
 
 import java.io.File;
 import java.io.FileWriter;
-import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -175,7 +174,9 @@ public class SeikoApplication extends Application implements Runnable, Thread.Un
         new Thread(new Runnable() {
             @Override
             public void run() {
-                for (String protocol : new String[]{"ANDROID_PHONE", "ANDROID_PAD"}) {
+                for (String protocol : new String[]{
+//                        "ANDROID_PHONE",
+                        "ANDROID_PAD"}) {
                     ProtocolInjector injector;
                     if (globalConfig.getBoolean("cloudProtocolInject", true)) {
                         BotConfiguration.MiraiProtocol protocol1 = BotConfiguration.MiraiProtocol.valueOf(protocol);
@@ -184,9 +185,10 @@ public class SeikoApplication extends Application implements Runnable, Thread.Un
                             JSONObject newProtocol = JSON.parseObject(
                                     Jsoup.connect("https://ghproxy.com/https://raw.githubusercontent.com/RomiChan/protocol-versions/master/" + protocol.toLowerCase() + ".json").execute().body()
                             );
+                            injector.setBuildVer(newProtocol.getString("sort_version_name"));
                             injector.setApkId(newProtocol.getString("apk_id"));
                             injector.setId(newProtocol.getLong("app_id"));
-                            injector.setVer(newProtocol.getString("sort_version_name"));
+                            injector.setVer(newProtocol.getString("sort_version_name").substring(0, newProtocol.getString("sort_version_name").lastIndexOf(".")));
                             injector.setSdkVer(newProtocol.getString("sdk_version"));
                             injector.setMiscBitMap(newProtocol.getInteger("misc_bitmap"));
                             injector.setSubSigMap(newProtocol.getInteger("sub_sig_map"));
@@ -194,38 +196,12 @@ public class SeikoApplication extends Application implements Runnable, Thread.Un
                             injector.setSign(newProtocol.getString("apk_sign"));
                             injector.setBuildTime(newProtocol.getLong("build_time"));
                             injector.setSsoVersion(newProtocol.getInteger("sso_version"));
+                            injector.setAppKey(newProtocol.getString("app_key"));
+                            injector.setSupportsQRLogin(false);
                             injector.inject(protocol1);
-                            Log.d(getClass().getName(), "协议:" + protocol + "云注入完成!" + newProtocol.toString());
-
-                            //apkId = json.getValue("apk_id").jsonPrimitive.content
-                            //id = json.getValue("app_id").jsonPrimitive.long
-                            //ver = json.getValue("sort_version_name").jsonPrimitive.content
-                            //sdkVer = json.getValue("sdk_version").jsonPrimitive.content
-                            //miscBitMap = json.getValue("misc_bitmap").jsonPrimitive.int
-                            //subSigMap = json.getValue("sub_sig_map").jsonPrimitive.int
-                            //mainSigMap = json.getValue("main_sig_map").jsonPrimitive.int
-                            //sign = json.getValue("apk_sign").jsonPrimitive.content.hexToBytes().toUHexString(" ")
-                            //buildTime = json.getValue("build_time").jsonPrimitive.long
-                            //ssoVersion = json.getValue("sso_version").jsonPrimitive.int
-
-                            //{
-                            //  "apk_id": "com.tencent.mobileqq",
-                            //  "app_id": 537158635,
-                            //  "sub_app_id": 537158635,
-                            //  "app_key": "0S200MNJT807V3GE",
-                            //  "sort_version_name": "8.9.53.10815",
-                            //  "build_time": 1681901591,
-                            //  "apk_sign": "a6b745bf24a2c277527716f6f36eb68d",
-                            //  "sdk_version": "6.0.0.2538",
-                            //  "sso_version": 19,
-                            //  "misc_bitmap": 150470524,
-                            //  "main_sig_map": 34869472,
-                            //  "sub_sig_map": 66560,
-                            //  "dump_time": 1683193286,
-                            //  "protocol_type": 1
-                            //}
-                        } catch (IOException e) {
-                            Log.i(getClass().getName(), "协议" + protocol + "热修复失败!" + e.getMessage());
+                            Log.d(getClass().getName(), "协议:" + protocol + "云注入完成!" + newProtocol);
+                        } catch (Exception e) {
+                            Log.e(getClass().getName(), "协议" + protocol + "热修复失败!", e);
                         }
                     }
 
@@ -233,7 +209,12 @@ public class SeikoApplication extends Application implements Runnable, Thread.Un
                     //一定是String,String
                     for (Map.Entry<String, Object> objectEntry : storage.entrySet()) {
                         injector = JSON.parseObject(((String) objectEntry.getValue()), ProtocolInjector.class);
-                        injector.inject(BotConfiguration.MiraiProtocol.valueOf(objectEntry.getKey()));
+                        try {
+                            injector.inject(BotConfiguration.MiraiProtocol.valueOf(objectEntry.getKey()));
+                        } catch (Exception e) {
+                            Log.i(getClass().getName(), "本地" + objectEntry.getKey() + "协议注入失败,已自动清除此信息");
+                            storage.remove(objectEntry.getKey());
+                        }
                     }
                 }
             }

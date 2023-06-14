@@ -115,7 +115,7 @@ public class ProtocolInjector {
     //将字段注入到对应的协议中
     public void inject(MiraiProtocol target) {
         String sign = collectSign(this.sign);
-        ObjectUtils.requireNull(apkId, id, ver, sdkVer, miscBitMap, subSigMap, mainSigMap, sign, buildTime, ssoVersion, supportsQRLogin);
+        ObjectUtils.requireNull(apkId, id, ver, buildVer, sdkVer, miscBitMap, subSigMap, mainSigMap, sign, buildTime, ssoVersion, appKey, supportsQRLogin);
         try {
             map.put(target, constructor.newInstance(apkId, id, ver, buildVer, sdkVer, miscBitMap, subSigMap, mainSigMap, sign, buildTime, ssoVersion, appKey, supportsQRLogin));
         } catch (IllegalAccessException | InstantiationException | InvocationTargetException e) {
@@ -151,110 +151,132 @@ public class ProtocolInjector {
         return sign;
     }
 
-    //GETTER 和 SETTER
+    //SETTER
 
-    public String getBuildVer() {
-        return buildVer;
-    }
 
     public void setBuildVer(String buildVer) {
         this.buildVer = buildVer;
-    }
-
-    public String getAppKey() {
-        return appKey;
     }
 
     public void setAppKey(String appKey) {
         this.appKey = appKey;
     }
 
-    public String getApkId() {
-        return apkId;
-    }
-
     public void setApkId(String apkId) {
         this.apkId = apkId;
-    }
-
-    public Long getId() {
-        return id;
     }
 
     public void setId(Long id) {
         this.id = id;
     }
 
-    public String getVer() {
-        return ver;
-    }
-
     public void setVer(String ver) {
         this.ver = ver;
-    }
-
-    public String getSdkVer() {
-        return sdkVer;
     }
 
     public void setSdkVer(String sdkVer) {
         this.sdkVer = sdkVer;
     }
 
-    public Integer getMiscBitMap() {
-        return miscBitMap;
-    }
-
     public void setMiscBitMap(Integer miscBitMap) {
         this.miscBitMap = miscBitMap;
-    }
-
-    public Integer getSubSigMap() {
-        return subSigMap;
     }
 
     public void setSubSigMap(Integer subSigMap) {
         this.subSigMap = subSigMap;
     }
 
-    public Integer getMainSigMap() {
-        return mainSigMap;
-    }
-
     public void setMainSigMap(Integer mainSigMap) {
         this.mainSigMap = mainSigMap;
-    }
-
-    public String getSign() {
-        return sign;
     }
 
     public void setSign(String sign) {
         this.sign = sign;
     }
 
-    public Long getBuildTime() {
-        return buildTime;
-    }
-
     public void setBuildTime(Long buildTime) {
         this.buildTime = buildTime;
-    }
-
-    public Integer getSsoVersion() {
-        return ssoVersion;
     }
 
     public void setSsoVersion(Integer ssoVersion) {
         this.ssoVersion = ssoVersion;
     }
 
+    public void setSupportsQRLogin(Boolean supportsQRLogin) {
+        this.supportsQRLogin = supportsQRLogin;
+    }
+
+    //GETTER
+    public String getBuildVer() {
+        return buildVer;
+    }
+
+    public String getAppKey() {
+        return appKey;
+    }
+
+    public String getApkId() {
+        return apkId;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getVer() {
+        return ver;
+    }
+
+    public String getSdkVer() {
+        return sdkVer;
+    }
+
+    public Integer getMiscBitMap() {
+        return miscBitMap;
+    }
+
+    public Integer getSubSigMap() {
+        return subSigMap;
+    }
+
+    public Integer getMainSigMap() {
+        return mainSigMap;
+    }
+
+    public String getSign() {
+        return sign;
+    }
+
+    public Long getBuildTime() {
+        return buildTime;
+    }
+
+    public Integer getSsoVersion() {
+        return ssoVersion;
+    }
+
     public Boolean getSupportsQRLogin() {
         return supportsQRLogin;
     }
 
-    public void setSupportsQRLogin(Boolean supportsQRLogin) {
-        this.supportsQRLogin = supportsQRLogin;
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("ProtocolInjector{");
+        sb.append("buildVer='").append(buildVer).append('\'');
+        sb.append(", appKey='").append(appKey).append('\'');
+        sb.append(", apkId='").append(apkId).append('\'');
+        sb.append(", id=").append(id);
+        sb.append(", ver='").append(ver).append('\'');
+        sb.append(", sdkVer='").append(sdkVer).append('\'');
+        sb.append(", miscBitMap=").append(miscBitMap);
+        sb.append(", subSigMap=").append(subSigMap);
+        sb.append(", mainSigMap=").append(mainSigMap);
+        sb.append(", sign='").append(sign).append('\'');
+        sb.append(", buildTime=").append(buildTime);
+        sb.append(", ssoVersion=").append(ssoVersion);
+        sb.append(", supportsQRLogin=").append(supportsQRLogin);
+        sb.append('}');
+        return sb.toString();
     }
 }
 
