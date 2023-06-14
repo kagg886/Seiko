@@ -14,4 +14,10 @@ import net.mamoe.mirai.console.data.value
  */
 object SeikoPluginConfig : AutoSavePluginConfig("pluginConfig") {
     val alwaysRefreshOnceMessageGetting by value<Boolean>(false) //每次接受到消息时都要刷新一遍伪代码
+
+
+    fun a() {
+        val payload = ByteArray(10);
+        payload.copyInto(ByteArray(payload.size), 4, 4)
+    }
 }

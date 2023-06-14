@@ -4,7 +4,7 @@ plugins {
 apply plugin: 'kotlin-android'
 
 android {
-    compileSdk 33
+    compileSdk 34
 
     packagingOptions { //Mirai升级2.14.0时需要添加这两项来排除，否则报错
         exclude 'META-INF/INDEX.LIST'
@@ -34,7 +34,7 @@ android {
             manifestPlaceholders = [
                     APP_NAME: "@string/app_name",
             ]
-
+            matchingFallbacks = ['debug']
         }
 
         debug {
@@ -74,7 +74,11 @@ dependencies {
     implementation 'org.jsoup:jsoup:1.15.3'
     implementation 'com.squareup.okhttp3:okhttp:4.10.0'
 
+
     implementation("net.mamoe:mirai-core:$gradle.mirai_version")
+    compileOnly("net.mamoe:mirai-core-androidDebug:$gradle.mirai_version")
+    compileOnly("net.mamoe:mirai-core-api-androidDebug:$gradle.mirai_version")
+    compileOnly("net.mamoe:mirai-core-utils-androidDebug:$gradle.mirai_version")
 //    api("net.mamoe:mirai-core-api-android:$gradle.mirai_version")
 //    implementation("net.mamoe:mirai-core-utils-androidRelease:$gradle.mirai_version")
 

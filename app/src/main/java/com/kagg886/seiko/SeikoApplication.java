@@ -13,10 +13,12 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.preference.PreferenceManager;
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.kagg886.seiko.util.IOUtil;
 import com.kagg886.seiko.util.ProtocolInjector;
 import com.kagg886.seiko.util.storage.JSONObjectStorage;
 import net.mamoe.mirai.utils.BotConfiguration;
+import org.jsoup.Jsoup;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -108,8 +110,8 @@ public class SeikoApplication extends Application implements Runnable, Thread.Un
     @Override
     public void onCreate() {
         super.onCreate();
-        customProtocolInject();
         globalConfig = PreferenceManager.getDefaultSharedPreferences(this);
+        fixProtocol();
         Thread.setDefaultUncaughtExceptionHandler(this);
         new Handler(Looper.getMainLooper()).post(this);
     }
@@ -159,15 +161,64 @@ public class SeikoApplication extends Application implements Runnable, Thread.Un
         writeCrash(e);
     }
 
-    private void customProtocolInject() {
-        JSONObjectStorage storage = JSONObjectStorage.obtain(Paths.get(SeikoApplication.getSeikoApplicationContext().getExternalFilesDir("config").toString(), "customProtocol.json").toFile().getAbsolutePath());
-        //一定是String,String
-        for (Map.Entry<String, Object> objectEntry : storage.entrySet()) {
-            ProtocolInjector injector = JSON.parseObject(((String) objectEntry.getValue()), ProtocolInjector.class);
-            injector.inject(BotConfiguration.MiraiProtocol.valueOf(objectEntry.getKey()));
+    /*
+     * @param :
+     * @return void
+     * @author kagg886
+     * @description 修复协议，优先级为本地>云服务>默认
+     * 云服务只能注入PHONE和PAD协议
+     * @date 2023/06/05 12:26
+     * @see https://github.com/cssxsh/fix-protocol-version/blob/main/src/main/kotlin/xyz/cssxsh/mirai/tool/FixProtocolVersion.kt
+     */
+    private void fixProtocol() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                for (String protocol : new String[]{
+//                        "ANDROID_PHONE",
+                        "ANDROID_PAD"}) {
+                    ProtocolInjector injector;
+                    if (globalConfig.getBoolean("cloudProtocolInject", true)) {
+                        BotConfiguration.MiraiProtocol protocol1 = BotConfiguration.MiraiProtocol.valueOf(protocol);
+                        injector = new ProtocolInjector(protocol1);
+                        try {
+                            JSONObject newProtocol = JSON.parseObject(
+                                    Jsoup.connect("https://ghproxy.com/https://raw.githubusercontent.com/RomiChan/protocol-versions/master/" + protocol.toLowerCase() + ".json").execute().body()
+                            );
+                            injector.setBuildVer(newProtocol.getString("sort_version_name"));
+                            injector.setApkId(newProtocol.getString("apk_id"));
+                            injector.setId(newProtocol.getLong("app_id"));
+                            injector.setVer(newProtocol.getString("sort_version_name").substring(0, newProtocol.getString("sort_version_name").lastIndexOf(".")));
+                            injector.setSdkVer(newProtocol.getString("sdk_version"));
+                            injector.setMiscBitMap(newProtocol.getInteger("misc_bitmap"));
+                            injector.setSubSigMap(newProtocol.getInteger("sub_sig_map"));
+                            injector.setMainSigMap(newProtocol.getInteger("main_sig_map"));
+                            injector.setSign(newProtocol.getString("apk_sign"));
+                            injector.setBuildTime(newProtocol.getLong("build_time"));
+                            injector.setSsoVersion(newProtocol.getInteger("sso_version"));
+                            injector.setAppKey(newProtocol.getString("app_key"));
+                            injector.setSupportsQRLogin(false);
+                            injector.inject(protocol1);
+                            Log.d(getClass().getName(), "协议:" + protocol + "云注入完成!" + newProtocol);
+                        } catch (Exception e) {
+                            Log.e(getClass().getName(), "协议" + protocol + "热修复失败!", e);
+                        }
+                    }
 
-            Log.i(getClass().getName(), "Protocol:{" + objectEntry.getKey() + "}injected");
-        }
-
+                    JSONObjectStorage storage = JSONObjectStorage.obtain(Paths.get(SeikoApplication.getSeikoApplicationContext().getExternalFilesDir("config").toString(), "customProtocol.json").toFile().getAbsolutePath());
+                    //一定是String,String
+                    for (Map.Entry<String, Object> objectEntry : storage.entrySet()) {
+                        injector = JSON.parseObject(((String) objectEntry.getValue()), ProtocolInjector.class);
+                        try {
+                            injector.inject(BotConfiguration.MiraiProtocol.valueOf(objectEntry.getKey()));
+                        } catch (Exception e) {
+                            Log.i(getClass().getName(), "本地" + objectEntry.getKey() + "协议注入失败,已自动清除此信息");
+                            storage.remove(objectEntry.getKey());
+                            storage.save();
+                        }
+                    }
+                }
+            }
+        }).start();
     }
 }
