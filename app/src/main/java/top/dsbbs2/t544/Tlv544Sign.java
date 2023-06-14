@@ -12,10 +12,6 @@ import java.util.stream.IntStream;
 
 import static top.dsbbs2.t544.Data.*;
 
-/**
- * @see <a href="https://github.com/lvyitian/tlv544_enc/blob/main/src/top/dsbbs2/t544/Tlv544Sign.java">TLV544算法实现</a>
- * 本算法不代表最新版本
- */
 public interface Tlv544Sign {
     public static byte[] signBytes(byte[] payload) {
         long curr = System.currentTimeMillis() * 1000;
@@ -290,6 +286,20 @@ public interface Tlv544Sign {
         return result;
     }
 
+    public static long u32RotateRight(long value, int shift) {
+        shift = shift & 0x1F; // Ensure shift is within 0-31 range
+        value = value & 0xFFFFFFFFL; // Ensure value is within the range of uint32
+
+        return ((value >>> shift) | (value << (32 - shift))) & 0xFFFFFFFFL;
+    }
+
+    public static long u32RotateLeft(long value, int shift) {
+        shift = shift & 0x1F; // Ensure shift is within 0-31 range
+        value = value & 0xFFFFFFFFL; // Ensure value is within the range of uint32
+
+        return ((value << shift) | (value >>> (32 - shift))) & 0xFFFFFFFFL;
+    }
+
     public static <T> List<T> subList(List<T> l, int start) {
         return l.subList(start, l.size());
     }
@@ -352,12 +362,12 @@ public interface Tlv544Sign {
         while (len > 0) {
             if (state.p == 0) {
                 for (int t = 0; t < state.nr; t += 2) subAd(state.state);
-                for (int i = 0; i < 16; i++) state.state[i] = longWrappingAdd(state.state[i], state.org_state[i]);
+                for (int i = 0; i < 16; i++) state.state[i] = u32WrappingAdd(state.state[i], state.org_state[i]);
             }
             byte[] sb = new byte[16 << 2];
             for (int i = 0; i < state.state.length; i++) {
                 long val = state.state[i];
-                byte[] vb = longToLittleEndianBytes(val);
+                byte[] vb = u32ToLittleEndianBytes(val);
                 for (int j = (i << 2); j < ((i + 1) << 2); j++) sb[j] = vb[j - (i << 2)];
             }
             while (state.p <= 64 && len != 0) {
@@ -374,94 +384,94 @@ public interface Tlv544Sign {
         }
     }
 
-    public static void subAd(Long[] st) {
+    public static void subAd(Long[]/*uint[]*/ st) {
         long r12 = st[3];
         long dx = st[4];
         long bp = st[11];
-        long r15 = longWrappingAdd(st[0], dx);
-        long r9 = longRotateLeft(st[12] ^ r15, 16);
+        long r15 = u32WrappingAdd(st[0], dx);
+        long r9 = u32RotateLeft(st[12] ^ r15, 16);
         long si = st[5];
-        long r11 = longWrappingAdd(st[8], r9);
-        long r14 = longWrappingAdd(st[1], si);
-        long r8 = longRotateLeft(st[13] ^ r14, 16);
+        long r11 = u32WrappingAdd(st[8], r9);
+        long r14 = u32WrappingAdd(st[1], si);
+        long r8 = u32RotateLeft(st[13] ^ r14, 16);
         long cx = st[6];
-        long r13 = longWrappingAdd(st[2], cx);
-        long bx = longWrappingAdd(st[9], r8);
-        long di = longRotateLeft(st[14] ^ r13, 16);
-        long r10 = longWrappingAdd(st[10], di);
-        dx = longRotateLeft(dx ^ r11, 12);
-        r15 = longWrappingAdd(r15, dx);
-        r9 = longRotateLeft(r9 ^ r15, 8);
-        si = longRotateLeft(si ^ bx, 12);
-        r14 = longWrappingAdd(r14, si);
-        cx = longRotateLeft(cx ^ r10, 12);
-        r11 = longWrappingAdd(r11, r9);
+        long r13 = u32WrappingAdd(st[2], cx);
+        long bx = u32WrappingAdd(st[9], r8);
+        long di = u32RotateLeft(st[14] ^ r13, 16);
+        long r10 = u32WrappingAdd(st[10], di);
+        dx = u32RotateLeft(dx ^ r11, 12);
+        r15 = u32WrappingAdd(r15, dx);
+        r9 = u32RotateLeft(r9 ^ r15, 8);
+        si = u32RotateLeft(si ^ bx, 12);
+        r14 = u32WrappingAdd(r14, si);
+        cx = u32RotateLeft(cx ^ r10, 12);
+        r11 = u32WrappingAdd(r11, r9);
         r8 ^= r14;
-        r13 = longWrappingAdd(r13, cx);
-        r8 = longRotateLeft(r8, 8);
-        bx = longWrappingAdd(bx, r8);
-        di = longRotateLeft(di ^ r13, 8);
-        long tmp0 = longRotateLeft(dx ^ r11, 7);
+        r13 = u32WrappingAdd(r13, cx);
+        r8 = u32RotateLeft(r8, 8);
+        bx = u32WrappingAdd(bx, r8);
+        di = u32RotateLeft(di ^ r13, 8);
+        long tmp0 = u32RotateLeft(dx ^ r11, 7);
         dx = st[7];
         si ^= bx;
         long tmp1 = bx;
         bx = r10;
-        si = longRotateLeft(si, 7);
-        bx = longWrappingAdd(bx, di);
-        r12 = longWrappingAdd(r12, dx);
-        r15 = longWrappingAdd(r15, si);
-        r10 = longRotateLeft(st[15] ^ r12, 16);
-        cx = longRotateLeft(cx ^ bx, 7);
-        bp = longWrappingAdd(bp, r10);
-        r14 = longWrappingAdd(r14, cx);
-        dx = longRotateLeft(dx ^ bp, 12);
-        r9 = longRotateLeft(r9 ^ r14, 16);
-        r12 = longWrappingAdd(r12, dx);
-        r10 = longRotateLeft(r10 ^ r12, 8);
-        bp = longWrappingAdd(bp, r10);
-        r10 = longRotateLeft(r10 ^ r15, 16);
-        bx = longWrappingAdd(bx, r10);
-        si = longRotateLeft(si ^ bx, 12);
-        r15 = longWrappingAdd(r15, si);
+        si = u32RotateLeft(si, 7);
+        bx = u32WrappingAdd(bx, di);
+        r12 = u32WrappingAdd(r12, dx);
+        r15 = u32WrappingAdd(r15, si);
+        r10 = u32RotateLeft(st[15] ^ r12, 16);
+        cx = u32RotateLeft(cx ^ bx, 7);
+        bp = u32WrappingAdd(bp, r10);
+        r14 = u32WrappingAdd(r14, cx);
+        dx = u32RotateLeft(dx ^ bp, 12);
+        r9 = u32RotateLeft(r9 ^ r14, 16);
+        r12 = u32WrappingAdd(r12, dx);
+        r10 = u32RotateLeft(r10 ^ r12, 8);
+        bp = u32WrappingAdd(bp, r10);
+        r10 = u32RotateLeft(r10 ^ r15, 16);
+        bx = u32WrappingAdd(bx, r10);
+        si = u32RotateLeft(si ^ bx, 12);
+        r15 = u32WrappingAdd(r15, si);
         st[0] = r15;
-        r10 = longRotateLeft(r10 ^ r15, 8);
-        bx = longWrappingAdd(bx, r10);
+        r10 = u32RotateLeft(r10 ^ r15, 8);
+        bx = u32WrappingAdd(bx, r10);
         st[15] = r10;
         st[10] = bx;
-        dx = longRotateLeft(dx ^ bp, 7);
-        bp = longWrappingAdd(bp, r9);
-        cx = longRotateLeft(cx ^ bp, 12);
-        r13 = longWrappingAdd(r13, dx);
-        r14 = longWrappingAdd(r14, cx);
-        st[5] = longRotateLeft(si ^ bx, 7);
-        r8 = longRotateLeft(r8 ^ r13, 16);
+        dx = u32RotateLeft(dx ^ bp, 7);
+        bp = u32WrappingAdd(bp, r9);
+        cx = u32RotateLeft(cx ^ bp, 12);
+        r13 = u32WrappingAdd(r13, dx);
+        r14 = u32WrappingAdd(r14, cx);
+        st[5] = u32RotateLeft(si ^ bx, 7);
+        r8 = u32RotateLeft(r8 ^ r13, 16);
         st[1] = r14;
-        r11 = longWrappingAdd(r11, r8);
-        r9 = longRotateLeft(r9 ^ r14, 8);
-        bp = longWrappingAdd(bp, r9);
+        r11 = u32WrappingAdd(r11, r8);
+        r9 = u32RotateLeft(r9 ^ r14, 8);
+        bp = u32WrappingAdd(bp, r9);
         st[12] = r9;
-        dx = longRotateLeft(dx ^ r11, 12);
+        dx = u32RotateLeft(dx ^ r11, 12);
         st[11] = bp;
-        r13 = longWrappingAdd(r13, dx);
-        st[6] = longRotateLeft(cx ^ bp, 7);
-        r8 = longRotateLeft(r8 ^ r13, 8);
+        r13 = u32WrappingAdd(r13, dx);
+        st[6] = u32RotateLeft(cx ^ bp, 7);
+        r8 = u32RotateLeft(r8 ^ r13, 8);
         st[2] = r13;
-        r11 = longWrappingAdd(r11, r8);
+        r11 = u32WrappingAdd(r11, r8);
         st[8] = r11;
-        st[7] = longRotateLeft(dx ^ r11, 7);
+        st[7] = u32RotateLeft(dx ^ r11, 7);
         st[13] = r8;
-        r12 = longWrappingAdd(r12, tmp0);
+        r12 = u32WrappingAdd(r12, tmp0);
         di ^= r12;
-        di = longRotateLeft(di, 16);
-        cx = longWrappingAdd(tmp1, di);
-        dx = longRotateLeft(tmp0 ^ cx, 12);
-        r12 = longWrappingAdd(r12, dx);
+        di = u32RotateLeft(di, 16);
+        cx = u32WrappingAdd(tmp1, di);
+        dx = u32RotateLeft(tmp0 ^ cx, 12);
+        r12 = u32WrappingAdd(r12, dx);
         di ^= r12;
         st[3] = r12;
-        long rd = longRotateLeft(di, 8);
+        long rd = u32RotateLeft(di, 8);
         st[14] = rd;
-        cx = longWrappingAdd(cx, rd);
-        st[4] = longRotateLeft(dx ^ cx, 7);
+        cx = u32WrappingAdd(cx, rd);
+        st[4] = u32RotateLeft(dx ^ cx, 7);
         st[9] = cx;
     }
 
@@ -475,8 +485,12 @@ public interface Tlv544Sign {
         return (value >>> distance) | (value << (64 - distance));
     }
 
-    public static long longWrappingAdd(long a, long b) {
+    public static long ulongWrappingAdd(long a, long b) {
         return (long) ((a + b) % Math.pow(2, 64));
+    }
+
+    public static long u32WrappingAdd(long a, long b) {
+        return (long) ((a + b) % Math.pow(2, 32));
     }
 
     public static short ubyteWrappingAdd(short a, short b) {
@@ -510,9 +524,8 @@ public interface Tlv544Sign {
         put_16b.apply(Arrays.asList(stat).subList(14, 16), data);
         Long[] org_state = state.org_state;
         for (int i = 0; i < 12; i++) org_state[i] = stat[i];
-        for (int i = 0; i < 16; i++) org_state[i] = ThreadLocalRandom.current().nextLong((long) Math.pow(2, 32));
+        for (int i = 12; i < 16; i++) org_state[i] = ThreadLocalRandom.current().nextLong((long) Math.pow(2, 32));
     }
-
     public static long littleEndianBytesToUnsignedInt(byte[] bytes) {
         if (bytes.length > 4) {
             throw new IllegalArgumentException("Invalid byte array length (up to 4 bytes allowed)");
@@ -526,7 +539,6 @@ public interface Tlv544Sign {
 
         return result;
     }
-
     public static long littleEndianBytesToUnsignedInt(Byte[] bytes) {
         if (bytes.length > 4) {
             throw new IllegalArgumentException("Invalid byte array length (up to 4 bytes allowed)");

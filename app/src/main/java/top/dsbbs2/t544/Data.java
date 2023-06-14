@@ -2,58 +2,11 @@ package top.dsbbs2.t544;
 
 public final class Data {
     public static final short[]/*ubyte[]*/ CRC_PART = {64, 85, 103, 196, 13, 207, 237, 110};
-    public static final short[]/*ubyte[]*/ KEY_TABLE = {36, 37, 38, 40, 41, 43, 44, 45, 52, 53, 54, 55, 56, 57, 58, 63, 65, 66, 67, 68, 69, 69, 70, 71,
-            72, 73, 74, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 111, 112, 113, 114, 115, 116,
-            117, 118, 119, 120, 121, 122};
-    public static final short[]/*ubyte[]*/ TABLE2 = {33, 35, 36, 37, 38, 41, 43, 46, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 61, 62, 63, 64, 65,
-            66, 67, 68, 69, 70, 71, 75, 77, 78, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 111,
-            112, 113, 114, 115, 116};
-    public static final short[]/*ubyte[]*/ KEY1 = {97, 36, 40, 101, 84, 55, 42, 64};
-    public static final short[]/*ubyte[]*/ KEY2 = {38, 79, 57, 33, 62, 54, 88, 41};
-    public static final short[]/*ubyte[]*/ IP_TABLE = {0, 5, 10, 15, 4, 9, 14, 3, 8, 13, 2, 7, 12, 1, 6, 11};
-    public static final short[]/*ubyte[]*/ ENC_TEE = {76, 194, 211, 188, 170, 232, 82, 177, 242, 178, 245, 7, 58, 71, 250, 180};
-    public static final long[]/*uint[]*/ ENC_TEF = {16777216, 33554432, 67108864, 134217728, 268435456, 536870912, 1073741824, 2147483648L,
-            452984832, 905969664, 1811939328, 3623878656L, 2868903936L, 1291845632, 2583691264L};
-    public static final long[]/*uint[]*/ ENC_TRB = {1287836604, 2867352241L, 4071814407L, 977795764, 3991887420L, 1191644301, 3048601994L, 2415002430L,
-            1721035855, 563339458, 2485524808L, 466885238, 708236512, 195376162, 2676174186L, 2220308252L,
-            2041333951, 1913224349, 3985265143L, 1776117483, 2829033798L, 3667320283L, 924617772, 1589766855,
-            4028131102L, 713996997, 496121577, 1129569326, 1570657796, 1997597889, 1786960424, 701564422,
-            3824236961L, 2497828192L, 4267904840L, 3618769230L, 3488618159L, 1527890895, 2775764103L, 1925236169,
-            1129761775, 407308320, 3174417575L, 3488940398L};
-    public static final Long[]/*uint[]*/ STAT_CHK = {1634760805L, 857760878L, 2036477234L, 1797285236L};
+
     public static long[]/*uint[]*/ CRC_TABLE;
-    public static short[][][][]/*ubyte[][][][]*/ ENC_TEA;
-    public static short[][]/*ubyte[][]*/ ENC_TEB;
-    public static short[][]/*ubyte[][]*/ ENC_TEC;
-    public static short[][]/*ubyte[][]*/ ENC_TR;
-    public static short[][]/*ubyte[][]*/ DEC_TR;
 
     static {
         initCRC_TABLE();
-    }
-
-    static {
-        initENC_TEA();
-    }
-
-    static {
-        initENC_TEB();
-    }
-
-    static {
-        initENC_TEC();
-    }
-
-    static {
-        initENC_TR();
-    }
-
-    static {
-        initDEC_TR();
-    }
-
-    private Data() {
-        throw new RuntimeException();
     }
 
     public static final void initCRC_TABLE() {
@@ -90,6 +43,18 @@ public final class Data {
                 4057260610L, 4066508878L, 4089016648L, 4107580753L, 4111451223L, 4139329115L, 4150417245L, 4167216745L,
                 4189708143L, 4195302755L, 4224994405L, 4240017532L, 4251122042L, 4275313526L, 4279200368L};
     }
+    public static final short[]/*ubyte[]*/ KEY_TABLE = {36, 37, 38, 40, 41, 43, 44, 45, 52, 53, 54, 55, 56, 57, 58, 63, 65, 66, 67, 68, 69, 69, 70, 71,
+            72, 73, 74, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 111, 112, 113, 114, 115, 116,
+            117, 118, 119, 120, 121, 122};
+    public static final short[]/*ubyte[]*/ TABLE2 = {33, 35, 36, 37, 38, 41, 43, 46, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 61, 62, 63, 64, 65,
+            66, 67, 68, 69, 70, 71, 75, 77, 78, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 111,
+            112, 113, 114, 115, 116};
+    public static final short[]/*ubyte[]*/ KEY1 = {97, 36, 40, 101, 84, 55, 42, 64};
+    public static final short[]/*ubyte[]*/ KEY2 = {38, 79, 57, 33, 62, 54, 88, 41};
+    public static final short[]/*ubyte[]*/ IP_TABLE = {0, 5, 10, 15, 4, 9, 14, 3, 8, 13, 2, 7, 12, 1, 6, 11};
+    public static final short[]/*ubyte[]*/ ENC_TEE = {76, 194, 211, 188, 170, 232, 82, 177, 242, 178, 245, 7, 58, 71, 250, 180};
+    public static final long[]/*uint[]*/ ENC_TEF = {16777216, 33554432, 67108864, 134217728, 268435456, 536870912, 1073741824, 2147483648L,
+            452984832, 905969664, 1811939328, 3623878656L, 2868903936L, 1291845632, 2583691264L};
 
     public static final void initENC_TEA() {
         ENC_TEA = new short[][][][]{{
@@ -701,6 +666,13 @@ public final class Data {
                         }
                 }};
     }
+    public static final long[]/*uint[]*/ ENC_TRB = {1287836604, 2867352241L, 4071814407L, 977795764, 3991887420L, 1191644301, 3048601994L, 2415002430L,
+            1721035855, 563339458, 2485524808L, 466885238, 708236512, 195376162, 2676174186L, 2220308252L,
+            2041333951, 1913224349, 3985265143L, 1776117483, 2829033798L, 3667320283L, 924617772, 1589766855,
+            4028131102L, 713996997, 496121577, 1129569326, 1570657796, 1997597889, 1786960424, 701564422,
+            3824236961L, 2497828192L, 4267904840L, 3618769230L, 3488618159L, 1527890895, 2775764103L, 1925236169,
+            1129761775, 407308320, 3174417575L, 3488940398L};
+    public static final Long[]/*uint[]*/ STAT_CHK = {1634760805L, 857760878L, 2036477234L, 1797285236L};
 
     public static final void initENC_TEB() {
         ENC_TEB = new short[][]{{
@@ -752,6 +724,8 @@ public final class Data {
                         140, 161, 137, 13, 191, 230, 66, 104, 65, 153, 45, 15, 176, 84, 187, 22,
                 }};
     }
+    public static short[][][][]/*ubyte[][][][]*/ ENC_TEA;
+    public static short[][]/*ubyte[][]*/ ENC_TEB;
 
     public static final void initENC_TEC() {
         ENC_TEC = new short[][]{{0, 0, 0, 0, 0, 0},
@@ -1011,6 +985,17 @@ public final class Data {
                 {231, 25, 79, 168, 154, 131},
                 {229, 26, 70, 163, 151, 141}};
     }
+    public static short[][]/*ubyte[][]*/ ENC_TEC;
+    public static short[][]/*ubyte[][]*/ ENC_TR;
+    public static short[][]/*ubyte[][]*/ DEC_TR;
+
+    static {
+        initENC_TEA();
+    }
+
+    static {
+        initENC_TEB();
+    }
 
     public static final void initENC_TR() {
         ENC_TR = new short[][]{{2, 5, 0, 14, 15, 3, 10, 1, 13, 12, 7, 11, 6, 8, 4, 9},
@@ -1047,6 +1032,14 @@ public final class Data {
                 {3, 14, 8, 2, 0, 1, 11, 6, 15, 12, 13, 10, 9, 4, 7, 5}};
     }
 
+    static {
+        initENC_TEC();
+    }
+
+    static {
+        initENC_TR();
+    }
+
     public static final void initDEC_TR() {
         DEC_TR = new short[][]{{11, 0, 9, 6, 14, 8, 4, 1, 2, 7, 10, 3, 15, 12, 13, 5},
                 {11, 9, 3, 2, 6, 15, 5, 13, 12, 4, 10, 14, 8, 0, 7, 1},
@@ -1080,5 +1073,12 @@ public final class Data {
                 {2, 5, 3, 4, 9, 15, 8, 11, 6, 10, 0, 14, 12, 7, 13, 1},
                 {14, 15, 8, 6, 2, 10, 0, 1, 3, 13, 5, 11, 7, 9, 4, 12},
                 {15, 6, 0, 8, 7, 13, 12, 9, 10, 14, 3, 4, 5, 11, 1, 2}};
+    }
+
+    static {
+        initDEC_TR();
+    }
+    private Data() {
+        throw new RuntimeException();
     }
 }
