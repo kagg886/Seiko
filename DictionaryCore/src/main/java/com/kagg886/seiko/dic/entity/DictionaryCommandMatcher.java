@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
  */
 public class DictionaryCommandMatcher {
 
-    private static final HashMap<String,Class<?>[]> domainQuoteNew; //记录了所有的合法标签
+    private static final Map<String,Class<?>[]> domainQuoteNew; //记录了所有的合法标签
     private final Pattern pattern;//匹配字符串
     private final String source; //源表达式
     private final int line;//行数
