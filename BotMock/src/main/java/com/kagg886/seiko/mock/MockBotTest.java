@@ -1,17 +1,12 @@
 package com.kagg886.seiko.mock;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
-import com.alibaba.fastjson.TypeReference;
 import com.kagg886.seiko.dic.DICList;
 import com.kagg886.seiko.dic.DictionaryEnvironment;
 import com.kagg886.seiko.dic.DictionaryReg;
-import com.kagg886.seiko.dic.entity.DictionaryFile;
 import com.kagg886.seiko.dic.model.DICParseResult;
-import com.kagg886.seiko.dic.session.impl.GroupMessageRuntime;
-import net.mamoe.mirai.contact.NormalMember;
 import net.mamoe.mirai.contact.file.AbsoluteFolder;
-import net.mamoe.mirai.event.events.GroupMessageEvent;
+import net.mamoe.mirai.message.data.MessageChainBuilder;
+import net.mamoe.mirai.message.data.PlainText;
 import net.mamoe.mirai.mock.MockBot;
 import net.mamoe.mirai.mock.MockBotFactory;
 import net.mamoe.mirai.mock.contact.MockGroup;
@@ -20,10 +15,12 @@ import net.mamoe.mirai.utils.ExternalResource;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.*;
+import java.util.Scanner;
+import java.util.UUID;
 
 public class MockBotTest {
     public static void main(String[] args) throws IOException {
+        initDictionaryEnvironment();
 //        List<Integer> a = List.of(1,2,3,4,5);
 //        System.out.println(JSON.toJSONString(a));
         MockBotFactory.initialize();
@@ -32,10 +29,11 @@ public class MockBotTest {
         MockBot mockBot = MockBotFactory.Companion.newMockBotBuilder().id(1693256674).create();
 
         //初始化群
-        MockGroup group = mockBot.addGroup(786442984,"机器人测群");
+        MockGroup group = mockBot.addGroup(1, "机器人测群");
+        MockGroup group1 = mockBot.addGroup(2, "草");
 
         //初始化自己
-        MockMember a = group.addMember(485184047,"猫娘");
+        MockMember a = group.addMember(485184047, "猫娘");
 
         for (int i = 100000; i < 100100; i++) {
             group.addMember(i, UUID.randomUUID().toString());
@@ -68,7 +66,8 @@ public class MockBotTest {
 
         for (String s = scanner.nextLine();;s = scanner.nextLine()) {
             //group.broadcastNewMemberJoinRequestEvent(123456,"猫娘",s,0);
-            a.says(s);
+            a.says(new MessageChainBuilder().append(new PlainText(s))
+                    .append(ExternalResource.uploadAsImage(new File("BotMock/mock/dic/dic.txt"), group)).build());
         }
     }
 
