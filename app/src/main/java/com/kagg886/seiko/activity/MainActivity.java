@@ -53,9 +53,6 @@ import java.util.zip.ZipOutputStream;
  */
 public class MainActivity extends AppCompatActivity {
 
-    private LinearLayout rootView;
-    private TabLayout layout;
-    private ViewPager pager;
     private ModuleAdapter adapter;
 
     private ActivityResult result;
@@ -87,6 +84,34 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         adapter.notifyDataSetChanged();
+    }
+
+    private Handler checkHandler = new Handler(Looper.getMainLooper()) {
+        @Override
+        public void handleMessage(@NonNull Message msg) {
+            JSONObject data;
+            try {
+                data = new JSONObject(msg.getData().getString("update"));
+            } catch (JSONException e) {
+                throw new RuntimeException(e);
+            }
+            AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+            String body = data.optString("body");
+            String title = data.optString("tag_name");
+            builder.setTitle(("V" + BuildConfig.VERSION_NAME) + "->" + title);
+            builder.setMessage(body.substring(0, Math.min(body.length() - 1, 500)) + (body.length() - 1 > 500 ? "..." : ""));
+            builder.setPositiveButton("通过Github打开", (dialog, which) -> {
+                ShareUtil.openUrlByBrowser(data.optString("html_url"));
+            });
+            builder.setNegativeButton("通过Gitee打开", (dialog, which) -> {
+                ShareUtil.openUrlByBrowser("https://gitee.com/kagg886/Seiko/releases/tag/" + title);
+            });
+            builder.create().show();
+        }
+    };
+
+    private void addFragment(List<ModuleAdapter.Structure> fragments, @StringRes int str, Fragment fragment) {
+        fragments.add(new ModuleAdapter.Structure(getText(str).toString(), fragment));
     }
 
     @Override
@@ -135,14 +160,14 @@ public class MainActivity extends AppCompatActivity {
         registerReceiver(dialogBroadCast, filter);
 
         //初始化SnackBar广播
-        rootView = findViewById(R.id.activity_main_root);
+        LinearLayout rootView = findViewById(R.id.activity_main_root);
         snackBroadCast = new SnackBroadCast(rootView);
         filter = new IntentFilter();
         filter.addAction(SnackBroadCast.TAG);
         registerReceiver(snackBroadCast, filter);
 
-        layout = findViewById(R.id.activity_main_view_tab_layout);
-        pager = findViewById(R.id.activity_main_view_view_pager);
+        TabLayout layout = findViewById(R.id.activity_main_view_tab_layout);
+        ViewPager pager = findViewById(R.id.activity_main_view_view_pager);
         adapter = new ModuleAdapter(getSupportFragmentManager());
 
         //启动Seiko托管服务，它是整个程序运行的关键
@@ -164,12 +189,8 @@ public class MainActivity extends AppCompatActivity {
         layout.setupWithViewPager(pager);
     }
 
-    private void addFragment(List<ModuleAdapter.Structure> fragments, @StringRes int str, Fragment fragment) {
-        fragments.add(new ModuleAdapter.Structure(getText(str).toString(), fragment));
-    }
-
     private void checkUpdate() {
-        if (!SeikoApplication.globalConfig.getBoolean("checkUpdateOnceStart",true)) {
+        if (!SeikoApplication.globalConfig.getBoolean("checkUpdateOnceStart", true)) {
             return;
         }
         new Thread(() -> {
@@ -190,28 +211,4 @@ public class MainActivity extends AppCompatActivity {
             }
         }).start();
     }
-
-    private Handler checkHandler = new Handler(Looper.getMainLooper()) {
-        @Override
-        public void handleMessage(@NonNull Message msg) {
-            JSONObject data;
-            try {
-                data = new JSONObject(msg.getData().getString("update"));
-            } catch (JSONException e) {
-                throw new RuntimeException(e);
-            }
-            AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-            String body = data.optString("body");
-            String title = data.optString("tag_name");
-            builder.setTitle(("V" + BuildConfig.VERSION_NAME) + "->" + title);
-            builder.setMessage(body.substring(0, Math.min(body.length()-1, 500)) + (body.length()-1 > 500 ? "..." : ""));
-            builder.setPositiveButton("通过Github打开",(dialog,which) -> {
-                ShareUtil.openUrlByBrowser(data.optString("html_url"));
-            });
-            builder.setNegativeButton("通过Gitee打开",(dialog, which) -> {
-                ShareUtil.openUrlByBrowser("https://gitee.com/kagg886/Seiko/releases/tag/" + title);
-            });
-            builder.create().show();
-        }
-    };
 }

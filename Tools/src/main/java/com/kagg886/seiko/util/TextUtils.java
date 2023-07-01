@@ -18,6 +18,20 @@ public class TextUtils {
 
     private static final Pattern p = Pattern.compile("^[A-Fa-f0-9]+$");
 
+
+    public static String toHEXString(byte[] bytes) {
+        StringBuilder result = new StringBuilder();
+        for (int index = 0, len = bytes.length; index <= len - 1; index += 1) {
+            int char1 = ((bytes[index] >> 4) & 0xF);
+            char chara1 = Character.forDigit(char1, 16);
+            int char2 = ((bytes[index]) & 0xF);
+            char chara2 = Character.forDigit(char2, 16);
+            result.append(chara1);
+            result.append(chara2);
+        }
+        return result.toString();
+    }
+
     public static String repeat(String value, int count) {
         if (count == 1) {
             return value;

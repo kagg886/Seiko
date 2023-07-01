@@ -28,7 +28,7 @@
     <string name="login_fail_reason">%s\n完整日志请查看BOT日志</string>
     <string name="login_fail_reason_unknown">BOT登录时发生未知异常</string>
     <string name="login_process">登录中… (%s)</string>
-    <string name="login_process_message">请稍等片刻…</string>
+    <string name="login_process_message">登陆中…</string>
     <string name="login_logout">用户操作，BOT主动下线!</string>
     <string name="login_title_create">添加账号</string>
     <string name="login_title_edit">编辑账号</string>

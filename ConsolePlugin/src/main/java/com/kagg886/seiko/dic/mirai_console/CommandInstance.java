@@ -14,7 +14,7 @@ import net.mamoe.mirai.console.command.CommandContext;
 import net.mamoe.mirai.console.command.ConsoleCommandSender;
 import net.mamoe.mirai.console.command.java.JCompositeCommand;
 
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -77,7 +77,7 @@ public class CommandInstance extends JCompositeCommand {
                 builder.append("伪代码路径:");
                 builder.append(file.getFile().getAbsolutePath());
                 builder.append("\n伪代码指令:\n[生效范围]指令:行数");
-                for (Map.Entry<DictionaryCommandMatcher, ArrayList<DictionaryCode>> entry : file.getCommands().entrySet()) {
+                for (Map.Entry<DictionaryCommandMatcher, List<DictionaryCode>> entry : file.getCommands().entrySet()) {
                     builder.append("\n");
                     builder.append(entry.getKey().toString());
                     builder.append(":");

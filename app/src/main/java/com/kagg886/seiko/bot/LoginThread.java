@@ -1,6 +1,7 @@
 package com.kagg886.seiko.bot;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -47,13 +48,17 @@ public class LoginThread extends Thread {
     private final TextView nick;
 
     private final AlertDialog dialog;
-
-
+    private final TextView dialogContent;
     private final Handler dialogController = new Handler(Looper.getMainLooper()) { //Dialog控制的Handler
+
         @Override
         public void handleMessage(@NonNull Message msg) {
             switch (msg.what) {
-                case 2:
+                case 3://修改对话框内容
+                    dialogContent.setText(msg.getData().getString("content"));
+                    break;
+
+                case 2: //展示对话框
                     dialog.show();
                     break;
                 case 0:
@@ -119,10 +124,13 @@ public class LoginThread extends Thread {
 
         BotConfiguration.MiraiProtocol protocol = BotConfiguration.MiraiProtocol.valueOf(platform);
 
+        dialogContent = new TextView(SeikoApplication.getCurrentActivity());
+
+
         dialog = new AlertDialog.Builder(SeikoApplication.getCurrentActivity())
                 .setTitle(text(R.string.login_process, uin))
                 .setCancelable(false)
-                .setMessage(R.string.login_process_message)
+                .setView(dialogContent)
                 .create();
         BotLogConfiguration configuration = new BotLogConfiguration(uin);
         configuration.setProtocol(protocol);
@@ -134,11 +142,20 @@ public class LoginThread extends Thread {
         }
     }
 
+    private void setDialogContent(String text) {
+        Message message = new Message();
+        message.what = 3;
+        message.getData().putString("content", text);
+        dialogController.sendMessage(message);
+    }
+
     @SuppressLint("UnsafeOptInUsageError")
     @Override
     public void run() {
         try {
+            Context ctx = SeikoApplication.getSeikoApplicationContext();
             dialogController.sendEmptyMessage(2);
+            setDialogContent(ctx.getString(R.string.login_process_message));
             bot.login();
             dialogController.sendEmptyMessage(0);
             JSONArrayStorage s = JSONArrayStorage.obtain(SeikoApplication.getSeikoApplicationContext().getExternalFilesDir("config").getAbsolutePath() + "/botList.json");

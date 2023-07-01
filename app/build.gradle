@@ -78,7 +78,7 @@ dependencies {
     implementation("net.mamoe:mirai-core:$gradle.mirai_version")
 //    compileOnly("net.mamoe:mirai-core-androidDebug:$gradle.mirai_version")
 //    compileOnly("net.mamoe:mirai-core-api-androidDebug:$gradle.mirai_version")
-//    compileOnly("net.mamoe:mirai-core-utils-androidDebug:$gradle.mirai_version")
+    compileOnly("net.mamoe:mirai-core-utils:$gradle.mirai_version")
 
 
 //    api("net.mamoe:mirai-core-api-android:$gradle.mirai_version")
