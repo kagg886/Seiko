@@ -9,15 +9,49 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="50deb0ec-ac2b-4bb3-81a3-6580c4990f99" name="更改" comment="fix:  修复协议设置页面中静态字段的产生">
+    <list default="true" id="50deb0ec-ac2b-4bb3-81a3-6580c4990f99" name="更改" comment="feat: ✨ 与FEKit对接实现tlv544">
+      <change afterPath="$PROJECT_DIR$/app/lib/classes_merge.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/kagg886/seiko/bot/sign/QSignHelper.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/kagg886/seiko/bot/sign/SSOSign.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/kagg886/seiko/bot/sign/SeikoEncryptServiceImpl.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/tencent/mobileqq/channel/ChannelManager.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/tencent/mobileqq/channel/ChannelProxy.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/tencent/mobileqq/dt/Dtn.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/tencent/mobileqq/dt/app/Dtc.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/tencent/mobileqq/dt/model/FEBound.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/tencent/mobileqq/fe/CmdWhiteListChangeCallback.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/tencent/mobileqq/fe/EventCallback.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/tencent/mobileqq/fe/FEKit.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/tencent/mobileqq/fe/IFEKitLog.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/tencent/mobileqq/fe/utils/DeepSleepDetector.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/tencent/mobileqq/msf/MsfService.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/tencent/mobileqq/qsec/qseccodec/SecCipher.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/tencent/mobileqq/qsec/qsecdandelionsdk/Dandelion.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/tencent/mobileqq/qsec/qsecprotocol/ByteData.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/tencent/mobileqq/qsec/qsecurity/QSec.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/tencent/mobileqq/qsec/qsecurity/QSecConfig.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/tencent/mobileqq/sign/QQSecuritySign.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/tencent/qphone/base/BaseConstants.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/tencent/qphone/base/remote/FromServiceMsg.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/tencent/qphone/base/remote/ToServiceMsg.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/tencent/qphone/base/util/CodecWarpper.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/tencent/qqprotect/qsec/QSecFramework.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/java/moe/fuqiuluo/signfaker/proxy/ProxyApplicationInfo.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/java/moe/fuqiuluo/signfaker/proxy/ProxyContext.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/java/moe/fuqiuluo/signfaker/proxy/ProxyPackageManager.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/jniLibs/arm64-v8a/libfekit.so" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/resources/META-INF/services/net.mamoe.mirai.internal.spi.EncryptService$Factory" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ConsolePlugin/src/main/java/com/kagg886/seiko/dic/mirai_console/CommandInstance.java" beforeDir="false" afterPath="$PROJECT_DIR$/ConsolePlugin/src/main/java/com/kagg886/seiko/dic/mirai_console/CommandInstance.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Tools/src/main/java/com/kagg886/seiko/util/TextUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/Tools/src/main/java/com/kagg886/seiko/util/TextUtils.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/app/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/kagg886/seiko/SeikoApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/kagg886/seiko/SeikoApplication.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/kagg886/seiko/activity/MainActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/kagg886/seiko/activity/MainActivity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/kagg886/seiko/bot/LoginThread.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/kagg886/seiko/bot/LoginThread.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/kagg886/seiko/bot/SeikoEncryptServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/kagg886/seiko/bot/SeikoEncryptServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/values/strings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/values/strings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/kagg886/seiko/bot/SeikoEncryptServiceImpl.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/top/dsbbs2/t544/Data.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/top/dsbbs2/t544/Pair.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/top/dsbbs2/t544/RC4.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/top/dsbbs2/t544/State.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/top/dsbbs2/t544/Tlv544Sign.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/resources/META-INF/services/net.mamoe.mirai.internal.spi.EncryptService" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/settings.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/settings.gradle" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -81,9 +115,9 @@
         <option value="JUnit3 Test Class" />
         <option value="layoutResourceFile" />
         <option value="Class" />
-        <option value="Kotlin Class" />
         <option value="Kotlin File" />
         <option value="Kotlin Object" />
+        <option value="Kotlin Class" />
       </list>
     </option>
   </component>
@@ -118,7 +152,7 @@
     <option name="stateVersion" value="1" />
   </component>
   <component name="ProblemsViewState">
-    <option name="selectedTabId" value="CurrentFile" />
+    <option name="selectedTabId" value="ProjectErrors" />
   </component>
   <component name="ProjectId" id="2PYkHwgCfL9PUK8of1NiuSVmXUw" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
@@ -126,44 +160,56 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ApkExportedModule": "Seiko.app",
-    "ExportApk.ApkPath": "D:\\IDEAProjects\\Seiko\\app",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.go.formatter.settings.were.checked": "true",
-    "RunOnceActivity.go.migrated.go.modules.settings": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary": "JUnit3",
-    "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit3": "junit.framework.TestCase",
-    "git-widget-placeholder": "dev",
-    "go.import.settings.migrated": "true",
-    "jdk.selected.JAVA_MODULE": "jbr-17",
-    "ktor.last.update.timestamp": "1684492463623",
-    "last_directory_selection": "D:/IDEAProjects/Seiko/app/src/test/java",
-    "last_opened_file_path": "D:/IDEAProjects/kagg886.jks",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "project.structure.last.edited": "SDK",
-    "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.29425287",
-    "settings.editor.selected.configurable": "reference.settings.ide.settings.new.ui",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ApkExportedModule&quot;: &quot;Seiko.app&quot;,
+    &quot;ExportApk.ApkPath&quot;: &quot;D:\\IDEAProjects\\Seiko\\app&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.go.formatter.settings.were.checked&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.go.migrated.go.modules.settings&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary&quot;: &quot;JUnit3&quot;,
+    &quot;com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit3&quot;: &quot;junit.framework.TestCase&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;dev&quot;,
+    &quot;go.import.settings.migrated&quot;: &quot;true&quot;,
+    &quot;jdk.selected.JAVA_MODULE&quot;: &quot;jbr-17&quot;,
+    &quot;ktor.last.update.timestamp&quot;: &quot;1684492463623&quot;,
+    &quot;last_directory_selection&quot;: &quot;D:/IDEAProjects/Seiko/app/src/test/java&quot;,
+    &quot;last_opened_file_path&quot;: &quot;D:/IDEAProjects/Seiko/app/src/main/java/moe/fuqiuluo/signfaker&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;库&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.29425287&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;reference.settings.ide.settings.new.ui&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   },
-  "keyToStringList": {
-    "ExportApk.BuildVariants": [
-      "release"
+  &quot;keyToStringList&quot;: {
+    &quot;ExportApk.BuildVariants&quot;: [
+      &quot;release&quot;
     ]
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\IDEAProjects\Seiko\app\src\main\java\moe\fuqiuluo\signfaker" />
+      <recent name="D:\IDEAProjects\Seiko\app\src\main\java\moe\fuqiuluo" />
+      <recent name="D:\IDEAProjects\Seiko\app\src\main\java" />
+      <recent name="D:\IDEAProjects\Seiko\app\src\main" />
+    </key>
     <key name="CreateTestDialog.Recents.Supers">
       <recent name="junit.framework.TestCase" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\IDEAProjects\Seiko\app\lib" />
+    </key>
+    <key name="MoveKotlinTopLevelDeclarationsDialog.RECENTS_KEY">
+      <recent name="com.kagg886.seiko.bot.sign" />
     </key>
     <key name="CreateTestDialog.RecentsKey">
       <recent name="com.kagg886.seiko.util" />
@@ -409,7 +455,10 @@
       <workItem from="1687582236955" duration="16000" />
       <workItem from="1687782164456" duration="883000" />
       <workItem from="1687863678336" duration="18000" />
-      <workItem from="1688183106022" duration="8630000" />
+      <workItem from="1688183106022" duration="8924000" />
+      <workItem from="1688210779518" duration="20000" />
+      <workItem from="1689328403237" duration="4324000" />
+      <workItem from="1689332767483" duration="1883000" />
     </task>
     <task id="LOCAL-00001" summary="style: 📝 写了几个注释">
       <created>1683678818902</created>
@@ -481,7 +530,15 @@
       <option name="project" value="LOCAL" />
       <updated>1685714640105</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="fix: 🐛 第一次修复45问题">
+      <option name="closed" value="true" />
+      <created>1688192756156</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1688192756156</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -524,7 +581,9 @@
     <MESSAGE value="feat: ✨ 优化登录协议设置UI" />
     <MESSAGE value="feat: ✨ 优化夜间模式下登录协议设置UI" />
     <MESSAGE value="fix:  修复协议设置页面中静态字段的产生" />
-    <option name="LAST_COMMIT_MESSAGE" value="fix:  修复协议设置页面中静态字段的产生" />
+    <MESSAGE value="fix:  第一次修复45问题" />
+    <MESSAGE value="feat: ✨ 与FEKit对接实现tlv544" />
+    <option name="LAST_COMMIT_MESSAGE" value="feat: ✨ 与FEKit对接实现tlv544" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REARRANGE_BEFORE_PROJECT_COMMIT" value="true" />
@@ -552,7 +611,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/com/kagg886/seiko/bot/LoginThread.java</url>
-          <line>82</line>
+          <line>71</line>
           <option name="timeStamp" value="21" />
         </line-breakpoint>
       </breakpoints>

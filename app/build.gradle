@@ -74,6 +74,8 @@ dependencies {
     implementation 'org.jsoup:jsoup:1.15.3'
     implementation 'com.squareup.okhttp3:okhttp:4.10.0'
 
+    implementation fileTree(dir: 'lib', includes: ["*.jar"])
+
 
     implementation("net.mamoe:mirai-core:$gradle.mirai_version")
 //    compileOnly("net.mamoe:mirai-core-androidDebug:$gradle.mirai_version")

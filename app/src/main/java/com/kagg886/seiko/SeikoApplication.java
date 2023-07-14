@@ -14,6 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.preference.PreferenceManager;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.kagg886.seiko.bot.sign.QSignHelper;
 import com.kagg886.seiko.util.IOUtil;
 import com.kagg886.seiko.util.ProtocolInjector;
 import com.kagg886.seiko.util.storage.JSONObjectStorage;
@@ -171,6 +172,9 @@ public class SeikoApplication extends Application implements Runnable, Thread.Un
      * @see https://github.com/cssxsh/fix-protocol-version/blob/main/src/main/kotlin/xyz/cssxsh/mirai/tool/FixProtocolVersion.kt
      */
     private void fixProtocol() {
+        QSignHelper.INSTANCE.registerEncryptService();
+
+
         new Thread(new Runnable() {
             @Override
             public void run() {
