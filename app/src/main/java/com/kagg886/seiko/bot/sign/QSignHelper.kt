@@ -18,6 +18,15 @@ import java.lang.ref.WeakReference
 
 object QSignHelper {
 
+    fun int32ToBuf(i: Int): ByteArray {
+        val out = ByteArray(4)
+        out[3] = i.toByte()
+        out[2] = (i shr 8).toByte()
+        out[1] = (i shr 16).toByte()
+        out[0] = (i shr 24).toByte()
+        return out
+    }
+
     fun toUHex(a: ByteArray): String {
         return a.toUHexString("")
     }

@@ -2,7 +2,11 @@ package com.kagg886.seiko.bot.sign;
 
 import android.annotation.SuppressLint;
 import android.util.Log;
+import com.tencent.mobileqq.fe.FEKit;
 import com.tencent.mobileqq.qsec.qsecdandelionsdk.Dandelion;
+import com.tencent.mobileqq.qsec.qsecurity.QSec;
+import com.tencent.mobileqq.qsec.qsecurity.QSecConfig;
+import com.tencent.mobileqq.sign.QQSecuritySign;
 import kotlinx.coroutines.CoroutineScope;
 import net.mamoe.mirai.internal.spi.EncryptService;
 import net.mamoe.mirai.internal.spi.EncryptServiceContext;
@@ -11,6 +15,8 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 /**
  * tlv544实现器，未来将支持更多类型
@@ -21,6 +27,8 @@ import java.util.Map;
 public class SeikoEncryptServiceImpl implements EncryptService.Factory, EncryptService {
 
     private Map<Long, Map<String, ?>> contextMap = new HashMap<>();
+
+    private ScheduledThreadPoolExecutor pool = new ScheduledThreadPoolExecutor(10);
 
     //用户登录后才会被Patched
     public SeikoEncryptServiceImpl() {
@@ -86,9 +94,70 @@ public class SeikoEncryptServiceImpl implements EncryptService.Factory, EncryptS
     @SuppressLint("DefaultLocale")
     @Nullable
     @Override
-    public SignResult qSecurityGetSign(@NotNull EncryptServiceContext encryptServiceContext, int sequenceId, @NotNull String cmdName, @NotNull byte[] bytes) {
+    public synchronized SignResult qSecurityGetSign(@NotNull EncryptServiceContext encryptServiceContext, int seq, @NotNull String cmd, @NotNull byte[] bytes) {
+        if (cmd.equals("StatSvc.register")) {
+            QQSecuritySign.INSTANCE.requestToken();
+            pool.schedule(QQSecuritySign.INSTANCE::requestToken, 30, TimeUnit.MINUTES);
+        }
 
-        return null;
+        long uin = encryptServiceContext.getId();
+        String qua = QSecConfig.INSTANCE.getBusiness_qua();
+
+        FEKit.INSTANCE.changeUin(uin);
+        QQSecuritySign.SignResult result = QQSecuritySign.INSTANCE.getSign(QSec.INSTANCE, qua, cmd, bytes, QSignHelper.INSTANCE.int32ToBuf(seq), String.valueOf(uin));
+
+
+        Log.d(getClass().getName(), "SSOSign:" + encryptServiceContext.getId() + "-->" + result);
+        return new SignResult(result.getSign(), result.getToken(), result.getExtra());
+
+/*        val response = client.preparePost("${server}/sign")
+                .addFormParam("uin", uin.toString())
+                .addFormParam("cmd", cmd)
+                .addFormParam("seq", seq.toString())
+                .addFormParam("buffer", buffer.toUHexString(""))
+                .execute().get()
+        val body = Json.decodeFromString(DataWrapper.serializer(), response.responseBody)
+        check(body.code == 0) { body.message }
+
+        logger.debug("Bot(${uin}) sign ${cmd}, ${body.message}")
+
+        return Json.decodeFromJsonElement(SignResult.serializer(), body.data)*/
+
+
+/*        val uin = fetchGet("uin")!!
+                val qua = fetchGet("qua", CONFIG.protocol.qua)!!
+                val cmd = fetchGet("cmd")!!
+                val seq = fetchGet("seq")!!.toInt()
+        val buffer = fetchGet("buffer")!!.hex2ByteArray()
+        val qimei36 = fetchGet("qimei36", def = "")!!
+
+                // I hope the androidId and guid can be null,but the fetchGet() can not work
+                val androidId = call.parameters["android_id"] ?: ""
+        val guid = call.parameters["guid"] ?: ""
+
+        requestSign(cmd, uin, qua, seq, buffer, qimei36, androidId, guid)*/
+
+/*        private suspend fun PipelineContext<Unit, ApplicationCall>.requestSign(cmd: String, uin: String, qua: String, seq: Int, buffer: ByteArray, qimei36: String = QSecConfig.business_q36) {
+            FEKit.changeUin(uin.toLong())
+
+            fun int32ToBuf(i: Int): ByteArray {
+                val out = ByteArray(4)
+                out[3] = i.toByte()
+                out[2] = (i shr 8).toByte()
+                out[1] = (i shr 16).toByte()
+                out[0] = (i shr 24).toByte()
+                return out
+            }
+
+            val sign = QQSecuritySign.getSign(QSec, qua, cmd, buffer, int32ToBuf(seq), uin)!!
+
+                    call.respond(
+                            APIResult(0, "success", Sign(
+                                    sign.token.toHexString(),
+                                    sign.extra.toHexString(),
+                                    sign.sign.toHexString(), QSecConfig.business_o3did ?: ""
+    )))
+        }*/
     }
 
     @NotNull

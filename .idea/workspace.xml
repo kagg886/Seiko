@@ -10,49 +10,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="50deb0ec-ac2b-4bb3-81a3-6580c4990f99" name="更改" comment="feat: ✨ 与FEKit对接实现tlv544">
-      <change afterPath="$PROJECT_DIR$/app/lib/classes_merge.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/kagg886/seiko/bot/sign/QSignHelper.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/kagg886/seiko/bot/sign/SSOSign.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/kagg886/seiko/bot/sign/SeikoEncryptServiceImpl.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/tencent/mobileqq/channel/ChannelManager.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/tencent/mobileqq/channel/ChannelProxy.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/tencent/mobileqq/dt/Dtn.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/tencent/mobileqq/dt/app/Dtc.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/tencent/mobileqq/dt/model/FEBound.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/tencent/mobileqq/fe/CmdWhiteListChangeCallback.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/tencent/mobileqq/fe/EventCallback.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/tencent/mobileqq/fe/FEKit.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/tencent/mobileqq/fe/IFEKitLog.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/tencent/mobileqq/fe/utils/DeepSleepDetector.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/tencent/mobileqq/msf/MsfService.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/tencent/mobileqq/qsec/qseccodec/SecCipher.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/tencent/mobileqq/qsec/qsecdandelionsdk/Dandelion.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/tencent/mobileqq/qsec/qsecprotocol/ByteData.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/tencent/mobileqq/qsec/qsecurity/QSec.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/tencent/mobileqq/qsec/qsecurity/QSecConfig.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/tencent/mobileqq/sign/QQSecuritySign.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/tencent/qphone/base/BaseConstants.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/tencent/qphone/base/remote/FromServiceMsg.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/tencent/qphone/base/remote/ToServiceMsg.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/tencent/qphone/base/util/CodecWarpper.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/tencent/qqprotect/qsec/QSecFramework.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/moe/fuqiuluo/signfaker/proxy/ProxyApplicationInfo.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/moe/fuqiuluo/signfaker/proxy/ProxyContext.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/moe/fuqiuluo/signfaker/proxy/ProxyPackageManager.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/jniLibs/arm64-v8a/libfekit.so" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/resources/META-INF/services/net.mamoe.mirai.internal.spi.EncryptService$Factory" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/app/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/kagg886/seiko/SeikoApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/kagg886/seiko/SeikoApplication.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/kagg886/seiko/activity/MainActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/kagg886/seiko/activity/MainActivity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/kagg886/seiko/bot/SeikoEncryptServiceImpl.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/top/dsbbs2/t544/Data.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/top/dsbbs2/t544/Pair.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/top/dsbbs2/t544/RC4.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/top/dsbbs2/t544/State.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/top/dsbbs2/t544/Tlv544Sign.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/resources/META-INF/services/net.mamoe.mirai.internal.spi.EncryptService" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/settings.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/settings.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/kagg886/seiko/bot/sign/QSignHelper.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/kagg886/seiko/bot/sign/QSignHelper.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/kagg886/seiko/bot/sign/SSOSign.kt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/kagg886/seiko/bot/sign/SeikoEncryptServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/kagg886/seiko/bot/sign/SeikoEncryptServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/tencent/mobileqq/sign/QQSecuritySign.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/tencent/mobileqq/sign/QQSecuritySign.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -458,7 +420,7 @@
       <workItem from="1688183106022" duration="8924000" />
       <workItem from="1688210779518" duration="20000" />
       <workItem from="1689328403237" duration="4324000" />
-      <workItem from="1689332767483" duration="1883000" />
+      <workItem from="1689332767483" duration="4474000" />
     </task>
     <task id="LOCAL-00001" summary="style: 📝 写了几个注释">
       <created>1683678818902</created>
@@ -538,7 +500,15 @@
       <option name="project" value="LOCAL" />
       <updated>1688192756156</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="feat: ✨ 与FEKit对接实现tlv544">
+      <option name="closed" value="true" />
+      <created>1689334694633</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1689334694633</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
