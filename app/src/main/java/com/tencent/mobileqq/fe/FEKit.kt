@@ -1,30 +1,25 @@
 package com.tencent.mobileqq.fe
 
-import android.util.Log
 import com.tencent.beacon.event.UserAction
 import com.tencent.mobileqq.dt.Dtn
 import com.tencent.mobileqq.fe.utils.DeepSleepDetector
 import com.tencent.mobileqq.qsec.qsecurity.QSec
 import com.tencent.mobileqq.qsec.qsecurity.QSecConfig
 import com.tencent.mobileqq.sign.QQSecuritySign
+
+import moe.fuqiuluo.signfaker.logger.TextLogger.log
 import moe.fuqiuluo.signfaker.proxy.ProxyContext
+import moe.fuqiuluo.utils.MD5
 import java.io.File
-import java.security.MessageDigest
 
 object FEKit {
-
-    fun log(s: String) {
-        Log.d("FEKit", s)
-    }
-
     fun init(qua: String, qimei: String, androidId: String, proxyContext: ProxyContext) {
         kotlin.runCatching {
             log("尝试载入FEKIT二进制库...")
             System.loadLibrary("fekit")
             log("载入FEKIT二进制库成功...")
 
-            QSecConfig.setupBusinessInfo(proxyContext, "0", toMD5(androidId + "02:00:00:00:00:00"), "", "", qimei, qua)
-
+            QSecConfig.setupBusinessInfo(proxyContext, "0", MD5.toMD5(androidId + "02:00:00:00:00:00"), "", "", qimei, qua)
             DeepSleepDetector.startCheck()
 
             QQSecuritySign.initSafeMode(false)
@@ -35,9 +30,10 @@ object FEKit {
                 log("目录`5463306EE50FE3AA`不存在，创建成功！")
                 file.mkdirs()
             }
-            Dtn.initContext(proxyContext, file.absolutePath)
+            Dtn.initContext(proxyContext)
+//            Dtn.initContext(proxyContext, file.absolutePath)
             log("初始化Dtn成功")
-            Dtn.initLog(object : IFEKitLog() {
+            Dtn.initLog(object: IFEKitLog() {
                 override fun d(str: String, i2: Int, str2: String) {
                     log("FEKitLogDebug $str: $str2")
                 }
@@ -75,26 +71,5 @@ object FEKit {
         QSecConfig.business_uin = uin.toString()
         Dtn.initUin(uin.toString())
         log("改变Uin = $uin")
-    }
-
-    private fun toMD5(input: String): String {
-        val digest = MessageDigest.getInstance("MD5")
-        val result = digest.digest(input.toByteArray())
-        val stringBuilder = StringBuilder()
-
-        //转成16进制
-        result.forEach {
-            val value = it
-            val hex = value.toInt() and (0xFF)
-            val hexStr = Integer.toHexString(hex)
-            println(hexStr)
-            if (hexStr.length == 1) {
-                stringBuilder.append(0).append(hexStr)
-            } else {
-                stringBuilder.append(hexStr)
-            }
-        }
-
-        return stringBuilder.toString()
     }
 }

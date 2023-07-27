@@ -1,1 +1,2 @@
-com.kagg886.seiko.bot.sign.SeikoEncryptServiceImpl
+com.kagg886.seiko.bot.SeikoEncryptServiceFactory
+

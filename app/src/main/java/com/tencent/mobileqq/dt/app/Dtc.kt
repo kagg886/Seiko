@@ -2,25 +2,23 @@ package com.tencent.mobileqq.dt.app
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.net.wifi.WifiInfo
+import android.net.wifi.WifiManager
 import android.os.Environment
 import android.provider.Settings
 import android.util.DisplayMetrics
-import android.util.Log
+import moe.fuqiuluo.signfaker.logger.TextLogger.log
 import java.lang.ref.WeakReference
 
 @SuppressLint("StaticFieldLeak")
 object Dtc {
     lateinit var ctx: WeakReference<Context>
-    private val cacheDB = hashMapOf<String, String>()
+    private val cacheDB  = hashMapOf<String, String>()
     lateinit var androidId: String
-
-    fun log(s: String) {
-        Log.d("Dtc", s)
-    }
 
     @JvmStatic
     fun mmKVValue(key: String): String {
-        val ret = when (key) {
+        val ret =  when(key) {
             "o3_switch_Xwid" -> cacheDB.getOrDefault(key, "")
 
             else -> cacheDB.getOrDefault(key, "")
@@ -155,11 +153,10 @@ object Dtc {
         str5: String?,
         str6: String?,
         str7: String?
-    ) {
-    }
+    ) {}
 
     @JvmStatic
-    fun getAndroidID(): String = androidId
+    fun getAndroidID(): String  = androidId
 
     @JvmStatic
     fun getBSSID(context: Context): String {

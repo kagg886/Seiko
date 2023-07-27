@@ -35,8 +35,5 @@ object QQSecuritySign {
         var extra: ByteArray = EMPTY_BYTE_ARRAY
         var sign: ByteArray = EMPTY_BYTE_ARRAY
         var token: ByteArray = EMPTY_BYTE_ARRAY
-        override fun toString(): String {
-            return "SignResult(extra=${extra.contentToString()}, sign=${sign.contentToString()}, token=${token.contentToString()})"
-        }
     }
 }

@@ -14,5 +14,5 @@ app/src/test
 .cxx
 /ConsolePlugin/debug-sandbox
 /BotMock/build
-.idea
+.idea/
 /**/build

@@ -9,12 +9,19 @@ android {
     packagingOptions { //Mirai升级2.14.0时需要添加这两项来排除，否则报错
         exclude 'META-INF/INDEX.LIST'
         exclude 'META-INF/io.netty.versions.properties'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/license.txt'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/NOTICE.txt'
+        exclude 'META-INF/notice.txt'
+        exclude 'META-INF/ASL2.0'
+        exclude("META-INF/*.kotlin_module")
     }
 
     defaultConfig {
         applicationId "com.kagg886.seiko"
         minSdk 28
-        targetSdk 32
+        targetSdk 34
         versionCode gradle.ext.app_version_code
         versionName gradle.ext.app_version
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -78,6 +85,7 @@ dependencies {
 
 
     implementation("net.mamoe:mirai-core:$gradle.mirai_version")
+    implementation("net.mamoe:mirai-core-utils:$gradle.mirai_version")
 //    compileOnly("net.mamoe:mirai-core-androidDebug:$gradle.mirai_version")
 //    compileOnly("net.mamoe:mirai-core-api-androidDebug:$gradle.mirai_version")
     compileOnly("net.mamoe:mirai-core-utils:$gradle.mirai_version")
@@ -90,6 +98,9 @@ dependencies {
     // 代码编辑器
     implementation(platform("io.github.Rosemoe.sora-editor:bom:0.21.1"))
     implementation("io.github.Rosemoe.sora-editor:editor")
+
+    implementation 'org.bouncycastle:bcprov-jdk15on:1.70'
+    implementation files('libs/beacon_android_v3.2.0.3_official64_release.jar')
 
     implementation project(':PluginAPI')
     implementation project(':DictionaryCore')

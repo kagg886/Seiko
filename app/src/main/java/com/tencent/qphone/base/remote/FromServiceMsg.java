@@ -20,13 +20,12 @@ public class FromServiceMsg implements Parcelable, Cloneable {
     };
     private static final String tag = "FromServiceMsg";
     private static final String version = "version";
-    private final HashMap<String, byte[]> transInfo;
-    public HashMap<String, Object> attributes;
-    @Deprecated
-    public Bundle extraData;
     private int appId;
     private int appSeq;
+    public HashMap<String, Object> attributes;
     private String errorMsg;
+    @Deprecated
+    public Bundle extraData;
     private int flag;
     private byte fromVersion;
     private boolean isColorLevel;
@@ -36,6 +35,7 @@ public class FromServiceMsg implements Parcelable, Cloneable {
     private int resultCode;
     private String serviceCmd;
     private int ssoSeq;
+    private final HashMap<String, byte[]> transInfo;
     private byte[] trpcRspErrorMsg;
     private int trpcRspFuncRetCode;
     private int trpcRspRetCode;
@@ -50,7 +50,7 @@ public class FromServiceMsg implements Parcelable, Cloneable {
         this.wupBuffer = new byte[0];
         this.attributes = new HashMap<>(32);
         this.fromVersion = (byte) 1;
-        // this.msfCommand = MsfCommand.unknown;
+       // this.msfCommand = MsfCommand.unknown;
         this.msgCookie = new byte[0];
         this.trpcRspErrorMsg = new byte[0];
         this.transInfo = new HashMap<>();
@@ -63,88 +63,6 @@ public class FromServiceMsg implements Parcelable, Cloneable {
             e2.printStackTrace();
         }
     }
-
-    public FromServiceMsg(String str, String str2) {
-        this(-1, -1, str, str2);
-        try {
-            this.extraData.putByte("version", this.fromVersion);
-        } catch (Exception e2) {
-            e2.printStackTrace();
-        }
-    }
-
-    public FromServiceMsg(int i2, int i3, String str, String str2) {
-        this.errorMsg = "";
-        this.mSsoEnc = 0;
-        this.ssoSeq = -1;
-        this.appSeq = -1;
-        this.wupBuffer = new byte[0];
-        this.attributes = new HashMap<>(32);
-        this.fromVersion = (byte) 1;
-        // this.msfCommand = MsfCommand.unknown;
-        this.msgCookie = new byte[0];
-        this.trpcRspErrorMsg = new byte[0];
-        this.transInfo = new HashMap<>();
-        this.isColorLevel = false;
-        Bundle bundle = new Bundle();
-        this.extraData = bundle;
-        this.resultCode = 1001;
-        this.appId = i2;
-        this.appSeq = i3;
-        this.uin = str;
-        this.serviceCmd = str2;
-        try {
-            bundle.putByte("version", this.fromVersion);
-        } catch (Exception e2) {
-            e2.printStackTrace();
-        }
-    }
-
-    public FromServiceMsg(int i2, int i3, String str, String str2, byte[] bArr) {
-        this.errorMsg = "";
-        this.mSsoEnc = 0;
-        this.ssoSeq = -1;
-        this.appSeq = -1;
-        this.wupBuffer = new byte[0];
-        this.attributes = new HashMap<>(32);
-        this.fromVersion = (byte) 1;
-        //  this.msfCommand = MsfCommand.unknown;
-        this.msgCookie = new byte[0];
-        this.trpcRspErrorMsg = new byte[0];
-        this.transInfo = new HashMap<>();
-        this.isColorLevel = false;
-        Bundle bundle = new Bundle();
-        this.extraData = bundle;
-        this.resultCode = 1001;
-        this.appId = i2;
-        this.appSeq = i3;
-        this.uin = str;
-        this.serviceCmd = str2;
-        this.msgCookie = bArr;
-        try {
-            bundle.putByte("version", this.fromVersion);
-        } catch (Exception e2) {
-            e2.printStackTrace();
-        }
-    }
-
-    public FromServiceMsg(Parcel parcel) {
-        this.errorMsg = "";
-        this.mSsoEnc = 0;
-        this.ssoSeq = -1;
-        this.appSeq = -1;
-        this.wupBuffer = new byte[0];
-        this.attributes = new HashMap<>(32);
-        this.fromVersion = (byte) 1;
-        //this.msfCommand = MsfCommand.unknown;
-        this.msgCookie = new byte[0];
-        this.trpcRspErrorMsg = new byte[0];
-        this.transInfo = new HashMap<>();
-        this.isColorLevel = false;
-        this.extraData = new Bundle();
-        readFromParcel(parcel);
-    }
-
     public synchronized Object addAttribute(String str, Object obj) {
         return this.attributes.put(str, obj);
     }
@@ -162,22 +80,9 @@ public class FromServiceMsg implements Parcelable, Cloneable {
         return this.appId;
     }
 
-    public void setAppId(int i2) {
-        this.appId = i2;
-    }
-
     public int getAppSeq() {
         return this.appSeq;
     }
-
-    public void setAppSeq(int i2) {
-        this.appSeq = i2;
-    }
-
-    //public MsfCommand getMsfCommand() {
-    //    return this.msfCommand;
-    //}
-
     public Object getAttribute(String str) {
         return this.attributes.get(str);
     }
@@ -198,45 +103,27 @@ public class FromServiceMsg implements Parcelable, Cloneable {
     public int getFlag() {
         return this.flag;
     }
-
-    public void setFlag(int i2) {
-        this.flag = i2;
-    }
-
     public byte getFromVersion() {
         return this.fromVersion;
     }
 
-    public void setFromVersion(byte b2) {
-        this.fromVersion = b2;
-    }
+    //public MsfCommand getMsfCommand() {
+    //    return this.msfCommand;
+    //}
 
     public byte[] getMsgCookie() {
         return this.msgCookie;
     }
 
-    public void setMsgCookie(byte[] bArr) {
-        this.msgCookie = bArr;
-    }
-
     public int getRequestSsoSeq() {
         return this.ssoSeq;
     }
-
-    public void setRequestSsoSeq(int i2) {
-        this.ssoSeq = i2;
-    }
-
     public int getResultCode() {
         return this.resultCode;
     }
 
     public String getServiceCmd() {
         return this.serviceCmd;
-    }
-
-    public void setServiceCmd(String str) {
-        this.serviceCmd = str;
     }
 
     public String getShortStringForLog() {
@@ -304,39 +191,16 @@ public class FromServiceMsg implements Parcelable, Cloneable {
     public byte[] getTrpcRspErrorMsg() {
         return this.trpcRspErrorMsg;
     }
-
-    public void setTrpcRspErrorMsg(byte[] bArr) {
-        this.trpcRspErrorMsg = bArr;
-    }
-
     public int getTrpcRspFuncRetCode() {
         return this.trpcRspFuncRetCode;
     }
 
-    public void setTrpcRspFuncRetCode(int i2) {
-        this.trpcRspFuncRetCode = i2;
-    }
-
-    //public void setMsfCommand(MsfCommand msfCommand) {
-    //  this.msfCommand = msfCommand;
-    //}
-
     public int getTrpcRspRetCode() {
         return this.trpcRspRetCode;
     }
-
-    public void setTrpcRspRetCode(int i2) {
-        this.trpcRspRetCode = i2;
-    }
-
     public String getUin() {
         return this.uin;
     }
-
-    public void setUin(String str) {
-        this.uin = str;
-    }
-
     public byte[] getWupBuffer() {
         return this.wupBuffer;
     }
@@ -388,13 +252,34 @@ public class FromServiceMsg implements Parcelable, Cloneable {
             throw e2;
         }
     }
+    public void setAppId(int i2) {
+        this.appId = i2;
+    }
 
+    public void setAppSeq(int i2) {
+        this.appSeq = i2;
+    }
     public void setBusinessFail(int i2) {
         this.resultCode = i2;
     }
 
+    public void setFlag(int i2) {
+        this.flag = i2;
+    }
+
+    public void setFromVersion(byte b2) {
+        this.fromVersion = b2;
+    }
+
     public void setIsColorLevel(boolean z) {
         this.isColorLevel = z;
+    }
+    //public void setMsfCommand(MsfCommand msfCommand) {
+      //  this.msfCommand = msfCommand;
+    //}
+
+    public void setMsgCookie(byte[] bArr) {
+        this.msgCookie = bArr;
     }
 
     public void setMsgFail() {
@@ -403,6 +288,29 @@ public class FromServiceMsg implements Parcelable, Cloneable {
 
     public void setMsgSuccess() {
         this.resultCode = 1000;
+    }
+    public void setRequestSsoSeq(int i2) {
+        this.ssoSeq = i2;
+    }
+
+    public void setServiceCmd(String str) {
+        this.serviceCmd = str;
+    }
+
+    public void setTrpcRspErrorMsg(byte[] bArr) {
+        this.trpcRspErrorMsg = bArr;
+    }
+
+    public void setTrpcRspFuncRetCode(int i2) {
+        this.trpcRspFuncRetCode = i2;
+    }
+
+    public void setTrpcRspRetCode(int i2) {
+        this.trpcRspRetCode = i2;
+    }
+
+    public void setUin(String str) {
+        this.uin = str;
     }
 
     public String toString() {
@@ -481,5 +389,86 @@ public class FromServiceMsg implements Parcelable, Cloneable {
     public void setBusinessFail(int i2, int i3, String str) {
         this.resultCode = i3;
         this.errorMsg = str;
+    }
+
+    public FromServiceMsg(String str, String str2) {
+        this(-1, -1, str, str2);
+        try {
+            this.extraData.putByte("version", this.fromVersion);
+        } catch (Exception e2) {
+            e2.printStackTrace();
+        }
+    }
+
+    public FromServiceMsg(int i2, int i3, String str, String str2) {
+        this.errorMsg = "";
+        this.mSsoEnc = 0;
+        this.ssoSeq = -1;
+        this.appSeq = -1;
+        this.wupBuffer = new byte[0];
+        this.attributes = new HashMap<>(32);
+        this.fromVersion = (byte) 1;
+       // this.msfCommand = MsfCommand.unknown;
+        this.msgCookie = new byte[0];
+        this.trpcRspErrorMsg = new byte[0];
+        this.transInfo = new HashMap<>();
+        this.isColorLevel = false;
+        Bundle bundle = new Bundle();
+        this.extraData = bundle;
+        this.resultCode = 1001;
+        this.appId = i2;
+        this.appSeq = i3;
+        this.uin = str;
+        this.serviceCmd = str2;
+        try {
+            bundle.putByte("version", this.fromVersion);
+        } catch (Exception e2) {
+            e2.printStackTrace();
+        }
+    }
+
+    public FromServiceMsg(int i2, int i3, String str, String str2, byte[] bArr) {
+        this.errorMsg = "";
+        this.mSsoEnc = 0;
+        this.ssoSeq = -1;
+        this.appSeq = -1;
+        this.wupBuffer = new byte[0];
+        this.attributes = new HashMap<>(32);
+        this.fromVersion = (byte) 1;
+      //  this.msfCommand = MsfCommand.unknown;
+        this.msgCookie = new byte[0];
+        this.trpcRspErrorMsg = new byte[0];
+        this.transInfo = new HashMap<>();
+        this.isColorLevel = false;
+        Bundle bundle = new Bundle();
+        this.extraData = bundle;
+        this.resultCode = 1001;
+        this.appId = i2;
+        this.appSeq = i3;
+        this.uin = str;
+        this.serviceCmd = str2;
+        this.msgCookie = bArr;
+        try {
+            bundle.putByte("version", this.fromVersion);
+        } catch (Exception e2) {
+            e2.printStackTrace();
+        }
+    }
+
+    public FromServiceMsg(Parcel parcel) {
+        this.errorMsg = "";
+        this.mSsoEnc = 0;
+        this.ssoSeq = -1;
+        this.appSeq = -1;
+        this.wupBuffer = new byte[0];
+        this.attributes = new HashMap<>(32);
+        this.fromVersion = (byte) 1;
+        //this.msfCommand = MsfCommand.unknown;
+        this.msgCookie = new byte[0];
+        this.trpcRspErrorMsg = new byte[0];
+        this.transInfo = new HashMap<>();
+        this.isColorLevel = false;
+        this.extraData = new Bundle();
+        readFromParcel(parcel);
     }
 }

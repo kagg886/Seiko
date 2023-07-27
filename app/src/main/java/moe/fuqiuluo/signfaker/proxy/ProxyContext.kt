@@ -1,7 +1,15 @@
 package moe.fuqiuluo.signfaker.proxy
 
 import android.app.Application
-import android.content.*
+import android.content.BroadcastReceiver
+import android.content.ComponentName
+import android.content.ContentResolver
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
+import android.content.IntentSender
+import android.content.ServiceConnection
+import android.content.SharedPreferences
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
 import android.content.res.AssetManager
@@ -12,23 +20,22 @@ import android.database.sqlite.SQLiteDatabase
 import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
 import android.net.Uri
-import android.os.*
-import android.util.Log
+import android.os.Build
+import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
+import android.os.UserHandle
 import android.view.Display
 import androidx.annotation.RequiresApi
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
 import java.io.InputStream
+import moe.fuqiuluo.signfaker.logger.TextLogger.log
 
 class ProxyContext(
     private val myContext: Context
-) : Application() {
-
-    fun log(s: String) {
-        Log.d("ProxyContext", s)
-    }
-
+): Application() {
     override fun getAssets(): AssetManager {
         log("getAssets()")
         return myContext.assets
@@ -417,6 +424,10 @@ class ProxyContext(
     override fun stopService(p0: Intent?): Boolean {
         TODO("Not yet implemented")
     }
+
+//    override fun bindService(p0: Intent?, p1: ServiceConnection, p2: Int): Boolean {
+//        TODO("Not yet implemented")
+//    }
 
     override fun unbindService(p0: ServiceConnection) {
         TODO("Not yet implemented")

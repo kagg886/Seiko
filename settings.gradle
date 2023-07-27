@@ -26,7 +26,7 @@ include ':BotMock'
 include ':ConsolePlugin'
 include ':DICEventReg'
 
-gradle.ext.mirai_version = "2.15.0-dev-105"
+gradle.ext.mirai_version = "2.15.0"
 gradle.ext.app_version = "0.1.7"
 gradle.ext.app_version_code = 24
 gradle.ext.dic_version = "0.1.5"
