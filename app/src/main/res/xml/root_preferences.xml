@@ -27,18 +27,6 @@
         <EditTextPreference app:title="@string/settings_max_num_title" app:key="maxLogNum"/>
     </PreferenceCategory>
 
-    <PreferenceCategory app:title="@string/debug">
-        <SwitchPreference
-                app:defaultValue="true"
-                app:title="登录协议热修复"
-                app:summary="从云端拉取协议并进行修复，如非必要请勿关闭。"
-                android:key="cloudProtocolInject"/>
-        <DropDownPreference
-                app:key="protocolSetting"
-                app:summary="@string/protocol_warning"
-                app:title="@string/protocolSetting"/>
-    </PreferenceCategory>
-
     <PreferenceCategory app:title="@string/settings_info">
         <SwitchPreference
                 android:defaultValue="true"
