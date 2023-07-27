@@ -3,22 +3,31 @@ package moe.fuqiuluo.signfaker.proxy
 import android.content.ComponentName
 import android.content.Intent
 import android.content.IntentFilter
-import android.content.pm.*
+import android.content.pm.ActivityInfo
+import android.content.pm.ApplicationInfo
+import android.content.pm.ChangedPackages
+import android.content.pm.FeatureInfo
+import android.content.pm.InstrumentationInfo
+import android.content.pm.PackageInfo
+import android.content.pm.PackageInstaller
+import android.content.pm.PackageManager
+import android.content.pm.PermissionGroupInfo
+import android.content.pm.PermissionInfo
+import android.content.pm.ProviderInfo
+import android.content.pm.ResolveInfo
+import android.content.pm.ServiceInfo
+import android.content.pm.SharedLibraryInfo
+import android.content.pm.VersionedPackage
 import android.content.res.Resources
 import android.content.res.XmlResourceParser
 import android.graphics.Rect
 import android.graphics.drawable.Drawable
 import android.os.UserHandle
-import android.util.Log
+import moe.fuqiuluo.signfaker.logger.TextLogger.log
 
 class ProxyPackageManager(
     private val myPackageManager: PackageManager
-) : PackageManager() {
-
-    fun log(s: String) {
-        Log.d("ProxyPackageManager", s)
-    }
-
+): PackageManager() {
     override fun getPackageInfo(name: String, flags: Int): PackageInfo {
         log("getPackageInfo($name, $flags)")
         if (name == "com.tencent.mobileqq") {

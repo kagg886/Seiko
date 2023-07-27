@@ -3,6 +3,7 @@ package com.kagg886.seiko;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Application;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -10,15 +11,21 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
+
 import androidx.annotation.NonNull;
 import androidx.preference.PreferenceManager;
+
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.kagg886.seiko.bot.sign.QSignHelper;
+import com.kagg886.seiko.bot.SeikoEncryptServiceFactory;
 import com.kagg886.seiko.util.IOUtil;
 import com.kagg886.seiko.util.ProtocolInjector;
 import com.kagg886.seiko.util.storage.JSONObjectStorage;
+
+import net.mamoe.mirai.internal.spi.EncryptService;
 import net.mamoe.mirai.utils.BotConfiguration;
+import net.mamoe.mirai.utils.Services;
+
 import org.jsoup.Jsoup;
 
 import java.io.File;
@@ -29,6 +36,8 @@ import java.lang.reflect.Method;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.Map;
+
+import hamusuta.ProtocolUtils;
 
 /**
  * @projectName: Seiko
@@ -42,6 +51,7 @@ import java.util.Map;
 public class SeikoApplication extends Application implements Runnable, Thread.UncaughtExceptionHandler {
 
     public static SharedPreferences globalConfig;
+    public static Context context;
 
     /*
      * @param :
@@ -107,12 +117,14 @@ public class SeikoApplication extends Application implements Runnable, Thread.Un
         return (SeikoApplication) application;
     }
 
-
     @Override
     public void onCreate() {
         super.onCreate();
+        SeikoApplication.context = this;
+        ProtocolUtils.INSTANCE.injectProtocol();
+        Services.INSTANCE.register(EncryptService.Factory.class.getName(), SeikoEncryptServiceFactory.class.getName(), () -> SeikoEncryptServiceFactory.Companion);
         globalConfig = PreferenceManager.getDefaultSharedPreferences(this);
-        fixProtocol();
+//        fixProtocol();
         Thread.setDefaultUncaughtExceptionHandler(this);
         new Handler(Looper.getMainLooper()).post(this);
     }
@@ -172,9 +184,6 @@ public class SeikoApplication extends Application implements Runnable, Thread.Un
      * @see https://github.com/cssxsh/fix-protocol-version/blob/main/src/main/kotlin/xyz/cssxsh/mirai/tool/FixProtocolVersion.kt
      */
     private void fixProtocol() {
-        QSignHelper.INSTANCE.registerEncryptService();
-
-
         new Thread(new Runnable() {
             @Override
             public void run() {

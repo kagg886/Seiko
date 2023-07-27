@@ -366,6 +366,7 @@ public class BaseConstants {
     public static final String KEY_WEAK_NET_STRATEGY = "weakNetStrategy";
     public static final String KEY_WIFI_SIGNAL = "wifiSignal";
     public static final int LANG_ID_SIMPLIFIED_CHINESE = 2052;
+    public static int MAXSENDCOUNT_INMINUTE = 150;
     public static final String MINI_SDK = "";
     public static final String MSF_MMKV_FILE = "msf_mmkv_file";
     public static final String MSF_WEAK_NET_SP_NAME = "msf_weak_net_sp_name";
@@ -377,6 +378,7 @@ public class BaseConstants {
     public static final int NETINFO_WIFI = 2;
     public static final int NETINFO_WIFIANDMOBILE = 3;
     public static final long OPEN_SDK_BUFLAG_B1 = 1600001540;
+    public static String RDM_NoChangeFailCode = "rdm_NCF";
     public static final int REGUIN_CAPTCHA = 4;
     public static final int REGUIN_FACE = 59;
     public static final int REGUIN_GUARANTEE = 8;
@@ -422,21 +424,19 @@ public class BaseConstants {
     public static final byte UINTYPE_QQ = 0;
     public static final String UIN_NOUIN = "0";
     public static final String UNKNOWN_SSID_STRING = "<unknown ssid>";
+    public static int USEWAKELOCK_MINFAILEDCOUNT = 5;
     public static final String VAL_IPv4 = "IPv4";
     public static final String VAL_IPv4v6 = "v4v6";
     public static final String VAL_IPv6 = "IPv6";
     public static final String VAL_NONE = "none";
-    public static final String revision = "e757227e";
-    public static final String testServerAddress = "socket://113.96.213.95:14000";
-    public static final String CMD_MSG_PBSENDMSG = "MessageSvc.PbSendMsg";
-    public static int MAXSENDCOUNT_INMINUTE = 150;
-    public static String RDM_NoChangeFailCode = "rdm_NCF";
-    public static int USEWAKELOCK_MINFAILEDCOUNT = 5;
     public static String[] WiFiloginMergeTSAddress = null;
     public static String[] XGloginMergeTSAddress = null;
     public static int checkExpiresLogScreenOffCount = 2;
     public static boolean isUseDebugSso = false;
     public static long reSendIntrevTime = 5000;
+    public static final String revision = "e757227e";
+    public static final String testServerAddress = "socket://113.96.213.95:14000";
     public static String[] CMD_NeedBootPushCmdHeads = {"VideoSvc", "SharpSvr.s2c", "MessageSvc.Push", "OnlinePush", "trpc.msg.olpush.OlPushService.MsgPush"};
+    public static final String CMD_MSG_PBSENDMSG = "MessageSvc.PbSendMsg";
     public static String[] CMD_NeedResendCmds = {CMD_MSG_PBSENDMSG, "MessageSvc.SendMsg", "MessageSvc.offlinemsg", "MessageSvc.SendGroupMsg", "MsgProxy.SendMsg"};
 }

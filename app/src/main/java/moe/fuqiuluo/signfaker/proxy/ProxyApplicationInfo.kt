@@ -1,16 +1,11 @@
 package moe.fuqiuluo.signfaker.proxy
 
 import android.content.pm.ApplicationInfo
-import android.util.Log
+import moe.fuqiuluo.signfaker.logger.TextLogger.log
 
 class ProxyApplicationInfo(
-    val myApplicationInfo: ApplicationInfo
-) : ApplicationInfo() {
-
-    fun log(s: String) {
-        Log.d("ProxyApplicationInfo", s)
-    }
-
+    private val myApplicationInfo: ApplicationInfo
+): ApplicationInfo() {
     init {
         targetSdkVersion = 28
         log("ProxyApplicationInfo.targetSdkVersion = $targetSdkVersion")
