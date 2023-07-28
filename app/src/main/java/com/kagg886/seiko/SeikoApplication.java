@@ -112,7 +112,6 @@ public class SeikoApplication extends Application implements Runnable, Thread.Un
         ProtocolUtils.INSTANCE.injectProtocol();
         Services.INSTANCE.register(EncryptService.Factory.class.getName(), SeikoEncryptServiceFactory.class.getName(), () -> SeikoEncryptServiceFactory.Companion);
         globalConfig = PreferenceManager.getDefaultSharedPreferences(this);
-//        fixProtocol();
         Thread.setDefaultUncaughtExceptionHandler(this);
         new Handler(Looper.getMainLooper()).post(this);
     }

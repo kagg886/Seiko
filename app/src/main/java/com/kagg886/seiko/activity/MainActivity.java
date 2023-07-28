@@ -21,7 +21,6 @@ import com.kagg886.seiko.BuildConfig;
 import com.kagg886.seiko.R;
 import com.kagg886.seiko.SeikoApplication;
 import com.kagg886.seiko.adapter.ModuleAdapter;
-import com.kagg886.seiko.bot.sign.QSignHelper;
 import com.kagg886.seiko.event.DialogBroadCast;
 import com.kagg886.seiko.event.SnackBroadCast;
 import com.kagg886.seiko.fragment.DICFragment;
@@ -119,9 +118,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-
-        QSignHelper.INSTANCE.initFEKit(this);
 
         //检测崩溃报告
         File f = getExternalFilesDir("crash");

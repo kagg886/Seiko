@@ -5,31 +5,19 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.text.InputType;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.WindowManager;
-import android.widget.*;
 import androidx.annotation.NonNull;
 import androidx.annotation.StringRes;
-import androidx.appcompat.app.AlertDialog;
 import androidx.preference.EditTextPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
-import com.alibaba.fastjson.JSON;
 import com.kagg886.seiko.BuildConfig;
 import com.kagg886.seiko.R;
 import com.kagg886.seiko.SeikoApplication;
 import com.kagg886.seiko.event.SnackBroadCast;
 import com.kagg886.seiko.util.ShareUtil;
 import com.kagg886.seiko.util.TextUtils;
-import com.kagg886.seiko.util.storage.JSONObjectStorage;
 import net.mamoe.mirai.Bot;
-import net.mamoe.mirai.utils.BotConfiguration;
 import org.jetbrains.annotations.NotNull;
-
-import java.nio.file.Paths;
-
-import static com.kagg886.seiko.fragment.LoginFragment.protocols;
 
 public class SettingsFragment extends PreferenceFragmentCompat implements Preference.OnPreferenceClickListener, Preference.OnPreferenceChangeListener {
     @SuppressLint("DefaultLocale")

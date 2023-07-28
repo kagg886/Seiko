@@ -80,6 +80,25 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Swi
         builder.setView(view);
 
         Spinner spinner = view.findViewById(R.id.dialog_protocol);
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+            int previousPosition;
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                // 判断是否选择了第一项
+                if (position != 0 && position!= 2) {
+                    Toast.makeText(avt, "当前版本不支持切换至其他协议，强行切换有可能加重风控。", Toast.LENGTH_SHORT).show();
+                    spinner.setSelection(previousPosition);
+                } else {
+                    previousPosition = position;
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                // 未选中任何项时的处理
+            }
+        });
         spinner.setAdapter(new ArrayAdapter<>(avt, android.R.layout.simple_list_item_1, protocols));
 
         EditText keyEdit = view.findViewById(R.id.dialog_editKey);
