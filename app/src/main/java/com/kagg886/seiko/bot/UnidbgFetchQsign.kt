@@ -59,7 +59,7 @@ class UnidbgFetchQsign(coroutineContext: CoroutineContext): EncryptService, Coro
         val guid = device.guid.decodeToString()
         channel0 = context.extraArgs[EncryptServiceContext.KEY_CHANNEL_PROXY]
         if(token.get() == 0L) {
-            Starter.start(SeikoApplication.context, androidId, guid, qimei36)
+            Starter.start(SeikoApplication.getSeikoApplicationContext(), androidId, guid, qimei36)
             coroutineContext.job.invokeOnCompletion {
                 token.compareAndSet(uin, 0)
             }

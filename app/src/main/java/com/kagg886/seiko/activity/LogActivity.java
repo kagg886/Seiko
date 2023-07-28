@@ -23,6 +23,8 @@ import com.kagg886.seiko.util.IOUtil;
 import net.mamoe.mirai.Bot;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -77,7 +79,11 @@ public class LogActivity extends AppCompatActivity implements View.OnClickListen
         log.setTranscriptMode(AbsListView.TRANSCRIPT_MODE_ALWAYS_SCROLL);
         log.setStackFromBottom(true);
 
-        adapter = new LogAdapter(this, file);
+        try {
+            adapter = new LogAdapter(file);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         log.setAdapter(adapter);
 
         btn = findViewById(R.id.fragment_plugin_menu);

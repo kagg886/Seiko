@@ -39,7 +39,6 @@ import java.util.Map;
 public class SeikoApplication extends Application implements Runnable, Thread.UncaughtExceptionHandler {
 
     public static SharedPreferences globalConfig;
-    public static Context context;
 
     /*
      * @param :
@@ -108,7 +107,6 @@ public class SeikoApplication extends Application implements Runnable, Thread.Un
     @Override
     public void onCreate() {
         super.onCreate();
-        SeikoApplication.context = this;
         ProtocolUtils.INSTANCE.injectProtocol();
         Services.INSTANCE.register(EncryptService.Factory.class.getName(), SeikoEncryptServiceFactory.class.getName(), () -> SeikoEncryptServiceFactory.Companion);
         globalConfig = PreferenceManager.getDefaultSharedPreferences(this);
