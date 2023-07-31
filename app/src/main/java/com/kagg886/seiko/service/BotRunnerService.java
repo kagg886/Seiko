@@ -21,6 +21,7 @@ import com.kagg886.seiko.plugin.PluginList;
 
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.NoSuchElementException;
 import java.util.UUID;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -119,6 +120,13 @@ public class BotRunnerService extends Service {
 
     public void login(JSONObject target, TextView nick, SwitchCompat sw) {
         executor.execute(new LoginThread(target, sw, nick));
+    }
+
+    public LoginThread getThreadByBot(long qq) {
+        return executor.getQueue().stream()
+                .map((v) -> (LoginThread) v).filter(v -> v.getBot() == qq)
+                .findFirst()
+                .orElse(null);
     }
 
     private Notification getNotification(String content) {

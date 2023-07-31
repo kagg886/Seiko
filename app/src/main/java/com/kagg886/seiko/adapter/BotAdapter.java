@@ -17,6 +17,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.kagg886.seiko.R;
 import com.kagg886.seiko.activity.LogActivity;
 import com.kagg886.seiko.activity.MainActivity;
+import com.kagg886.seiko.bot.LoginThread;
 import com.kagg886.seiko.event.DialogBroadCast;
 import com.kagg886.seiko.event.SnackBroadCast;
 import com.kagg886.seiko.fragment.LoginFragment;
@@ -74,8 +75,19 @@ public class BotAdapter extends BaseAdapter {
         ImageView imageView = v.findViewById(R.id.adapter_botitem_imgContent);
         TextView nick = v.findViewById(R.id.adapter_botitem_botqqnick);
         TextView qq = v.findViewById(R.id.adapter_botitem_botqqid);
-        SwitchCompat sw = v.findViewById(R.id.adapter_dicitem_status);
+
         JSONObject target = botList.getJSONObject(position);
+
+        SwitchCompat sw;
+        //尝试修复页面刷新导致的mirai维护列表与seiko维护列表不同步的问题
+
+        if (BotRunnerService.INSTANCE == null) {
+            sw = v.findViewById(R.id.adapter_dicitem_status);
+        } else {
+            LoginThread thread = BotRunnerService.INSTANCE.getThreadByBot(target.getLong("uin"));
+            sw = thread == null ? v.findViewById(R.id.adapter_dicitem_status) : thread.getSwitch();
+            Log.d(getClass().getName(),"绑定到已存在的bot的switch");
+        }
 
         String str = target.getString("nick");
         nick.setText(str == null ? text(R.string.bot_list_not_login) : str);

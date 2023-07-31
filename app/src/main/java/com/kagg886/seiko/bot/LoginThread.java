@@ -48,16 +48,11 @@ public class LoginThread extends Thread {
     private final TextView nick;
 
     private final AlertDialog dialog;
-    private final TextView dialogContent;
     private final Handler dialogController = new Handler(Looper.getMainLooper()) { //Dialog控制的Handler
 
         @Override
         public void handleMessage(@NonNull Message msg) {
             switch (msg.what) {
-                case 3://修改对话框内容
-                    dialogContent.setText(msg.getData().getString("content"));
-                    break;
-
                 case 2: //展示对话框
                     dialog.show();
                     break;
@@ -69,44 +64,54 @@ public class LoginThread extends Thread {
                     break;
                 case 1:
                     Throwable throwable = ((Throwable) msg.getData().getSerializable("exception"));
-                    if (throwable.getClass() == BotAuthorizationException.class) {
-                        throwable = throwable.getCause();
-                    }
-                    if (SeikoApplication.globalConfig.getBoolean("badDeviceAutoDel", true)) {
-                        if (throwable instanceof LoginFailedException) {
-                            if (((LoginFailedException) throwable).getKillBot()) {
-                                //重置设备信息
-                                File file = Paths.get(SeikoApplication.getSeikoApplicationContext().getExternalFilesDir("bots").getAbsolutePath(),
-                                        String.valueOf(bot.getId())).toFile();
-                                bot.getLogger().error("bot登录失败，自动清除设备信息");
-                                IOUtil.delFile(file, pathname -> {
-                                    for (File t = pathname; !t.getAbsolutePath().equals("/"); t = t.getParentFile()) {
-                                        if (t.getName().equals("log") && t.isDirectory()) {
-                                            return false;
+                    if (!(throwable instanceof NormalOffline)) {
+                        if (throwable.getClass() == BotAuthorizationException.class) {
+                            throwable = throwable.getCause();
+                        }
+                        if (SeikoApplication.globalConfig.getBoolean("badDeviceAutoDel", true)) {
+                            if (throwable instanceof LoginFailedException) {
+                                if (((LoginFailedException) throwable).getKillBot()) {
+                                    //重置设备信息
+                                    File file = Paths.get(SeikoApplication.getSeikoApplicationContext().getExternalFilesDir("bots").getAbsolutePath(),
+                                            String.valueOf(bot.getId())).toFile();
+                                    bot.getLogger().error("bot登录失败，自动清除设备信息");
+                                    IOUtil.delFile(file, pathname -> {
+                                        for (File t = pathname; !t.getAbsolutePath().equals("/"); t = t.getParentFile()) {
+                                            if (t.getName().equals("log") && t.isDirectory()) {
+                                                return false;
+                                            }
                                         }
-                                    }
-                                    return true;
-                                });
+                                        return true;
+                                    });
+                                }
                             }
                         }
-                    }
-                    String error = throwable.getMessage() == null ? text(R.string.login_fail_reason_unknown) : text(R.string.login_fail_reason, throwable.getMessage());
+                        String error = throwable.getMessage() == null ? text(R.string.login_fail_reason_unknown) : text(R.string.login_fail_reason, throwable.getMessage());
 
-                    if (error.startsWith("Bot is already closed and cannot relogin")) {
-                        bot.getLogger().debug("登录时发现线程持有Bot过期，正在尝试重新创建线程...");
-                        //重新设置Bot
-                        BotRunnerService.INSTANCE.login(botConfig, nick,sw);
-                        dialog.dismiss();
-                        return;
+                        if (error.startsWith("Bot is already closed and cannot relogin")) {
+                            bot.getLogger().debug("登录时发现线程持有Bot过期，正在尝试重新创建线程...");
+                            //重新设置Bot
+                            BotRunnerService.INSTANCE.login(botConfig, nick,sw);
+                            dialog.dismiss();
+                            return;
+                        }
+                        DialogBroadCast.sendBroadCast(text(R.string.login_fail), error);
+                        bot.getLogger().error("在Bot登录时发现异常: ", throwable);
                     }
-                    DialogBroadCast.sendBroadCast(text(R.string.login_fail), error);
-                    bot.getLogger().error("在Bot登录时发现异常: ", throwable);
                     sw.setChecked(false);
                     dialog.dismiss();
                     break;
             }
         }
     };
+
+    public long getBot() {
+        return bot.getId();
+    }
+
+    public SwitchCompat getSwitch() {
+        return sw;
+    }
 
     @SuppressLint("DefaultLocale")
     public LoginThread(JSONObject botConfig, SwitchCompat sw, TextView nick) {
@@ -124,13 +129,10 @@ public class LoginThread extends Thread {
 
         BotConfiguration.MiraiProtocol protocol = BotConfiguration.MiraiProtocol.valueOf(platform);
 
-        dialogContent = new TextView(SeikoApplication.getCurrentActivity());
-
-
         dialog = new AlertDialog.Builder(SeikoApplication.getCurrentActivity())
                 .setTitle(text(R.string.login_process, uin))
                 .setCancelable(false)
-                .setView(dialogContent)
+                .setMessage("请稍等片刻")
                 .create();
         BotLogConfiguration configuration = new BotLogConfiguration(uin);
         configuration.setProtocol(protocol);
@@ -178,6 +180,7 @@ public class LoginThread extends Thread {
             }
             bot.join();
             SnackBroadCast.sendBroadCast(R.string.login_logout);
+            throw new NormalOffline();
         } catch (Throwable e) {
             Message m = new Message();
             m.what = 1;
@@ -190,5 +193,9 @@ public class LoginThread extends Thread {
 
     private String text(@StringRes int s, Object... args) {
         return String.format(SeikoApplication.getSeikoApplicationContext().getText(s).toString(), args);
+    }
+
+    private static class NormalOffline extends Throwable {
+
     }
 }
