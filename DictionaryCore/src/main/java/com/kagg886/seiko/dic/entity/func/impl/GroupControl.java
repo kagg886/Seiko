@@ -228,7 +228,7 @@ public abstract class GroupControl extends Function {
                 props.put("发送给新成员", parameters.getSendToNewMember());
                 props.put("置顶", parameters.isPinned());
                 props.put("需要确认", parameters.getRequireConfirmation());
-                props.put("图片", "null");
+                props.put("图片", parameters.getImage() == null ? "null" : parameters.getImage().getUrl());
                 unit.put("属性", props);
 
                 content.add(unit);

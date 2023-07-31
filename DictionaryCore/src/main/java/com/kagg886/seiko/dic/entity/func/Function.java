@@ -39,6 +39,7 @@ public abstract class Function extends DictionaryCode {
             {"撤回","MessageControl$Recall"},
             {"设置回复","MessageControl$Reply"},
             {"设置接收者", "MessageControl$setSender"},
+            {"戳", "MessageControl$Nudge"},
             {"语音", "Ptt"},
 
             //与文件有关

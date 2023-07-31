@@ -6,6 +6,11 @@ import com.kagg886.seiko.dic.exception.DictionaryOnRunningException;
 import com.kagg886.seiko.dic.session.AbsRuntime;
 import net.mamoe.mirai.Bot;
 import net.mamoe.mirai.contact.Contact;
+import net.mamoe.mirai.contact.Friend;
+import net.mamoe.mirai.contact.Group;
+import net.mamoe.mirai.contact.Member;
+import net.mamoe.mirai.event.events.FriendMessageEvent;
+import net.mamoe.mirai.event.events.GroupMessageEvent;
 import net.mamoe.mirai.event.events.MessageEvent;
 import net.mamoe.mirai.message.data.*;
 import net.mamoe.mirai.utils.ExternalResource;
@@ -15,6 +20,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -28,6 +34,54 @@ import java.util.Map;
  * @version: 1.0
  */
 public abstract class MessageControl extends Function.UnInterruptedFunction {
+
+    /**
+     * $戳 %成员对象%$ 或 $戳 %上下文%$
+     *
+     * @author kagg886
+     * @date 2023/7/31 11:03
+     **/
+    public static class Nudge extends Function.InterruptedFunction {
+        public Nudge(int line, String code) {
+            super(line, code);
+        }
+
+        @Override
+        protected void run(AbsRuntime<?> runtime, List<Object> args) {
+            Object arg0 = args.get(0);
+            if (arg0 instanceof HashMap) {
+                HashMap<String, ?> memberOrFriend = ((HashMap<String, ?>) arg0);
+                String type = (String) memberOrFriend.get("类型");
+                Bot b;
+                switch (type) {
+                    case "群成员":
+                        b = Bot.findInstance((long) memberOrFriend.get("BOT"));
+                        Group g = b.getGroup((long) memberOrFriend.get("群号"));
+                        Member m = g.get((long) memberOrFriend.get("QQ"));
+                        m.nudge().sendTo(g);
+                        break;
+                    case "好友":
+                        b = Bot.findInstance((long) memberOrFriend.get("BOT"));
+                        Friend f = b.getFriend((long) memberOrFriend.get("QQ"));
+                        f.nudge().sendTo(f);
+                        break;
+                    default:
+                        throw new DictionaryOnRunningException("非法的戳一戳类型" + type);
+                }
+            }
+            if (arg0 instanceof GroupMessageEvent) {
+                ((GroupMessageEvent) arg0).getSender().nudge().sendTo(((GroupMessageEvent) arg0).getGroup());
+                return;
+            }
+
+            if (arg0 instanceof FriendMessageEvent) {
+                ((FriendMessageEvent) arg0).getFriend().nudge().sendTo(((FriendMessageEvent) arg0).getFriend());
+                return;
+            }
+            throw new DictionaryOnRunningException("不合法的调用");
+        }
+    }
+
 
     /**
      * @projectName: Seiko
