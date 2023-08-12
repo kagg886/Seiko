@@ -154,7 +154,9 @@ public abstract class AbsRuntime<EVENT> {
             }
             if (matcher.matchesCommand(command)) { //正则匹配
                 String[] x = command.split(" ");
-                context.put("文本", command);
+                if (!context.containsKey("文本")) {
+                    context.put("文本", command);
+                }
                 context.put("参数长", x.length);
                 if (x.length != 1) {
                     for (int i = 0; i < x.length; i++) {

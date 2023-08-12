@@ -148,7 +148,6 @@ public class DictionaryReg {
                 }
                 MemberJoinRequestRuntime runtime = new MemberJoinRequestRuntime(dic, event);
                 runtime.invoke("申请入群");
-
             }
         });
     }

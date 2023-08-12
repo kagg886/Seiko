@@ -5,6 +5,8 @@ import com.kagg886.seiko.dic.session.AbsRuntime;
 import net.mamoe.mirai.contact.Contact;
 import net.mamoe.mirai.event.events.MemberJoinRequestEvent;
 
+import java.io.File;
+import java.net.URL;
 import java.util.Objects;
 
 /**
