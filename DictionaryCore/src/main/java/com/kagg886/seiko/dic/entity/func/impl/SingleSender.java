@@ -6,7 +6,6 @@ import com.kagg886.seiko.dic.session.AbsRuntime;
 import net.mamoe.mirai.contact.AudioSupported;
 import net.mamoe.mirai.contact.Contact;
 import net.mamoe.mirai.message.data.Audio;
-import net.mamoe.mirai.message.data.OfflineShortVideo;
 import net.mamoe.mirai.message.data.ShortVideo;
 import net.mamoe.mirai.utils.ExternalResource;
 import org.jsoup.Jsoup;
@@ -30,9 +29,9 @@ public abstract class SingleSender extends Function.InterruptedFunction {
      * @date: 2023/8/27 20:54
      * @version: 1.0
      */
-    public static class VideoSender extends SingleSender {
+    public static class Video extends SingleSender {
 
-        public VideoSender(int line, String code) {
+        public Video(int line, String code) {
             super(line, code);
         }
 
