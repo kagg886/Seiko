@@ -40,7 +40,8 @@ public abstract class Function extends DictionaryCode {
             {"设置回复","MessageControl$Reply"},
             {"设置接收者", "MessageControl$setSender"},
             {"戳", "MessageControl$Nudge"},
-            {"语音", "Ptt"},
+            {"语音", "SingleSender$Ptt"},
+            {"视频", "SingleSender$Video"},
 
             //与文件有关
             {"读", "FileControl$Read"},
