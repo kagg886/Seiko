@@ -66,8 +66,7 @@ public class MockBotTest {
 
         for (String s = scanner.nextLine();;s = scanner.nextLine()) {
             //group.broadcastNewMemberJoinRequestEvent(123456,"猫娘",s,0);
-            a.says(new MessageChainBuilder().append(new PlainText(s))
-                    .append(ExternalResource.uploadAsImage(new File("BotMock/mock/dic/dic.txt"), group)).build());
+            a.says(s);
         }
     }
 

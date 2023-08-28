@@ -55,20 +55,20 @@ public abstract class SingleSender extends Function.InterruptedFunction {
                     throw new DictionaryOnRunningException("无效的" + args.get(0).toString() + ":" + args.get(1).toString());
                 }
                 try {
-                    ExternalResource videoContent = ExternalResource.create(Jsoup.connect(args.get(1).toString()).ignoreContentType(true).execute().bodyStream());
-                    ExternalResource thumbnail = ExternalResource.create(Jsoup.connect(args.get(2).toString()).ignoreContentType(true).execute().bodyStream());
-                    video = supported.uploadShortVideo(thumbnail,videoContent, UUID.randomUUID() + ".mp4");
-                } catch (IOException e) {
-                    throw new DictionaryOnRunningException("短视频上传失败");
-                }
-            } else {
-                supported = runtime.getContact();
-                try {
                     ExternalResource videoContent = ExternalResource.create(Jsoup.connect(args.get(2).toString()).ignoreContentType(true).execute().bodyStream());
                     ExternalResource thumbnail = ExternalResource.create(Jsoup.connect(args.get(3).toString()).ignoreContentType(true).execute().bodyStream());
                     video = supported.uploadShortVideo(thumbnail,videoContent, UUID.randomUUID() + ".mp4");
                 } catch (IOException e) {
-                    throw new DictionaryOnRunningException("语音上传失败");
+                    throw new DictionaryOnRunningException("短视频上传失败",e);
+                }
+            } else {
+                supported = runtime.getContact();
+                try {
+                    ExternalResource videoContent = ExternalResource.create(Jsoup.connect(args.get(1).toString()).ignoreContentType(true).execute().bodyStream());
+                    ExternalResource thumbnail = ExternalResource.create(Jsoup.connect(args.get(2).toString()).ignoreContentType(true).execute().bodyStream());
+                    video = supported.uploadShortVideo(thumbnail,videoContent, UUID.randomUUID() + ".mp4");
+                } catch (IOException e) {
+                    throw new DictionaryOnRunningException("短视频上传失败",e);
                 }
             }
             supported.sendMessage(video);
@@ -110,14 +110,14 @@ public abstract class SingleSender extends Function.InterruptedFunction {
                 try {
                     audio = supported.uploadAudio(ExternalResource.create(Jsoup.connect(args.get(2).toString()).ignoreContentType(true).execute().bodyStream()));
                 } catch (IOException e) {
-                    throw new DictionaryOnRunningException("语音上传失败");
+                    throw new DictionaryOnRunningException("语音上传失败",e);
                 }
             } else {
                 supported = (AudioSupported) runtime.getContact();
                 try {
                     audio = supported.uploadAudio(ExternalResource.create(Jsoup.connect(args.get(1).toString()).ignoreContentType(true).execute().bodyStream()));
                 } catch (IOException e) {
-                    throw new DictionaryOnRunningException("语音上传失败");
+                    throw new DictionaryOnRunningException("语音上传失败",e);
                 }
             }
             supported.sendMessage(audio);
