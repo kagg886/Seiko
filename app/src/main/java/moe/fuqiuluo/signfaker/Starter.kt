@@ -50,7 +50,7 @@ object Starter {
 //            qimei = it
             QSecConfig.business_q36 = qimei
         }
-        val qua = "V1_AND_SQ_8.9.63_4194_YYB_D"
+        val qua = "V1_AND_SQ_8.9.73_4416_YYB_D"
         Dtc.androidId = androidId
         FEKit.init(qua, qimei, androidId, ctx)
         ChannelManager.setChannelProxy(object: ChannelProxy() {

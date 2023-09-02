@@ -10,4 +10,6 @@ object QSec {
     fun updateO3DID(str: String) {
         QSecConfig.business_o3did = str
     }
+
+    external fun getXwDebugID(s: String): ByteArray
 }
