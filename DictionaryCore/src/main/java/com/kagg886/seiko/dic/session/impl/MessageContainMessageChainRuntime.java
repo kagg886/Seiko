@@ -34,10 +34,14 @@ public class MessageContainMessageChainRuntime<V extends MessageEvent> extends A
                 context.put("语音秒数", s.getLength());
             }
 
-            if (sb instanceof OnlineShortVideo) {
-                OnlineShortVideo s = (OnlineShortVideo) sb;
-                context.put("视频大小", s.getFileSize());
-                context.put("视频链接", s.getUrlForDownload());
+            try {
+                if (sb instanceof OnlineShortVideo) {
+                    OnlineShortVideo s = (OnlineShortVideo) sb;
+                    context.put("视频大小", s.getFileSize());
+                    context.put("视频链接", s.getUrlForDownload());
+                }
+            } catch (NoClassDefFoundError ignored) {
+
             }
 
             if (sb instanceof QuoteReply) {
