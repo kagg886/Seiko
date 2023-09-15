@@ -7,6 +7,7 @@ import net.mamoe.mirai.contact.AudioSupported;
 import net.mamoe.mirai.contact.Contact;
 import net.mamoe.mirai.message.data.Audio;
 import net.mamoe.mirai.message.data.ShortVideo;
+import net.mamoe.mirai.message.data.SuperFace;
 import net.mamoe.mirai.utils.ExternalResource;
 import org.jsoup.Jsoup;
 

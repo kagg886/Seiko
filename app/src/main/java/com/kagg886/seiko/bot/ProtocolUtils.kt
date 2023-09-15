@@ -1,7 +1,5 @@
 package hamusuta
 
-import com.tencent.mobileqq.dt.model.FEBound
-import net.mamoe.mirai.internal.utils.*
 import net.mamoe.mirai.utils.BotConfiguration
 
 object ProtocolUtils {
@@ -24,7 +22,7 @@ object ProtocolUtils {
     //    "protocol_type": 1
     //}
     fun injectProtocol() {
-        MiraiProtocolInternal.protocols[BotConfiguration.MiraiProtocol.ANDROID_PHONE] = MiraiProtocolInternal(
+        net.mamoe.mirai.internal.utils.MiraiProtocolInternal.protocols[BotConfiguration.MiraiProtocol.ANDROID_PHONE] = net.mamoe.mirai.internal.utils.MiraiProtocolInternal(
             "com.tencent.mobileqq",
             537170996,
             "8.9.73",
@@ -37,7 +35,8 @@ object ProtocolUtils {
             1690371091L,
             20,
             "0S200MNJT807V3GE",
-            false
+            false,
+            true
         )
     }
 }
