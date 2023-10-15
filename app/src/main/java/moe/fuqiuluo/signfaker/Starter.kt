@@ -44,13 +44,13 @@ object Starter {
         Dtc.ctx = WeakReference(ctx)
         UserAction.initUserAction(ctx, false)
         UserAction.setAppKey("0S200MNJT807V3GE")
-        UserAction.setAppVersion("8.9.63")
+        UserAction.setAppVersion("8.9.80")
         UserAction.getQimei {
             TextLogger.log("QIMEI FETCH 成功： $it")
 //            qimei = it
             QSecConfig.business_q36 = qimei
         }
-        val qua = "V1_AND_SQ_8.9.73_4416_YYB_D"
+        val qua = "V1_AND_SQ_8.9.80_4614_YYB_D"
         Dtc.androidId = androidId
         FEKit.init(qua, qimei, androidId, ctx)
         ChannelManager.setChannelProxy(object: ChannelProxy() {

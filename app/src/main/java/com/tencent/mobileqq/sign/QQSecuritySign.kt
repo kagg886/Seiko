@@ -20,6 +20,23 @@ object QQSecuritySign {
 
     external fun dispatchEvent(str: String, str2: String, eventCallback: EventCallback)
 
+    //java/lang/String;
+    // Ljava/lang/String;
+    // Ljava/lang/String;
+    // Ljava/lang/String;
+    // Ljava/lang/String;
+    // Ljava/lang/String;
+    // Lcom/tencent/mobileqq/fe/EventCallback;)V
+    external fun notifyCamera(
+        str: String,
+        str1: String,
+        str2: String,
+        str3: String,
+        str4: String,
+        str5: String,
+        call: EventCallback
+    )
+
     external fun dispatchEventPB(
         str: String,
         str2: String,
