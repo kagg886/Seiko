@@ -26,16 +26,16 @@ object ProtocolUtils {
     fun injectProtocol() {
         net.mamoe.mirai.internal.utils.MiraiProtocolInternal.protocols[BotConfiguration.MiraiProtocol.ANDROID_PHONE] = net.mamoe.mirai.internal.utils.MiraiProtocolInternal(
             "com.tencent.mobileqq",
-            537176863,
+            537200219,
             "8.9.80",
-            "8.9.80.12440",
-            "6.0.0.2554",
+            "9.0.8.14755",
+            "6.0.0.2558",
             150470524,
             66560,
             16724722,
             "a6b745bf24a2c277527716f6f36eb68d",
-            1691565978L,
-            20,
+            1702888273L,
+            21,
             "0S200MNJT807V3GE",
             false,
             true

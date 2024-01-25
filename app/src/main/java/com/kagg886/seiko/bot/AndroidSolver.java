@@ -195,7 +195,7 @@ public class AndroidSolver extends LoginSolver implements QRCodeLoginListener, V
         ActivityResult result = avt.getResult();
         if (result.getResultCode() != Activity.RESULT_OK) {
             if (result.getResultCode() == SMSActivity.RESULT_RETRY) {
-                onSolveDeviceVerification(bot,requests,$completion);
+                return onSolveDeviceVerification(bot, requests, $completion);
             }
             throw new UnsupportedOperationException(text(R.string.sms_cancelled));
         }

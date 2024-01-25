@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
 
     private ModuleAdapter adapter;
 
-    private ActivityResult result;
+    private volatile ActivityResult result;
 
     public ActivityResultLauncher<Intent> verifyCall = this.registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> MainActivity.this.result = result);
     private DialogBroadCast dialogBroadCast;

@@ -48,6 +48,10 @@ object QQSecuritySign {
 
     external fun requestToken()
 
+    //Failed to register native method com.tencent.mobileqq.sign.QQSecuritySign.uiNotify(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lcom/tencent/mobileqq/fe/EventCallback;)V
+    external fun uiNotify(str: String, str2: String, str3: String, call: EventCallback)
+
+
     class SignResult {
         var extra: ByteArray = EMPTY_BYTE_ARRAY
         var sign: ByteArray = EMPTY_BYTE_ARRAY

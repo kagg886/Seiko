@@ -1,7 +1,7 @@
 pluginManagement {
     repositories {
         maven { url 'https://maven.aliyun.com/repository/public' }
-        maven {url "https://repo.mirai.mamoe.net/snapshots"}
+        maven { url "https://repo.mirai.mamoe.net/snapshots" }
         gradlePluginPortal()
         google()
         mavenCentral()
@@ -10,7 +10,8 @@ pluginManagement {
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
-        maven {url "https://repo.mirai.mamoe.net/snapshots"}
+//        maven { url 'https://maven.aliyun.com/repository/public' }
+        maven { url "https://repo.mirai.mamoe.net/snapshots" }
         google()
         mavenCentral()
     }
@@ -26,7 +27,7 @@ include ':BotMock'
 include ':ConsolePlugin'
 include ':DICEventReg'
 
-gradle.ext.mirai_version = "2.16.0-RC"
+gradle.ext.mirai_version = "2.16.0"
 gradle.ext.app_version = "0.2.1"
 gradle.ext.app_version_code = 26
 gradle.ext.dic_version = "0.1.6"

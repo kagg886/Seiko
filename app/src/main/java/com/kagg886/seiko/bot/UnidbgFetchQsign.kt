@@ -178,7 +178,8 @@ class UnidbgFetchQsign(coroutineContext: CoroutineContext): EncryptService, Coro
 
 
     private fun submit(cmd: String, callbackId: Long, buffer: ByteArray) {
-        ChannelManager.onNativeReceive(cmd, buffer, true, callbackId)
+        //TODO 0为意淫的
+        ChannelManager.onNativeReceive(cmd, buffer, true, 0, callbackId)
     }
 
     private fun callback(uin: Long, request: List<SsoPacket>) {
