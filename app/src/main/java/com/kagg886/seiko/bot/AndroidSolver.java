@@ -25,6 +25,7 @@ import com.kagg886.seiko.activity.MainActivity;
 import com.kagg886.seiko.activity.SMSActivity;
 import com.kagg886.seiko.event.SnackBroadCast;
 import com.kagg886.seiko.util.ShareUtil;
+import kotlin.Result;
 import kotlin.Unit;
 import kotlin.coroutines.Continuation;
 import kotlin.coroutines.CoroutineContext;
@@ -44,6 +45,8 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.UUID;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * @projectName: Seiko
@@ -175,6 +178,10 @@ public class AndroidSolver extends LoginSolver implements QRCodeLoginListener, V
         Intent i = new Intent(avt, SMSActivity.class);
         i.putExtra("phone",requests.getSms().getPhoneNumber());
         i.putExtra("country",requests.getSms().getCountryCode());
+
+        CountDownLatch l = new CountDownLatch(1);
+        AtomicReference<Throwable> t = new AtomicReference<>();
+
         requests.getSms().requestSms(new Continuation<Unit>() {
             @NotNull
             @Override
@@ -184,13 +191,21 @@ public class AndroidSolver extends LoginSolver implements QRCodeLoginListener, V
 
             @Override
             public void resumeWith(@NotNull Object o) {
-                if (o instanceof RetryLaterException) {
-                    SnackBroadCast.sendBroadCast(((RetryLaterException) o).getMessage());
-                    return;
+                if (o instanceof Result.Failure) {
+                    t.set(((Result.Failure) o).exception);
                 }
+                l.countDown();
                 Log.i("CallBack",o.getClass().getName());
             }
         });
+        try {
+            l.await();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        if (t.get() != null) {
+            throw new UnsupportedOperationException("发送验证码时出错: " + t.get().getMessage());
+        }
         avt.verifyCall.launch(i);
         ActivityResult result = avt.getResult();
         if (result.getResultCode() != Activity.RESULT_OK) {
