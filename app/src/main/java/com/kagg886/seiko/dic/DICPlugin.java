@@ -13,6 +13,7 @@ import com.kagg886.seiko.plugin.api.SeikoPlugin;
 import io.github.seikodictionaryenginev2.base.command.Registrator;
 import io.github.seikodictionaryenginev2.base.entity.DictionaryFile;
 import io.github.seikodictionaryenginev2.base.entity.DictionaryProject;
+import io.github.seikodictionaryenginev2.base.entity.code.func.Function;
 import io.github.seikodictionaryenginev2.base.env.DICList;
 import io.github.seikodictionaryenginev2.base.env.DictionaryEnvironment;
 import io.github.seikodictionaryenginev2.base.model.DICParseResult;
@@ -35,6 +36,57 @@ import java.util.Objects;
  * @version: 1.0
  */
 public class DICPlugin extends SeikoPlugin {
+    private static final String[][] dicFunctions = {
+            {"BOT列表", "BotControl$getBot"},
+            {"群列表", "BotControl$getGroups"},
+            {"获取群", "BotControl$getGroup"},
+            {"好友列表", "BotControl$getFriends"},
+            {"获取好友", "BotControl$getFriend"},
+
+
+            {"日志", "Logcat"},
+
+            {"图片", "MessageControl$addImage"},
+            {"艾特", "MessageControl$addAt"},
+            {"撤回", "MessageControl$Recall"},
+            {"设置回复", "MessageControl$Reply"},
+            {"设置接收者", "MessageControl$setSender"},
+            {"戳", "MessageControl$Nudge"},
+            {"语音", "SingleSender$Ptt"},
+            {"视频", "SingleSender$Video"},
+
+            {"群成员", "MemberControl$GetMember"},
+            {"群成员列表", "MemberControl$MemberList"},
+            {"改名", "MemberControl$ChangeName"},
+            {"群头衔", "MemberControl$ChangeTitle"},
+            {"禁言", "MemberControl$Mute"},
+            {"踢", "MemberControl$Kick"},
+            {"管理员", "MemberControl$ModifyAdmin"},
+    };
+
+    @Override
+    public void onLoad(Object ctx1) {
+        Context context = (Context) ctx1;
+        DictionaryEnvironment.getInstance().setDicRoot(context.getExternalFilesDir("dic"));
+        DictionaryEnvironment.getInstance().setDicConfigPoint(context.getExternalFilesDir("config").toPath().resolve("dicList.json").toFile().getAbsolutePath());
+        DictionaryEnvironment.getInstance().setDicData(context.getExternalFilesDir("dicData").toPath());
+
+        Registrator.inject();
+        HashMap<String, Class<?>[]> domainQuoteNew = new HashMap<>();
+        domainQuoteNew.put("群", new Class[]{GroupMessageEvent.class});
+        domainQuoteNew.put("好友", new Class[]{FriendMessageEvent.class});
+        domainQuoteNew.put("群事件", new Class[]{GroupMemberEvent.class, MemberJoinRequestEvent.class});
+        DictionaryEnvironment.getInstance().getEventDomain().putAll(domainQuoteNew);
+
+        for (String[] dicFunction : dicFunctions) {
+            try {
+                DictionaryEnvironment.getInstance().getGlobalFunctionRegister()
+                        .put(dicFunction[0], (Class<? extends Function>) Class.forName("com.kagg886.seiko.dic.v2.func." + dicFunction[1]));
+            } catch (ClassNotFoundException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
 
     @Override
     public void onBotGoLine(long botQQ) {
@@ -175,26 +227,6 @@ public class DICPlugin extends SeikoPlugin {
         });
     }
 
-    @Override
-    public void onLoad(Object ctx1) {
-        Context context = (Context) ctx1;
-        DictionaryEnvironment.getInstance().setDicRoot(context.getExternalFilesDir("dic"));
-        DictionaryEnvironment.getInstance().setDicConfigPoint(context.getExternalFilesDir("config").toPath().resolve("dicList.json").toFile().getAbsolutePath());
-        DictionaryEnvironment.getInstance().setDicData(context.getExternalFilesDir("dicData").toPath());
-
-        Registrator.inject();
-
-        HashMap<String, Class<?>[]> domainQuoteNew = new HashMap<>();
-        domainQuoteNew.put("群", new Class[]{GroupMessageEvent.class});
-        domainQuoteNew.put("好友", new Class[]{FriendMessageEvent.class});
-        domainQuoteNew.put("群事件", new Class[]{GroupMemberEvent.class, MemberJoinRequestEvent.class});
-
-        DictionaryEnvironment.getInstance().getEventDomain().putAll(domainQuoteNew);
-
-//        if (SeikoApplication.globalConfig.getBoolean("mergeAllLogs", false)) {
-//            DictionaryEnvironment.getInstance().setShowLogOnAllBots(false);
-//        }
-    }
 
     @Override
     public SeikoDescription getDescription() {

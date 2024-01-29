@@ -3,6 +3,7 @@ package com.kagg886.seiko.dic.v2.runtime;
 import io.github.seikodictionaryenginev2.base.entity.DictionaryFile;
 import io.github.seikodictionaryenginev2.base.session.BasicRuntime;
 import net.mamoe.mirai.contact.Contact;
+import net.mamoe.mirai.event.Event;
 import net.mamoe.mirai.message.data.MessageChainBuilder;
 
 /**
@@ -11,10 +12,17 @@ import net.mamoe.mirai.message.data.MessageChainBuilder;
  * @description:
  */
 
-public abstract class MiraiNonMessageEvent<T> extends BasicRuntime<T, Contact, MessageChainBuilder> {
+public abstract class MiraiNonMessageEvent<T extends Event> extends BasicRuntime<T, Contact, MessageChainBuilder> {
 
     public MiraiNonMessageEvent(DictionaryFile file, T t) {
         super(file, t);
+    }
+
+
+    @Override
+    protected void initObject(String command, T t) {
+        super.initObject(command, t);
+        getRuntimeObject().put("上下文", t);
     }
 
     @Override
