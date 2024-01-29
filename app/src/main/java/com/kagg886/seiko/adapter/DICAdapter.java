@@ -8,17 +8,19 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 import androidx.annotation.StringRes;
 import androidx.appcompat.widget.SwitchCompat;
-import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson2.JSONObject;
 import com.kagg886.seiko.R;
 import com.kagg886.seiko.SeikoApplication;
-import com.kagg886.seiko.dic.DICList;
-import com.kagg886.seiko.dic.DictionaryEnvironment;
-import com.kagg886.seiko.dic.entity.DictionaryFile;
-import com.kagg886.seiko.dic.model.DICParseResult;
-import com.kagg886.seiko.dic.session.impl.LifeCycleRuntime;
 import com.kagg886.seiko.event.DialogBroadCast;
 import com.kagg886.seiko.event.SnackBroadCast;
 import com.kagg886.seiko.util.IOUtil;
+import io.github.seikodictionaryenginev2.base.entity.DictionaryFile;
+import io.github.seikodictionaryenginev2.base.entity.DictionaryProject;
+import io.github.seikodictionaryenginev2.base.env.DICList;
+import io.github.seikodictionaryenginev2.base.env.DictionaryEnvironment;
+import io.github.seikodictionaryenginev2.base.model.DICParseResult;
+
+import java.util.List;
 
 /**
  * @projectName: Seiko
@@ -33,15 +35,12 @@ public class DICAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        if (DICList.getInstance() == null) {
-            return 0;
-        }
-        return DICList.getInstance().size();
+        return DICList.INSTANCE.size();
     }
 
     @Override
     public Object getItem(int i) {
-        return DICList.getInstance().get(i);
+        return DICList.INSTANCE.get(i);
     }
 
     @Override
@@ -56,7 +55,7 @@ public class DICAdapter extends BaseAdapter {
         SwitchCompat sw = v.findViewById(R.id.adapter_dicitem_status);
         TextView tx = v.findViewById(R.id.adapter_dicitem_name);
 
-        DICList l = DICList.getInstance();
+        DICList l = DICList.INSTANCE;
         tx.setText(l.get(i).getName());
 
         final JSONObject a = DictionaryEnvironment.getInstance().getDicConfig().getJSONObject(l.get(i).getName());
@@ -86,10 +85,10 @@ public class DICAdapter extends BaseAdapter {
             final String dicName = l.get(i).getName();
 
             // 勾选前需要验证插件有效性
-            if(isChecked) {
-                final DictionaryFile dictionaryFile = l.get(i);
+            if (isChecked) {
+                final DictionaryProject dictionaryFile = l.get(i);
                 try {
-                    dictionaryFile.parseDICCodeFile();
+                    dictionaryFile.init();
                 } catch (Exception e) {
                     DialogBroadCast.sendBroadCast(text(R.string.dic_load_error, dictionaryFile.getName()), IOUtil.getException(e));
                     sw.setChecked(false);
@@ -101,9 +100,6 @@ public class DICAdapter extends BaseAdapter {
 
             try {
                 tmp.put("enabled", isChecked);
-                if (!isChecked) {
-                    l.get(i).notifyLifeCycle(LifeCycleRuntime.LifeCycle.DESTROY);
-                }
                 DictionaryEnvironment.getInstance().getDicConfig().put(dicName, tmp);
                 DictionaryEnvironment.getInstance().getDicConfig().save();
             } catch (Throwable e) {
@@ -116,12 +112,13 @@ public class DICAdapter extends BaseAdapter {
 
     @Override
     public void notifyDataSetChanged() {
-        DICParseResult result = DICList.getInstance().refresh();
-        if(!result.success) {
+        List<DICParseResult> result = DICList.INSTANCE.refresh();
+        if (result.stream().filter((v) -> !v.success).findFirst().orElse(null) != null) {
             SnackBroadCast.sendBroadCast(text(R.string.dic_error));
         }
         super.notifyDataSetChanged();
     }
+
     private String text(@StringRes int s, Object... args) {
         return String.format(SeikoApplication.getSeikoApplicationContext().getText(s).toString(), args);
     }

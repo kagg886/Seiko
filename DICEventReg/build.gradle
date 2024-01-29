@@ -12,7 +12,9 @@ dependencies {
     implementation 'com.alibaba:fastjson:1.2.83'
     implementation 'org.jsoup:jsoup:1.15.3'
 
-    implementation project(':DictionaryCore')
+    implementation('io.github.seikodictionaryenginev2:core_base:2.0-dev-5')
+    implementation('io.github.seikodictionaryenginev2:base_command:2.0-dev-1')
+
     implementation project(':Tools')
 
     compileOnly("net.mamoe:mirai-core-api-jvm:$gradle.mirai_version")

@@ -66,20 +66,22 @@ android {
 }
 
 dependencies {
+
+    implementation(platform("org.jetbrains.kotlin:kotlin-bom:1.8.22"))
     implementation 'androidx.appcompat:appcompat:1.6.1'
-    implementation 'com.google.android.material:material:1.9.0'
+    implementation 'com.google.android.material:material:1.11.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
-    implementation 'androidx.preference:preference-ktx:1.2.0'
+    implementation 'androidx.preference:preference-ktx:1.2.1'
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
-    implementation 'androidx.core:core-ktx:1.10.1'
+    implementation 'androidx.core:core-ktx:1.12.0'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
 
     implementation 'com.alibaba:fastjson:2.0.34'
-    implementation 'org.jsoup:jsoup:1.15.3'
-    implementation 'com.squareup.okhttp3:okhttp:4.10.0'
+    implementation 'org.jsoup:jsoup:1.17.1'
+    implementation 'com.squareup.okhttp3:okhttp:4.12.0'
 
     implementation fileTree(dir: 'lib', includes: ["*.jar"])
 
@@ -103,9 +105,12 @@ dependencies {
     implementation files('libs/beacon_android_v3.2.0.3_official64_release.jar')
 
     implementation project(':PluginAPI')
-    implementation project(':DictionaryCore')
     implementation project(':Tools')
-    implementation project(':DICEventReg')
+
+    implementation 'com.alibaba.fastjson2:fastjson2:2.0.42'
+
+    implementation('io.github.seikodictionaryenginev2:core_base:2.0-dev-5')
+    implementation('io.github.seikodictionaryenginev2:base_command:2.0-dev-1')
 
 }
 

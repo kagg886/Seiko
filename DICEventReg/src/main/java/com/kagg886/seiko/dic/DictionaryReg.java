@@ -1,6 +1,6 @@
 package com.kagg886.seiko.dic;
 
-import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson2.JSONObject;
 import com.kagg886.seiko.dic.entity.DictionaryFile;
 import com.kagg886.seiko.dic.model.DICParseResult;
 import com.kagg886.seiko.dic.session.impl.FriendMessageRuntime;
@@ -25,14 +25,14 @@ public class DictionaryReg {
 
         channel.subscribeAlways(GroupMessageEvent.class, event -> { //注册群消息
             if (refreshDIC) {
-                DICParseResult res = DICList.getInstance().refresh();
+                DICParseResult res = DICList.INSTANCE.refresh();
                 if (!res.success) {
                     call.call(event.getBot().getLogger(), res);
                     return;
                 }
             }
             JSONObject dicConfigUnit;
-            for (DictionaryFile dic : DICList.getInstance()) {
+            for (DictionaryFile dic : DICList.INSTANCE) {
                 dicConfigUnit = DictionaryEnvironment.getInstance().getDicConfig().getJSONObject(dic.getName());
                 Boolean bo = dicConfigUnit.getBoolean("enabled");
                 if (bo == null) {
@@ -48,14 +48,14 @@ public class DictionaryReg {
 
         channel.subscribeAlways(FriendMessageEvent.class, event -> { //注册好友消息
             if (refreshDIC) {
-                DICParseResult res = DICList.getInstance().refresh();
+                DICParseResult res = DICList.INSTANCE.refresh();
                 if (!res.success) {
                     call.call(event.getBot().getLogger(), res);
                     return;
                 }
             }
             JSONObject dicConfigUnit;
-            for (DictionaryFile dic : DICList.getInstance()) {
+            for (DictionaryFile dic : DICList.INSTANCE) {
                 dicConfigUnit = DictionaryEnvironment.getInstance().getDicConfig().getJSONObject(dic.getName());
                 Boolean bo = dicConfigUnit.getBoolean("enabled");
                 if (bo == null) {
@@ -73,7 +73,7 @@ public class DictionaryReg {
 
         channel.subscribeAlways(GroupMemberEvent.class, event -> { //注册成员被踢，主动退群消息 被邀请 主动入群和恢复解散群
             if (refreshDIC) {
-                DICParseResult res = DICList.getInstance().refresh();
+                DICParseResult res = DICList.INSTANCE.refresh();
                 if (!res.success) {
                     call.call(event.getBot().getLogger(), res);
                     return;
@@ -81,7 +81,7 @@ public class DictionaryReg {
             }
 
             JSONObject dicConfigUnit;
-            for (DictionaryFile dic : DICList.getInstance()) {
+            for (DictionaryFile dic : DICList.INSTANCE) {
                 dicConfigUnit = DictionaryEnvironment.getInstance().getDicConfig().getJSONObject(dic.getName());
                 Boolean bo = dicConfigUnit.getBoolean("enabled");
                 if (bo == null) {
@@ -130,14 +130,14 @@ public class DictionaryReg {
 
         channel.subscribeAlways(MemberJoinRequestEvent.class, event -> {
             if (refreshDIC) {
-                DICParseResult res = DICList.getInstance().refresh();
+                DICParseResult res = DICList.INSTANCE.refresh();
                 if (!res.success) {
                     call.call(event.getBot().getLogger(), res);
                     return;
                 }
             }
             JSONObject dicConfigUnit;
-            for (DictionaryFile dic : DICList.getInstance()) {
+            for (DictionaryFile dic : DICList.INSTANCE) {
                 dicConfigUnit = DictionaryEnvironment.getInstance().getDicConfig().getJSONObject(dic.getName());
                 Boolean bo = dicConfigUnit.getBoolean("enabled");
                 if (bo == null) {

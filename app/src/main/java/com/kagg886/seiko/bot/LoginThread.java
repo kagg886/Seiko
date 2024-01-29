@@ -11,7 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.StringRes;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.SwitchCompat;
-import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson2.JSONObject;
 import com.kagg886.seiko.R;
 import com.kagg886.seiko.SeikoApplication;
 import com.kagg886.seiko.event.DialogBroadCast;

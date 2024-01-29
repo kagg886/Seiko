@@ -24,11 +24,12 @@ import com.kagg886.seiko.activity.DICEditActivity;
 import com.kagg886.seiko.activity.MainActivity;
 import com.kagg886.seiko.adapter.DICAdapter;
 import com.kagg886.seiko.constant.GlobalConstant;
-import com.kagg886.seiko.dic.DICList;
-import com.kagg886.seiko.dic.entity.DictionaryFile;
 import com.kagg886.seiko.event.SnackBroadCast;
 import com.kagg886.seiko.util.IOUtil;
 import com.kagg886.seiko.util.ShareUtil;
+import io.github.seikodictionaryenginev2.base.entity.DictionaryFile;
+import io.github.seikodictionaryenginev2.base.entity.DictionaryProject;
+import io.github.seikodictionaryenginev2.base.env.DICList;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
@@ -67,7 +68,7 @@ public class DICFragment extends Fragment implements View.OnClickListener, Swipe
         listView.setAdapter(adapter);
         listView.setOnItemClickListener((parent, view, position, id) -> {
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-            DictionaryFile file = DICList.getInstance().get(position);
+            DictionaryProject file = DICList.INSTANCE.get(position);
             builder.setTitle(text(R.string.dic_edit_title, file.getName()));
             builder.setItems(new String[] { text(R.string.dic_edit_action_edit), text(R.string.dic_edit_action_delete)}, (dialog, which) -> {
                 switch (which) {
@@ -75,7 +76,8 @@ public class DICFragment extends Fragment implements View.OnClickListener, Swipe
                         openDICCodeEditor(true, file.getName());
                         break;
                     case 1:
-                        file.getFile().delete();
+//                        file.getFile().delete();
+                        IOUtil.delFile(file.isSimpleDictionary() ? file.getIndexFile().getFile() : file.getIndexFile().getFile().getParentFile());
                         adapter.notifyDataSetChanged();
                         SnackBroadCast.sendBroadCast(R.string.dic_edit_action_delete_success);
                         break;

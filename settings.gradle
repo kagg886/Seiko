@@ -1,5 +1,6 @@
 pluginManagement {
     repositories {
+        mavenLocal()
         maven { url 'https://maven.aliyun.com/repository/public' }
         maven { url "https://repo.mirai.mamoe.net/snapshots" }
         gradlePluginPortal()
@@ -10,6 +11,7 @@ pluginManagement {
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
+        mavenLocal()
 //        maven { url 'https://maven.aliyun.com/repository/public' }
         maven { url "https://repo.mirai.mamoe.net/snapshots" }
         google()
@@ -22,10 +24,6 @@ include ':PluginAPI'
 
 include ':PluginDemo'
 include ':Tools'
-include ':DictionaryCore'
-include ':BotMock'
-include ':ConsolePlugin'
-include ':DICEventReg'
 
 gradle.ext.mirai_version = "2.16.0"
 gradle.ext.app_version = "0.2.2"
