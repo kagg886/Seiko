@@ -1,16 +1,29 @@
 package com.kagg886.seiko.dic;
 
 import android.content.Context;
+import com.alibaba.fastjson2.JSONObject;
 import com.kagg886.seiko.SeikoApplication;
+import com.kagg886.seiko.dic.v2.runtime.impl.FriendMessageRuntime;
+import com.kagg886.seiko.dic.v2.runtime.impl.GroupMemberRuntime;
+import com.kagg886.seiko.dic.v2.runtime.impl.GroupMessageRuntime;
+import com.kagg886.seiko.dic.v2.runtime.impl.MemberJoinRequestRuntime;
 import com.kagg886.seiko.event.DialogBroadCast;
 import com.kagg886.seiko.plugin.SeikoDescription;
 import com.kagg886.seiko.plugin.api.SeikoPlugin;
+import io.github.seikodictionaryenginev2.base.command.Registrator;
+import io.github.seikodictionaryenginev2.base.entity.DictionaryFile;
+import io.github.seikodictionaryenginev2.base.entity.DictionaryProject;
+import io.github.seikodictionaryenginev2.base.env.DICList;
 import io.github.seikodictionaryenginev2.base.env.DictionaryEnvironment;
+import io.github.seikodictionaryenginev2.base.model.DICParseResult;
 import net.mamoe.mirai.Bot;
 import net.mamoe.mirai.event.EventChannel;
-import net.mamoe.mirai.event.events.BotEvent;
+import net.mamoe.mirai.event.events.*;
 
 import java.io.File;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Objects;
 
 /**
  * @projectName: Seiko
@@ -25,15 +38,141 @@ public class DICPlugin extends SeikoPlugin {
 
     @Override
     public void onBotGoLine(long botQQ) {
-//        EventChannel<BotEvent> channel = Bot.findInstance(botQQ).getEventChannel();
-//
-//        DictionaryReg.CallBack callBack = (logger, result) -> {
-//            logger.warning("伪代码解析中存在问题！请检查无法被启用的伪代码");
-//            result.err.forEach(logger::warning);
-//        };
-//
-//        DictionaryReg.reg(channel, SeikoApplication.globalConfig.getBoolean("alwaysRefreshOnceMessageGetting", false),
-//                callBack);
+        EventChannel<BotEvent> channel = Bot.findInstance(botQQ).getEventChannel();
+        boolean refreshDIC = SeikoApplication.globalConfig.getBoolean("alwaysRefreshOnceMessageGetting", false);
+
+
+        channel.subscribeAlways(GroupMessageEvent.class, event -> { //注册群消息
+            if (refreshDIC) {
+                List<DICParseResult> res = DICList.INSTANCE.refresh();
+                if (res.stream().filter((v) -> !v.success).findFirst().orElse(null) != null) {
+                    Objects.requireNonNull(Bot.findInstance(botQQ)).getLogger().info("伪代码解析时遇到问题，请重新刷新词库");
+//                    SeikoApplication.getSeikoApplicationContext().
+                    return;
+                }
+            }
+            JSONObject dicConfigUnit;
+            for (DictionaryProject dic : DICList.INSTANCE) {
+                dicConfigUnit = DictionaryEnvironment.getInstance().getDicConfig().getJSONObject(dic.getName());
+                Boolean bo = dicConfigUnit.getBoolean("enabled");
+                if (bo == null) {
+                    bo = true;
+                }
+                if (!bo) {
+                    return;
+                }
+                GroupMessageRuntime runtime = new GroupMessageRuntime(dic.getIndexFile(), event);
+                runtime.invoke(event.getMessage().contentToString());
+            }
+        });
+
+        channel.subscribeAlways(FriendMessageEvent.class, event -> { //注册好友消息
+            if (refreshDIC) {
+                List<DICParseResult> res = DICList.INSTANCE.refresh();
+                if (res.stream().filter((v) -> !v.success).findFirst().orElse(null) != null) {
+                    Objects.requireNonNull(Bot.findInstance(botQQ)).getLogger().info("伪代码解析时遇到问题，请重新刷新词库");
+//                    SeikoApplication.getSeikoApplicationContext().
+                    return;
+                }
+            }
+            JSONObject dicConfigUnit;
+            for (DictionaryProject dic : DICList.INSTANCE) {
+                dicConfigUnit = DictionaryEnvironment.getInstance().getDicConfig().getJSONObject(dic.getName());
+                Boolean bo = dicConfigUnit.getBoolean("enabled");
+                if (bo == null) {
+                    bo = true;
+                }
+                if (!bo) {
+                    return;
+                }
+                FriendMessageRuntime runtime = new FriendMessageRuntime(dic.getIndexFile(), event);
+                runtime.invoke(event.getMessage().contentToString());
+            }
+
+
+        });
+
+        channel.subscribeAlways(GroupMemberEvent.class, event -> { //注册成员被踢，主动退群消息 被邀请 主动入群和恢复解散群
+            if (refreshDIC) {
+                List<DICParseResult> res = DICList.INSTANCE.refresh();
+                if (res.stream().filter((v) -> !v.success).findFirst().orElse(null) != null) {
+                    Objects.requireNonNull(Bot.findInstance(botQQ)).getLogger().info("伪代码解析时遇到问题，请重新刷新词库");
+//                    SeikoApplication.getSeikoApplicationContext().
+                    return;
+                }
+            }
+
+            JSONObject dicConfigUnit;
+            for (DictionaryProject dic : DICList.INSTANCE) {
+                dicConfigUnit = DictionaryEnvironment.getInstance().getDicConfig().getJSONObject(dic.getName());
+                Boolean bo = dicConfigUnit.getBoolean("enabled");
+                if (bo == null) {
+                    bo = true;
+                }
+                if (!bo) {
+                    return;
+                }
+                GroupMemberRuntime runtime = new GroupMemberRuntime(dic.getIndexFile(), event);
+                if (event instanceof MemberPermissionChangeEvent) {
+                    runtime.getRuntimeObject().put("原权限", ((MemberPermissionChangeEvent) event).getOrigin().toString());
+                    runtime.getRuntimeObject().put("原权限代码", ((MemberPermissionChangeEvent) event).getOrigin().getLevel());
+                    runtime.getRuntimeObject().put("现权限", ((MemberPermissionChangeEvent) event).getNew().toString());
+                    runtime.getRuntimeObject().put("现权限代码", ((MemberPermissionChangeEvent) event).getNew().getLevel());
+                    runtime.invoke("成员权限改变");
+                    return;
+                }
+
+                if (event instanceof MemberLeaveEvent.Kick) {
+                    runtime.getRuntimeObject().put("操作人", ((MemberLeaveEvent.Kick) event).getOperator().getId());
+                    runtime.invoke("成员被踢");
+                    return;
+                }
+                if (event instanceof MemberLeaveEvent.Quit) {
+                    runtime.invoke("成员主动退群");
+                    return;
+                }
+
+                if (event instanceof MemberJoinEvent.Invite) {
+                    runtime.getRuntimeObject().put("邀请人", ((MemberJoinEvent.Invite) event).getInvitor().getId());
+                    runtime.invoke("成员邀请入群");
+                    return;
+                }
+
+                if (event instanceof MemberJoinEvent.Active) {
+                    runtime.invoke("成员主动入群");
+                    return;
+                }
+
+                if (event instanceof MemberJoinEvent.Retrieve) {
+                    runtime.invoke("群主恢复解散群");
+                    return;
+                }
+            }
+        });
+
+        channel.subscribeAlways(MemberJoinRequestEvent.class, event -> {
+            if (refreshDIC) {
+                List<DICParseResult> res = DICList.INSTANCE.refresh();
+                if (res.stream().filter((v) -> !v.success).findFirst().orElse(null) != null) {
+                    Objects.requireNonNull(Bot.findInstance(botQQ)).getLogger().info("伪代码解析时遇到问题，请重新刷新词库");
+//                    SeikoApplication.getSeikoApplicationContext().
+                    return;
+                }
+            }
+            JSONObject dicConfigUnit;
+            for (DictionaryProject dic : DICList.INSTANCE) {
+                dicConfigUnit = DictionaryEnvironment.getInstance().getDicConfig().getJSONObject(dic.getName());
+                Boolean bo = dicConfigUnit.getBoolean("enabled");
+                if (bo == null) {
+                    bo = true;
+                }
+                if (!bo) {
+                    return;
+                }
+                MemberJoinRequestRuntime runtime = new MemberJoinRequestRuntime(dic.getIndexFile(), event);
+                runtime.invoke("申请入群");
+            }
+        });
     }
 
     @Override
@@ -42,6 +181,15 @@ public class DICPlugin extends SeikoPlugin {
         DictionaryEnvironment.getInstance().setDicRoot(context.getExternalFilesDir("dic"));
         DictionaryEnvironment.getInstance().setDicConfigPoint(context.getExternalFilesDir("config").toPath().resolve("dicList.json").toFile().getAbsolutePath());
         DictionaryEnvironment.getInstance().setDicData(context.getExternalFilesDir("dicData").toPath());
+
+        Registrator.inject();
+
+        HashMap<String, Class<?>[]> domainQuoteNew = new HashMap<>();
+        domainQuoteNew.put("群", new Class[]{GroupMessageEvent.class});
+        domainQuoteNew.put("好友", new Class[]{FriendMessageEvent.class});
+        domainQuoteNew.put("群事件", new Class[]{GroupMemberEvent.class, MemberJoinRequestEvent.class});
+
+        DictionaryEnvironment.getInstance().getEventDomain().putAll(domainQuoteNew);
 
 //        if (SeikoApplication.globalConfig.getBoolean("mergeAllLogs", false)) {
 //            DictionaryEnvironment.getInstance().setShowLogOnAllBots(false);
