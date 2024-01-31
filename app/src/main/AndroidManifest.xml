@@ -51,7 +51,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".activity.DICEditActivity">
+        <activity android:name=".activity.DICEditActivity" android:windowSoftInputMode="adjustResize">
 
         </activity>
 

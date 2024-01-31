@@ -83,6 +83,7 @@ public class GroupFileControl {
             }
 
             files.forEach(AbsoluteFileFolder::delete);
+            return null;
         }
 
 

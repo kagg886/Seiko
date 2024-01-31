@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
@@ -16,6 +17,7 @@ import com.google.android.material.snackbar.Snackbar;
 import com.kagg886.seiko.R;
 import com.kagg886.seiko.constant.GlobalConstant;
 import com.kagg886.seiko.util.IOUtil;
+import io.github.rosemoe.sora.text.Cursor;
 import io.github.rosemoe.sora.widget.CodeEditor;
 
 import java.io.IOException;
@@ -43,7 +45,27 @@ public class DICEditActivity extends AppCompatActivity {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+
+        registerTemplate("${}", v -> {
+            code.commitText("${}");
+        });
+        registerTemplate("$[]", v -> {
+            code.commitText("$[]");
+        });
+        registerTemplate("$$", v -> {
+            code.commitText("$$");
+        });
+
         bindListeners();
+    }
+
+    private void registerTemplate(String text, View.OnClickListener l) {
+        LinearLayout lay = findViewById(R.id.templates);
+        TextView v = LayoutInflater.from(this).inflate(R.layout.template_dic_edit, null).findViewById(R.id.text);
+        v.setText(text);
+        v.setOnClickListener(l);
+
+        lay.addView(v);
     }
 
     private void init() throws IOException {
@@ -84,7 +106,8 @@ public class DICEditActivity extends AppCompatActivity {
             }
         });
 
-        builder.setNegativeButton(R.string.cancel, (dialog, which) -> {});
+        builder.setNegativeButton(R.string.cancel, (dialog, which) -> {
+        });
         builder.show();
     }
 
