@@ -3,12 +3,12 @@ package com.kagg886.seiko.activity;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.TextView;
+import android.view.ViewGroup;
+import android.widget.*;
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 import androidx.appcompat.app.AlertDialog;
@@ -17,8 +17,13 @@ import com.google.android.material.snackbar.Snackbar;
 import com.kagg886.seiko.R;
 import com.kagg886.seiko.constant.GlobalConstant;
 import com.kagg886.seiko.util.IOUtil;
+import io.github.rosemoe.sora.event.EditorKeyEvent;
+import io.github.rosemoe.sora.event.EventReceiver;
+import io.github.rosemoe.sora.event.Unsubscribe;
 import io.github.rosemoe.sora.text.Cursor;
 import io.github.rosemoe.sora.widget.CodeEditor;
+import io.github.rosemoe.sora.widget.component.EditorCompletionAdapter;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.util.function.Consumer;
@@ -137,6 +142,22 @@ public class DICEditActivity extends AppCompatActivity {
                 });
             }
             System.out.println(code.getText());
+        });
+
+        ImageView undo = findViewById(R.id.undo);
+
+        undo.setOnClickListener((v) -> {
+            if (code.canUndo()) {
+                code.undo();
+            }
+        });
+
+        ImageView redo = findViewById(R.id.redo);
+
+        redo.setOnClickListener((v) -> {
+            if (code.canRedo()) {
+                code.redo();
+            }
         });
     }
 

@@ -6,12 +6,14 @@
                                                    android:layout_height="match_parent"
                                                    android:id="@+id/activity_dic_edit">
 
+
     <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="match_parent"
             android:orientation="vertical"
             android:layout_height="match_parent" android:id="@+id/linearLayoutCompat"
             app:layout_constraintTop_toTopOf="parent" app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toTopOf="@+id/horizontalScrollView" app:layout_constraintEnd_toEndOf="parent">
+            app:layout_constraintBottom_toTopOf="@+id/horizontalScrollView" app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0" app:layout_constraintVertical_bias="0.0">
         <com.google.android.material.appbar.AppBarLayout
                 android:layout_height="wrap_content"
                 android:layout_width="match_parent">
@@ -39,6 +41,20 @@
                         app:layout_constraintRight_toRightOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintBottom_toBottomOf="parent"/>
+                <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:srcCompat="@drawable/ic_undo"
+                        android:id="@+id/undo"
+                        android:contentDescription="@string/app_name" app:layout_constraintEnd_toStartOf="@+id/redo"
+                        app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintTop_toTopOf="parent"/>
+                <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:srcCompat="@drawable/ic_redo"
+                        android:id="@+id/redo" app:layout_constraintEnd_toStartOf="@+id/save_code_btn"
+                        app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintTop_toTopOf="parent"
+                        android:contentDescription="@string/app_name"/>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </com.google.android.material.appbar.AppBarLayout>
@@ -48,8 +64,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>
     </androidx.appcompat.widget.LinearLayoutCompat>
-
-
     <HorizontalScrollView android:layout_width="match_parent" android:layout_height="wrap_content"
                           android:fillViewport="true"
                           app:layout_constraintStart_toStartOf="parent" app:layout_constraintBottom_toBottomOf="parent"
