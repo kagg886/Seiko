@@ -62,6 +62,15 @@ public class DICPlugin extends SeikoPlugin {
             {"禁言", "MemberControl$Mute"},
             {"踢", "MemberControl$Kick"},
             {"管理员", "MemberControl$ModifyAdmin"},
+
+            {"退群", "GroupControl$Exit"},
+            {"获取群公告", "GroupControl$GetGroupAnnouncement"},
+            {"删除群公告", "GroupControl$DelGroupAnnouncement"},
+            {"发布群公告", "GroupControl$PublishGroupAnnouncement"},
+            {"进群申请处理", "GroupControl$DealMemberJoin"},
+
+            {"群文件", "GroupFileControl$GetFile"},
+            {"删群文件", "GroupFileControl$Delete"},
     };
 
     @Override
