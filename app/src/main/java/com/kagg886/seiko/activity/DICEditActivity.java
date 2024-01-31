@@ -3,10 +3,9 @@ package com.kagg886.seiko.activity;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.view.KeyEvent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.*;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -17,12 +16,19 @@ import com.google.android.material.snackbar.Snackbar;
 import com.kagg886.seiko.R;
 import com.kagg886.seiko.constant.GlobalConstant;
 import com.kagg886.seiko.util.IOUtil;
-import io.github.rosemoe.sora.event.EditorKeyEvent;
-import io.github.rosemoe.sora.event.EventReceiver;
-import io.github.rosemoe.sora.event.Unsubscribe;
-import io.github.rosemoe.sora.text.Cursor;
+import io.github.rosemoe.sora.lang.EmptyLanguage;
+import io.github.rosemoe.sora.lang.Language;
+import io.github.rosemoe.sora.lang.analysis.AnalyzeManager;
+import io.github.rosemoe.sora.lang.analysis.StyleReceiver;
+import io.github.rosemoe.sora.lang.completion.*;
+import io.github.rosemoe.sora.lang.format.Formatter;
+import io.github.rosemoe.sora.lang.smartEnter.NewlineHandler;
+import io.github.rosemoe.sora.text.CharPosition;
+import io.github.rosemoe.sora.text.Content;
+import io.github.rosemoe.sora.text.ContentReference;
+import io.github.rosemoe.sora.util.MyCharacter;
 import io.github.rosemoe.sora.widget.CodeEditor;
-import io.github.rosemoe.sora.widget.component.EditorCompletionAdapter;
+import io.github.rosemoe.sora.widget.SymbolPairMatch;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
@@ -42,6 +48,7 @@ public class DICEditActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dic_edit);
         code = findViewById(R.id.code);
+        code.setEditorLanguage(new SeikoDictionaryLanguage());
         saveCodeBtn = findViewById(R.id.save_code_btn);
         filenameView = findViewById(R.id.filename);
 
@@ -176,5 +183,121 @@ public class DICEditActivity extends AppCompatActivity {
 
     private void writeContentToFile(String content, String filename) throws IOException {
         IOUtil.writeStringToFile(this.getExternalFilesDir("dic").toPath().resolve(filename).toFile().getAbsolutePath(), code.getText().toString());
+    }
+
+    private class SeikoDictionaryLanguage implements Language {
+
+        @NonNull
+        @NotNull
+        @Override
+        public AnalyzeManager getAnalyzeManager() {
+            return new EmptyLanguage.EmptyAnalyzeManager();
+        }
+
+        @Override
+        public int getInterruptionLevel() {
+            return 0;
+        }
+
+        @Override
+        public void requireAutoComplete(@NonNull @NotNull ContentReference content, @NonNull @NotNull CharPosition position, @NonNull @NotNull CompletionPublisher publisher, @NonNull @NotNull Bundle extraArguments) throws CompletionCancelledException {
+            String prefix = CompletionHelper.computePrefix(content, position, MyCharacter::isJavaIdentifierPart);
+            if ("sss".startsWith(prefix)) {
+                publisher.addItem(new CompletionItem("sss") {
+                    @Override
+                    public void performCompletion(@NonNull @NotNull CodeEditor editor, @NonNull @NotNull Content text, int line, int column) {
+                        editor.commitText("sss");
+                    }
+                });
+            }
+
+            IdentifierAutoComplete c = new IdentifierAutoComplete(new String[]{"sss"});
+            c.requireAutoComplete(content, position, prefix, publisher, new IdentifierAutoComplete.SyncIdentifiers());
+        }
+
+        @Override
+        public int getIndentAdvance(@NonNull @NotNull ContentReference content, int line, int column) {
+            String dic = content.getLine(line).trim();
+
+            if (dic.startsWith("如果:") ||
+                    dic.startsWith("试错:") ||
+                    dic.startsWith("捕获") ||
+                    dic.startsWith("循环:") ||
+                    dic.startsWith("如果尾")
+            ) {
+                //如果尾补全
+                if (dic.startsWith("如果尾")) {
+                    int space = 0;
+                    String origin = content.getLine(line);
+                    for (int i = 0; i < origin.length(); i++) {
+                        if (origin.charAt(i) == ' ') {
+                            space++;
+                        }
+                    }
+                    code.getText().delete(line, 0, line, origin.length());
+
+                    StringBuilder b = new StringBuilder();
+                    for (int i = 0; i < space - 1; i++) {
+                        b = b.append(" ");
+                    }
+                    code.commitText(b.append("如果尾"));
+                }
+                return 1;
+            }
+
+            if (content.getLine(line).isEmpty()) {
+                return 0;
+            }
+
+            if (dic.isEmpty()) {
+                int space = 0;
+                String origin = content.getLine(line);
+                code.getText().delete(line, 0, line, origin.length());
+                for (int i = 0; i < origin.length(); i++) {
+                    if (origin.charAt(i) == ' ') {
+                        space++;
+                    }
+                }
+                StringBuilder b = new StringBuilder();
+                for (int i = 0; i < space - 1; i++) {
+                    b = b.append(" ");
+                }
+                code.commitText(b);
+                code.deleteText();
+                return -1;
+            }
+            return 0;
+        }
+
+        @Override
+        public boolean useTab() {
+            return false;
+        }
+
+        @NonNull
+        @NotNull
+        @Override
+        public Formatter getFormatter() {
+            return new EmptyLanguage.EmptyFormatter();
+        }
+
+        @Override
+        public SymbolPairMatch getSymbolPairs() {
+            SymbolPairMatch m = new SymbolPairMatch();
+            m.putPair("${", new SymbolPairMatch.SymbolPair("{", "}"));
+            return m;
+        }
+
+        @Nullable
+        @org.jetbrains.annotations.Nullable
+        @Override
+        public NewlineHandler[] getNewlineHandlers() {
+            return new NewlineHandler[]{};
+        }
+
+        @Override
+        public void destroy() {
+
+        }
     }
 }

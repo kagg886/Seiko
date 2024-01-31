@@ -72,33 +72,6 @@
                       android:background="#19000000" android:id="@+id/templates"
                       tools:ignore="Orientation">
 
-            <TextView android:layout_width="wrap_content"
-                      android:layout_height="40sp"
-                      android:minWidth="40sp"
-                      android:textColor="@color/black"
-                      android:includeFontPadding="false"
-                      android:gravity="center"
-                      android:textSize="20sp"
-                      android:background="@android:color/transparent" android:text="${}"/>
-
-            <TextView android:layout_width="wrap_content"
-                      android:layout_height="40sp"
-                      android:minWidth="40sp"
-                      android:textColor="@color/black"
-                      android:includeFontPadding="false"
-                      android:gravity="center"
-                      android:textSize="20sp"
-                      android:background="@android:color/transparent" android:text="$[]"/>
-
-            <TextView android:layout_width="wrap_content"
-                      android:layout_height="40sp"
-                      android:minWidth="40sp"
-                      android:textColor="@color/black"
-                      android:includeFontPadding="false"
-                      android:gravity="center"
-                      android:textSize="20sp"
-                      android:background="@android:color/transparent" android:text="$函数$"/>
-
         </LinearLayout>
     </HorizontalScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>
