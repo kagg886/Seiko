@@ -95,6 +95,8 @@ public class DICPlugin extends SeikoPlugin {
                 throw new RuntimeException(e);
             }
         }
+
+        DICList.INSTANCE.refresh();
     }
 
     @Override
