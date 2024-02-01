@@ -2,6 +2,7 @@ package com.kagg886.seiko.activity;
 
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,6 +17,9 @@ import com.google.android.material.snackbar.Snackbar;
 import com.kagg886.seiko.R;
 import com.kagg886.seiko.constant.GlobalConstant;
 import com.kagg886.seiko.util.IOUtil;
+import io.github.rosemoe.sora.event.EditorKeyEvent;
+import io.github.rosemoe.sora.event.EventReceiver;
+import io.github.rosemoe.sora.event.Unsubscribe;
 import io.github.rosemoe.sora.lang.EmptyLanguage;
 import io.github.rosemoe.sora.lang.Language;
 import io.github.rosemoe.sora.lang.analysis.AnalyzeManager;
@@ -29,6 +33,7 @@ import io.github.rosemoe.sora.text.ContentReference;
 import io.github.rosemoe.sora.util.MyCharacter;
 import io.github.rosemoe.sora.widget.CodeEditor;
 import io.github.rosemoe.sora.widget.SymbolPairMatch;
+import io.github.rosemoe.sora.widget.component.EditorAutoCompletion;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
@@ -186,12 +191,14 @@ public class DICEditActivity extends AppCompatActivity {
     }
 
     private class SeikoDictionaryLanguage implements Language {
+        private final AnalyzeManager manager = new EmptyLanguage.EmptyAnalyzeManager();
+        private final Formatter format = new EmptyLanguage.EmptyFormatter();
 
         @NonNull
         @NotNull
         @Override
         public AnalyzeManager getAnalyzeManager() {
-            return new EmptyLanguage.EmptyAnalyzeManager();
+            return manager;
         }
 
         @Override
@@ -201,18 +208,12 @@ public class DICEditActivity extends AppCompatActivity {
 
         @Override
         public void requireAutoComplete(@NonNull @NotNull ContentReference content, @NonNull @NotNull CharPosition position, @NonNull @NotNull CompletionPublisher publisher, @NonNull @NotNull Bundle extraArguments) throws CompletionCancelledException {
-            String prefix = CompletionHelper.computePrefix(content, position, MyCharacter::isJavaIdentifierPart);
-            if ("sss".startsWith(prefix)) {
-                publisher.addItem(new CompletionItem("sss") {
-                    @Override
-                    public void performCompletion(@NonNull @NotNull CodeEditor editor, @NonNull @NotNull Content text, int line, int column) {
-                        editor.commitText("sss");
-                    }
-                });
-            }
-
-            IdentifierAutoComplete c = new IdentifierAutoComplete(new String[]{"sss"});
-            c.requireAutoComplete(content, position, prefix, publisher, new IdentifierAutoComplete.SyncIdentifiers());
+            publisher.addItem(new CompletionItem("sss") {
+                @Override
+                public void performCompletion(@NonNull @NotNull CodeEditor editor, @NonNull @NotNull Content text, int line, int column) {
+                    editor.commitText("sss");
+                }
+            });
         }
 
         @Override
@@ -278,13 +279,14 @@ public class DICEditActivity extends AppCompatActivity {
         @NotNull
         @Override
         public Formatter getFormatter() {
-            return new EmptyLanguage.EmptyFormatter();
+            return format;
         }
 
         @Override
         public SymbolPairMatch getSymbolPairs() {
             SymbolPairMatch m = new SymbolPairMatch();
             m.putPair("${", new SymbolPairMatch.SymbolPair("{", "}"));
+            m.putPair("$[", new SymbolPairMatch.SymbolPair("[", "]"));
             return m;
         }
 
