@@ -36,7 +36,7 @@ public class DialogBroadCast extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        AlertDialog dialog1 = new AlertDialog.Builder(avt).setTitle(intent.getStringExtra("name"))
+        AlertDialog dialog1 = new AlertDialog.Builder(SeikoApplication.getCurrentActivity()).setTitle(intent.getStringExtra("name"))
                 .setMessage(intent.getStringExtra("error")).create();
         dialog1.show();
     }

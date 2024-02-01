@@ -16,6 +16,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.material.snackbar.Snackbar;
 import com.kagg886.seiko.R;
 import com.kagg886.seiko.constant.GlobalConstant;
+import com.kagg886.seiko.event.DialogBroadCast;
+import com.kagg886.seiko.event.SnackBroadCast;
 import com.kagg886.seiko.util.IOUtil;
 import io.github.rosemoe.sora.event.EditorKeyEvent;
 import io.github.rosemoe.sora.event.EventReceiver;
@@ -35,13 +37,17 @@ import io.github.rosemoe.sora.util.MyCharacter;
 import io.github.rosemoe.sora.widget.CodeEditor;
 import io.github.rosemoe.sora.widget.SymbolPairMatch;
 import io.github.rosemoe.sora.widget.component.EditorAutoCompletion;
+import io.github.seikodictionaryenginev2.base.entity.DictionaryFile;
 import io.github.seikodictionaryenginev2.base.entity.code.impl.FastAssignment;
+import io.github.seikodictionaryenginev2.base.env.DICList;
+import io.github.seikodictionaryenginev2.base.model.DICParseResult;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -160,7 +166,9 @@ public class DICEditActivity extends AppCompatActivity {
                     }
                 });
             }
-            System.out.println(code.getText());
+            Optional<DICParseResult> r = DICList.INSTANCE.refresh().stream().filter((p) -> !p.success)
+                    .filter((p) -> p.dicName.equals(new File(filename).getName())).findAny();
+            r.ifPresent(dicParseResult -> DialogBroadCast.sendBroadCast(String.format(this.getString(R.string.dic_load_error), dicParseResult.dicName), IOUtil.getException(dicParseResult.err)));
         });
 
         ImageView undo = findViewById(R.id.undo);
@@ -208,6 +216,7 @@ public class DICEditActivity extends AppCompatActivity {
         public int getInterruptionLevel() {
             return 0;
         }
+
         private final Function<String, Integer> depth = (v) -> {
             for (int i = 0; i < v.length(); i++) {
                 if (v.charAt(i) == ' ') {
@@ -255,11 +264,26 @@ public class DICEditActivity extends AppCompatActivity {
                 return;
             }
 
-            if (line.charAt(Math.min(0, position.column - 3)) == '$') {
-//                List<Map.Entry<String,String>> a =  io.github.seikodictionaryenginev2.base.entity.code.func.Function.globalManager.entrySet()
-//                        .stream()
-//                        .filter()
-//                        .collect(Collectors.toList());
+            if (line.trim().startsWith("$") && line.contains(" ")) {
+                if (line.trim().equals("$$")) {
+                    return;
+                }
+                String cmd = line.trim().substring(1);
+                io.github.seikodictionaryenginev2.base.entity.code.func.Function.globalManager.entrySet()
+                        .stream()
+                        .filter((v) -> v.getKey().startsWith(cmd)).forEach((e) -> {
+                            publisher.addItem(new CompletionItem(e.getKey(), "词库函数") {
+                                @Override
+                                public void performCompletion(@NonNull @NotNull CodeEditor editor, @NonNull @NotNull Content text, int line1, int column) {
+                                    String origin = content.getLine(line1);
+                                    editor.getText().delete(line1, origin.indexOf("$") + 1, line1, column);
+                                    column = editor.getText().getLine(line1).length();
+                                    editor.getCursor().set(line1, column - 1);
+                                    editor.commitText(e.getKey() + " ");
+                                    editor.getCursor().set(line1, column + e.getKey().length());
+                                }
+                            });
+                        });
                 return;
             }
         }
