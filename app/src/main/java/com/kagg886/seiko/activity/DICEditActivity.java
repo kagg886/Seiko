@@ -27,6 +27,7 @@ import io.github.rosemoe.sora.lang.analysis.StyleReceiver;
 import io.github.rosemoe.sora.lang.completion.*;
 import io.github.rosemoe.sora.lang.format.Formatter;
 import io.github.rosemoe.sora.lang.smartEnter.NewlineHandler;
+import io.github.rosemoe.sora.lang.util.PlainTextAnalyzeManager;
 import io.github.rosemoe.sora.text.CharPosition;
 import io.github.rosemoe.sora.text.Content;
 import io.github.rosemoe.sora.text.ContentReference;
@@ -34,11 +35,16 @@ import io.github.rosemoe.sora.util.MyCharacter;
 import io.github.rosemoe.sora.widget.CodeEditor;
 import io.github.rosemoe.sora.widget.SymbolPairMatch;
 import io.github.rosemoe.sora.widget.component.EditorAutoCompletion;
+import io.github.seikodictionaryenginev2.base.entity.code.impl.FastAssignment;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
+import java.util.Map;
 import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public class DICEditActivity extends AppCompatActivity {
     private CodeEditor code;
@@ -186,8 +192,9 @@ public class DICEditActivity extends AppCompatActivity {
             this.finish();
         }
     }
+
     private class SeikoDictionaryLanguage implements Language {
-        private final AnalyzeManager manager = new EmptyLanguage.EmptyAnalyzeManager();
+        private final AnalyzeManager manager = new PlainTextAnalyzeManager();
         private final Formatter format = new EmptyLanguage.EmptyFormatter();
 
         @NonNull
@@ -201,15 +208,60 @@ public class DICEditActivity extends AppCompatActivity {
         public int getInterruptionLevel() {
             return 0;
         }
+        private final Function<String, Integer> depth = (v) -> {
+            for (int i = 0; i < v.length(); i++) {
+                if (v.charAt(i) == ' ') {
+                    continue;
+                }
+                return i;
+            }
+            return 0;
+        };
 
         @Override
         public void requireAutoComplete(@NonNull @NotNull ContentReference content, @NonNull @NotNull CharPosition position, @NonNull @NotNull CompletionPublisher publisher, @NonNull @NotNull Bundle extraArguments) throws CompletionCancelledException {
-            publisher.addItem(new CompletionItem("sss") {
-                @Override
-                public void performCompletion(@NonNull @NotNull CodeEditor editor, @NonNull @NotNull Content text, int line, int column) {
-                    editor.commitText("sss");
+            String line = CompletionHelper.computePrefix(content, position, v -> true);
+
+            int dep = depth.apply(line);
+            if (line.contains("${") && line.indexOf("}", position.column - 1) < position.column) {
+                int l = position.line;
+                while (true) {
+                    line = content.getLine(l--);
+                    if (line.isEmpty()) {
+                        break;
+                    }
+                    if (line.trim().contains("<-")) {
+                        int dep1 = depth.apply(line);
+                        int p = content.getLine(position.line).indexOf("}");
+                        if (dep1 <= dep && !line.trim().startsWith("${") && (p == -1 || p >= position.column - 1)) {
+                            String[] val = line.trim().split("<-");
+                            publisher.addItem(new CompletionItem(val[0], val[1]) {
+                                @Override
+                                public void performCompletion(@NonNull @NotNull CodeEditor editor, @NonNull @NotNull Content text, int line1, int column) {
+                                    String origin = content.getLine(line1);
+                                    if (origin.charAt(Math.max(0, column - 1)) != '}') {
+                                        int left = origin.indexOf("${");
+                                        editor.getText().delete(line1, left + 2, line1, column);
+                                        column = editor.getText().getLine(line1).length();
+                                    }
+                                    editor.getCursor().set(line1, column - 1);
+                                    editor.commitText(val[0]);
+                                    editor.getCursor().set(line1, column + val[0].length());
+                                }
+                            });
+                        }
+                    }
                 }
-            });
+                return;
+            }
+
+            if (line.charAt(Math.min(0, position.column - 3)) == '$') {
+//                List<Map.Entry<String,String>> a =  io.github.seikodictionaryenginev2.base.entity.code.func.Function.globalManager.entrySet()
+//                        .stream()
+//                        .filter()
+//                        .collect(Collectors.toList());
+                return;
+            }
         }
 
         @Override
@@ -224,20 +276,16 @@ public class DICEditActivity extends AppCompatActivity {
             ) {
                 //如果尾补全
                 if (dic.startsWith("如果尾")) {
-                    int space = 0;
                     String origin = content.getLine(line);
-                    for (int i = 0; i < origin.length(); i++) {
-                        if (origin.charAt(i) == ' ') {
-                            space++;
-                        }
-                    }
+                    int depth = this.depth.apply(origin);
                     code.getText().delete(line, 0, line, origin.length());
 
                     StringBuilder b = new StringBuilder();
-                    for (int i = 0; i < space - 1; i++) {
+                    for (int i = 0; i < depth - 1; i++) {
                         b = b.append(" ");
                     }
                     code.commitText(b.append("如果尾"));
+                    return depth == 0 ? 1 : 0;
                 }
                 return 1;
             }

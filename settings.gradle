@@ -1,6 +1,9 @@
 pluginManagement {
     repositories {
         mavenLocal()
+        maven {
+            url "https://s01.oss.sonatype.org/content/repositories/snapshots"
+        }
         maven { url 'https://maven.aliyun.com/repository/public' }
         maven { url "https://repo.mirai.mamoe.net/snapshots" }
         gradlePluginPortal()
@@ -13,6 +16,9 @@ dependencyResolutionManagement {
     repositories {
         mavenLocal()
 //        maven { url 'https://maven.aliyun.com/repository/public' }
+        maven {
+            url "https://s01.oss.sonatype.org/content/repositories/snapshots"
+        }
         maven { url "https://repo.mirai.mamoe.net/snapshots" }
         google()
         mavenCentral()
