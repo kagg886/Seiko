@@ -36,6 +36,7 @@ import io.github.rosemoe.sora.widget.SymbolPairMatch;
 import io.github.rosemoe.sora.widget.component.EditorAutoCompletion;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.function.Consumer;
 
@@ -99,9 +100,9 @@ public class DICEditActivity extends AppCompatActivity {
             filenameView.setText(R.string.code_file_name_init);
 
         } else {
-            filenameView.setText(filename);
+            filenameView.setText(new File(filename).getName());
             // 从文件读取出来
-            Uri dicFileUri = Uri.fromFile(this.getExternalFilesDir("dic").toPath().resolve(filename).toFile());
+            Uri dicFileUri = Uri.fromFile(new File(filename));
             String content = IOUtil.loadStringFromStream(this.getContentResolver().openInputStream(dicFileUri));
             code.setText(content);
         }
@@ -137,7 +138,7 @@ public class DICEditActivity extends AppCompatActivity {
             // 保存按钮, 如果存在文件则保存后退出activity, 刷新dic, 否则弹窗输入文件名
             if (existFile) {
                 try {
-                    writeContentToFile(code.getText().toString(), filename);
+                    IOUtil.writeStringToFile(filename, code.getText().toString());
                     toast(R.string.dic_edit_save_success);
                 } catch (IOException e) {
                     toast(R.string.dic_edit_save_fail);
@@ -180,16 +181,11 @@ public class DICEditActivity extends AppCompatActivity {
         if (dicExist)
             toast(R.string.dic_edit_create_exist);
         else {
-            writeContentToFile(code.getText().toString(), filename);
+            IOUtil.writeStringToFile(filename, code.getText().toString());
             toast(R.string.dic_edit_create_success);
             this.finish();
         }
     }
-
-    private void writeContentToFile(String content, String filename) throws IOException {
-        IOUtil.writeStringToFile(this.getExternalFilesDir("dic").toPath().resolve(filename).toFile().getAbsolutePath(), code.getText().toString());
-    }
-
     private class SeikoDictionaryLanguage implements Language {
         private final AnalyzeManager manager = new EmptyLanguage.EmptyAnalyzeManager();
         private final Formatter format = new EmptyLanguage.EmptyFormatter();

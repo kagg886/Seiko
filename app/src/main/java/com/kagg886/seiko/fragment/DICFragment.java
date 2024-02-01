@@ -73,7 +73,7 @@ public class DICFragment extends Fragment implements View.OnClickListener, Swipe
             builder.setItems(new String[] { text(R.string.dic_edit_action_edit), text(R.string.dic_edit_action_delete)}, (dialog, which) -> {
                 switch (which) {
                     case 0:
-                        openDICCodeEditor(true, file.getName());
+                        openDICCodeEditor(true, file.getIndexFile().getFile().getAbsolutePath());
                         break;
                     case 1:
 //                        file.getFile().delete();
