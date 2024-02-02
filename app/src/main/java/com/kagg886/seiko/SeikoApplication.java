@@ -3,6 +3,7 @@ package com.kagg886.seiko;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Application;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -12,7 +13,9 @@ import android.os.Looper;
 import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.preference.PreferenceManager;
+
 import com.kagg886.seiko.bot.SeikoEncryptServiceFactory;
+import com.kagg886.seiko.util.AntiDetect;
 import com.kagg886.seiko.util.IOUtil;
 import hamusuta.ProtocolUtils;
 import net.mamoe.mirai.internal.spi.EncryptService;
@@ -38,6 +41,12 @@ import java.util.Map;
 public class SeikoApplication extends Application implements Runnable, Thread.UncaughtExceptionHandler {
 
     public static SharedPreferences globalConfig;
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
+        AntiDetect.init();
+    }
 
     /*
      * @param :

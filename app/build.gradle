@@ -17,7 +17,9 @@ android {
         exclude 'META-INF/ASL2.0'
         exclude("META-INF/*.kotlin_module")
     }
-
+    buildFeatures {
+        prefab true
+    }
     externalNativeBuild {
         cmake {
             path file('src/main/cpp/CMakeLists.txt')
@@ -42,6 +44,11 @@ android {
         buildConfigField "String", "BUILD_TIME", getDate()
         buildConfigField "String", "MIRAI_VERSION", "\"" + gradle.mirai_version + "\""
         buildConfigField "String", "COMMIT_HASH", "\"" + getGitSha() + "\""
+
+        ndk {
+            //noinspection ChromeOsAbiSupport
+            abiFilters 'arm64-v8a'
+        }
     }
 
     buildTypes {
@@ -115,7 +122,7 @@ dependencies {
 
     implementation 'org.bouncycastle:bcprov-jdk15on:1.70'
     implementation files('libs/beacon_android_v3.2.0.3_official64_release.jar')
-
+    implementation 'com.bytedance.android:shadowhook:1.0.9'
     implementation project(':PluginAPI')
     implementation project(':DictionaryCore')
     implementation project(':Tools')
