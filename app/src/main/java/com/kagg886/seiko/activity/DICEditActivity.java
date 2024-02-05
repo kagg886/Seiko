@@ -195,7 +195,7 @@ public class DICEditActivity extends AppCompatActivity {
         if (dicExist)
             toast(R.string.dic_edit_create_exist);
         else {
-            IOUtil.writeStringToFile(filename, code.getText().toString());
+            IOUtil.writeStringToFile(getExternalFilesDir("dic").toPath().resolve(filename).toFile().getAbsolutePath(), code.getText().toString());
             toast(R.string.dic_edit_create_success);
             this.finish();
         }
